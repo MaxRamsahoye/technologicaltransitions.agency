@@ -30,7 +30,8 @@
       } catch (e) {}
       try {
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
-        if (localStorage.getItem('blue') === '1') document.documentElement.classList.add('blue');
+        var band = localStorage.getItem('band');
+        if (band === 'sepia' || band === 'midnight') document.documentElement.classList.add('band-' + band);
       } catch (e) {}
     })();
   </script>
@@ -153,8 +154,15 @@
       --inverse-link: #0000ee;
     }
 
-    /* b (white theme only): Overview and footer in midnight blue with light sepia text */
-    html.blue:not([data-theme]) {
+    /* b (white theme only) cycles the Overview and footer: black, light sepia,
+       midnight blue */
+    html.band-sepia:not([data-theme]) {
+      --inverse-bg: #fbf6ec;
+      --inverse-ink: #3b2f20;
+      --inverse-link: #1d4fbf;
+    }
+
+    html.band-midnight:not([data-theme]) {
       --inverse-bg: #0d1330;
       --inverse-ink: #fbf6ec;
       --inverse-link: #8ab4f8;
@@ -1690,17 +1698,31 @@
         toggleTheme();
       });
 
-      // b toggles midnight blue Overview and footer (white theme); c the blue accent.
-      var TOGGLES = { b: 'blue', c: 'colour' };
+      // b cycles the Overview and footer colours (white theme); c toggles the blue accent.
+      var BANDS = ['', 'sepia', 'midnight'];
+
+      function cycleBand() {
+        var current = BANDS.filter(function (b) { return b && root.classList.contains('band-' + b); })[0] || '';
+        var next = BANDS[(BANDS.indexOf(current) + 1) % BANDS.length];
+        BANDS.forEach(function (b) { if (b) root.classList.remove('band-' + b); });
+        if (next) root.classList.add('band-' + next);
+        try { localStorage.setItem('band', next); } catch (err) {}
+      }
+
+      function toggleColour() {
+        var on = root.classList.toggle('colour');
+        try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
+      }
+
+      var SHORTCUTS = { b: cycleBand, c: toggleColour };
 
       document.addEventListener('keydown', function (e) {
-        var name = TOGGLES[e.key.toLowerCase()];
-        if (!name) return;
+        var action = SHORTCUTS[e.key.toLowerCase()];
+        if (!action) return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         var tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
-        var on = root.classList.toggle(name);
-        try { localStorage.setItem(name, on ? '1' : '0'); } catch (err) {}
+        action();
         playPianoClick();
       });
 
