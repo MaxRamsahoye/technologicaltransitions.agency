@@ -672,6 +672,26 @@
       display: none;
     }
 
+    .site-footer {
+      margin-top: 96px;
+      border-top: 1px solid var(--hairline);
+      padding: 40px 24px 56px;
+    }
+
+    .site-footer p {
+      max-width: 760px;
+      margin: 0 auto;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .site-footer strong {
+      font-weight: 500;
+      color: var(--canvas-ink);
+    }
+
     .endnotes.has-notes {
       display: block;
       max-width: 660px;
@@ -947,6 +967,9 @@
       <p class="endnotes-heading">Endnotes</p>
     </div>
 
+    <footer class="site-footer">
+      <p><strong>technologicaltransitions.agency</strong> is an independent research project by Max Ramsahoye on the major technological transitions that have shaped civilisation &ndash; agricultural, industrial, digital and now intelligence &ndash; and on the human agency that remains in how they unfold.</p>
+    </footer>
   </div>
 
   <script>
@@ -1103,7 +1126,7 @@
           sidenoteHomes.forEach(function (home) {
             endnotesContainer.appendChild(home.el);
           });
-          endnotesContainer.classList.add('has-notes');
+          endnotesContainer.classList.toggle('has-notes', sidenoteHomes.length > 0);
         } else {
           sidenoteHomes.forEach(function (home) {
             home.parent.insertBefore(home.el, home.next);
