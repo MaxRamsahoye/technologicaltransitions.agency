@@ -67,9 +67,9 @@
     }
 
     :root {
-      --frame-bg: #000000;
-      --frame-ink: #ffffff;
-      --frame-accent: #a3a3a3;
+      --frame-bg: var(--canvas-bg);
+      --frame-ink: var(--canvas-ink);
+      --frame-accent: var(--canvas-accent);
       --canvas-bg: #f8f4ee;
       --canvas-ink: #000000;
       --canvas-accent: #000000;
@@ -77,7 +77,7 @@
       --selection-bg: rgba(186, 220, 240, 0.45);
       --note-highlight: #dbe9f3;
       --rule: #e4ddd3;
-      --frame-margin: 100px;
+      --frame-margin: 0px;
       --header-margin: 100px;
       --serif: 'ET Bembo', Bembo, 'Times New Roman', Georgia, serif;
     }
@@ -87,9 +87,6 @@
     }
 
     html[data-theme="sepia"] {
-      --frame-bg: #e6d6b8;
-      --frame-ink: #000000;
-      --frame-accent: #8a6d42;
       --canvas-bg: #f8f4ee;
       --canvas-ink: #000000;
       --canvas-accent: #8a6d42;
@@ -100,9 +97,6 @@
     }
 
     html[data-theme="midnight"] {
-      --frame-bg: #0d1330;
-      --frame-ink: #ffffff;
-      --frame-accent: #9fb0d9;
       --canvas-bg: #000000;
       --canvas-ink: #ffffff;
       --canvas-accent: #9fb0d9;
@@ -113,9 +107,6 @@
     }
 
     html[data-theme="dark"] {
-      --frame-bg: #ffffff;
-      --frame-ink: #000000;
-      --frame-accent: #4d4d4d;
       --canvas-bg: #000000;
       --canvas-ink: #ffffff;
       --canvas-accent: #ffffff;
@@ -193,7 +184,6 @@
     .page {
       background: var(--canvas-bg);
       color: var(--canvas-ink);
-      border-radius: 14px 14px 0 0;
       min-height: calc(100vh - 130px);
     }
 
@@ -825,7 +815,7 @@
 </head>
 <body>
   <div class="frame-header">
-    <a class="site-title" href="../">Global Maxima</a>
+    <a class="site-title" href="./">Global Maxima</a>
   </div>
 
   <div class="left-controls">
@@ -1286,17 +1276,10 @@
         requestAnimationFrame(step);
       }
 
-      var AUTOSCROLL_DELAY = 900;
-      var AUTOSCROLL_DURATION = 1100;
-      var REVEAL_DELAY_AFTER_AUTOSCROLL = 1000;
-
-      function autoOpenCanvas() {
-        animateScrollTo(page.offsetTop + 10, 1100);
-      }
+      var REVEAL_DELAY = 1000;
 
       if (!location.hash) {
-        setTimeout(autoOpenCanvas, AUTOSCROLL_DELAY);
-        setTimeout(markRevealReady, AUTOSCROLL_DELAY + AUTOSCROLL_DURATION + REVEAL_DELAY_AFTER_AUTOSCROLL);
+        setTimeout(markRevealReady, REVEAL_DELAY);
       } else {
         markRevealReady();
       }
