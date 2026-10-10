@@ -37,12 +37,12 @@
   --band-bg: #fbf6ec;
   /* footer colours, as in the article */
   --inverse-bg: #fbf6ec;
-  --inverse-ink: #3b2f20;
+  --inverse-ink: #000000;
 }
 
 html[data-theme="sepia"] {
   --canvas-bg: #fbf6ec;
-  --canvas-ink: #3b2f20;
+  --canvas-ink: #000000;
   --muted: #9a8a72;
   --track-tint: rgba(59, 47, 32, 0.12);
   --band-bg: #f2e8d2;
