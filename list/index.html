@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="../assets/site.css?v=1a359e33" rel="stylesheet">
+  <link href="../assets/site.css?v=46b0c328" rel="stylesheet">
   <style>
     /* the central column is light sepia, top to bottom of the window */
     body::before {
@@ -29,7 +29,8 @@
       top: 0;
       bottom: 0;
       left: 50%;
-      width: min(760px, 100%);
+      /* wider than the text, so the colour shows either side of it */
+      width: min(900px, 100%);
       transform: translateX(-50%);
       background: var(--band-bg);
       z-index: 0;

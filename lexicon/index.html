@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="../assets/site.css?v=1a359e33" rel="stylesheet">
+  <link href="../assets/site.css?v=46b0c328" rel="stylesheet">
   <style>
     .lexicon {
       margin: 0;
@@ -68,8 +68,27 @@
       column-gap: 104px;
     }
 
+    /* outline circle bullets, indented */
+    .lexicon-index ol {
+      padding-left: 24px;
+    }
+
     .lexicon-index li {
-      padding: 6px 0;
+      position: relative;
+      padding: 6px 0 6px 22px;
+    }
+
+    .lexicon-index li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(6px + 0.68em - 4px);
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      box-sizing: border-box;
+      font-size: 17px;
     }
 
     .lexicon-index a,
@@ -102,6 +121,7 @@
 
     @media (max-width: 480px) {
       .lexicon-index ol {
+        padding-left: 4px;
         grid-template-columns: 1fr;
         grid-template-rows: none;
         grid-auto-flow: row;
