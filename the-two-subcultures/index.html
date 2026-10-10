@@ -310,7 +310,7 @@
       stroke: var(--canvas-accent);
     }
 
-    body.past-frame .progress-ring {
+    body.past-subtitle .progress-ring {
       opacity: 1;
     }
 
@@ -833,7 +833,7 @@
 
   <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
     <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
-    <circle class="progress-ring-fill" cx="15" cy="15" r="13" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+    <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
   </svg>
 
   <button class="scroll-top-btn" type="button" aria-label="Scroll to top">&#x02C4;</button>
@@ -1114,6 +1114,8 @@
       }
 
       var ringFill = document.querySelector('.progress-ring-fill');
+      var subtitleEl = document.querySelector('.article-subtitle');
+      var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
       var articleHeaderEl = document.querySelector('.article-header');
@@ -1165,11 +1167,17 @@
         if (canvasScrollable > 0 && scrollTop - CANVAS_TOP <= 10) {
           pct = 0;
         }
-        if (canvasScrollable > 0 && scrollTop >= scrollable - 1) {
+        if (canvasScrollable > 0 && scrollTop >= scrollable - 2) {
           pct = 100;
         }
 
-        ringFill.setAttribute('stroke-dashoffset', 100 - pct);
+        if (pct >= 100) {
+          // A solid stroke: dashes can leave a hairline gap at the join.
+          ringFill.style.strokeDasharray = 'none';
+        } else {
+          ringFill.style.strokeDasharray = RING_LENGTH + ' ' + RING_LENGTH;
+          ringFill.style.strokeDashoffset = RING_LENGTH * (1 - pct / 100);
+        }
 
         if (pct >= 100 && !reachedEnd) {
           reachedEnd = true;
@@ -1181,7 +1189,7 @@
         btn.classList.toggle('visible', pct > 20);
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
-        document.body.classList.toggle('past-frame', scrollTop > CANVAS_TOP);
+        document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
 
         var headerOffScreen = articleHeaderEl.getBoundingClientRect().bottom <= 0;
         var tocEligible = isWide && headerOffScreen;
