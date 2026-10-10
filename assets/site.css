@@ -138,7 +138,8 @@ body.page-leaving {
   color: var(--canvas-ink);
 }
 
-.back-arrow:hover {
+.back-arrow:hover,
+.back-arrow.key-hover {
   color: var(--muted);
 }
 
@@ -174,7 +175,8 @@ body.page-leaving {
   color: var(--muted);
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.theme-toggle.key-hover {
   color: var(--canvas-ink);
 }
 
@@ -351,7 +353,8 @@ body.past-start .progress-ring {
   pointer-events: auto;
 }
 
-.scroll-top-btn:hover {
+.scroll-top-btn:hover,
+.scroll-top-btn.key-hover {
   color: var(--canvas-ink);
 }
 

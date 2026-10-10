@@ -370,7 +370,8 @@
       color: var(--muted);
     }
 
-    .theme-toggle:hover {
+    .theme-toggle:hover,
+    .theme-toggle.key-hover {
       color: var(--canvas-ink);
     }
 
@@ -1704,11 +1705,8 @@
         })[0];
         if (!btn) return;
         e.preventDefault();
-        playPianoClick();
-        var rect = btn.getBoundingClientRect();
-        spawnRipple(rect.left + rect.width / 2, rect.top + rect.height / 2, getComputedStyle(btn).color);
         flashHover(btn);
-        goTo(btn);
+        btn.click();
       });
 
       document.addEventListener('keydown', function (e) {
@@ -1716,9 +1714,8 @@
         var tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
         e.preventDefault();
-        playPianoClick();
         flashHover(btn);
-        scrollToTop();
+        btn.click();
       });
 
       var themeToggle = document.querySelector('.theme-toggle');
@@ -1763,7 +1760,8 @@
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         var tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
-        toggleTheme();
+        flashHover(themeToggle);
+        themeToggle.click();
       });
 
       // b cycles the Overview and footer colours (white theme); c toggles the blue accent.
@@ -1784,6 +1782,13 @@
 
       var SHORTCUTS = { b: cycleBand, c: toggleColour };
 
+      // b and c have no button: their ripple shows where the pointer is
+      var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      document.addEventListener('mousemove', function (e) {
+        pointer.x = e.clientX;
+        pointer.y = e.clientY;
+      }, { passive: true });
+
       document.addEventListener('keydown', function (e) {
         var action = SHORTCUTS[e.key.toLowerCase()];
         if (!action) return;
@@ -1792,6 +1797,7 @@
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
         action();
         playPianoClick();
+        spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
       });
 
       var audioCtx = null;

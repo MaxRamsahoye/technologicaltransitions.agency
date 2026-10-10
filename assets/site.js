@@ -290,18 +290,25 @@
 
   /* ---------- keys ---------- */
 
+  // Shortcuts press their on-screen button, so they sound, ripple and
+  // highlight exactly like a click.
+  function press(el) {
+    if (!el) return;
+    el.classList.add('key-hover');
+    clearTimeout(el.keyHoverTimer);
+    el.keyHoverTimer = setTimeout(function () { el.classList.remove('key-hover'); }, 600);
+    el.click();
+  }
+
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || typing()) return;
     if (e.key === 't' || e.key === 'T') {
-      if (themeBtn) {
-        var r = themeBtn.getBoundingClientRect();
-        spawnRipple(r.left + r.width / 2, r.top + r.height / 2, getComputedStyle(themeBtn).color);
-      }
-      toggleTheme();
-    } else if (e.key === 'Backspace' && upBtn) {
+      press(themeBtn);
+    } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
-      playPianoClick();
-      scrollToTop();
+      // part-way down a page with an up arrow: go up first; otherwise go back
+      if (upBtn && upBtn.classList.contains('visible')) press(upBtn);
+      else press(backArrow);
     }
   });
 })();
