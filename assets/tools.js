@@ -4,11 +4,10 @@
 // The find bar is on where the script tag has data-search-scope:
 //   data-search-scope    what to search (selector)
 //   data-search-exclude  parts of it to leave out (selector, optional)
-//   data-first-until     the first screen lasts until this element's top is
-//                        halfway up the window; there the bar is top centre,
-//                        after it top left
-//   data-search-skip     no find bar while this element fills the middle of
-//                        the window (e.g. the article's Overview)
+//   data-hide-until      at the very top the bar sits top centre; once the
+//                        page is scrolled it is hidden until this element
+//                        (the Overview, the Lexicon's top band) has scrolled
+//                        away, then it sits top left
 (function () {
   var script = document.currentScript;
   var root = document.documentElement;
@@ -67,8 +66,7 @@
 
   function initFind() {
     var excludeSel = script.getAttribute('data-search-exclude');
-    var firstUntil = document.querySelector(script.getAttribute('data-first-until') || 'none');
-    var skipEl = document.querySelector(script.getAttribute('data-search-skip') || 'none');
+    var hideUntil = document.querySelector(script.getAttribute('data-hide-until') || 'none');
     var hasHighlights = window.CSS && CSS.highlights && window.Highlight;
 
     var bar = document.createElement('div');
@@ -88,25 +86,25 @@
     var matches = [];
     var current = -1;
     var timer = null;
+    var refocus = false;  // hidden while typing: take the cursor back on return
     var revealedAt = 0;   // a jump to a match can pass through the skip zone
 
     // which screen we are on: 'first', 'skip' (no bar) or 'main'
     function zone() {
-      var mid = window.innerHeight * 0.5;
-      if (skipEl) {
-        var s = skipEl.getBoundingClientRect();
-        if (s.top <= mid && s.bottom > mid) return 'skip';
-      }
-      if (firstUntil && firstUntil.getBoundingClientRect().top > mid) return 'first';
+      if (window.scrollY <= 10) return 'first';
+      if (hideUntil && hideUntil.getBoundingClientRect().bottom > 80) return 'skip';
       return 'main';
     }
 
     function place() {
       var z = zone();
-      bar.classList.toggle('at-left', z === 'main');
-      var hide = z === 'skip' && Date.now() - revealedAt > 1500;
-      if (hide && !bar.classList.contains('suppressed') && bar.contains(document.activeElement)) input.blur();
+      bar.classList.toggle('at-left', z !== 'first');
+      // while a search has matches the bar stays, wherever they lead
+      var hide = z === 'skip' && !matches.length && Date.now() - revealedAt > 1500;
+      var was = bar.classList.contains('suppressed');
+      if (hide && !was && bar.contains(document.activeElement)) { input.blur(); refocus = true; }
       bar.classList.toggle('suppressed', hide);
+      if (!hide && was && refocus) { refocus = false; input.focus({ preventScroll: true }); }
     }
 
     function textNodes() {
@@ -193,6 +191,7 @@
 
     function close() {
       bar.classList.remove('open');
+      refocus = false;
       input.blur();
       if (hasHighlights) {
         CSS.highlights.delete('find-match');
