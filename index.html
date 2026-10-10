@@ -381,19 +381,12 @@
       padding: 0 0 40px;
     }
 
+    /* sits in the left margin beside the Overview, level with its heading */
     .toc {
-      grid-column: 1;
-      position: sticky;
-      top: 529px;
-      transform: translateX(-40px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    body.wide .toc.toc-visible {
-      opacity: 1;
-      pointer-events: auto;
+      position: absolute;
+      top: 56px;
+      right: calc(100% + 90px);
+      width: 300px;
     }
 
     .toc-label {
@@ -744,7 +737,8 @@
       }
 
       .toc {
-        transform: none;
+        right: calc(100% + 40px);
+        width: 200px;
       }
 
       .toc-label {
@@ -944,11 +938,6 @@
     <header class="site-header"></header>
 
     <div class="layout-grid">
-      <nav class="toc" aria-label="Contents">
-        <p class="toc-label">Technological Transitions</p>
-        <ol></ol>
-      </nav>
-
       <main class="main-area">
         <article>
           <div class="article-header">
@@ -959,6 +948,11 @@
 
           <div class="article-body">
             <section id="overview">
+              <nav class="toc" aria-label="Contents">
+                <p class="toc-label">Technological Transitions</p>
+                <ol></ol>
+              </nav>
+
               <h2>Overview</h2>
 
               <p>Our advanced, global civilisation is the result of a progressive series of technological revolutions &ndash; agricultural, industrial and digital &ndash; each fundamentally changing the political economy and cultural psychology of human populations, affording new strategic advantages and reshaping the <em>fitness landscape</em> of civilisation as a whole.</p>
@@ -1232,33 +1226,8 @@
       var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
-      var articleHeaderEl = document.querySelector('.article-header');
       var reachedEnd = false;
-      var wasTocEligible = false;
-      var tocEl = document.querySelector('.toc');
-      var mainAreaEl = document.querySelector('.main-area');
-      var tocHideTimer = null;
-      var insideTocZone = false;
       var revealReady = false;
-
-      function showToc() {
-        clearTimeout(tocHideTimer);
-        tocEl.classList.add('toc-visible');
-      }
-
-      function scheduleTocAutoHide() {
-        clearTimeout(tocHideTimer);
-        tocHideTimer = setTimeout(function () {
-          if (!insideTocZone) tocEl.classList.remove('toc-visible');
-        }, 2000);
-      }
-
-      function attemptTocReveal() {
-        if (revealReady && document.body.classList.contains('toc-eligible') && !tocEl.classList.contains('toc-visible')) {
-          showToc();
-          scheduleTocAutoHide();
-        }
-      }
 
       function markRevealReady() {
         revealReady = true;
@@ -1268,7 +1237,6 @@
           note.style.transitionDelay = (i * SIDENOTE_STAGGER_MS) + 'ms';
         });
         document.body.classList.add('reveal-ready');
-        attemptTocReveal();
       }
 
       function update() {
@@ -1305,36 +1273,11 @@
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
-
-        var headerOffScreen = articleHeaderEl.getBoundingClientRect().bottom <= 0;
-        var tocEligible = isWide && headerOffScreen;
-        document.body.classList.toggle('toc-eligible', tocEligible);
-
-        if (tocEligible && !wasTocEligible) {
-          setTimeout(attemptTocReveal, 600);
-        } else if (!tocEligible && wasTocEligible) {
-          clearTimeout(tocHideTimer);
-          tocEl.classList.remove('toc-visible');
-        }
-        wasTocEligible = tocEligible;
       }
 
       window.addEventListener('scroll', update, { passive: true });
       window.addEventListener('resize', update);
       update();
-
-      document.addEventListener('mousemove', function (e) {
-        if (!document.body.classList.contains('toc-eligible')) return;
-        var mainLeft = mainAreaEl.getBoundingClientRect().left;
-        var nowInside = e.clientX < mainLeft;
-        if (nowInside && !insideTocZone) {
-          insideTocZone = true;
-          if (revealReady) showToc();
-        } else if (!nowInside && insideTocZone) {
-          insideTocZone = false;
-          scheduleTocAutoHide();
-        }
-      });
 
       function easeInOutQuad(t) {
         return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
