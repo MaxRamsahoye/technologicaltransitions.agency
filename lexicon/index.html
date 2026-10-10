@@ -26,76 +26,6 @@
       margin: 0;
     }
 
-    .page-main {
-      padding-bottom: 0;
-    }
-
-    /* closing section after the last entry */
-    .lexicon-next {
-      margin-top: 120px;
-      padding: 48px 56px;
-      background: var(--band-bg);
-    }
-
-    .lexicon-next-label {
-      margin: 0 0 16px;
-      font-family: var(--mono-caps);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .lexicon-next-link {
-      display: block;
-      font-family: var(--sans);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      font-size: 28px;
-      line-height: 1.2;
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .lexicon-next-link:hover {
-      text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 5px;
-    }
-
-    .lexicon-next-desc {
-      margin: 12px 0 32px;
-      font-size: 20px;
-      color: var(--muted);
-    }
-
-    .lexicon-back {
-      font-family: var(--sans);
-      font-size: 16px;
-      color: inherit;
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
-
-    .lexicon-back::before {
-      content: '\2191\00a0';
-      display: inline-block;
-      text-decoration: none;
-    }
-
-    @media (max-width: 600px) {
-      .lexicon-next {
-        padding: 36px 24px;
-      }
-
-      .lexicon-next-link {
-        font-size: 22px;
-      }
-    }
-
-    /* index of concepts, in two columns */
     /* light sepia band from the top of the window to just below the index */
     .lexicon-top {
       position: relative;
@@ -121,6 +51,7 @@
       }
     }
 
+    /* index of concepts, in two columns */
     .lexicon-index {
       margin: 0;
       scroll-margin-top: 48px;
@@ -337,22 +268,10 @@
         <dd>The layered infrastructure of technologies through which a society produces, communicates and organises itself.</dd>
       </div>
     </dl>
-
-    <aside class="lexicon-next">
-      <p class="lexicon-next-label">Continue reading</p>
-      <a class="lexicon-next-link" href="../">A Critical Evolutionary Game-Theory Model of Major Technological Transitions<span aria-hidden="true"> &rarr;</span></a>
-      <p class="lexicon-next-desc">The research article these terms come from.</p>
-      <a class="lexicon-back" href="#concepts">Back to the concepts</a>
-    </aside>
   </main>
 
   <a class="site-title" href="../">Technological<br>Transitions</a>
 
-  <footer class="site-footer">
-    <p class="footer-title"><span>A Critical Evolutionary <span class="nowrap">Game-Theory</span> Model of</span> <span>Major Technological Transitions</span></p>
-    <p>An independent research project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on the major technological transitions &ndash; agricultural, industrial and digital &ndash; that have shaped civilisation <em>and the human agency that has shaped them</em>. At this point in history, it is critical to see how the ongoing intelligence revolution is contingent on decisions made by the political elite and constructed by the collective actions (or inactions) of all humans alive today. Ultimately, it is time we affirm that the acceleration of AI is not as inevitable as the governments and corporations of the world would have us believe. Another future is possible, <em>it is up to us to choose it</em>.</p>
-    <p class="footer-url"><a class="footer-site" href="../">technologicaltransitions.agency</a></p>
-  </footer>
 
   <div class="progress-pill" data-start=".lexicon .term:first-child" data-end=".lexicon .term:last-child" aria-hidden="true">
     <div class="progress-pill-fill"></div>
@@ -364,60 +283,6 @@
     </svg>
   </button>
 
-  <script>
-    // Entries near the end can't scroll up to the top of the window on their
-    // own. When one is jumped to, add just enough space after the content for
-    // it to reach the top; take that space away again once it has scrolled out
-    // of view, so the page never jumps and normally ends without a gap.
-    (function () {
-      var main = document.querySelector('.page-main');
-      var BASE = 0;
-      var extra = 0;
-      var reached = false;   // has the window scrolled down into the extra space yet?
-
-      function contentEnd() {
-        // where the page would end without the extra space
-        return document.documentElement.scrollHeight - extra;
-      }
-
-      function makeRoomFor(id) {
-        var target = id && document.getElementById(id);
-        if (!target || !target.classList.contains('term')) return;
-        var margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-        var top = target.getBoundingClientRect().top + window.scrollY - margin;
-        var needed = Math.ceil(top + window.innerHeight - contentEnd());
-        extra = Math.max(0, needed);
-        reached = false;
-        main.style.paddingBottom = (BASE + extra) + 'px';
-      }
-
-      document.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href^="#"]');
-        if (a) makeRoomFor(a.getAttribute('href').slice(1));
-      });
-
-      window.addEventListener('scroll', function () {
-        if (!extra) return;
-        // the extra space begins where the main content used to end
-        var spaceStart = main.getBoundingClientRect().bottom + window.scrollY - extra;
-        var bottom = window.scrollY + window.innerHeight;
-        if (!reached) {
-          reached = bottom >= spaceStart;
-          return;
-        }
-        if (bottom < spaceStart) {
-          extra = 0;
-          main.style.paddingBottom = BASE + 'px';
-        }
-      }, { passive: true });
-
-      if (location.hash) {
-        makeRoomFor(location.hash.slice(1));
-        var t = document.getElementById(location.hash.slice(1));
-        if (t) t.scrollIntoView();
-      }
-    })();
-  </script>
   <script src="../assets/site.js?v=d39cbb2d" data-base="../"></script>
 </body>
 </html>
