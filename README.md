@@ -1,2 +1,2 @@
-# globalmaxima
- https://maxramsahoye.github.io/globalmaxima/
+technologicaltransitions.agency
+ https://maxramsahoye.github.io/technologicaltransitions.agency
