@@ -325,10 +325,10 @@
       spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
     } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
-      // anywhere below the top: go to the top first; at the top (or already
-      // on the way there): go back
-      if (window.scrollY > 2 && !headingTop) {
-        headingTop = true;
+      // anywhere below the top: go to the top first; at the top (or still
+      // gliding there from the last press): go back
+      if (window.scrollY > 2 && Date.now() - headingTopAt > GLIDE_MS) {
+        headingTopAt = Date.now();
         if (upBtn) press(upBtn);
         else { playPianoClick(); scrollToTop(); }
       } else {
@@ -337,12 +337,11 @@
     }
   });
 
-  // a scroll to the top counts as arrived until the reader scrolls down again
-  var headingTop = false;
-  var lastY = window.scrollY;
+  // a press during the glide to the top counts as being at the top
+  var GLIDE_MS = 900;
+  var headingTopAt = 0;
   window.addEventListener('scroll', function () {
-    if (window.scrollY > lastY) headingTop = false;
-    lastY = window.scrollY;
+    if (window.scrollY <= 2) headingTopAt = 0;
   }, { passive: true });
 
   // c has no button: its ripple shows where the pointer is
