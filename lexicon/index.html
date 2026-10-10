@@ -25,7 +25,7 @@
     }
 
     .term {
-      padding: 28px 0;
+      padding: 40px 0;
       border-top: 1.5px solid var(--canvas-ink);
     }
 
@@ -60,7 +60,12 @@
   </style>
 </head>
 <body>
-  <a class="site-title" href="../">Technological<br>Transitions</a>
+  <a class="back-arrow" href="../" aria-label="Back">
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
   <button class="theme-toggle" type="button" aria-label="Toggle theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
         <circle cx="12" cy="12" r="4.5"/>
@@ -97,11 +102,11 @@
 
     <dl class="lexicon">
       <div class="term">
-        <dt>Critical evolutionary game-theory model</dt>
+        <dt>Critical Evolutionary Game-Theory Model</dt>
         <dd>The model proposed here: major technological transitions as <em>structurally driven</em> by global competitive pressures and <em>agentially enacted</em> by the local decision-making of the power-elite.</dd>
       </div>
       <div class="term">
-        <dt>Fitness landscape</dt>
+        <dt>Fitness Landscape</dt>
         <dd>The terrain of competitive advantage on which societies are selected &ndash; which political economies and cultural psychologies prosper, and which are outcompeted, under a given technology stack.</dd>
       </div>
       <div class="term">
@@ -109,27 +114,40 @@
         <dd>The fourth, and likely final, major technological transition, now under way, driven by artificial intelligence.</dd>
       </div>
       <div class="term">
-        <dt>Major technological transitions</dt>
+        <dt>Major Technological Transitions</dt>
         <dd>Periods of time where the introduction of a new form of technology stack (infrastructure) fundamentally changes the wider political economy (social structures) and cultural psychology (superstructures) of the populations that deploy it, conferring competitive advantage and ultimately reshaping the fitness landscape of civilisation as a whole. So far: the Agricultural, Industrial and Digital Revolutions.</dd>
       </div>
       <div class="term">
-        <dt>Multi-polar trap</dt>
+        <dt>Multi-Polar Trap</dt>
         <dd>A situation in which competing actors each pursue their own advantage, locking all of them into an outcome that is worse for everyone &ndash; as in an arms race.</dd>
       </div>
       <div class="term">
-        <dt>Power-elite</dt>
-        <dd>The small group of decision-makers whose local responses to competitive pressures enact &ndash; or refuse &ndash; the civilisation-wide diffusion of a new technology stack.</dd>
+        <dt>Power-Elite</dt>
+        <dd>The small group of decision-makers whose local responses to competitive pressures enact &ndash; or restrict &ndash; the civilisation-wide diffusion of a new technology stack.</dd>
       </div>
       <div class="term">
-        <dt>Socio-technical system</dt>
+        <dt>Socio-Technical System</dt>
         <dd>A society understood as a single configuration of its technologies and the social structures built around them.</dd>
       </div>
       <div class="term">
-        <dt>Technology stack</dt>
+        <dt>Technology Stack</dt>
         <dd>The layered infrastructure of technologies through which a society produces, communicates and organises itself.</dd>
       </div>
     </dl>
   </main>
+
+  <a class="site-title" href="../">Technological<br>Transitions</a>
+
+  <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
+    <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
+    <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
+  </svg>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.625 19.625,18.375 8.375,18.375"/>
+    </svg>
+  </button>
 
   <script src="../assets/site.js" data-base="../"></script>
 </body>

@@ -14,7 +14,7 @@
       if (t === 'sepia' || t === 'midnight' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   </script>
-  <title>Contents — Technological Transitions</title>
+  <title>Pages — Technological Transitions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     .menu a {
       display: block;
-      padding: 24px 0;
+      padding: 40px 0;
       font-family: var(--sans);
       font-weight: 600;
       letter-spacing: -0.02em;
@@ -46,7 +46,7 @@
       text-decoration: none;
     }
 
-    .menu a span {
+    .menu-desc {
       display: block;
       margin-top: 6px;
       font-family: var(--serif);
@@ -56,7 +56,7 @@
       color: var(--muted);
     }
 
-    .menu a:hover {
+    .menu a:hover .menu-title {
       text-decoration: underline;
       text-decoration-thickness: 1.5px;
       text-underline-offset: 5px;
@@ -70,7 +70,12 @@
   </style>
 </head>
 <body>
-  <a class="site-title" href="../">Technological<br>Transitions</a>
+  <a class="back-arrow" href="../" aria-label="Back">
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
   <button class="theme-toggle" type="button" aria-label="Toggle theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
         <circle cx="12" cy="12" r="4.5"/>
@@ -102,13 +107,15 @@
     </button>
 
   <main class="page-main">
-    <h1 class="page-title">Contents</h1>
+    <h1 class="page-title">Pages</h1>
 
     <ul class="menu">
-      <li><a href="../">A Critical Evolutionary Game-Theory Model of Major Technological Transitions<span>The article</span></a></li>
-      <li><a href="../lexicon/">Lexicon<span>Key terms used in the article</span></a></li>
+      <li><a href="../"><span class="menu-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</span><span class="menu-desc">The research article</span></a></li>
+      <li><a href="../lexicon/"><span class="menu-title">Lexicon</span><span class="menu-desc">Key terms used in the research article</span></a></li>
     </ul>
   </main>
+
+  <a class="site-title" href="../">Technological<br>Transitions</a>
 
   <script src="../assets/site.js" data-base="../"></script>
 </body>

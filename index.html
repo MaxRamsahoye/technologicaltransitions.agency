@@ -205,41 +205,19 @@
       transition: background-color 0.25s ease;
     }
 
-    /* hamburger: right edge, halfway down the first screen, opens the contents */
+    /* hamburger: left of the theme toggle, opens the Pages menu */
     .menu-btn {
-      position: absolute;
-      top: calc(50vh - 56px);
-      top: calc(50svh - 56px);
-      right: 40px;
-      z-index: 5;
       display: flex;
-      padding: 6px;
-      margin: -6px;
-      color: var(--canvas-ink);
-    }
-
-    .menu-btn:hover {
       color: var(--muted);
     }
 
+    .menu-btn:hover {
+      color: var(--canvas-ink);
+    }
+
     .menu-btn svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    @media (max-width: 960px) {
-      .menu-btn {
-        top: calc(50vh - 51px);
-        top: calc(50svh - 51px);
-        right: 24px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .menu-btn {
-        top: calc(50vh - 47px);
-        top: calc(50svh - 47px);
-      }
+      width: 20px;
+      height: 20px;
     }
 
     * {
@@ -1192,6 +1170,20 @@
   <script>
     (function () {
       var loader = document.querySelector('.loader');
+
+      // Only on arriving at the site: skip it when coming from another page of
+      // the site, or when going back/forward through history.
+      var internal = false;
+      try {
+        internal = !!document.referrer && new URL(document.referrer).origin === location.origin;
+        var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type === 'back_forward') internal = true;
+      } catch (e) {}
+      if (internal) {
+        loader.remove();
+        return;
+      }
+
       var fill = loader.querySelector('.loader-fill');
       var LENGTH = 2 * Math.PI * 13;
       var FILL_MS = 1400;
@@ -1246,6 +1238,13 @@
   </div>
 
   <div class="left-controls">
+    <a class="menu-btn" href="list/" aria-label="Pages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </a>
     <button class="theme-toggle" type="button" aria-label="Toggle theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
         <circle cx="12" cy="12" r="4.5"/>
@@ -1289,13 +1288,6 @@
   </button>
 
   <div class="page">
-    <a class="menu-btn" href="list/" aria-label="Contents">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </a>
     <header class="site-header"></header>
 
     <div class="layout-grid">
@@ -1828,7 +1820,7 @@
         });
       }
 
-      function playPianoClick() {
+      function playPianoClick(short) {
         try {
           if (!audioCtx) {
             var AC = window.AudioContext || window.webkitAudioContext;
@@ -1841,16 +1833,27 @@
           if (next < 0 || next >= pianoNotes.length) next = noteIndex - (next - noteIndex);
           noteIndex = next;
           var now = audioCtx.currentTime;
-          playSoftTone(pianoNotes[noteIndex], now, 0.045, 2.8);
+          playSoftTone(pianoNotes[noteIndex], now, 0.045, short ? 0.7 : 2.8);
           // A quieter answering note two scale steps above.
           var answer = pianoNotes[Math.min(noteIndex + 2, pianoNotes.length - 1)];
-          if (answer !== pianoNotes[noteIndex]) playSoftTone(answer, now + 0.16, 0.018, 2.4);
+          if (answer !== pianoNotes[noteIndex]) playSoftTone(answer, now + 0.16, 0.018, short ? 0.5 : 2.4);
         } catch (e) {}
+      }
+
+      // A click that leaves for another page gets a short note, so the page
+      // change (after the 800ms fade) never cuts it off.
+      function leavesPage(e) {
+        var link = e.target.closest('a');
+        if (!link || (link.target && link.target !== '_self')) return false;
+        try {
+          var url = new URL(link.href, location.href);
+          return url.origin === location.origin && !(url.pathname === location.pathname && url.hash);
+        } catch (err) { return false; }
       }
 
       document.addEventListener('click', function (e) {
         if (e.target.closest('.theme-toggle')) return;
-        playPianoClick();
+        playPianoClick(leavesPage(e));
       });
 
       function playThemeSound(toDark) {

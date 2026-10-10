@@ -33,12 +33,14 @@
   --serif: 'ET Bembo', Bembo, 'Times New Roman', Georgia, serif;
   --sans: 'Inter', sans-serif;
   --mono-caps: 'IBM Plex Sans', sans-serif;
+  --track-tint: rgba(0, 0, 0, 0.08);
 }
 
 html[data-theme="sepia"] {
   --canvas-bg: #fbf6ec;
   --canvas-ink: #3b2f20;
   --muted: #9a8a72;
+  --track-tint: rgba(59, 47, 32, 0.12);
   --selection-bg: rgba(214, 196, 160, 0.45);
 }
 
@@ -46,6 +48,7 @@ html[data-theme="midnight"] {
   --canvas-bg: #0d1330;
   --canvas-ink: #e6ebf5;
   --muted: #8a93ad;
+  --track-tint: rgba(230, 235, 245, 0.15);
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
@@ -53,6 +56,7 @@ html[data-theme="dark"] {
   --canvas-bg: #000000;
   --canvas-ink: #ffffff;
   --muted: #8c8c8c;
+  --track-tint: rgba(255, 255, 255, 0.15);
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
@@ -79,10 +83,59 @@ body {
   transition: background-color 0.25s ease;
 }
 
-/* header: site name top left, theme toggle top right */
-.site-title {
+body {
+  transition: background-color 0.25s ease, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.page-leaving {
+  opacity: 0;
+}
+
+.click-ripple {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.55;
+  transform: scale(0.3);
+  animation: click-ripple-anim 0.4s ease-out forwards;
+}
+
+@keyframes click-ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* back arrow top left; site name in the bottom-left corner; theme toggle top right */
+.back-arrow {
   position: absolute;
-  top: 24px;
+  top: 33px;
+  left: 40px;
+  display: flex;
+  color: var(--canvas-ink);
+}
+
+.back-arrow:hover {
+  color: var(--muted);
+}
+
+.back-arrow svg {
+  width: 26px;
+  height: 20px;
+}
+
+.site-title {
+  position: fixed;
+  bottom: 28px;
   left: 40px;
   font-family: var(--mono-caps);
   font-size: 18px;
@@ -132,8 +185,12 @@ html[data-theme] .theme-toggle .icon-sun {
 }
 
 @media (max-width: 960px) {
+  .back-arrow {
+    top: 28px;
+    left: 24px;
+  }
+
   .site-title {
-    top: 19px;
     left: 24px;
   }
 
@@ -144,8 +201,11 @@ html[data-theme] .theme-toggle .icon-sun {
 }
 
 @media (max-width: 600px) {
+  .back-arrow {
+    top: 24px;
+  }
+
   .site-title {
-    top: 18px;
     font-size: 15px;
   }
 
@@ -214,4 +274,89 @@ button,
 a *,
 button * {
   cursor: var(--cursor-link) !important;
+}
+
+/* on narrow screens the corner name would sit over the text; put it at the end */
+@media (max-width: 1180px) {
+  .site-title {
+    position: static;
+    display: block;
+    width: max-content;
+    margin: 0 24px 40px;
+  }
+}
+
+/* reading progress ring (top right) and up arrow (bottom right) */
+.progress-ring {
+  position: fixed;
+  top: 31px;
+  right: 40px;
+  width: 28px;
+  height: 28px;
+  transform: rotate(-90deg);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.progress-ring circle {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.progress-ring-track {
+  stroke: var(--track-tint);
+}
+
+.progress-ring-fill {
+  stroke: var(--canvas-ink);
+}
+
+body.past-start .progress-ring {
+  opacity: 1;
+}
+
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 37px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 42;
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top-btn:hover {
+  color: var(--canvas-ink);
+}
+
+.scroll-top-btn svg {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 600px) {
+  .progress-ring {
+    top: 22px;
+    right: 24px;
+  }
+
+  .scroll-top-btn {
+    right: 21px;
+  }
 }
