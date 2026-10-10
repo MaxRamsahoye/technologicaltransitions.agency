@@ -134,6 +134,11 @@
     if (e.persisted) document.body.classList.remove('page-leaving');
   });
 
+  // If going back only moves within this page, it never leaves: show it again.
+  window.addEventListener('popstate', function () {
+    document.body.classList.remove('page-leaving');
+  });
+
   /* ---------- ripples ---------- */
 
   function spawnRipple(x, y, color) {
@@ -171,6 +176,16 @@
         if (fromSite && history.length > 1) history.back();
         else location.href = backArrow.getAttribute('href');
       }, NAV_DELAY);
+      return;
+    }
+
+    // Links within the page (e.g. Lexicon concepts) replace the address rather
+    // than adding to history, so the back arrow returns to the previous page.
+    var hashLink = e.target.closest('a[href^="#"]');
+    if (hashLink && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      e.preventDefault();
+      playPianoClick();
+      location.replace(hashLink.getAttribute('href'));
       return;
     }
 
