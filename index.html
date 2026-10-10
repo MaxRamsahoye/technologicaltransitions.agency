@@ -87,7 +87,7 @@
       --canvas-accent: #000000;
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
       --muted: #8c8c8c;
-      --hairline: #dcdcdc;
+      --hairline: #000000;
       --rule-width: 1.5px;
       --panel-tint: #f5f5f5;
       --link-blue: #0000ee;
@@ -136,9 +136,16 @@
       --note-highlight: #3f4852;
       --rule: #232c4c;
       --muted: #8c8c8c;
-      --hairline: #333333;
+      --hairline: #ffffff;
       --panel-tint: #121212;
       --link-blue: #8ab4f8;
+    }
+
+    /* a 1.5px rule would be blurred across pixels on standard screens */
+    @media (max-resolution: 1.49dppx) {
+      :root {
+        --rule-width: 1px;
+      }
     }
 
     /* b: bands — grey header, Overview and footer, with full-width rules */
