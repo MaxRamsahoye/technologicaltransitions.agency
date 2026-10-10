@@ -31,8 +31,8 @@
   <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions — Max Ramsahoye</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet"></noscript>
   <style>
     @font-face {
       font-family: 'ET Bembo';
@@ -197,6 +197,15 @@
       align-items: flex-start;
       justify-content: flex-end;
       padding: 50px var(--header-margin) 0 0;
+    }
+
+    .frame-header::after {
+      content: '';
+      position: absolute;
+      left: var(--header-margin);
+      right: var(--header-margin);
+      bottom: 0;
+      border-bottom: 1px solid var(--canvas-ink);
     }
 
     .site-title {
@@ -408,8 +417,8 @@
       font-family: var(--serif);
       font-weight: 600;
       font-size: 52px;
-      line-height: 1.15;
-      margin: 0 0 8px;
+      line-height: 1.05;
+      margin: 0 0 24px;
       color: var(--canvas-ink);
     }
 
@@ -522,6 +531,7 @@
 
     .sidenote-label {
       display: block;
+      font-family: 'IBM Plex Sans', sans-serif;
       width: fit-content;
       font-style: normal;
       font-size: 11px;
@@ -542,6 +552,7 @@
 
     .sidenote-ref {
       counter-increment: sidenote;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 0.65em;
       color: var(--canvas-accent);
       vertical-align: super;
