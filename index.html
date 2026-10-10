@@ -963,12 +963,27 @@
     }
 
     /* author, title and subtitle on the left; sitemap on the right */
+    /* the menu's right edge lines up with the right edge of the text column
+       (760px wide, narrower as the window closes in, 660px at 1180px and below) */
+    .site-footer {
+      --text-column: min(760px, 100vw - 480px);
+    }
+
     .footer-inner {
       display: grid;
-      grid-template-columns: minmax(0, 640px) max-content;
-      justify-content: center;
-      column-gap: 160px;
+      grid-template-columns: max-content max-content;
+      column-gap: 104px;
       align-items: start;
+      width: max-content;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: max(0px, calc(50% - var(--text-column) / 2));
+    }
+
+    @media (max-width: 1180px) {
+      .site-footer {
+        --text-column: 660px;
+      }
     }
 
     .site-footer .footer-inner p {
@@ -1026,7 +1041,24 @@
 
     .footer-sitemap li {
       display: flex;
+      align-items: baseline;
       counter-increment: sitemap;
+    }
+
+    /* the dot: a true 4px circle sitting on the baseline, after the numeral */
+    .footer-sitemap li::after {
+      content: '';
+      order: -1;
+      flex: none;
+      width: 4px;
+      height: 4px;
+      margin: 0 28px 0 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .footer-sitemap li::before {
+      order: -2;
     }
 
     .footer-sitemap li + li {
@@ -1034,17 +1066,13 @@
     }
 
     /* roman numerals, right-aligned in a fixed column, each followed by a
-       small round dot, then room before the name */
+       small round dot (below), then room before the name */
     .footer-sitemap li::before {
       content: counter(sitemap, upper-roman);
       flex: none;
-      box-sizing: content-box;
       width: 2.2em;
-      padding-right: 9px;
-      margin-right: 28px;
       text-align: right;
       font-weight: 400;
-      background: radial-gradient(circle closest-side, currentColor 85%, transparent 100%) no-repeat right 0 bottom 0.34em / 5px 5px;
     }
 
     .footer-sitemap a {
@@ -1077,9 +1105,12 @@
       white-space: nowrap;
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1100px) {
       .footer-inner {
         grid-template-columns: minmax(0, 760px);
+        justify-content: center;
+        width: auto;
+        margin: 0;
       }
 
       .footer-inner {
