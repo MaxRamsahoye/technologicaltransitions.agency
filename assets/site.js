@@ -319,9 +319,13 @@
       press(enterTarget);
     } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
-      // part-way down a page with an up arrow: go up first; otherwise go back
-      if (upBtn && upBtn.classList.contains('visible')) press(upBtn);
-      else press(backArrow);
+      // anywhere below the top: go to the top first; at the top: go back
+      if (window.scrollY > 2) {
+        if (upBtn) press(upBtn);
+        else { playPianoClick(); scrollToTop(); }
+      } else {
+        press(backArrow);
+      }
     }
   });
 })();
