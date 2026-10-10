@@ -997,8 +997,7 @@
       color: var(--muted);
     }
 
-    /* title and subtitle the same width: the block is as wide as the title,
-       and the subtitle (the quote) is sized to fill one line of it */
+    /* the block is as wide as the title; the quote wraps within it */
     .footer-head {
       --footer-title-size: min(22px, calc((100vw - 48px) / 20.8));
       width: max-content;
@@ -1010,17 +1009,9 @@
       min-width: 100%;
       margin-top: 18px;
       font-family: var(--serif);
-      font-size: calc(var(--footer-title-size) * 1.05);
+      font-size: max(16px, calc(var(--footer-title-size) * 0.95));
       line-height: 1.35;
       text-wrap: balance;
-    }
-
-    /* the line runs the full width of the title */
-    @media (min-width: 701px) {
-      .site-footer .footer-inner .footer-subtitle {
-        text-align: justify;
-        text-align-last: justify;
-      }
     }
 
     /* the menu's last line sits level with the subtitle's last line */
