@@ -1306,15 +1306,6 @@
         scrollToTop();
       });
 
-      document.addEventListener('keydown', function (e) {
-        if (e.key !== 'Enter') return;
-        var tag = document.activeElement && document.activeElement.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'A' || tag === 'BUTTON' || (document.activeElement && document.activeElement.isContentEditable)) return;
-        e.preventDefault();
-        playPianoClick();
-        autoOpenCanvas();
-      });
-
       var themeToggle = document.querySelector('.theme-toggle');
       var root = document.documentElement;
       var THEMES = ['light', 'dark'];
@@ -1362,6 +1353,22 @@
       var audioCtx = null;
       var pianoNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
 
+      // A soft sine tone with a gentle swell and long fade, plus a faint octave.
+      function playSoftTone(freq, when, peak, decay) {
+        [[freq, peak, decay], [freq * 2, peak * 0.12, decay * 0.6]].forEach(function (partial) {
+          var osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = partial[0];
+          var gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0, when);
+          gain.gain.linearRampToValueAtTime(partial[1], when + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, when + partial[2]);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(when);
+          osc.stop(when + partial[2]);
+        });
+      }
+
       function playPianoClick() {
         try {
           if (!audioCtx) {
@@ -1371,33 +1378,7 @@
           }
           if (audioCtx.state === 'suspended') { audioCtx.resume(); }
           var freq = pianoNotes[Math.floor(Math.random() * pianoNotes.length)];
-          var now = audioCtx.currentTime;
-
-          var osc = audioCtx.createOscillator();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-
-          var osc2 = audioCtx.createOscillator();
-          osc2.type = 'sine';
-          osc2.frequency.value = freq * 2;
-
-          var gain = audioCtx.createGain();
-          gain.gain.setValueAtTime(0, now);
-          gain.gain.linearRampToValueAtTime(0.1, now + 0.006);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
-
-          var gain2 = audioCtx.createGain();
-          gain2.gain.setValueAtTime(0, now);
-          gain2.gain.linearRampToValueAtTime(0.025, now + 0.006);
-          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
-
-          osc.connect(gain).connect(audioCtx.destination);
-          osc2.connect(gain2).connect(audioCtx.destination);
-
-          osc.start(now);
-          osc.stop(now + 0.45);
-          osc2.start(now);
-          osc2.stop(now + 0.38);
+          playSoftTone(freq, audioCtx.currentTime, 0.045, 1.4);
         } catch (e) {}
       }
 
@@ -1443,34 +1424,11 @@
             audioCtx = new AC();
           }
           if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-          var freq = 1046.50;
-          var now = audioCtx.currentTime;
-
-          var osc = audioCtx.createOscillator();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-
-          var osc2 = audioCtx.createOscillator();
-          osc2.type = 'sine';
-          osc2.frequency.value = freq * 2;
-
-          var gain = audioCtx.createGain();
-          gain.gain.setValueAtTime(0, now);
-          gain.gain.linearRampToValueAtTime(0.08, now + 0.004);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
-
-          var gain2 = audioCtx.createGain();
-          gain2.gain.setValueAtTime(0, now);
-          gain2.gain.linearRampToValueAtTime(0.02, now + 0.004);
-          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-
-          osc.connect(gain).connect(audioCtx.destination);
-          osc2.connect(gain2).connect(audioCtx.destination);
-
-          osc.start(now);
-          osc.stop(now + 0.35);
-          osc2.start(now);
-          osc2.stop(now + 0.28);
+          // A slow, quiet rising C major arpeggio that rings out.
+          var start = audioCtx.currentTime;
+          [261.63, 329.63, 392.00, 523.25].forEach(function (freq, i) {
+            playSoftTone(freq, start + i * 0.22, 0.04, 2.6);
+          });
         } catch (e) {}
       }
 
