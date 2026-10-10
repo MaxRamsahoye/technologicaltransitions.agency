@@ -1014,14 +1014,18 @@
       margin-top: 14px;
     }
 
-    /* roman numerals, right-aligned in a fixed column, with room after */
+    /* roman numerals, right-aligned in a fixed column, each followed by a
+       small square dot, then room before the name */
     .footer-sitemap li::before {
       content: counter(sitemap, upper-roman);
       flex: none;
+      box-sizing: content-box;
       width: 2.2em;
-      margin-right: 18px;
+      padding-right: 9px;
+      margin-right: 28px;
       text-align: right;
       font-weight: 400;
+      background: linear-gradient(currentColor, currentColor) no-repeat right 0 bottom 0.36em / 4px 4px;
     }
 
     .footer-sitemap a {
