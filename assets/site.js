@@ -260,7 +260,12 @@
       }
       document.body.classList.toggle('past-start', scrollTop > start && (!endEl || scrollTop < end));
 
-      if (upBtn) upBtn.classList.toggle('visible', scrollTop > start + window.innerHeight * 0.5);
+      if (upBtn) {
+        // data-show-after: show once that element has scrolled past the top
+        var after = upBtn.getAttribute('data-show-after') && document.querySelector(upBtn.getAttribute('data-show-after'));
+        var showFrom = after ? after.getBoundingClientRect().bottom + scrollTop : start + window.innerHeight * 0.5;
+        upBtn.classList.toggle('visible', scrollTop > showFrom);
+      }
 
       // the end chord plays on reaching the bottom of the page
       if (atBottom && !reachedEnd) {
@@ -292,6 +297,9 @@
 
   // Shortcuts press their on-screen button, so they sound, ripple and
   // highlight exactly like a click.
+  // Enter presses the link marked data-enter (e.g. the Lexicon's first concept)
+  var enterTarget = document.querySelector('[data-enter]');
+
   function press(el) {
     if (!el) return;
     el.classList.add('key-hover');
@@ -304,6 +312,11 @@
     if (e.metaKey || e.ctrlKey || e.altKey || typing()) return;
     if (e.key === 't' || e.key === 'T') {
       press(themeBtn);
+    } else if (e.key === 'Enter' && enterTarget) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'A' || tag === 'BUTTON') return;
+      e.preventDefault();
+      press(enterTarget);
     } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
       // part-way down a page with an up arrow: go up first; otherwise go back
