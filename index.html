@@ -288,11 +288,11 @@
 
     .site-title {
       position: absolute;
-      top: 28px;
-      /* halfway between the page margin and the article column */
-      left: calc((max(var(--header-margin), 24px) + max(240px, 50% - 380px)) / 2);
+      top: 24px;
+      /* top-left corner, mirroring the theme toggle in the top right */
+      left: 40px;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1.15;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -896,10 +896,6 @@
         font-size: min(37px, calc((100vw - 48px) / 15.4));
       }
 
-      .site-title {
-        left: calc((max(var(--header-margin), 24px) + max(24px, 50% - 330px)) / 2);
-      }
-
       .layout-grid {
         grid-template-columns: 1fr;
         max-width: none;
@@ -963,7 +959,8 @@
       }
 
       .site-title {
-        top: 23px;
+        top: 19px;
+        left: 24px;
       }
 
       .article-header {
@@ -1004,8 +1001,8 @@
       }
 
       .site-title {
-        top: 19px;
-        font-size: 13px;
+        top: 18px;
+        font-size: 15px;
       }
 
       .article-header {
