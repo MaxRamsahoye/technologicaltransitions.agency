@@ -31,8 +31,8 @@
   <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions — Max Ramsahoye</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet"></noscript>
   <style>
     @font-face {
       font-family: 'ET Bembo';
@@ -209,9 +209,13 @@
     }
 
     .site-title {
-      font-family: var(--serif);
-      font-size: 28px;
-      letter-spacing: -0.02em;
+      position: absolute;
+      top: 44px;
+      /* line up with the left edge of the article column */
+      left: max(240px, calc(50% - 380px));
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 20px;
+      line-height: 1.15;
       color: var(--frame-ink);
       text-decoration: none;
       font-weight: 600;
@@ -638,6 +642,10 @@
     }
 
     @media (max-width: 1180px) {
+      .site-title {
+        left: max(24px, calc(50% - 330px));
+      }
+
       .layout-grid {
         grid-template-columns: 1fr;
         max-width: none;
@@ -700,7 +708,8 @@
       }
 
       .site-title {
-        font-size: 25px;
+        top: 29px;
+        left: max(calc(var(--header-margin) + 48px), calc(50% - 330px));
       }
 
       .article-header {
@@ -744,7 +753,8 @@
       }
 
       .site-title {
-        font-size: 22px;
+        top: 17px;
+        font-size: 18px;
       }
 
       .article-header {
@@ -778,7 +788,7 @@
 </head>
 <body>
   <div class="frame-header">
-    <a class="site-title" href="./">Max Ramsahoye</a>
+    <a class="site-title" href="./">Max<br>Ramsahoye</a>
   </div>
 
   <div class="left-controls">
