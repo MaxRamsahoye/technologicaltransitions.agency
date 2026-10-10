@@ -178,7 +178,45 @@
     }
 
     .page {
+      position: relative;
       transition: background-color 0.25s ease;
+    }
+
+    /* hamburger: right edge, halfway down the first screen, opens the contents */
+    .menu-btn {
+      position: absolute;
+      top: calc(50vh - 56px);
+      top: calc(50svh - 56px);
+      right: 40px;
+      z-index: 5;
+      display: flex;
+      padding: 6px;
+      margin: -6px;
+      color: var(--canvas-ink);
+    }
+
+    .menu-btn:hover {
+      color: var(--muted);
+    }
+
+    .menu-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    @media (max-width: 960px) {
+      .menu-btn {
+        top: calc(50vh - 51px);
+        top: calc(50svh - 51px);
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .menu-btn {
+        top: calc(50vh - 47px);
+        top: calc(50svh - 47px);
+      }
     }
 
     * {
@@ -567,6 +605,24 @@
     .next-screen svg {
       width: 32px;
       height: 32px;
+      animation: arrow-nudge 2.4s ease-in-out infinite;
+    }
+
+    /* a slow downward nudge inviting the scroll */
+    @keyframes arrow-nudge {
+      0%, 55%, 100% {
+        transform: translateY(0);
+      }
+
+      25% {
+        transform: translateY(6px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .next-screen svg {
+        animation: none;
+      }
     }
 
     .article-author {
@@ -1210,6 +1266,13 @@
   </button>
 
   <div class="page">
+    <a class="menu-btn" href="list/" aria-label="Contents">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </a>
     <header class="site-header"></header>
 
     <div class="layout-grid">
@@ -1876,7 +1939,7 @@
       }
 
       document.addEventListener('click', function (e) {
-        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .sidenote-ref, .sidenote-label');
+        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .menu-btn, .sidenote-ref, .sidenote-label');
         var x, y;
         if (iconBtn) {
           var rect = iconBtn.getBoundingClientRect();

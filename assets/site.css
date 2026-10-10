@@ -1,0 +1,194 @@
+/* Shared styles for the secondary pages (contents menu, lexicon). The article
+   page keeps its own inline styles; the theme colours here mirror it. */
+
+@font-face {
+  font-family: 'ET Bembo';
+  src: url('../fonts/ETBembo-RomanOSF.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ET Bembo';
+  src: url('../fonts/ETBembo-SemiBoldOSF.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ET Bembo';
+  src: url('../fonts/ETBembo-DisplayItalic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --canvas-bg: #ffffff;
+  --canvas-ink: #000000;
+  --muted: #8c8c8c;
+  --selection-bg: rgba(186, 220, 240, 0.45);
+  --serif: 'ET Bembo', Bembo, 'Times New Roman', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --mono-caps: 'IBM Plex Sans', sans-serif;
+}
+
+html[data-theme="sepia"] {
+  --canvas-bg: #fbf6ec;
+  --canvas-ink: #3b2f20;
+  --muted: #9a8a72;
+  --selection-bg: rgba(214, 196, 160, 0.45);
+}
+
+html[data-theme="midnight"] {
+  --canvas-bg: #0d1330;
+  --canvas-ink: #e6ebf5;
+  --muted: #8a93ad;
+  --selection-bg: rgba(180, 205, 235, 0.35);
+}
+
+html[data-theme="dark"] {
+  --canvas-bg: #000000;
+  --canvas-ink: #ffffff;
+  --muted: #8c8c8c;
+  --selection-bg: rgba(180, 205, 235, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--canvas-ink);
+}
+
+html {
+  background: var(--canvas-bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--canvas-bg);
+  color: var(--canvas-ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease;
+}
+
+/* header: site name top left, theme toggle top right */
+.site-title {
+  position: absolute;
+  top: 24px;
+  left: 40px;
+  font-family: var(--mono-caps);
+  font-size: 18px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  color: var(--canvas-ink);
+  text-decoration: none;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 36px;
+  right: 40px;
+  display: flex;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.theme-toggle:hover {
+  color: var(--canvas-ink);
+}
+
+.theme-toggle svg {
+  display: none;
+  width: 18px;
+  height: 18px;
+}
+
+.theme-toggle .icon-sun,
+html[data-theme="sepia"] .theme-toggle .icon-sun-cloud,
+html[data-theme="midnight"] .theme-toggle .icon-moon-star,
+html[data-theme="dark"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+html[data-theme] .theme-toggle .icon-sun {
+  display: none;
+}
+
+.theme-toggle .cloud {
+  fill: var(--canvas-bg);
+}
+
+@media (max-width: 960px) {
+  .site-title {
+    top: 19px;
+    left: 24px;
+  }
+
+  .theme-toggle {
+    top: 31px;
+    right: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-title {
+    top: 18px;
+    font-size: 15px;
+  }
+
+  .theme-toggle {
+    top: 27px;
+  }
+}
+
+/* page body */
+.page-main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 180px 24px 120px;
+}
+
+.page-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: clamp(36px, 6vw, 52px);
+  line-height: 1.08;
+  margin: 0 0 24px;
+}
+
+.page-intro {
+  font-size: 23px;
+  line-height: 1.35;
+  margin: 0 0 64px;
+}
+
+@media (max-width: 600px) {
+  .page-main {
+    padding-top: 140px;
+  }
+
+  .page-intro {
+    font-size: 20px;
+  }
+}
+
+.plain-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
