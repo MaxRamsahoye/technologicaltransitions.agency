@@ -512,3 +512,36 @@ body.past-start .progress-pill {
 body.footer-in-view .progress-pill {
   opacity: 0;
 }
+
+/* edge variant: a full-height bar along the right edge, standing in for the
+   browser's scrollbar (which the page hides) */
+.progress-pill.progress-edge {
+  top: 0;
+  left: auto;
+  right: 0;
+  width: 4px;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  transform: none;
+  border-radius: 0;
+  opacity: 1;
+}
+
+.progress-edge .progress-pill-fill {
+  border-radius: 0;
+}
+
+@media (max-width: 860px) {
+  .progress-pill.progress-edge {
+    display: block;
+  }
+}
+
+html.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+html.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

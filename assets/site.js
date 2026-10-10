@@ -216,7 +216,8 @@
   var pillFill = pill && pill.querySelector('.progress-pill-fill');
   var indicator = pill || ring;
   var upBtn = document.querySelector('.scroll-top-btn');
-  var startEl = document.querySelector((indicator && indicator.getAttribute('data-start')) || '.page-title');
+  var startSel = (indicator && indicator.getAttribute('data-start')) || '.page-title';
+  var startEl = startSel === 'top' ? null : document.querySelector(startSel);   // 'top': from the very top
   var startOffset = parseFloat((indicator && indicator.getAttribute('data-start-offset')) || '0');
   var endEl = indicator && indicator.getAttribute('data-end') && document.querySelector(indicator.getAttribute('data-end'));
   var reachedEnd = false;
