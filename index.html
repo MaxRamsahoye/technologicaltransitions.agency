@@ -999,7 +999,7 @@
 
     /* the block is as wide as the title; the quote wraps within it */
     .footer-head {
-      --footer-title-size: min(22px, calc((100vw - 48px) / 20.8));
+      --footer-title-size: min(24px, calc((100vw - 48px) / 21));
       width: max-content;
       max-width: 100%;
     }
@@ -1009,7 +1009,7 @@
       min-width: 100%;
       margin-top: 18px;
       font-family: var(--serif);
-      font-size: max(16px, calc(var(--footer-title-size) * 0.95));
+      font-size: clamp(16px, calc((100vw - 48px) / 21.9), 20.9px);
       line-height: 1.35;
       text-wrap: balance;
     }
