@@ -25,20 +25,47 @@
     }
 
     /* index of concepts, in two columns */
+    /* light sepia band from the top of the window to just below the index */
+    .lexicon-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 72px;
+    }
+
+    .lexicon-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -56px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    @media (max-width: 600px) {
+      .lexicon-top::before {
+        top: -140px;
+      }
+    }
+
     .lexicon-index {
-      margin: 0 0 72px;
+      margin: 0;
     }
 
     .lexicon-index ol {
       list-style: none;
       margin: 0;
       padding: 0;
-      columns: 2;
-      column-gap: 40px;
+      display: grid;
+      grid-template-columns: max-content max-content;
+      grid-template-rows: repeat(4, auto);
+      grid-auto-flow: column;
+      column-gap: 104px;
     }
 
     .lexicon-index li {
-      break-inside: avoid;
       padding: 6px 0;
     }
 
@@ -72,7 +99,9 @@
 
     @media (max-width: 480px) {
       .lexicon-index ol {
-        columns: 1;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-auto-flow: row;
       }
     }
 
@@ -175,6 +204,7 @@
     </button>
 
   <main class="page-main">
+    <div class="lexicon-top">
     <h1 class="page-title">Lexicon</h1>
     <p class="page-intro">Key terms used in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
 
@@ -190,6 +220,7 @@
       <li><a href="#technology-stack">Technology Stack</a></li>
       </ol>
     </nav>
+    </div>
 
     <dl class="lexicon">
       <div class="term" id="critical-evolutionary-game-theory-model">

@@ -34,6 +34,7 @@
   --sans: 'Inter', sans-serif;
   --mono-caps: 'IBM Plex Sans', sans-serif;
   --track-tint: rgba(0, 0, 0, 0.08);
+  --band-bg: #fbf6ec;
 }
 
 html[data-theme="sepia"] {
@@ -41,6 +42,7 @@ html[data-theme="sepia"] {
   --canvas-ink: #3b2f20;
   --muted: #9a8a72;
   --track-tint: rgba(59, 47, 32, 0.12);
+  --band-bg: #f2e8d2;
   --selection-bg: rgba(214, 196, 160, 0.45);
 }
 
@@ -49,6 +51,7 @@ html[data-theme="midnight"] {
   --canvas-ink: #e6ebf5;
   --muted: #8a93ad;
   --track-tint: rgba(230, 235, 245, 0.15);
+  --band-bg: #161e44;
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
@@ -57,6 +60,7 @@ html[data-theme="dark"] {
   --canvas-ink: #ffffff;
   --muted: #8c8c8c;
   --track-tint: rgba(255, 255, 255, 0.15);
+  --band-bg: #15120c;
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
@@ -118,6 +122,7 @@ body.page-leaving {
 /* back arrow top left; site name in the bottom-left corner; theme toggle top right */
 .back-arrow {
   position: absolute;
+  z-index: 10;
   top: 33px;
   left: 40px;
   display: flex;
@@ -149,6 +154,7 @@ body.page-leaving {
 
 .theme-toggle {
   position: absolute;
+  z-index: 10;
   top: 36px;
   right: 40px;
   display: flex;
