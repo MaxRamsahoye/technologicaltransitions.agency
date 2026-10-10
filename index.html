@@ -213,14 +213,14 @@
     }
 
     .loader svg {
-      width: 44px;
-      height: 44px;
+      width: 72px;
+      height: 72px;
       transform: rotate(-90deg);
     }
 
     .loader circle {
       fill: none;
-      stroke-width: 2.5;
+      stroke-width: 1.6;
     }
 
     .loader-track {
@@ -1449,9 +1449,26 @@
 
       btn.addEventListener('click', scrollToTop);
 
-      document.querySelector('.next-screen').addEventListener('click', function () {
-        var overview = document.getElementById('overview');
-        animateScrollTo(overview.getBoundingClientRect().top + window.scrollY, 900);
+      var nextScreenBtn = document.querySelector('.next-screen');
+      var overviewEl = document.getElementById('overview');
+
+      function goToOverview() {
+        animateScrollTo(overviewEl.getBoundingClientRect().top + window.scrollY, 900);
+      }
+
+      nextScreenBtn.addEventListener('click', goToOverview);
+
+      // Enter on the first screen does the same as the down arrow.
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'A' || tag === 'BUTTON' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        if (overviewEl.getBoundingClientRect().top < window.innerHeight / 2) return;
+        e.preventDefault();
+        playPianoClick();
+        var rect = nextScreenBtn.getBoundingClientRect();
+        spawnRipple(rect.left + rect.width / 2, rect.top + rect.height / 2, getComputedStyle(nextScreenBtn).color);
+        goToOverview();
       });
 
       document.addEventListener('keydown', function (e) {
