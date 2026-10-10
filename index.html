@@ -1045,32 +1045,18 @@
       counter-increment: sitemap;
     }
 
-    /* the dot: a true 4px circle sitting on the baseline, after the numeral */
-    .footer-sitemap li::after {
-      content: '';
-      order: -1;
-      flex: none;
-      width: 4px;
-      height: 4px;
-      margin: 0 28px 0 5px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .footer-sitemap li::before {
-      order: -2;
-    }
 
     .footer-sitemap li + li {
       margin-top: 14px;
     }
 
-    /* roman numerals, right-aligned in a fixed column, each followed by a
-       small round dot (below), then room before the name */
+    /* roman numerals, right-aligned in a fixed column, with
+       room before the name */
     .footer-sitemap li::before {
       content: counter(sitemap, upper-roman);
       flex: none;
       width: 2.2em;
+      margin-right: 28px;
       text-align: right;
       font-weight: 400;
     }
