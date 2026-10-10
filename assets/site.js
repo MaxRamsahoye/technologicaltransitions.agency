@@ -311,7 +311,12 @@
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey || typing()) return;
     if (e.key === 't' || e.key === 'T') {
-      press(themeBtn);
+      if (themeBtn) press(themeBtn);
+      else {
+        // no toggle on this page: switch anyway, rippling at the pointer
+        toggleTheme();
+        spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
+      }
     } else if (e.key === 'Enter' && enterTarget) {
       var tag = document.activeElement && document.activeElement.tagName;
       if (tag === 'A' || tag === 'BUTTON') return;
