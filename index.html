@@ -963,11 +963,13 @@
     }
 
     /* author, title and subtitle on the left; sitemap on the right */
-    /* centred: equal space on either side of the footer content */
+    /* centred: equal space on either side of the footer content; the menu's
+       line sits midway between the title block and the links */
     .footer-inner {
+      --line-gap: 80px;
       display: grid;
       grid-template-columns: max-content max-content;
-      column-gap: 104px;
+      column-gap: var(--line-gap);
       align-items: start;
       width: max-content;
       max-width: 100%;
@@ -1013,7 +1015,7 @@
     .footer-sitemap ol {
       list-style: none;
       margin: 0;
-      padding: 2px 0 2px 64px;
+      padding: 2px 0 2px var(--line-gap);
       border-left: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
       font-family: 'Inter', sans-serif;
       font-weight: 600;
