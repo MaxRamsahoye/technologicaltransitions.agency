@@ -1008,9 +1008,9 @@
       }
     }
 
-    /* vertically centred beside the title block */
+    /* the menu's last line sits level with the subtitle's last line */
     .footer-sitemap {
-      align-self: center;
+      align-self: end;
     }
 
     .footer-sitemap ol {
@@ -1034,7 +1034,7 @@
     }
 
     /* roman numerals, right-aligned in a fixed column, each followed by a
-       small square dot, then room before the name */
+       small round dot, then room before the name */
     .footer-sitemap li::before {
       content: counter(sitemap, upper-roman);
       flex: none;
@@ -1044,7 +1044,7 @@
       margin-right: 28px;
       text-align: right;
       font-weight: 400;
-      background: linear-gradient(currentColor, currentColor) no-repeat right 0 bottom 0.36em / 4px 4px;
+      background: radial-gradient(circle closest-side, currentColor 85%, transparent 100%) no-repeat right 0 bottom 0.34em / 5px 5px;
     }
 
     .footer-sitemap a {
