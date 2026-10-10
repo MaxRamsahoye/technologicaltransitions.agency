@@ -243,7 +243,8 @@
     .left-controls {
       position: absolute;
       top: 36px;
-      right: max(var(--header-margin), 24px);
+      /* in line with the progress ring and scroll-to-top button */
+      right: 40px;
       z-index: 50;
       display: flex;
       align-items: center;
@@ -258,11 +259,11 @@
       border: none;
       padding: 0;
       cursor: pointer;
-      color: var(--frame-ink);
+      color: var(--muted);
     }
 
     .theme-toggle:hover {
-      color: var(--frame-accent);
+      color: var(--canvas-ink);
     }
 
     .theme-toggle svg {
@@ -736,6 +737,7 @@
 
       .left-controls {
         top: 31px;
+        right: 24px;
       }
 
       .site-title {
