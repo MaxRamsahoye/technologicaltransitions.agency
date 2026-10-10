@@ -26,6 +26,10 @@
           document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png';
         }
       } catch (e) {}
+      try {
+        if (localStorage.getItem('blank') === '1') document.documentElement.classList.add('blank');
+        if (localStorage.getItem('mono') === '1') document.documentElement.classList.add('mono');
+      } catch (e) {}
     })();
   </script>
   <title>Technological Transitions</title>
@@ -130,6 +134,24 @@
       --hairline: #333333;
       --panel: #121212;
       --link: #8ab4f8;
+    }
+
+    /* b: blank — no grey bands or rules on the header, footer and Overview */
+    html.blank,
+    html.blank[data-theme] {
+      --panel: var(--canvas-bg);
+      --hairline: transparent;
+    }
+
+    /* c: colour off — the blue accent becomes the text colour, links go semi-bold */
+    html.mono,
+    html.mono[data-theme] {
+      --link: var(--canvas-ink);
+    }
+
+    html.mono .article-body p a,
+    html.mono .footer-site {
+      font-weight: 600;
     }
 
     .page {
@@ -1559,6 +1581,20 @@
         var tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
         toggleTheme();
+      });
+
+      // b toggles the grey bands and rules; c toggles the blue accent.
+      var TOGGLES = { b: 'blank', c: 'mono' };
+
+      document.addEventListener('keydown', function (e) {
+        var name = TOGGLES[e.key.toLowerCase()];
+        if (!name) return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        var on = root.classList.toggle(name);
+        try { localStorage.setItem(name, on ? '1' : '0'); } catch (err) {}
+        playPianoClick();
       });
 
       var audioCtx = null;
