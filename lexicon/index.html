@@ -129,20 +129,21 @@
       transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .term:hover,
-    .term:target {
+    .lexicon:not(.hover-locked) .term:hover,
+    .term.is-clicked {
       transform: scale(1.05);
     }
 
-    .term:hover::before,
-    .term:target::before {
+    .lexicon:not(.hover-locked) .term:hover::before,
+    .term.is-clicked::before {
       transform: scaleY(1);
     }
 
-    /* a concept reached by its link keeps the hover look; it starts once the
-       scroll has mostly arrived */
-    .term:target,
-    .term:target::before {
+    /* a concept reached by its link takes the hover look once the scroll has
+       mostly arrived; for a second no other entry reacts to hover, then it
+       eases back (see the script below) */
+    .term.is-clicked,
+    .term.is-clicked::before {
       transition-delay: 0.45s;
     }
 
@@ -283,6 +284,36 @@
     </svg>
   </button>
 
+  <script>
+    (function () {
+      var lexicon = document.querySelector('.lexicon');
+      var ARRIVE_MS = 450;   // matches the transition-delay above
+      var HOLD_MS = 1000;
+      var timer = null;
+
+      function highlight(id) {
+        var term = id && document.getElementById(id);
+        if (!term || !term.classList.contains('term')) return;
+        clearTimeout(timer);
+        Array.prototype.forEach.call(document.querySelectorAll('.term.is-clicked'), function (t) {
+          t.classList.remove('is-clicked');
+        });
+        lexicon.classList.add('hover-locked');
+        term.classList.add('is-clicked');
+        timer = setTimeout(function () {
+          term.classList.remove('is-clicked');
+          lexicon.classList.remove('hover-locked');
+        }, ARRIVE_MS + HOLD_MS);
+      }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (a) highlight(a.getAttribute('href').slice(1));
+      });
+
+      if (location.hash) highlight(location.hash.slice(1));
+    })();
+  </script>
   <script src="../assets/site.js?v=d39cbb2d" data-base="../"></script>
 </body>
 </html>
