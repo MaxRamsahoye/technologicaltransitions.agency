@@ -223,8 +223,8 @@
     .site-title {
       position: absolute;
       top: 28px;
-      /* mirror the theme toggle on the right */
-      left: max(var(--header-margin), 24px);
+      /* halfway between the page margin and the article column */
+      left: calc((max(var(--header-margin), 24px) + max(240px, 50% - 380px)) / 2);
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 14px;
       line-height: 1.15;
@@ -671,6 +671,10 @@
     }
 
     @media (max-width: 1180px) {
+      .site-title {
+        left: calc((max(var(--header-margin), 24px) + max(24px, 50% - 330px)) / 2);
+      }
+
       .layout-grid {
         grid-template-columns: 1fr;
         max-width: none;
