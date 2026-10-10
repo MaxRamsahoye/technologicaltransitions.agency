@@ -1116,6 +1116,9 @@
       function finish() {
         if (finished) return;
         finished = true;
+        // The page script plays the completion chord on this.
+        window.loaderComplete = true;
+        document.dispatchEvent(new Event('loadercomplete'));
         setTimeout(function () {
           loader.classList.add('loader-done');
           setTimeout(function () { loader.remove(); }, 700);
@@ -1746,6 +1749,10 @@
           });
         } catch (e) {}
       }
+
+      // The loading ring closing plays the same chord as finishing the article.
+      if (window.loaderComplete) playCompletionSound();
+      else document.addEventListener('loadercomplete', playCompletionSound);
 
       function playCompletionSound() {
         try {
