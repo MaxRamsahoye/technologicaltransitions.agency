@@ -1374,7 +1374,9 @@
       });
 
       var audioCtx = null;
-      var pianoNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+      // C major pentatonic, C4 to E5. Clicks walk through it a step or two at a time.
+      var pianoNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
+      var noteIndex = 2;
 
       // A soft sine tone with a gentle swell and long fade, plus a faint octave.
       function playSoftTone(freq, when, peak, decay) {
@@ -1400,8 +1402,15 @@
             audioCtx = new AC();
           }
           if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-          var freq = pianoNotes[Math.floor(Math.random() * pianoNotes.length)];
-          playSoftTone(freq, audioCtx.currentTime, 0.045, 1.4);
+          var steps = [-2, -1, 1, 2];
+          var next = noteIndex + steps[Math.floor(Math.random() * steps.length)];
+          if (next < 0 || next >= pianoNotes.length) next = noteIndex - (next - noteIndex);
+          noteIndex = next;
+          var now = audioCtx.currentTime;
+          playSoftTone(pianoNotes[noteIndex], now, 0.045, 2.8);
+          // A quieter answering note two scale steps above.
+          var answer = pianoNotes[Math.min(noteIndex + 2, pianoNotes.length - 1)];
+          if (answer !== pianoNotes[noteIndex]) playSoftTone(answer, now + 0.16, 0.018, 2.4);
         } catch (e) {}
       }
 
