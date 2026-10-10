@@ -902,7 +902,7 @@
             </section>
 
             <section id="macrohistory">
-              <h2>Macrohistory: Major Technological Transitions</h2>
+              <h2 data-toc="Major Technological Transitions">Macrohistory: Major Technological Transitions</h2>
 
               <p>Whist it is all we have ever known, the advanced, global, technological civilisation of today has only been in existence for a very brief period of human history. The society or <em>socio-technical system</em>, that we live within is a highly novel configuration, the large-scale culmination of a series of technological revolutions. So far, civilisation has undergone three such revolutions &ndash; Agricultural, Industrial and Digital &ndash; and we are now in the midst of a fourth (and likely final) one: the <a href="https://ia.samaltman.com/#:~:text=Technology%20brought%20us%20from%20the%20Stone%20Age%20to%20the%20Agricultural%20Age%20and%20then%20to%20the%20Industrial%20Age.%20From%20here%2C%20the%20path%20to%20the%20Intelligence%20Age%20is%20paved%20with%20compute%2C%20energy%2C%20and%20human%20will." target="_blank" rel="noopener">Intelligence Revolution</a>.</p>
 
@@ -956,7 +956,7 @@
         var li = document.createElement('li');
         var a = document.createElement('a');
         a.href = '#' + section.id;
-        a.textContent = heading.textContent;
+        a.textContent = heading.dataset.toc || heading.textContent;
         li.appendChild(a);
         tocList.appendChild(li);
         tocItemCount++;
