@@ -695,14 +695,20 @@
       max-width: 760px;
       margin: 0 auto;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6;
       color: var(--muted);
     }
 
-    .site-footer strong {
+    .footer-site {
       font-weight: 500;
       color: var(--canvas-ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .footer-site:hover {
+      border-bottom-color: var(--canvas-ink);
     }
 
     .endnotes.has-notes {
@@ -981,7 +987,7 @@
     </div>
 
     <footer class="site-footer">
-      <p><strong>technologicaltransitions.agency</strong> is an independent research project by Max Ramsahoye on the major technological transitions that have shaped civilisation &ndash; agricultural, industrial, digital and now intelligence &ndash; and on the human agency that remains in how they unfold.</p>
+      <p><a class="footer-site" href="./">technologicaltransitions.agency</a> is an independent research project by Max Ramsahoye on the major technological transitions that have shaped civilisation &ndash; agricultural, industrial, digital and intelligence revolutions &ndash; and on the human agency that shapes them.</p>
     </footer>
   </div>
 
@@ -1221,6 +1227,7 @@
       }
 
       var ringFill = document.querySelector('.progress-ring-fill');
+      var footerEl = document.querySelector('.site-footer');
       var subtitleEl = document.querySelector('.article-subtitle');
       var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
@@ -1293,7 +1300,8 @@
           reachedEnd = false;
         }
 
-        btn.classList.toggle('visible', pct > 20);
+        var footerInView = footerEl.getBoundingClientRect().top < window.innerHeight;
+        btn.classList.toggle('visible', pct > 20 && !footerInView);
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
