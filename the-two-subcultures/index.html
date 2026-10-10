@@ -276,35 +276,41 @@
       display: none;
     }
 
-    .scroll-progress-track {
+    .progress-ring {
       position: fixed;
-      top: 134px;
-      right: var(--frame-margin);
-      width: 5px;
-      height: calc(100vh - 134px);
-      border-radius: 0;
-      background: var(--canvas-track-tint);
+      top: 30px;
+      right: calc(var(--frame-margin) + 40px);
+      width: 30px;
+      height: 30px;
+      transform: rotate(-90deg);
       z-index: 40;
       opacity: 0;
-      transition: right 0.6s ease, opacity 0.6s ease;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
     }
 
-    .scroll-progress-fill {
-      position: fixed;
-      top: 134px;
-      right: var(--frame-margin);
-      width: 5px;
-      height: 0px;
-      border-radius: 0;
-      background: var(--canvas-accent);
-      z-index: 41;
-      opacity: 0;
-      transition: right 0.6s ease, opacity 0.6s ease;
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 2.5;
     }
 
-    body.past-frame .scroll-progress-track,
-    body.past-frame .scroll-progress-fill {
+    .progress-ring-track {
+      stroke: var(--canvas-track-tint);
+    }
+
+    .progress-ring-fill {
+      stroke: var(--canvas-accent);
+    }
+
+    body.past-frame .progress-ring {
       opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .progress-ring {
+        top: 20px;
+        right: 20px;
+      }
     }
 
     .scroll-top-btn {
@@ -810,8 +816,10 @@
     </button>
   </div>
 
-  <div class="scroll-progress-track"></div>
-  <div class="scroll-progress-fill"></div>
+  <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
+    <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
+    <circle class="progress-ring-fill" cx="15" cy="15" r="13" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+  </svg>
 
   <button class="scroll-top-btn" type="button" aria-label="Scroll to top">&#x02C4;</button>
 
@@ -1089,8 +1097,7 @@
         });
       }
 
-      var track = document.querySelector('.scroll-progress-track');
-      var fill = document.querySelector('.scroll-progress-fill');
+      var ringFill = document.querySelector('.progress-ring-fill');
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
       var articleHeaderEl = document.querySelector('.article-header');
@@ -1146,13 +1153,7 @@
           pct = 100;
         }
 
-        var topInset = Math.max(0, CANVAS_TOP - scrollTop);
-        var trackHeight = window.innerHeight - topInset;
-
-        track.style.top = topInset + 'px';
-        track.style.height = trackHeight + 'px';
-        fill.style.top = topInset + 'px';
-        fill.style.height = (pct / 100 * trackHeight) + 'px';
+        ringFill.setAttribute('stroke-dashoffset', 100 - pct);
 
         if (pct >= 100 && !reachedEnd) {
           reachedEnd = true;
