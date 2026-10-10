@@ -982,11 +982,30 @@
       color: var(--muted);
     }
 
+    /* title and subtitle the same width: the block is as wide as the title,
+       and the subtitle is sized to fill two balanced lines of it */
+    .footer-head {
+      --footer-title-size: min(36px, calc((100vw - 48px) / 15.4));
+      width: max-content;
+      max-width: 100%;
+    }
+
     .site-footer .footer-inner .footer-subtitle {
-      margin-top: 20px;
+      width: 0;
+      min-width: 100%;
+      margin-top: 18px;
       font-family: var(--serif);
-      font-size: 21px;
+      font-size: max(17px, calc(var(--footer-title-size) * 0.488));
       line-height: 1.35;
+      text-wrap: balance;
+    }
+
+    /* where both lines fit, they run the full width of the title */
+    @media (min-width: 701px) {
+      .site-footer .footer-inner .footer-subtitle {
+        text-align: justify;
+        text-align-last: justify;
+      }
     }
 
     /* vertically centred beside the title block */
@@ -1042,7 +1061,7 @@
       overflow-wrap: anywhere;
       font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 28px;
+      font-size: var(--footer-title-size);
       letter-spacing: -0.01em;
       line-height: 1.2;
     }
@@ -1069,8 +1088,8 @@
     }
 
     @media (max-width: 700px) {
-      .site-footer .footer-title {
-        font-size: 21px;
+      .site-footer .footer-inner .footer-subtitle {
+        text-wrap: pretty;
       }
 
       .footer-title > span {
@@ -1506,7 +1525,7 @@
       <div class="footer-inner">
       <div class="footer-head">
       <p class="footer-author"><a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
-      <p class="footer-title">technologicaltransitions.agency</p>
+      <p class="footer-title"><a class="heading-link" href="./">technologicaltransitions.agency</a></p>
       <p class="footer-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is <em>enacted</em> by the power-elite&rsquo;s response to them</p>
       </div>
       <nav class="footer-sitemap" aria-label="Sitemap">
