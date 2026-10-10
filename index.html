@@ -471,11 +471,40 @@
       grid-column: 2;
     }
 
+    /* first screen: author, title and subtitle centred below the site header */
     .article-header {
       max-width: 760px;
-      margin: 0;
-      padding: 130px 0 0;
-      text-align: left;
+      margin: 0 auto;
+      padding: 40px 0;
+      min-height: calc(100vh - 90px);
+      min-height: calc(100svh - 90px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .next-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .next-screen:hover {
+      color: var(--canvas-ink);
+    }
+
+    .next-screen svg {
+      width: 32px;
+      height: 32px;
     }
 
     .article-author {
@@ -489,8 +518,8 @@
       font-family: 'Inter', sans-serif;
       font-weight: 700;
       letter-spacing: -0.02em;
-      /* runs 240px into the right margin; sized so "Major Technological
-         Transitions" fits on one line */
+      /* 240px wider than the column (overflowing evenly when centred); sized
+         so "Major Technological Transitions" fits on one line */
       width: calc(100% + 240px);
       font-size: min(52px, calc((min(760px, 100vw - 480px) + 240px) / 15.4));
       line-height: 1.08;
@@ -507,7 +536,7 @@
       font-weight: 600;
       font-size: 26px;
       color: var(--canvas-ink);
-      margin: 0 0 72px;
+      margin: 0 0 40px;
     }
 
     .article-body {
@@ -556,6 +585,16 @@
       position: relative;
       z-index: 0;
       padding: 56px 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* flex children don't collapse margins, so space paragraphs one way only */
+    #overview > p {
+      margin: 0 0 15px;
     }
 
     #overview::before {
@@ -869,12 +908,13 @@
       }
 
       .article-header {
-        padding-top: 90px;
+        min-height: calc(100vh - 80px);
+        min-height: calc(100svh - 80px);
       }
 
       .article-subtitle {
         font-size: 22px;
-        margin-bottom: 44px;
+        margin-bottom: 36px;
       }
 
       .article-body {
@@ -910,7 +950,8 @@
       }
 
       .article-header {
-        padding-top: 70px;
+        min-height: calc(100vh - 72px);
+        min-height: calc(100svh - 72px);
       }
 
       .article-subtitle {
@@ -1037,6 +1078,12 @@
             <p class="article-author">Max Ramsahoye</p>
             <h1 class="article-title">A Critical Evolutionary <span class="title-line">Game-Theory Model of</span> <span class="title-line">Major Technological Transitions</span></h1>
             <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is enacted by the technocratic elite&rsquo;s response to them</p>
+            <button class="next-screen" type="button" aria-label="Continue to the overview">
+              <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+                <circle cx="14" cy="14" r="13.5"/>
+                <polygon points="14,17.5 18.5,10.5 9.5,10.5"/>
+              </svg>
+            </button>
           </div>
 
           <div class="article-body">
@@ -1401,6 +1448,11 @@
 
       btn.addEventListener('click', scrollToTop);
 
+      document.querySelector('.next-screen').addEventListener('click', function () {
+        var overview = document.getElementById('overview');
+        animateScrollTo(overview.getBoundingClientRect().top + window.scrollY, 900);
+      });
+
       document.addEventListener('keydown', function (e) {
         if (e.key !== 'Backspace') return;
         var tag = document.activeElement && document.activeElement.tagName;
@@ -1605,7 +1657,7 @@
       }
 
       document.addEventListener('click', function (e) {
-        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .scroll-down-btn, .sidenote-ref, .sidenote-label');
+        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .sidenote-ref, .sidenote-label');
         var x, y;
         if (iconBtn) {
           var rect = iconBtn.getBoundingClientRect();
