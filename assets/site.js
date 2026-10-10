@@ -207,7 +207,9 @@
 
   // Progress shows as a ring (.progress-ring) or a vertical pill
   // (.progress-pill). It counts from the bottom of the element named by the
-  // indicator's data-start (default: the page title) plus data-start-offset.
+  // indicator's data-start (default: the page title) plus data-start-offset,
+  // to the top of the element named by data-end (default: the end of the
+  // page). The indicator shows only between the two.
   var ring = document.querySelector('.progress-ring');
   var ringFill = ring && ring.querySelector('.progress-ring-fill');
   var pill = document.querySelector('.progress-pill');
@@ -216,6 +218,7 @@
   var upBtn = document.querySelector('.scroll-top-btn');
   var startEl = document.querySelector((indicator && indicator.getAttribute('data-start')) || '.page-title');
   var startOffset = parseFloat((indicator && indicator.getAttribute('data-start-offset')) || '0');
+  var endEl = indicator && indicator.getAttribute('data-end') && document.querySelector(indicator.getAttribute('data-end'));
   var reachedEnd = false;
 
   function scrollToTop() {
@@ -230,9 +233,14 @@
       var scrollTop = doc.scrollTop || document.body.scrollTop;
       var scrollable = doc.scrollHeight - doc.clientHeight;
       var start = startEl ? startEl.getBoundingClientRect().bottom + scrollTop + startOffset : 0;
-      var span = scrollable - start;
+      var end = endEl ? Math.min(scrollable, endEl.getBoundingClientRect().top + scrollTop) : scrollable;
+      // finish before the footer comes into view
+      var foot = endEl && document.querySelector('.site-footer');
+      if (foot) end = Math.min(end, foot.getBoundingClientRect().top + scrollTop - window.innerHeight);
+      var span = end - start;
       var pct = span > 0 ? Math.min(100, Math.max(0, (scrollTop - start) / span * 100)) : 0;
-      if (scrollable > 0 && scrollTop >= scrollable - 2) pct = 100;
+      var atBottom = scrollable > 0 && scrollTop >= scrollable - 2;
+      if (atBottom && !endEl) pct = 100;
 
       if (ringFill) {
         if (pct >= 100) {
@@ -243,14 +251,15 @@
         }
       }
       if (pillFill) pillFill.style.transform = 'scaleY(' + pct / 100 + ')';
-      document.body.classList.toggle('past-start', scrollTop > start);
+      document.body.classList.toggle('past-start', scrollTop > start && (!endEl || scrollTop < end));
 
       if (upBtn) upBtn.classList.toggle('visible', scrollTop > start + window.innerHeight * 0.5);
 
-      if (pct >= 100 && !reachedEnd) {
+      // the end chord plays on reaching the bottom of the page
+      if (atBottom && !reachedEnd) {
         reachedEnd = true;
         playCompletionSound();
-      } else if (pct < 100) {
+      } else if (!atBottom) {
         reachedEnd = false;
       }
     };

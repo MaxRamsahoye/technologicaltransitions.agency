@@ -143,8 +143,8 @@ body.page-leaving {
 }
 
 .back-arrow svg {
-  width: 26px;
-  height: 20px;
+  width: 20px;
+  height: 15px;
 }
 
 .site-title {
@@ -476,23 +476,23 @@ body.footer-in-view .scroll-top-btn {
   top: 50%;
   /* halfway between the column's right edge (50% + 356px) and the window's */
   left: calc(75vw + 178px);
-  width: 6px;
-  height: 36vh;
-  margin-left: -3px;
+  width: 4px;
+  height: 52vh;
+  margin-left: -2px;
   transform: translateY(-50%);
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--track-tint);
   overflow: hidden;
   z-index: 40;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.9s ease-in-out;
 }
 
 .progress-pill-fill {
   position: absolute;
   inset: 0;
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--canvas-ink);
   transform: scaleY(0);
   transform-origin: top;
@@ -506,4 +506,9 @@ body.past-start .progress-pill {
   .progress-pill {
     display: none;
   }
+}
+
+/* the pill never overlaps the footer */
+body.footer-in-view .progress-pill {
+  opacity: 0;
 }
