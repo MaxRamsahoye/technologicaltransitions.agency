@@ -1000,7 +1000,7 @@
     /* title and subtitle the same width: the block is as wide as the title,
        and the subtitle (the quote) is sized to fill one line of it */
     .footer-head {
-      --footer-title-size: min(36px, calc((100vw - 48px) / 15.4));
+      --footer-title-size: min(22px, calc((100vw - 48px) / 20.8));
       width: max-content;
       max-width: 100%;
     }
@@ -1010,7 +1010,7 @@
       min-width: 100%;
       margin-top: 18px;
       font-family: var(--serif);
-      font-size: calc(var(--footer-title-size) * 0.79);
+      font-size: calc(var(--footer-title-size) * 1.08);
       line-height: 1.35;
       text-wrap: balance;
     }
@@ -1085,13 +1085,15 @@
       border-bottom-color: currentColor;
     }
 
+    /* in the style of the site name in the top-left corner */
     .site-footer .footer-title {
       overflow-wrap: anywhere;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 500;
       font-size: var(--footer-title-size);
-      letter-spacing: -0.01em;
-      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.15;
     }
 
     /* three lines: "A Critical Evolutionary" / "Game-Theory Model of" /
