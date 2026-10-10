@@ -28,7 +28,7 @@
       } catch (e) {}
     })();
   </script>
-  <title>The Two Subcultures — Global Maxima</title>
+  <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions — Max Ramsahoye</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -255,23 +255,6 @@
       display: block;
     }
 
-    .hamburger-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: var(--frame-ink);
-    }
-
-    .hamburger-btn:hover {
-      color: var(--frame-accent);
-    }
-
-    .hamburger-btn svg {
-      width: 19px;
-      height: 19px;
-    }
-
     html {
       scrollbar-width: none;
     }
@@ -340,9 +323,10 @@
       color: var(--canvas-ink);
     }
 
-    .scroll-top-btn svg {
-      width: 15px;
-      height: 15px;
+    .scroll-top-btn {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
     }
 
     .layout-grid {
@@ -433,26 +417,7 @@
       font-family: var(--serif);
       font-size: 26px;
       color: var(--canvas-ink);
-      margin: 0 0 26px;
-    }
-
-    .article-byline {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 20px;
-      letter-spacing: 0.04em;
-      color: var(--canvas-ink);
       margin: 0 0 72px;
-    }
-
-    .article-byline a {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-    }
-
-    .article-byline a:hover {
-      border-bottom-color: var(--canvas-ink);
     }
 
     .article-body {
@@ -628,17 +593,6 @@
       margin-bottom: 0;
     }
 
-    .dinkus {
-      font-family: 'Cormorant Garamond', var(--serif);
-      text-align: center;
-      font-weight: 700;
-      font-size: 24px;
-      letter-spacing: 0.25em;
-      color: var(--canvas-accent);
-      margin: 0;
-      padding: 20px 0 30px;
-    }
-
     @media (max-width: 1800px) {
       .layout-grid {
         grid-template-columns: 200px minmax(0, 760px) 200px;
@@ -730,10 +684,6 @@
         font-size: 25px;
       }
 
-      .dinkus {
-        padding-top: 48px;
-      }
-
       .article-header {
         padding-top: 90px;
       }
@@ -744,9 +694,6 @@
 
       .article-subtitle {
         font-size: 22px;
-      }
-
-      .article-byline {
         margin-bottom: 44px;
       }
 
@@ -791,9 +738,6 @@
 
       .article-subtitle {
         font-size: 19px;
-      }
-
-      .article-byline {
         margin-bottom: 32px;
       }
 
@@ -815,18 +759,10 @@
 </head>
 <body>
   <div class="frame-header">
-    <a class="site-title" href="./">Global Maxima</a>
+    <a class="site-title" href="./">Max Ramsahoye</a>
   </div>
 
   <div class="left-controls">
-    <a class="hamburger-btn" href="../list/" aria-label="Contents">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </a>
-
     <button class="theme-toggle" type="button" aria-label="Toggle theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
         <circle cx="12" cy="12" r="4.5"/>
@@ -848,28 +784,22 @@
   <div class="scroll-progress-track"></div>
   <div class="scroll-progress-fill"></div>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
-    <svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.7">
-      <polygon points="3,23 13,16.5 23,23 13,3"/>
-      <line x1="13" y1="16.5" x2="13" y2="3"/>
-    </svg>
-  </button>
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">&#x02C4;</button>
 
   <div class="page">
     <header class="site-header"></header>
 
     <div class="layout-grid">
       <nav class="toc" aria-label="Contents">
-        <p class="toc-label">The Two Subcultures</p>
+        <p class="toc-label">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</p>
         <ol></ol>
       </nav>
 
       <main class="main-area">
         <article>
           <div class="article-header">
-            <h1 class="article-title">The Two Subcultures</h1>
-            <p class="article-subtitle">Synthesis at the intellectual frontier</p>
-            <p class="article-byline"><a href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
+            <h1 class="article-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</h1>
+            <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is enacted by the technocratic elite&rsquo;s response to them</p>
           </div>
 
           <div class="article-body">
@@ -912,7 +842,6 @@
       <p class="endnotes-heading">Endnotes</p>
     </div>
 
-    <p class="dinkus">***</p>
   </div>
 
   <script>
@@ -1154,7 +1083,7 @@
       var fill = document.querySelector('.scroll-progress-fill');
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
-      var bylineEl = document.querySelector('.article-byline');
+      var articleHeaderEl = document.querySelector('.article-header');
       var reachedEnd = false;
       var wasTocEligible = false;
       var tocEl = document.querySelector('.toc');
@@ -1227,8 +1156,8 @@
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-frame', scrollTop > CANVAS_TOP);
 
-        var authorOffScreen = bylineEl.getBoundingClientRect().bottom <= 0;
-        var tocEligible = isWide && authorOffScreen;
+        var headerOffScreen = articleHeaderEl.getBoundingClientRect().bottom <= 0;
+        var tocEligible = isWide && headerOffScreen;
         document.body.classList.toggle('toc-eligible', tocEligible);
 
         if (tocEligible && !wasTocEligible) {
@@ -1527,7 +1456,7 @@
       }
 
       document.addEventListener('click', function (e) {
-        var iconBtn = e.target.closest('.theme-toggle, .hamburger-btn, .back-arrow, .scroll-top-btn, .scroll-down-btn, .sidenote-ref, .sidenote-label');
+        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .scroll-down-btn, .sidenote-ref, .sidenote-label');
         var x, y;
         if (iconBtn) {
           var rect = iconBtn.getBoundingClientRect();
