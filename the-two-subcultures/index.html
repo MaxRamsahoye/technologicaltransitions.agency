@@ -52,6 +52,14 @@
 
     @font-face {
       font-family: 'ET Bembo';
+      src: url('../fonts/et-book-bold-line-figures.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'ET Bembo';
       src: url('../fonts/ETBembo-DisplayItalic.woff2') format('woff2');
       font-weight: 400;
       font-style: italic;
@@ -70,7 +78,7 @@
       --frame-bg: var(--canvas-bg);
       --frame-ink: var(--canvas-ink);
       --frame-accent: var(--canvas-accent);
-      --canvas-bg: #f8f4ee;
+      --canvas-bg: #ffffff;
       --canvas-ink: #000000;
       --canvas-accent: #000000;
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
@@ -87,7 +95,7 @@
     }
 
     html[data-theme="sepia"] {
-      --canvas-bg: #f8f4ee;
+      --canvas-bg: #ffffff;
       --canvas-ink: #000000;
       --canvas-accent: #8a6d42;
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
@@ -344,7 +352,7 @@
 
     .scroll-top-btn {
       font-family: var(--serif);
-      font-size: 30px;
+      font-size: 20px;
       line-height: 1;
     }
 
@@ -432,7 +440,7 @@
 
     .article-title {
       font-family: var(--serif);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 52px;
       line-height: 1.05;
       margin: 0 0 24px;
@@ -441,6 +449,7 @@
 
     .article-subtitle {
       font-family: var(--serif);
+      font-weight: 600;
       font-size: 26px;
       color: var(--canvas-ink);
       margin: 0 0 72px;
