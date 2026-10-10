@@ -252,6 +252,12 @@
         }
       }
       if (pillFill) pillFill.style.transform = 'scaleY(' + pct / 100 + ')';
+      // edge bar: runs from the start point (once it is on screen) to the bottom
+      if (pill && pill.classList.contains('progress-edge')) {
+        var inset = Math.max(0, start - scrollTop);
+        pill.style.top = inset + 'px';
+        pill.style.height = Math.max(0, window.innerHeight - inset) + 'px';
+      }
       document.body.classList.toggle('past-start', scrollTop > start && (!endEl || scrollTop < end));
 
       if (upBtn) upBtn.classList.toggle('visible', scrollTop > start + window.innerHeight * 0.5);
