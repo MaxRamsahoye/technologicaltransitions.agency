@@ -386,7 +386,7 @@
       stroke: var(--link);
     }
 
-    body.past-subtitle .progress-ring {
+    body.past-overview .progress-ring {
       opacity: 1;
     }
 
@@ -834,6 +834,14 @@
       text-underline-offset: 3px;
     }
 
+    .article-author .author-link {
+      text-decoration-color: transparent;
+    }
+
+    .article-author .author-link:hover {
+      text-decoration-color: currentColor;
+    }
+
     .footer-site {
       font-weight: 600;
       color: var(--link);
@@ -1176,7 +1184,7 @@
             </section>
 
             <section id="macrohistory">
-              <h2 data-toc="Major Technological Transitions">Macrohistory: Major Technological Transitions</h2>
+              <h2>Major Technological Transitions</h2>
 
               <p>Whist it is all we have ever known, the advanced, global, technological civilisation of today has only been in existence for a very brief period of human history. The society or <em>socio-technical system</em>, that we live within is a highly novel configuration, the large-scale culmination of a series of technological revolutions. So far, civilisation has undergone three such revolutions &ndash; Agricultural, Industrial and Digital &ndash; and we are now in the midst of a fourth (and likely final) one: the <a href="https://ia.samaltman.com/#:~:text=Technology%20brought%20us%20from%20the%20Stone%20Age%20to%20the%20Agricultural%20Age%20and%20then%20to%20the%20Industrial%20Age.%20From%20here%2C%20the%20path%20to%20the%20Intelligence%20Age%20is%20paved%20with%20compute%2C%20energy%2C%20and%20human%20will." target="_blank" rel="noopener">Intelligence Revolution</a>.</p>
 
@@ -1430,7 +1438,6 @@
       var ringFill = document.querySelector('.progress-ring-fill');
       var footerEl = document.querySelector('.site-footer');
       var overviewSection = document.getElementById('overview');
-      var subtitleEl = document.querySelector('.article-subtitle');
       var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
@@ -1451,13 +1458,14 @@
         var doc = document.documentElement;
         var scrollTop = doc.scrollTop || document.body.scrollTop;
         var scrollable = doc.scrollHeight - doc.clientHeight;
-        var CANVAS_TOP = page.offsetTop;
-        var canvasScrollable = scrollable - CANVAS_TOP;
-        var pct = canvasScrollable > 0 ? Math.min(100, Math.max(0, ((scrollTop - CANVAS_TOP) / canvasScrollable) * 100)) : 0;
-        if (canvasScrollable > 0 && scrollTop - CANVAS_TOP <= 10) {
-          pct = 0;
-        }
-        if (canvasScrollable > 0 && scrollTop >= scrollable - 2) {
+        // The ring measures reading from the Overview's bottom rule (the start of
+        // Macrohistory) to the end of the page, and only shows once that rule
+        // has scrolled past the top of the window.
+        var RING_START = overviewSection.getBoundingClientRect().bottom + scrollTop;
+        var ringScrollable = scrollable - RING_START;
+        var pastOverviewRule = scrollTop >= RING_START;
+        var pct = ringScrollable > 0 ? Math.min(100, Math.max(0, ((scrollTop - RING_START) / ringScrollable) * 100)) : 0;
+        if (scrollable > 0 && scrollTop >= scrollable - 2) {
           pct = 100;
         }
 
@@ -1481,7 +1489,7 @@
         btn.classList.toggle('visible', pastOverview && !footerInView);
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
-        document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
+        document.body.classList.toggle('past-overview', pastOverviewRule);
       }
 
       window.addEventListener('scroll', update, { passive: true });
