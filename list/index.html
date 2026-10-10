@@ -20,12 +20,37 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="../assets/site.css?v=d4f3ae88" rel="stylesheet">
+  <link href="../assets/site.css?v=c1fa02b6" rel="stylesheet">
   <style>
-    /* the page's contents sit in a light sepia box, without dividers */
-    .pages-box {
+    /* the central column is light sepia, top to bottom of the window */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: min(760px, 100%);
+      transform: translateX(-50%);
       background: var(--band-bg);
-      padding: 56px 56px 32px;
+      z-index: 0;
+    }
+
+    .page-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-title {
+      z-index: 1;
+    }
+
+    /* where the name sits in the flow (narrow screens), lift it above the column */
+    @media (max-width: 1180px) {
+      .site-title {
+        position: relative;
+        left: 0;
+        bottom: 0;
+      }
     }
 
     .pages-box .page-title {
@@ -67,10 +92,6 @@
     }
 
     @media (max-width: 600px) {
-      .pages-box {
-        padding: 36px 24px 16px;
-      }
-
       .menu a {
         font-size: 21px;
       }
@@ -119,7 +140,7 @@
     <h1 class="page-title">Pages</h1>
 
     <ul class="menu">
-      <li><a href="../"><span class="menu-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</span><span class="menu-desc">The research article</span></a></li>
+      <li><a href="../"><span class="menu-title">Research Article</span><span class="menu-desc">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</span></a></li>
       <li><a href="../lexicon/"><span class="menu-title">Lexicon</span><span class="menu-desc">Key terms used in the research article</span></a></li>
     </ul>
     </div>
