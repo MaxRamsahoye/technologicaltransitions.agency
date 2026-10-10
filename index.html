@@ -441,6 +441,11 @@
       opacity: 1;
     }
 
+    /* full by the time the footer arrives, then gone */
+    body.past-overview.footer-in-view .progress-ring {
+      opacity: 0;
+    }
+
     @media (max-width: 600px) {
       .progress-ring {
         top: 22px;
@@ -1766,6 +1771,7 @@
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-overview', pastOverviewRule);
+        document.body.classList.toggle('footer-in-view', footerInView);
       }
 
       window.addEventListener('scroll', update, { passive: true });
