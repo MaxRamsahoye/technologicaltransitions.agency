@@ -22,23 +22,25 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="../assets/site.css?v=5fd3c6d1" rel="stylesheet">
   <style>
+    /* the page's contents sit in a light sepia box, without dividers */
+    .pages-box {
+      background: var(--band-bg);
+      padding: 56px 56px 32px;
+    }
+
+    .pages-box .page-title {
+      margin-bottom: 16px;
+    }
+
     .menu {
       list-style: none;
       margin: 0;
       padding: 0;
     }
 
-    .menu li {
-      border-top: 1.5px solid var(--canvas-ink);
-    }
-
-    .menu li:last-child {
-      border-bottom: 1.5px solid var(--canvas-ink);
-    }
-
     .menu a {
       display: block;
-      padding: 40px 0;
+      padding: 24px 0;
       font-family: var(--sans);
       font-weight: 600;
       letter-spacing: -0.02em;
@@ -65,6 +67,10 @@
     }
 
     @media (max-width: 600px) {
+      .pages-box {
+        padding: 36px 24px 16px;
+      }
+
       .menu a {
         font-size: 21px;
       }
@@ -109,12 +115,14 @@
     </button>
 
   <main class="page-main">
+    <div class="pages-box">
     <h1 class="page-title">Pages</h1>
 
     <ul class="menu">
       <li><a href="../"><span class="menu-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</span><span class="menu-desc">The research article</span></a></li>
       <li><a href="../lexicon/"><span class="menu-title">Lexicon</span><span class="menu-desc">Key terms used in the research article</span></a></li>
     </ul>
+    </div>
   </main>
 
   <a class="site-title" href="../">Technological<br>Transitions</a>
