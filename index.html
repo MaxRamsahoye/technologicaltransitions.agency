@@ -30,6 +30,7 @@
       } catch (e) {}
       try {
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
+        if (localStorage.getItem('blue') === '1') document.documentElement.classList.add('blue');
       } catch (e) {}
     })();
   </script>
@@ -150,6 +151,13 @@
       --inverse-bg: #ffffff;
       --inverse-ink: #000000;
       --inverse-link: #0000ee;
+    }
+
+    /* b (white theme only): Overview and footer in midnight blue with light sepia text */
+    html.blue:not([data-theme]) {
+      --inverse-bg: #0d1330;
+      --inverse-ink: #fbf6ec;
+      --inverse-link: #8ab4f8;
     }
 
     /* c: colour — blue accent; links drop back from semi-bold */
@@ -1661,8 +1669,8 @@
         toggleTheme();
       });
 
-      // c toggles the blue accent.
-      var TOGGLES = { c: 'colour' };
+      // b toggles midnight blue Overview and footer (white theme); c the blue accent.
+      var TOGGLES = { b: 'blue', c: 'colour' };
 
       document.addEventListener('keydown', function (e) {
         var name = TOGGLES[e.key.toLowerCase()];
