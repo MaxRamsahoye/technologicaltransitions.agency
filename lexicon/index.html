@@ -65,8 +65,9 @@
       scroll-behavior: smooth;
     }
 
+    /* heading lands 48px below the top of the window */
     .term {
-      scroll-margin-top: 40px;
+      scroll-margin-top: 20px;
     }
 
     @media (max-width: 480px) {
@@ -239,6 +240,21 @@
     </svg>
   </button>
 
+  <script>
+    // Room after the last entry, so every entry can scroll up to the top
+    // when its link is followed.
+    (function () {
+      var main = document.querySelector('.page-main');
+      var terms = document.querySelectorAll('.term');
+      var last = terms[terms.length - 1];
+      function pad() {
+        main.style.paddingBottom = Math.max(120, window.innerHeight - last.offsetHeight - 20) + 'px';
+      }
+      pad();
+      window.addEventListener('resize', pad);
+      window.addEventListener('load', pad);
+    })();
+  </script>
   <script src="../assets/site.js" data-base="../"></script>
 </body>
 </html>
