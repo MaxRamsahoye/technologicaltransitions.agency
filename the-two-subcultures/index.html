@@ -176,7 +176,7 @@
       margin: 0;
       min-height: 100vh;
       background: var(--frame-bg);
-      padding: 130px var(--frame-margin) 0;
+      padding: 90px var(--frame-margin) 0;
       font-family: var(--serif);
       color: var(--frame-ink);
       -webkit-font-smoothing: antialiased;
@@ -192,7 +192,7 @@
     .page {
       background: var(--canvas-bg);
       color: var(--canvas-ink);
-      min-height: calc(100vh - 130px);
+      min-height: calc(100vh - 90px);
     }
 
     .frame-header {
@@ -200,7 +200,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 130px;
+      height: 90px;
       display: flex;
       align-items: flex-start;
       justify-content: flex-end;
@@ -210,20 +210,22 @@
     .frame-header::after {
       content: '';
       position: absolute;
-      left: var(--header-margin);
-      right: var(--header-margin);
+      left: 0;
+      right: 0;
       bottom: 0;
       border-bottom: 1px solid var(--canvas-ink);
     }
 
     .site-title {
       position: absolute;
-      top: 44px;
+      top: 28px;
       /* line up with the left edge of the article column */
       left: max(240px, calc(50% - 380px));
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 20px;
+      font-size: 14px;
       line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: var(--frame-ink);
       text-decoration: none;
       font-weight: 600;
@@ -236,7 +238,7 @@
 
     .left-controls {
       position: absolute;
-      top: 58px;
+      top: 36px;
       right: max(var(--header-margin), 24px);
       z-index: 50;
       display: flex;
@@ -354,6 +356,7 @@
       font-family: var(--serif);
       font-size: 20px;
       line-height: 1;
+      -webkit-text-stroke: 0.8px currentColor;
     }
 
     .layout-grid {
@@ -713,24 +716,24 @@
       }
 
       body {
-        padding-top: 110px;
+        padding-top: 80px;
       }
 
       .page {
-        min-height: calc(100vh - 110px);
+        min-height: calc(100vh - 80px);
       }
 
       .frame-header {
-        height: 110px;
+        height: 80px;
         padding-top: 38px;
       }
 
       .left-controls {
-        top: 43px;
+        top: 31px;
       }
 
       .site-title {
-        top: 29px;
+        top: 23px;
       }
 
       .article-header {
@@ -757,25 +760,25 @@
       }
 
       body {
-        padding-top: 104px;
+        padding-top: 72px;
       }
 
       .page {
-        min-height: calc(100vh - 104px);
+        min-height: calc(100vh - 72px);
       }
 
       .frame-header {
-        height: 104px;
+        height: 72px;
         padding-top: 25px;
       }
 
       .left-controls {
-        top: 28px;
+        top: 27px;
       }
 
       .site-title {
-        top: 17px;
-        font-size: 18px;
+        top: 19px;
+        font-size: 13px;
       }
 
       .article-header {
