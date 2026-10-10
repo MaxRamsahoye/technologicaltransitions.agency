@@ -506,7 +506,7 @@
     /* bottom centre of the Overview band */
     .next-screen-overview {
       position: absolute;
-      bottom: 32px;
+      bottom: 64px;
       left: 50%;
       transform: translateX(-50%);
     }
@@ -593,7 +593,7 @@
     #overview {
       position: relative;
       z-index: 0;
-      padding: 56px 0 96px;
+      padding: 56px 0 128px;
       min-height: 100vh;
       min-height: 100svh;
       display: flex;
@@ -635,7 +635,11 @@
 
     @media (max-width: 600px) {
       #overview {
-        padding: 40px 0 88px;
+        padding: 40px 0 104px;
+      }
+
+      .next-screen-overview {
+        bottom: 48px;
       }
     }
 
@@ -1379,6 +1383,7 @@
 
       var ringFill = document.querySelector('.progress-ring-fill');
       var footerEl = document.querySelector('.site-footer');
+      var overviewSection = document.getElementById('overview');
       var subtitleEl = document.querySelector('.article-subtitle');
       var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
@@ -1426,7 +1431,8 @@
         }
 
         var footerInView = footerEl.getBoundingClientRect().top < window.innerHeight;
-        btn.classList.toggle('visible', pct > 20 && !footerInView);
+        var pastOverview = overviewSection.getBoundingClientRect().bottom < window.innerHeight / 2;
+        btn.classList.toggle('visible', pastOverview && !footerInView);
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
