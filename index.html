@@ -359,12 +359,12 @@
     }
 
     .scroll-top-btn {
-      font-family: var(--serif);
-      font-size: 20px;
-      line-height: 1;
-      -webkit-text-stroke: 0.4px currentColor;
-      border: 1px solid currentColor;
       color: var(--muted);
+    }
+
+    .scroll-top-btn svg {
+      width: 34px;
+      height: 34px;
     }
 
     .layout-grid {
@@ -864,7 +864,12 @@
     <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
   </svg>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">&#x02C4;</button>
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
+    <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <circle cx="17" cy="17" r="16.5"/>
+      <polygon points="17,11 23,21 11,21"/>
+    </svg>
+  </button>
 
   <div class="page">
     <header class="site-header"></header>
