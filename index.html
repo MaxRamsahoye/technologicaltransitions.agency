@@ -177,6 +177,29 @@
       color: var(--inverse-link);
     }
 
+    /* custom cursor: a slim dart, filled; outlined over things you can click */
+    :root {
+      --cursor-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23000' stroke='%23fff' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, auto;
+      --cursor-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23fff' stroke='%23fff' stroke-width='3.2' stroke-linejoin='round'/%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23fff' stroke='%23000' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, pointer;
+    }
+
+    html[data-theme="midnight"],
+    html[data-theme="dark"] {
+      --cursor-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23fff' stroke='%23000' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, auto;
+      --cursor-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23000' stroke='%23000' stroke-width='3.2' stroke-linejoin='round'/%3E%3Cpath d='M3 2.5 L21 11.2 L12.6 12.6 L10.2 21 Z' fill='%23000' stroke='%23fff' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, pointer;
+    }
+
+    html {
+      cursor: var(--cursor-arrow);
+    }
+
+    a,
+    button,
+    a *,
+    button * {
+      cursor: var(--cursor-link) !important;
+    }
+
     .page {
       position: relative;
       transition: background-color 0.25s ease;
