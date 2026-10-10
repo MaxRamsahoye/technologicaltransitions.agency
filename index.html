@@ -27,8 +27,8 @@
         }
       } catch (e) {}
       try {
-        if (localStorage.getItem('blank') === '1') document.documentElement.classList.add('blank');
-        if (localStorage.getItem('mono') === '1') document.documentElement.classList.add('mono');
+        if (localStorage.getItem('bands') === '1') document.documentElement.classList.add('bands');
+        if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
       } catch (e) {}
     })();
   </script>
@@ -88,8 +88,12 @@
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
       --muted: #8c8c8c;
       --hairline: #dcdcdc;
-      --panel: #f5f5f5;
-      --link: #0000ee;
+      --panel-tint: #f5f5f5;
+      --link-blue: #0000ee;
+      /* default design: no grey bands or header/footer-wide rules, no blue */
+      --panel: var(--canvas-bg);
+      --band-rule: transparent;
+      --link: var(--canvas-ink);
       --selection-bg: rgba(186, 220, 240, 0.45);
       --note-highlight: #dbe9f3;
       --rule: #e4ddd3;
@@ -132,26 +136,27 @@
       --rule: #232c4c;
       --muted: #8c8c8c;
       --hairline: #333333;
-      --panel: #121212;
-      --link: #8ab4f8;
+      --panel-tint: #121212;
+      --link-blue: #8ab4f8;
     }
 
-    /* b: blank — no grey bands or rules on the header, footer and Overview */
-    html.blank,
-    html.blank[data-theme] {
-      --panel: var(--canvas-bg);
-      --hairline: transparent;
+    /* b: bands — grey header, Overview and footer, with full-width rules */
+    html.bands {
+      --panel: var(--panel-tint);
+      --band-rule: var(--hairline);
     }
 
-    /* c: colour off — the blue accent becomes the text colour, links go semi-bold */
-    html.mono,
-    html.mono[data-theme] {
-      --link: var(--canvas-ink);
+    /* c: colour — blue accent; links drop back from semi-bold */
+    html.colour {
+      --link: var(--link-blue);
     }
 
-    html.mono .article-body p a,
-    html.mono .footer-site {
-      font-weight: 600;
+    html.colour .article-body p a {
+      font-weight: 400;
+    }
+
+    html.colour .footer-site {
+      font-weight: 500;
     }
 
     .page {
@@ -278,7 +283,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      border-bottom: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--band-rule);
     }
 
     .site-title {
@@ -600,6 +605,7 @@
 
     .article-body p a {
       color: var(--link);
+      font-weight: 600;
       text-decoration: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
@@ -800,22 +806,29 @@
 
     .site-footer {
       margin-top: 96px;
-      border-top: 1px solid var(--hairline);
-      padding: 40px 24px 56px;
+      border-top: 1px solid var(--band-rule);
+      padding: 0 24px 56px;
       background: var(--panel);
     }
 
+    /* rule the width of the text column, above the footer text */
     .site-footer p {
       max-width: 760px;
       margin: 0 auto;
+      padding-top: 40px;
+      border-top: 1px solid var(--hairline);
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       line-height: 1.6;
       color: var(--muted);
     }
 
+    html.bands .site-footer p {
+      border-top-color: transparent;
+    }
+
     .footer-site {
-      font-weight: 500;
+      font-weight: 600;
       color: var(--link);
       text-decoration: none;
       border-bottom: 1px solid transparent;
@@ -1584,8 +1597,8 @@
         toggleTheme();
       });
 
-      // b toggles the grey bands and rules; c toggles the blue accent.
-      var TOGGLES = { b: 'blank', c: 'mono' };
+      // b toggles the grey bands and full-width rules; c toggles the blue accent.
+      var TOGGLES = { b: 'bands', c: 'colour' };
 
       document.addEventListener('keydown', function (e) {
         var name = TOGGLES[e.key.toLowerCase()];
