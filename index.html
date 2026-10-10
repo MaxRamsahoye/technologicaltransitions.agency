@@ -342,18 +342,26 @@
       height: 18px;
     }
 
-    .theme-toggle .icon-moon {
+    /* one icon per theme: sun (light), sun and cloud (sepia),
+       moon and star (midnight), moon (dark) */
+    .theme-toggle svg {
       display: none;
     }
 
-    html[data-theme="dark"] .theme-toggle .icon-sun,
-    html[data-theme="midnight"] .theme-toggle .icon-sun {
-      display: none;
-    }
-
-    html[data-theme="dark"] .theme-toggle .icon-moon,
-    html[data-theme="midnight"] .theme-toggle .icon-moon {
+    .theme-toggle .icon-sun,
+    html[data-theme="sepia"] .theme-toggle .icon-sun-cloud,
+    html[data-theme="midnight"] .theme-toggle .icon-moon-star,
+    html[data-theme="dark"] .theme-toggle .icon-moon {
       display: block;
+    }
+
+    html[data-theme] .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    /* the cloud hides the part of the sun behind it */
+    .theme-toggle .cloud {
+      fill: var(--frame-bg);
     }
 
     html {
@@ -1167,6 +1175,19 @@
         <line x1="17.5" y1="17.5" x2="19.5" y2="19.5"/>
         <line x1="4.5" y1="19.5" x2="6.5" y2="17.5"/>
         <line x1="17.5" y1="6.5" x2="19.5" y2="4.5"/>
+      </svg>
+      <svg class="icon-sun-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="9" r="3.4"/>
+        <line x1="9" y1="2" x2="9" y2="3.6"/>
+        <line x1="2" y1="9" x2="3.6" y2="9"/>
+        <line x1="4.05" y1="4.05" x2="5.2" y2="5.2"/>
+        <line x1="13.95" y1="4.05" x2="12.8" y2="5.2"/>
+        <line x1="4.05" y1="13.95" x2="5.2" y2="12.8"/>
+        <path class="cloud" d="M9.5 21h8a4.5 4.5 0 0 0 0-9 5.5 5.5 0 0 0-10.4 1.9A3.6 3.6 0 0 0 9.5 21Z"/>
+      </svg>
+      <svg class="icon-moon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>
+        <path d="M18 2.2Q18.5 4.5 20.8 5 18.5 5.5 18 7.8 17.5 5.5 15.2 5 17.5 4.5 18 2.2Z" fill="currentColor" stroke-width="0.8"/>
       </svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>
