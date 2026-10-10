@@ -2,7 +2,7 @@
 // sounds, page-to-page fade, back arrow, and the reading-progress ring and up
 // arrow where a page has them. Sounds and themes match the article.
 (function () {
-  var THEMES = ['light', 'dark', 'sepia', 'midnight'];
+  var THEMES = ['light', 'dark'];  // sepia and midnight hidden for now
   var DARK = ['dark', 'midnight'];
   var NAV_DELAY = 800;
   var root = document.documentElement;

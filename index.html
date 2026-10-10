@@ -17,10 +17,10 @@
       } catch (e) {}
       try {
         var t = localStorage.getItem('theme');
-        if (t === 'sepia' || t === 'midnight' || t === 'dark') {
+        if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
         }
-        if (t === 'midnight' || t === 'dark') {
+        if (t === 'dark') {
           var suffix = 'dark';
           document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
           document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
@@ -1720,7 +1720,7 @@
 
       var themeToggle = document.querySelector('.theme-toggle');
       var root = document.documentElement;
-      var THEMES = ['light', 'dark', 'sepia', 'midnight'];
+      var THEMES = ['light', 'dark'];  // sepia and midnight hidden for now
       var DARK_THEMES = ['midnight', 'dark'];
 
       function setFavicons(isDark) {

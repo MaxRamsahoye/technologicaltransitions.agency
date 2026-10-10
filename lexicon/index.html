@@ -11,7 +11,7 @@
   <script>
     try {
       var t = localStorage.getItem('theme');
-      if (t === 'sepia' || t === 'midnight' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
       if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
       var band = localStorage.getItem('band');
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
@@ -337,6 +337,6 @@
       if (location.hash) highlight(location.hash.slice(1));
     })();
   </script>
-  <script src="../assets/site.js?v=b5e1a2fd" data-base="../"></script>
+  <script src="../assets/site.js?v=482c68e0" data-base="../"></script>
 </body>
 </html>
