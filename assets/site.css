@@ -28,7 +28,7 @@
 :root {
   --canvas-bg: #ffffff;
   --canvas-ink: #000000;
-  --muted: #8a7760;
+  --muted: #8c8c8c;
   --selection-bg: rgba(186, 220, 240, 0.45);
   --serif: 'ET Bembo', Bembo, 'Times New Roman', Georgia, serif;
   --sans: 'Inter', sans-serif;
@@ -65,7 +65,7 @@ html[data-theme="midnight"] {
 html[data-theme="dark"] {
   --canvas-bg: #000000;
   --canvas-ink: #ffffff;
-  --muted: #8c8c8c;
+  --muted: #b3aa9c;
   --track-tint: rgba(255, 255, 255, 0.15);
   --band-bg: #15120c;
   --inverse-bg: #ffffff;
