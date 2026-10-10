@@ -65,9 +65,9 @@ html[data-theme="midnight"] {
 html[data-theme="dark"] {
   --canvas-bg: #000000;
   --canvas-ink: #ffffff;
-  --muted: #b3aa9c;
+  --muted: #8c8c8c;
   --track-tint: rgba(255, 255, 255, 0.15);
-  --band-bg: #15120c;
+  --band-bg: #2b2419;
   --inverse-bg: #ffffff;
   --inverse-ink: #000000;
   --selection-bg: rgba(180, 205, 235, 0.35);
