@@ -26,6 +26,10 @@
       margin: 0;
     }
 
+    .page-main {
+      padding-bottom: 0;
+    }
+
     /* closing section after the last entry */
     .lexicon-next {
       margin-top: 120px;
@@ -361,22 +365,57 @@
   </button>
 
   <script>
-    // Room after the last entry (counting what follows it, the footer
-    // included), so every entry can scroll up to the top when its link is
-    // followed.
+    // Entries near the end can't scroll up to the top of the window on their
+    // own. When one is jumped to, add just enough space after the content for
+    // it to reach the top; take that space away again once it has scrolled out
+    // of view, so the page never jumps and normally ends without a gap.
     (function () {
       var main = document.querySelector('.page-main');
-      var terms = document.querySelectorAll('.term');
-      var last = terms[terms.length - 1];
-      function pad() {
-        main.style.paddingBottom = '0px';
-        var below = document.documentElement.scrollHeight - (last.getBoundingClientRect().bottom + window.scrollY);
-        var needed = window.innerHeight - 20 - last.offsetHeight;
-        main.style.paddingBottom = Math.max(120, needed - below) + 'px';
+      var BASE = 0;
+      var extra = 0;
+      var reached = false;   // has the window scrolled down into the extra space yet?
+
+      function contentEnd() {
+        // where the page would end without the extra space
+        return document.documentElement.scrollHeight - extra;
       }
-      pad();
-      window.addEventListener('resize', pad);
-      window.addEventListener('load', pad);
+
+      function makeRoomFor(id) {
+        var target = id && document.getElementById(id);
+        if (!target || !target.classList.contains('term')) return;
+        var margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        var top = target.getBoundingClientRect().top + window.scrollY - margin;
+        var needed = Math.ceil(top + window.innerHeight - contentEnd());
+        extra = Math.max(0, needed);
+        reached = false;
+        main.style.paddingBottom = (BASE + extra) + 'px';
+      }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (a) makeRoomFor(a.getAttribute('href').slice(1));
+      });
+
+      window.addEventListener('scroll', function () {
+        if (!extra) return;
+        // the extra space begins where the main content used to end
+        var spaceStart = main.getBoundingClientRect().bottom + window.scrollY - extra;
+        var bottom = window.scrollY + window.innerHeight;
+        if (!reached) {
+          reached = bottom >= spaceStart;
+          return;
+        }
+        if (bottom < spaceStart) {
+          extra = 0;
+          main.style.paddingBottom = BASE + 'px';
+        }
+      }, { passive: true });
+
+      if (location.hash) {
+        makeRoomFor(location.hash.slice(1));
+        var t = document.getElementById(location.hash.slice(1));
+        if (t) t.scrollIntoView();
+      }
     })();
   </script>
   <script src="../assets/site.js?v=2dd9320c" data-base="../"></script>
