@@ -317,10 +317,18 @@
       if (tag === 'A' || tag === 'BUTTON') return;
       e.preventDefault();
       press(enterTarget);
+    } else if (e.key === 'c' || e.key === 'C') {
+      // c: toggle the blue link accent (shared with the article)
+      var on = document.documentElement.classList.toggle('colour');
+      try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
+      playPianoClick();
+      spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
     } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
-      // anywhere below the top: go to the top first; at the top: go back
-      if (window.scrollY > 2) {
+      // anywhere below the top: go to the top first; at the top (or already
+      // on the way there): go back
+      if (window.scrollY > 2 && !headingTop) {
+        headingTop = true;
         if (upBtn) press(upBtn);
         else { playPianoClick(); scrollToTop(); }
       } else {
@@ -328,4 +336,19 @@
       }
     }
   });
+
+  // a scroll to the top counts as arrived until the reader scrolls down again
+  var headingTop = false;
+  var lastY = window.scrollY;
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > lastY) headingTop = false;
+    lastY = window.scrollY;
+  }, { passive: true });
+
+  // c has no button: its ripple shows where the pointer is
+  var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  document.addEventListener('mousemove', function (e) {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+  }, { passive: true });
 })();

@@ -26,6 +26,7 @@
 }
 
 :root {
+  --link-blue: #0000ee;
   --canvas-bg: #ffffff;
   --canvas-ink: #000000;
   --muted: #8c8c8c;
@@ -41,6 +42,7 @@
 }
 
 html[data-theme="sepia"] {
+  --link-blue: #1d4fbf;
   --canvas-bg: #fbf6ec;
   --canvas-ink: #000000;
   --muted: #9a8a72;
@@ -52,6 +54,7 @@ html[data-theme="sepia"] {
 }
 
 html[data-theme="midnight"] {
+  --link-blue: #8ab4f8;
   --canvas-bg: #0d1330;
   --canvas-ink: #e6ebf5;
   --muted: #8a93ad;
@@ -63,6 +66,7 @@ html[data-theme="midnight"] {
 }
 
 html[data-theme="dark"] {
+  --link-blue: #8ab4f8;
   --canvas-bg: #000000;
   --canvas-ink: #ffffff;
   --muted: #8c8c8c;
@@ -268,6 +272,15 @@ html[data-theme] .theme-toggle .icon-sun {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+}
+
+/* c: colour — links in the blue accent, as in the article */
+html.colour .plain-link,
+html.colour .lexicon-index a,
+html.colour .term dt a,
+html.colour .menu a,
+html.colour .footer-site {
+  color: var(--link-blue);
 }
 
 /* custom cursor: a small outlined dart; filled over things you can click */
