@@ -17,8 +17,10 @@
       } catch (e) {}
       try {
         var t = localStorage.getItem('theme');
-        if (t === 'dark') {
+        if (t === 'sepia' || t === 'midnight' || t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
+        }
+        if (t === 'midnight' || t === 'dark') {
           var suffix = 'dark';
           document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
           document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
@@ -87,6 +89,10 @@
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
       --muted: #8c8c8c;
       --link-blue: #0000ee;
+      /* colours for the inverse Overview and footer, and the blue that reads on them */
+      --inverse-bg: #000000;
+      --inverse-ink: #ffffff;
+      --inverse-link: #8ab4f8;
       /* no blue by default; c turns it on */
       --link: var(--canvas-ink);
       --selection-bg: rgba(186, 220, 240, 0.45);
@@ -102,22 +108,32 @@
     }
 
     html[data-theme="sepia"] {
-      --canvas-bg: #ffffff;
-      --canvas-ink: #000000;
-      --canvas-accent: #8a6d42;
-      --canvas-track-tint: rgba(0, 0, 0, 0.08);
-      --selection-bg: rgba(214, 196, 160, 0.4);
+      --canvas-bg: #f4ecd8;
+      --canvas-ink: #3b2f20;
+      --canvas-accent: #3b2f20;
+      --canvas-track-tint: rgba(59, 47, 32, 0.12);
+      --muted: #9a8a72;
+      --link-blue: #1d4fbf;
+      --inverse-bg: #3b2f20;
+      --inverse-ink: #f4ecd8;
+      --inverse-link: #a9c4f5;
+      --selection-bg: rgba(214, 196, 160, 0.45);
       --note-highlight: #eae1cf;
-      --rule: #e4ddd3;
+      --rule: #e0d4b8;
     }
 
     html[data-theme="midnight"] {
-      --canvas-bg: #000000;
-      --canvas-ink: #ffffff;
-      --canvas-accent: #9fb0d9;
-      --canvas-track-tint: rgba(255, 255, 255, 0.15);
+      --canvas-bg: #0d1330;
+      --canvas-ink: #e6ebf5;
+      --canvas-accent: #e6ebf5;
+      --canvas-track-tint: rgba(230, 235, 245, 0.15);
+      --muted: #8a93ad;
+      --link-blue: #8ab4f8;
+      --inverse-bg: #e6ebf5;
+      --inverse-ink: #0d1330;
+      --inverse-link: #1d4fbf;
       --selection-bg: rgba(180, 205, 235, 0.35);
-      --note-highlight: #3f4852;
+      --note-highlight: #2a3352;
       --rule: #232c4c;
     }
 
@@ -131,6 +147,9 @@
       --rule: #232c4c;
       --muted: #8c8c8c;
       --link-blue: #8ab4f8;
+      --inverse-bg: #ffffff;
+      --inverse-ink: #000000;
+      --inverse-link: #0000ee;
     }
 
     /* c: colour — blue accent; links drop back from semi-bold */
@@ -144,11 +163,7 @@
 
     html.colour .footer-site {
       font-weight: 500;
-      color: #8ab4f8;
-    }
-
-    html.colour[data-theme="dark"] .footer-site {
-      color: #0000ee;
+      color: var(--inverse-link);
     }
 
     .page {
@@ -323,11 +338,13 @@
       display: none;
     }
 
-    html[data-theme="dark"] .theme-toggle .icon-sun {
+    html[data-theme="dark"] .theme-toggle .icon-sun,
+    html[data-theme="midnight"] .theme-toggle .icon-sun {
       display: none;
     }
 
-    html[data-theme="dark"] .theme-toggle .icon-moon {
+    html[data-theme="dark"] .theme-toggle .icon-moon,
+    html[data-theme="midnight"] .theme-toggle .icon-moon {
       display: block;
     }
 
@@ -639,16 +656,10 @@
 
     /* inverse: swap text and background colours for everything in the Overview */
     #overview {
-      --canvas-bg: #000000;
-      --canvas-ink: #ffffff;
-      --canvas-accent: #ffffff;
+      --canvas-bg: var(--inverse-bg);
+      --canvas-ink: var(--inverse-ink);
+      --canvas-accent: var(--inverse-ink);
       color: var(--canvas-ink);
-    }
-
-    html[data-theme="dark"] #overview {
-      --canvas-bg: #ffffff;
-      --canvas-ink: #000000;
-      --canvas-accent: #000000;
     }
 
     #overview > :last-child {
@@ -800,8 +811,8 @@
     .site-footer {
       margin-top: 96px;
       padding: 80px 24px 96px;
-      background: var(--canvas-ink);
-      color: var(--canvas-bg);
+      background: var(--inverse-bg);
+      color: var(--inverse-ink);
     }
 
     .site-footer p {
@@ -1604,7 +1615,8 @@
 
       var themeToggle = document.querySelector('.theme-toggle');
       var root = document.documentElement;
-      var THEMES = ['light', 'dark'];
+      var THEMES = ['light', 'sepia', 'midnight', 'dark'];
+      var DARK_THEMES = ['midnight', 'dark'];
 
       function setFavicons(isDark) {
         var suffix = isDark ? 'dark' : 'light';
@@ -1626,14 +1638,14 @@
         } else {
           root.setAttribute('data-theme', theme);
         }
-        setFavicons(theme === 'dark');
+        setFavicons(DARK_THEMES.indexOf(theme) !== -1);
         try { localStorage.setItem('theme', theme); } catch (e) {}
       }
 
       function toggleTheme() {
         var next = THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length];
         applyTheme(next);
-        playThemeSound(next === 'dark');
+        playThemeSound(DARK_THEMES.indexOf(next) !== -1);
       }
 
       themeToggle.addEventListener('click', toggleTheme);
