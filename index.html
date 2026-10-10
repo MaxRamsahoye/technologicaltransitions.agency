@@ -697,6 +697,23 @@
       margin-top: 88px;
     }
 
+    /* headings link to themselves; menu and heading links land with room above */
+    .article-body section:not(#overview),
+    .article-body h3[id] {
+      scroll-margin-top: 72px;
+    }
+
+    .heading-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .heading-link:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
     .article-body h3 {
       font-family: 'Inter', sans-serif;
       font-weight: 600;
@@ -1322,7 +1339,7 @@
               </svg>
               </button>
 
-              <h2>Overview</h2>
+              <h2><a class="heading-link" href="#overview">Overview</a></h2>
 
               <p>Our advanced, global civilisation is the result of a progressive series of technological revolutions &ndash; agricultural, industrial and digital &ndash; each fundamentally changing the political economy and cultural psychology of human populations, affording new strategic advantages and reshaping the <em>fitness landscape</em> of civilisation as a whole.</p>
 
@@ -1334,7 +1351,7 @@
             </section>
 
             <section id="macrohistory">
-              <h2>Major Technological Transitions</h2>
+              <h2><a class="heading-link" href="#macrohistory">Major Technological Transitions</a></h2>
 
               <p>Whilst it is all we have ever known, the advanced, global, technological civilisation of today has only been in existence for a very brief period of human history. The society or <em>socio-technical system</em>, that we live within is a highly novel configuration, the large-scale culmination of a series of technological revolutions. So far, civilisation has undergone three such revolutions &ndash; Agricultural, Industrial and Digital &ndash; and we are now in the midst of a fourth (and likely final) one: the <a href="https://ia.samaltman.com/#:~:text=Technology%20brought%20us%20from%20the%20Stone%20Age%20to%20the%20Agricultural%20Age%20and%20then%20to%20the%20Industrial%20Age.%20From%20here%2C%20the%20path%20to%20the%20Intelligence%20Age%20is%20paved%20with%20compute%2C%20energy%2C%20and%20human%20will." target="_blank" rel="noopener">Intelligence Revolution</a>.</p>
 
@@ -1342,11 +1359,11 @@
             </section>
 
             <section id="agricultural-revolution">
-              <h2>The Agricultural Revolution</h2>
+              <h2><a class="heading-link" href="#agricultural-revolution">The Agricultural Revolution</a></h2>
 
               <p>To understand this we can turn back to history. The clearest case &ndash; and the most consequential (as well as the earliest chronologically) &ndash; was the first major technological transition from nomadic hunter-gatherer tribes to settled agrarian civilisations. In the next section, we set out the <em>super-structural change</em> that occurred and then the <em>evolutionary game-theoretic dynamics</em> that caused it.</p>
 
-              <h3>Structural &amp; Super-Structural Change</h3>
+              <h3 id="structural-change"><a class="heading-link" href="#structural-change">Structural &amp; Super-Structural Change</a></h3>
 
               <p>For 99% of human history, humans lived in small-scale groups (with social cognition capped below &lt;150, now known as the &lsquo;Dunbar number&rsquo;) of nomadic hunter-gatherers: moving from place to place with seasonal cycles, the availability of foraging food sources and the migration patterns of wild game.</p>
 
