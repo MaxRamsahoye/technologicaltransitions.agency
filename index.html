@@ -503,6 +503,14 @@
       color: var(--canvas-ink);
     }
 
+    /* bottom centre of the Overview band */
+    .next-screen-overview {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
     .next-screen svg {
       width: 32px;
       height: 32px;
@@ -585,7 +593,7 @@
     #overview {
       position: relative;
       z-index: 0;
-      padding: 56px 0;
+      padding: 56px 0 96px;
       min-height: 100vh;
       min-height: 100svh;
       display: flex;
@@ -622,7 +630,7 @@
 
     @media (max-width: 600px) {
       #overview {
-        padding: 40px 0;
+        padding: 40px 0 88px;
       }
     }
 
@@ -1079,7 +1087,7 @@
             <p class="article-author">Max Ramsahoye</p>
             <h1 class="article-title">A Critical Evolutionary <span class="title-line">Game-Theory Model of</span> <span class="title-line">Major Technological Transitions</span></h1>
             <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is enacted by the technocratic elite&rsquo;s response to them</p>
-            <button class="next-screen" type="button" aria-label="Continue to the overview">
+            <button class="next-screen" type="button" data-target="overview" aria-label="Continue to the overview">
               <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
                 <circle cx="14" cy="14" r="13.5"/>
                 <polygon points="14,17.5 18.5,10.5 9.5,10.5"/>
@@ -1093,6 +1101,13 @@
                 <p class="toc-label">Technological Transitions</p>
                 <ol></ol>
               </nav>
+
+              <button class="next-screen next-screen-overview" type="button" data-target="macrohistory" aria-label="Continue to the next section">
+                <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+                <circle cx="14" cy="14" r="13.5"/>
+                <polygon points="14,17.5 18.5,10.5 9.5,10.5"/>
+              </svg>
+              </button>
 
               <h2>Overview</h2>
 
@@ -1449,26 +1464,36 @@
 
       btn.addEventListener('click', scrollToTop);
 
-      var nextScreenBtn = document.querySelector('.next-screen');
-      var overviewEl = document.getElementById('overview');
+      var nextScreenBtns = Array.prototype.slice.call(document.querySelectorAll('.next-screen'));
 
-      function goToOverview() {
-        animateScrollTo(overviewEl.getBoundingClientRect().top + window.scrollY, 900);
+      function goTo(btn) {
+        var target = document.getElementById(btn.dataset.target);
+        var offset = btn.dataset.target === 'overview' ? 0 : 72;
+        animateScrollTo(target.getBoundingClientRect().top + window.scrollY - offset, 900);
       }
 
-      nextScreenBtn.addEventListener('click', goToOverview);
+      nextScreenBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () { goTo(btn); });
+      });
 
-      // Enter on the first screen does the same as the down arrow.
+      // Enter does the same as the down arrow of the screen being read: the
+      // first screen, or the Overview while it fills the middle of the view.
       document.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter' || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
         var tag = document.activeElement && document.activeElement.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'A' || tag === 'BUTTON' || (document.activeElement && document.activeElement.isContentEditable)) return;
-        if (overviewEl.getBoundingClientRect().top < window.innerHeight / 2) return;
+        var mid = window.innerHeight / 2;
+        var btn = nextScreenBtns.filter(function (b) {
+          var screen = b.closest('.article-header, section');
+          var r = screen.getBoundingClientRect();
+          return r.top <= mid && r.bottom > mid;
+        })[0];
+        if (!btn) return;
         e.preventDefault();
         playPianoClick();
-        var rect = nextScreenBtn.getBoundingClientRect();
-        spawnRipple(rect.left + rect.width / 2, rect.top + rect.height / 2, getComputedStyle(nextScreenBtn).color);
-        goToOverview();
+        var rect = btn.getBoundingClientRect();
+        spawnRipple(rect.left + rect.width / 2, rect.top + rect.height / 2, getComputedStyle(btn).color);
+        goTo(btn);
       });
 
       document.addEventListener('keydown', function (e) {
