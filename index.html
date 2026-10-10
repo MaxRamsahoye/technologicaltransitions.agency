@@ -2,12 +2,1531 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=the-two-subcultures/">
-  <link rel="canonical" href="the-two-subcultures/">
-  <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link id="favicon-ico" rel="icon" href="favicon/favicon-light.ico" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32-light.png">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="favicon/favicon-192-light.png">
+  <link id="favicon-apple" rel="apple-touch-icon" href="favicon/apple-touch-icon-light.png">
+  <script>
+    (function () {
+      try {
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        if (!location.hash) window.scrollTo(0, 0);
+      } catch (e) {}
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+          var suffix = 'dark';
+          document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
+          document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
+          document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png';
+          document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png';
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions — Max Ramsahoye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+  <style>
+    @font-face {
+      font-family: 'ET Bembo';
+      src: url('fonts/ETBembo-RomanOSF.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'ET Bembo';
+      src: url('fonts/ETBembo-SemiBoldOSF.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'ET Bembo';
+      src: url('fonts/et-book-bold-line-figures.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'ET Bembo';
+      src: url('fonts/ETBembo-DisplayItalic.woff2') format('woff2');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'ET Bembo Lining';
+      src: url('fonts/ETBembo-RomanLF.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --frame-bg: var(--canvas-bg);
+      --frame-ink: var(--canvas-ink);
+      --frame-accent: var(--canvas-accent);
+      --canvas-bg: #ffffff;
+      --canvas-ink: #000000;
+      --canvas-accent: #000000;
+      --canvas-track-tint: rgba(0, 0, 0, 0.08);
+      --muted: #8c8c8c;
+      --hairline: #dcdcdc;
+      --selection-bg: rgba(186, 220, 240, 0.45);
+      --note-highlight: #dbe9f3;
+      --rule: #e4ddd3;
+      --frame-margin: 0px;
+      --header-margin: 100px;
+      --serif: 'ET Bembo', Bembo, 'Times New Roman', Georgia, serif;
+    }
+
+    body.wide {
+      --frame-margin: 0px;
+    }
+
+    html[data-theme="sepia"] {
+      --canvas-bg: #ffffff;
+      --canvas-ink: #000000;
+      --canvas-accent: #8a6d42;
+      --canvas-track-tint: rgba(0, 0, 0, 0.08);
+      --selection-bg: rgba(214, 196, 160, 0.4);
+      --note-highlight: #eae1cf;
+      --rule: #e4ddd3;
+    }
+
+    html[data-theme="midnight"] {
+      --canvas-bg: #000000;
+      --canvas-ink: #ffffff;
+      --canvas-accent: #9fb0d9;
+      --canvas-track-tint: rgba(255, 255, 255, 0.15);
+      --selection-bg: rgba(180, 205, 235, 0.35);
+      --note-highlight: #3f4852;
+      --rule: #232c4c;
+    }
+
+    html[data-theme="dark"] {
+      --canvas-bg: #000000;
+      --canvas-ink: #ffffff;
+      --canvas-accent: #ffffff;
+      --canvas-track-tint: rgba(255, 255, 255, 0.15);
+      --selection-bg: rgba(180, 205, 235, 0.35);
+      --note-highlight: #3f4852;
+      --rule: #232c4c;
+      --muted: #8c8c8c;
+      --hairline: #333333;
+    }
+
+    .page {
+      transition: background-color 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    ::selection {
+      background: var(--selection-bg);
+      color: var(--canvas-ink);
+    }
+
+    ::-moz-selection {
+      background: var(--selection-bg);
+      color: var(--canvas-ink);
+    }
+
+    .click-ripple {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      margin-left: -8px;
+      margin-top: -8px;
+      border-radius: 50%;
+      border: 1.5px solid currentColor;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.55;
+      transform: scale(0.3);
+      animation: click-ripple-anim 0.4s ease-out forwards;
+    }
+
+    @keyframes click-ripple-anim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    html {
+      background: var(--frame-bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      position: relative;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--frame-bg);
+      padding: 90px var(--frame-margin) 0;
+      font-family: var(--serif);
+      color: var(--frame-ink);
+      -webkit-font-smoothing: antialiased;
+      opacity: 0;
+      transition: background-color 0.25s ease, padding-left 0.6s ease, padding-right 0.6s ease, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.page-visible {
+      opacity: 1;
+      transition: background-color 0.25s ease, padding-left 0.6s ease, padding-right 0.6s ease, opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .page {
+      background: var(--canvas-bg);
+      color: var(--canvas-ink);
+      min-height: calc(100vh - 90px);
+    }
+
+    .frame-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 90px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 50px var(--header-margin) 0 0;
+    }
+
+    .frame-header::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .site-title {
+      position: absolute;
+      top: 28px;
+      /* halfway between the page margin and the article column */
+      left: calc((max(var(--header-margin), 24px) + max(240px, 50% - 380px)) / 2);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--frame-ink);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .site-title:hover {
+      color: var(--frame-accent);
+    }
+
+    .left-controls {
+      position: absolute;
+      top: 36px;
+      /* in line with the progress ring and scroll-to-top button */
+      right: 40px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .theme-toggle:hover {
+      color: var(--canvas-ink);
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    html[data-theme="dark"] .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    html[data-theme="dark"] .theme-toggle .icon-moon {
+      display: block;
+    }
+
+    html {
+      scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar {
+      display: none;
+    }
+
+    .progress-ring {
+      position: fixed;
+      top: 30px;
+      right: calc(var(--frame-margin) + 40px);
+      width: 30px;
+      height: 30px;
+      transform: rotate(-90deg);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .progress-ring-track {
+      stroke: var(--canvas-track-tint);
+    }
+
+    .progress-ring-fill {
+      stroke: var(--canvas-accent);
+    }
+
+    body.past-subtitle .progress-ring {
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .progress-ring {
+        top: 20px;
+        right: 20px;
+      }
+    }
+
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 30px;
+      right: calc(var(--frame-margin) + 40px);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, right 0.6s ease;
+      z-index: 42;
+      color: var(--canvas-accent);
+    }
+
+    .scroll-top-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top-btn:hover {
+      color: var(--canvas-ink);
+    }
+
+    .scroll-top-btn {
+      font-family: var(--serif);
+      font-size: 20px;
+      line-height: 1;
+      -webkit-text-stroke: 0.8px currentColor;
+      border: 1px solid currentColor;
+      color: var(--muted);
+    }
+
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 760px) 300px;
+      column-gap: 90px;
+      align-items: start;
+      justify-content: center;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 0 0 40px;
+    }
+
+    .toc {
+      grid-column: 1;
+      position: sticky;
+      top: 529px;
+      transform: translateX(-40px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    body.wide .toc.toc-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toc-label {
+      font-family: var(--serif);
+      font-size: 26px;
+      letter-spacing: 0.02em;
+      font-weight: 600;
+      color: var(--canvas-accent);
+      margin: 0 0 16px;
+    }
+
+    .toc ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: toc-counter;
+    }
+
+    .toc li {
+      counter-increment: toc-counter;
+      margin-bottom: 9px;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .toc li::before {
+      content: counter(toc-counter) '. ';
+      color: var(--canvas-accent);
+    }
+
+    .toc a {
+      color: var(--canvas-ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .toc a:hover {
+      border-bottom-color: var(--canvas-ink);
+    }
+
+    .main-area {
+      grid-column: 2;
+    }
+
+    .article-header {
+      max-width: 760px;
+      margin: 0;
+      padding: 130px 0 0;
+      text-align: left;
+    }
+
+    .article-author {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      color: var(--muted);
+      margin: 0 0 32px;
+    }
+
+    .article-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 60px;
+      line-height: 0.98;
+      margin: 0 0 24px;
+      color: var(--canvas-ink);
+    }
+
+    .article-subtitle {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 26px;
+      color: var(--canvas-ink);
+      margin: 0 0 72px;
+    }
+
+    .article-body {
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+      color: var(--canvas-ink);
+      counter-reset: sidenote;
+    }
+
+    .article-body::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    .article-body p,
+    .article-body ul {
+      max-width: 760px;
+    }
+
+    .article-body p {
+      margin: 15px 0;
+    }
+
+    .article-body h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.35em;
+      line-height: 1.2;
+      margin: 0 0 18px;
+    }
+
+    .article-body section + section {
+      margin-top: 48px;
+    }
+
+    .article-body ul {
+      margin: 20px 0;
+    }
+
+    .dash-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .dash-list li {
+      padding-left: 1.3em;
+      text-indent: -1.3em;
+      margin-bottom: 18px;
+    }
+
+    .dash-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .sidenote {
+      float: right;
+      clear: right;
+      width: 300px;
+      margin: 4px -420px 20px 0;
+      font-family: var(--serif);
+      font-style: normal;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--canvas-ink);
+      opacity: 0;
+      transition: opacity 0.9s ease-in-out;
+    }
+
+    body.wide.reveal-ready .sidenote.note-in-view {
+      opacity: 1;
+    }
+
+    .sidenote {
+      position: relative;
+      z-index: 0;
+    }
+
+    .sidenote::after {
+      content: '';
+      position: absolute;
+      inset: -8px -10px;
+      background: var(--note-highlight);
+      border-radius: 6px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidenote.note-active::after {
+      opacity: 1;
+    }
+
+    .note-anchor {
+      padding: 0.08em 0;
+      border-radius: 4px;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .note-anchor.note-active {
+      background-color: var(--note-highlight);
+      box-shadow: 4px 0 0 var(--note-highlight), -4px 0 0 var(--note-highlight);
+    }
+
+    .sidenote-label {
+      display: block;
+      font-family: 'IBM Plex Sans', sans-serif;
+      width: fit-content;
+      font-style: normal;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--canvas-accent);
+      text-decoration: none;
+      margin-bottom: 4px;
+    }
+
+    .sidenote-label:hover {
+      color: var(--canvas-ink);
+    }
+
+    .sidenote-label::before {
+      content: counter(sidenote) '.';
+    }
+
+    .sidenote-ref {
+      counter-increment: sidenote;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.65em;
+      color: var(--canvas-accent);
+      vertical-align: super;
+      line-height: 0;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .sidenote-ref:hover {
+      color: var(--canvas-ink);
+    }
+
+    .sidenote-ref.note-active,
+    .sidenote-label.note-active {
+      color: var(--canvas-ink);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .sidenote-ref::before {
+      content: counter(sidenote);
+    }
+
+    .sidenote-label[data-num]::before {
+      content: attr(data-num) '.';
+    }
+
+    .endnotes {
+      display: none;
+    }
+
+    .endnotes.has-notes {
+      display: block;
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .endnotes-heading {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 20px;
+      color: var(--canvas-ink);
+      margin: 0 0 16px;
+    }
+
+    .endnotes .sidenote {
+      border-left: none;
+      padding-left: 0;
+      margin: 0 0 16px;
+    }
+
+    .endnotes .sidenote:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 1800px) {
+      .layout-grid {
+        grid-template-columns: 200px minmax(0, 760px) 200px;
+        column-gap: 40px;
+      }
+
+      .toc {
+        transform: none;
+      }
+
+      .toc-label {
+        font-size: 21px;
+      }
+
+      .toc li {
+        font-size: 13px;
+      }
+
+      .sidenote {
+        width: 200px;
+        margin: 4px -240px 20px 0;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .site-title {
+        left: calc((max(var(--header-margin), 24px) + max(24px, 50% - 330px)) / 2);
+      }
+
+      .layout-grid {
+        grid-template-columns: 1fr;
+        max-width: none;
+        padding: 0 24px 100px;
+      }
+
+      .toc {
+        display: none;
+      }
+
+      .main-area {
+        grid-column: 1;
+        max-width: 660px;
+        margin: 0 auto;
+      }
+
+      .article-header,
+      .article-body p,
+      .article-body ul {
+        max-width: 660px;
+      }
+
+      .article-body {
+        font-size: 23px;
+      }
+
+      .sidenote {
+        float: none;
+        width: 100%;
+        margin: 10px 0;
+        line-height: 1.3;
+        padding-left: 16px;
+        border-left: 2px solid var(--rule);
+        opacity: 1;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 960px) {
+      :root {
+        --frame-margin: 0px;
+        --header-margin: 0px;
+      }
+
+      body {
+        padding-top: 80px;
+      }
+
+      .page {
+        min-height: calc(100vh - 80px);
+      }
+
+      .frame-header {
+        height: 80px;
+        padding-top: 38px;
+      }
+
+      .left-controls {
+        top: 31px;
+        right: 24px;
+      }
+
+      .site-title {
+        top: 23px;
+      }
+
+      .article-header {
+        padding-top: 90px;
+      }
+
+      .article-title {
+        font-size: 44px;
+      }
+
+      .article-subtitle {
+        font-size: 22px;
+        margin-bottom: 44px;
+      }
+
+      .article-body {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --header-margin: 24px;
+      }
+
+      body {
+        padding-top: 72px;
+      }
+
+      .page {
+        min-height: calc(100vh - 72px);
+      }
+
+      .frame-header {
+        height: 72px;
+        padding-top: 25px;
+      }
+
+      .left-controls {
+        top: 27px;
+      }
+
+      .site-title {
+        top: 19px;
+        font-size: 13px;
+      }
+
+      .article-header {
+        padding-top: 70px;
+      }
+
+      .article-title {
+        font-size: 33px;
+      }
+
+      .article-subtitle {
+        font-size: 19px;
+        margin-bottom: 32px;
+      }
+
+      .article-body {
+        font-size: 20px;
+      }
+
+      .toc-label {
+        font-size: 22px;
+      }
+    }
+
+    @media (min-width: 1181px) and (min-resolution: 1.25dppx) {
+      .article-body {
+        font-size: clamp(19px, 0.485vw + 13.3px, 22px);
+      }
+    }
+  </style>
 </head>
 <body>
-  <script>location.replace('the-two-subcultures/');</script>
-  <a href="the-two-subcultures/">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</a>
+  <div class="frame-header">
+    <a class="site-title" href="./">Technological<br>Transitions</a>
+  </div>
+
+  <div class="left-controls">
+    <button class="theme-toggle" type="button" aria-label="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.5"/>
+        <line x1="12" y1="2" x2="12" y2="5"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="2" y1="12" x2="5" y2="12"/>
+        <line x1="19" y1="12" x2="22" y2="12"/>
+        <line x1="4.5" y1="4.5" x2="6.5" y2="6.5"/>
+        <line x1="17.5" y1="17.5" x2="19.5" y2="19.5"/>
+        <line x1="4.5" y1="19.5" x2="6.5" y2="17.5"/>
+        <line x1="17.5" y1="6.5" x2="19.5" y2="4.5"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>
+      </svg>
+    </button>
+  </div>
+
+  <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
+    <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
+    <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
+  </svg>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">&#x02C4;</button>
+
+  <div class="page">
+    <header class="site-header"></header>
+
+    <div class="layout-grid">
+      <nav class="toc" aria-label="Contents">
+        <p class="toc-label">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</p>
+        <ol></ol>
+      </nav>
+
+      <main class="main-area">
+        <article>
+          <div class="article-header">
+            <p class="article-author">Max Ramsahoye</p>
+            <h1 class="article-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</h1>
+            <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is enacted by the technocratic elite&rsquo;s response to them</p>
+          </div>
+
+          <div class="article-body">
+            <section id="overview">
+              <h2>Overview</h2>
+
+              <p>Our advanced, global civilisation is the result of a progressive series of technological revolutions &ndash; agricultural, industrial and digital &ndash; each fundamentally changing the political economy and cultural psychology of human populations, affording new strategic advantages and reshaping the fitness landscape of civilisation as a whole.</p>
+
+              <p>So far civilisation has undergone three such major technological transitions. We are now in the midst of the fourth (and likely final): the Intelligence Revolution. The underlying structural dynamic driving it &ndash; military-economic adaptation, competitive pressures, multi-polar traps, arms races &ndash; is continuous with all preceding transitions. However, as an exponential technology, AI could generate negative externalities magnitudes more powerful and catastrophic, potentially even existential.</p>
+
+              <p>In this article, this foundational civilisational problem is revisited by drawing on the literature of science and technology studies, in concert with case studies of previous technological revolutions throughout history. Principally, the article proposes a critical evolutionary game-theory model of major technological transitions: as structurally driven by global competitive pressures and also agentially enacted by the local decision-making of the power-elite. Ultimately, it is an open question whether pro-human intentions can prevail over the agents and dynamics of the current world-system.</p>
+
+              <p>As E.P Thompson put it: &ldquo;If Man is ever obliterated from the earth by means of his own armaments, there will be no simple answer to the question: Did he fall, or was he pushed?&rdquo;.</p>
+            </section>
+
+            <section id="macrohistory">
+              <h2>Macrohistory: Major Technological Transitions</h2>
+
+              <p>Whist it is all we have ever known, the advanced, global, technological civilisation of today has only been in existence for a very brief period of human history. The society or socio-technical system, that we live within is a highly novel configuration, the large-scale culmination of a series of technological revolutions. So far, civilisation has undergone three such revolutions &ndash; Agricultural, Industrial and Digital &ndash; and we are now in the midst of a fourth (and likely final) one: the Intelligence Revolution.</p>
+
+              <p>We call these major technological transitions: periods of time where the introduction of a new form of technology stack (infrastructure) fundamentally changes the wider political economy (social structures) and cultural psychology (superstructures) of the populations that deploy it, conferring competitive advantage and ultimately reshaping the fitness landscape of civilisation as a whole.</p>
+            </section>
+          </div>
+        </article>
+      </main>
+    </div>
+
+    <div class="endnotes" id="endnotes">
+      <p class="endnotes-heading">Endnotes</p>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      requestAnimationFrame(function () {
+        document.body.classList.add('page-visible');
+      });
+
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          document.body.classList.add('page-visible');
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (e.defaultPrevented || e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var link = e.target.closest('a');
+        if (!link || (link.target && link.target !== '_self')) return;
+        var url;
+        try { url = new URL(link.href, location.href); } catch (err) { return; }
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname && url.hash) return;
+        e.preventDefault();
+        document.body.classList.remove('page-visible');
+        setTimeout(function () {
+          location.href = link.href;
+        }, 800);
+      });
+
+      var tocNav = document.querySelector('.toc');
+      var tocList = tocNav.querySelector('ol');
+      var tocItemCount = 0;
+      document.querySelectorAll('.article-body > section[id]').forEach(function (section) {
+        var heading = section.querySelector(':scope > h2, :scope > h3');
+        if (!heading) return;
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + section.id;
+        a.textContent = heading.textContent;
+        li.appendChild(a);
+        tocList.appendChild(li);
+        tocItemCount++;
+      });
+      if (tocItemCount === 0) {
+        tocNav.style.display = 'none';
+      }
+
+      var endnotesContainer = document.getElementById('endnotes');
+      var sidenotes = Array.prototype.slice.call(document.querySelectorAll('.sidenote'));
+      var sidenoteHomes = sidenotes.map(function (el) {
+        return { el: el, parent: el.parentNode, next: el.nextSibling };
+      });
+
+      sidenotes.forEach(function (el, i) {
+        var label = el.querySelector('.sidenote-label');
+        if (label) label.setAttribute('data-num', i + 1);
+      });
+
+      function findSentenceStart(textBefore) {
+        var boundary = /[.!?]+["'’”)\]]*\s+/g;
+        var start = 0;
+        var m;
+        while ((m = boundary.exec(textBefore))) {
+          var wordBefore = textBefore.slice(0, m.index).match(/(\S+)$/);
+          var word = wordBefore ? wordBefore[1] : '';
+          if (/^(?:[A-Z]\.)*[A-Z]$/.test(word)) continue;
+          if (/^(?:e\.g|i\.e|etc|vs|cf|Mr|Mrs|Ms|Dr|St)$/i.test(word)) continue;
+          start = m.index + m[0].length;
+        }
+        return start;
+      }
+
+      function wrapAnchorSentence(ref, noteNum) {
+        var block = ref.closest('p, li');
+        if (!block) return;
+        var before = document.createRange();
+        before.setStart(block, 0);
+        before.setEndBefore(ref);
+        var offset = findSentenceStart(before.toString());
+
+        var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+        var node;
+        var startNode = null;
+        var startOffset = 0;
+        while ((node = walker.nextNode())) {
+          if (node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_PRECEDING) break;
+          if (offset <= node.length) {
+            startNode = node;
+            startOffset = offset;
+            break;
+          }
+          offset -= node.length;
+        }
+        if (!startNode) return;
+
+        var range = document.createRange();
+        if (startNode.parentNode === block) {
+          range.setStart(startNode, startOffset);
+        } else {
+          var top = startNode;
+          while (top.parentNode !== block) top = top.parentNode;
+          range.setStartBefore(top);
+        }
+        range.setEndAfter(ref);
+
+        var span = document.createElement('span');
+        span.className = 'note-anchor';
+        span.setAttribute('data-note', noteNum);
+        try {
+          range.surroundContents(span);
+        } catch (err) {}
+      }
+
+      Array.prototype.forEach.call(document.querySelectorAll('.sidenote-ref'), function (ref) {
+        wrapAnchorSentence(ref, ref.id.replace('ref-', ''));
+      });
+
+      function noteParts(num) {
+        var note = document.getElementById('note-' + num);
+        return [
+          document.getElementById('ref-' + num),
+          note,
+          note && note.querySelector('.sidenote-label'),
+          document.querySelector('.note-anchor[data-note="' + num + '"]')
+        ].filter(Boolean);
+      }
+
+      function setNoteActive(num, on) {
+        noteParts(num).forEach(function (el) {
+          el.classList.toggle('note-active', on);
+        });
+      }
+
+      Array.prototype.forEach.call(document.querySelectorAll('.sidenote-ref, .sidenote-label'), function (el) {
+        var num = el.classList.contains('sidenote-ref')
+          ? el.id.replace('ref-', '')
+          : el.getAttribute('href').replace('#ref-', '');
+        ['mouseenter', 'focus'].forEach(function (type) {
+          el.addEventListener(type, function () { setNoteActive(num, true); });
+        });
+        ['mouseleave', 'blur'].forEach(function (type) {
+          el.addEventListener(type, function () { setNoteActive(num, false); });
+        });
+      });
+
+      var endnotesQuery = window.matchMedia('(max-width: 960px)');
+      var notesAreEndnotes = null;
+
+      function setEndnotesMode(isEndnotes) {
+        if (isEndnotes === notesAreEndnotes) return;
+        notesAreEndnotes = isEndnotes;
+        if (isEndnotes) {
+          sidenoteHomes.forEach(function (home) {
+            endnotesContainer.appendChild(home.el);
+          });
+          endnotesContainer.classList.add('has-notes');
+        } else {
+          sidenoteHomes.forEach(function (home) {
+            home.parent.insertBefore(home.el, home.next);
+          });
+          endnotesContainer.classList.remove('has-notes');
+        }
+      }
+
+      setEndnotesMode(endnotesQuery.matches);
+      endnotesQuery.addEventListener('change', function (e) {
+        setEndnotesMode(e.matches);
+      });
+
+      var sidenoteRefs = Array.prototype.slice.call(document.querySelectorAll('.sidenote-ref'));
+      var SIDENOTE_STAGGER_MS = 350;
+
+      if (window.IntersectionObserver) {
+        var sidenoteStaggerIndex = 0;
+        var sidenoteStaggerResetTimer = null;
+
+        var refOnScreen = {};
+        var noteOnScreen = {};
+
+        function refreshNoteVisibility(num) {
+          var note = document.getElementById('note-' + num);
+          if (!note) return;
+          var show = !!(refOnScreen[num] && noteOnScreen[num]);
+          if (show === note.classList.contains('note-in-view')) return;
+          if (show) {
+            note.style.transitionDelay = (sidenoteStaggerIndex * SIDENOTE_STAGGER_MS) + 'ms';
+            sidenoteStaggerIndex++;
+            clearTimeout(sidenoteStaggerResetTimer);
+            sidenoteStaggerResetTimer = setTimeout(function () { sidenoteStaggerIndex = 0; }, 700);
+          } else {
+            note.style.transitionDelay = '0ms';
+          }
+          note.classList.toggle('note-in-view', show);
+        }
+
+        var sidenoteObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            var isRef = entry.target.classList.contains('sidenote-ref');
+            var num = entry.target.id.replace(isRef ? 'ref-' : 'note-', '');
+            if (isRef) {
+              refOnScreen[num] = entry.isIntersecting;
+            } else if (!entry.isIntersecting) {
+              noteOnScreen[num] = false;
+            }
+            refreshNoteVisibility(num);
+          });
+          checkNotesArrival();
+        });
+
+        // A note only counts as arrived once all of it is on screen with clear space below it of half its height.
+        var checkNotesArrival = function () {
+          var viewportHeight = window.innerHeight;
+          sidenotes.forEach(function (note) {
+            var num = note.id.replace('note-', '');
+            if (noteOnScreen[num]) return;
+            var rect = note.getBoundingClientRect();
+            var needed = Math.min(rect.height * 1.5, viewportHeight * 0.75);
+            if (rect.top >= 0 && rect.top + needed <= viewportHeight) {
+              noteOnScreen[num] = true;
+              refreshNoteVisibility(num);
+            }
+          });
+        };
+
+        sidenoteRefs.concat(sidenotes).forEach(function (el) {
+          sidenoteObserver.observe(el);
+        });
+        window.addEventListener('scroll', checkNotesArrival, { passive: true });
+        window.addEventListener('resize', checkNotesArrival);
+        checkNotesArrival();
+      } else {
+        sidenotes.forEach(function (note) {
+          note.classList.add('note-in-view');
+        });
+      }
+
+      var ringFill = document.querySelector('.progress-ring-fill');
+      var subtitleEl = document.querySelector('.article-subtitle');
+      var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
+      var btn = document.querySelector('.scroll-top-btn');
+      var page = document.querySelector('.page');
+      var articleHeaderEl = document.querySelector('.article-header');
+      var reachedEnd = false;
+      var wasTocEligible = false;
+      var tocEl = document.querySelector('.toc');
+      var mainAreaEl = document.querySelector('.main-area');
+      var tocHideTimer = null;
+      var insideTocZone = false;
+      var revealReady = false;
+
+      function showToc() {
+        clearTimeout(tocHideTimer);
+        tocEl.classList.add('toc-visible');
+      }
+
+      function scheduleTocAutoHide() {
+        clearTimeout(tocHideTimer);
+        tocHideTimer = setTimeout(function () {
+          if (!insideTocZone) tocEl.classList.remove('toc-visible');
+        }, 1000);
+      }
+
+      function attemptTocReveal() {
+        if (revealReady && document.body.classList.contains('toc-eligible') && !tocEl.classList.contains('toc-visible')) {
+          showToc();
+          scheduleTocAutoHide();
+        }
+      }
+
+      function markRevealReady() {
+        revealReady = true;
+        sidenotes.filter(function (note) {
+          return note.classList.contains('note-in-view');
+        }).forEach(function (note, i) {
+          note.style.transitionDelay = (i * SIDENOTE_STAGGER_MS) + 'ms';
+        });
+        document.body.classList.add('reveal-ready');
+        attemptTocReveal();
+      }
+
+      function update() {
+        var doc = document.documentElement;
+        var scrollTop = doc.scrollTop || document.body.scrollTop;
+        var scrollable = doc.scrollHeight - doc.clientHeight;
+        var CANVAS_TOP = page.offsetTop;
+        var canvasScrollable = scrollable - CANVAS_TOP;
+        var pct = canvasScrollable > 0 ? Math.min(100, Math.max(0, ((scrollTop - CANVAS_TOP) / canvasScrollable) * 100)) : 0;
+        if (canvasScrollable > 0 && scrollTop - CANVAS_TOP <= 10) {
+          pct = 0;
+        }
+        if (canvasScrollable > 0 && scrollTop >= scrollable - 2) {
+          pct = 100;
+        }
+
+        if (pct >= 100) {
+          // A solid stroke: dashes can leave a hairline gap at the join.
+          ringFill.style.strokeDasharray = 'none';
+        } else {
+          ringFill.style.strokeDasharray = RING_LENGTH + ' ' + RING_LENGTH;
+          ringFill.style.strokeDashoffset = RING_LENGTH * (1 - pct / 100);
+        }
+
+        if (pct >= 100 && !reachedEnd) {
+          reachedEnd = true;
+          playCompletionSound();
+        } else if (pct < 100 && reachedEnd) {
+          reachedEnd = false;
+        }
+
+        btn.classList.toggle('visible', pct > 20);
+        var isWide = scrollTop > 10;
+        document.body.classList.toggle('wide', isWide);
+        document.body.classList.toggle('past-subtitle', subtitleEl.getBoundingClientRect().bottom <= 0);
+
+        var headerOffScreen = articleHeaderEl.getBoundingClientRect().bottom <= 0;
+        var tocEligible = isWide && headerOffScreen;
+        document.body.classList.toggle('toc-eligible', tocEligible);
+
+        if (tocEligible && !wasTocEligible) {
+          setTimeout(attemptTocReveal, 600);
+        } else if (!tocEligible && wasTocEligible) {
+          clearTimeout(tocHideTimer);
+          tocEl.classList.remove('toc-visible');
+        }
+        wasTocEligible = tocEligible;
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+
+      document.addEventListener('mousemove', function (e) {
+        if (!document.body.classList.contains('toc-eligible')) return;
+        var mainLeft = mainAreaEl.getBoundingClientRect().left;
+        var nowInside = e.clientX < mainLeft;
+        if (nowInside && !insideTocZone) {
+          insideTocZone = true;
+          if (revealReady) showToc();
+        } else if (!nowInside && insideTocZone) {
+          insideTocZone = false;
+          scheduleTocAutoHide();
+        }
+      });
+
+      function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      }
+
+      function animateScrollTo(targetY, duration) {
+        var startY = window.scrollY;
+        var distance = targetY - startY;
+        var startTime = null;
+
+        function step(timestamp) {
+          if (startTime === null) startTime = timestamp;
+          var progress = Math.min((timestamp - startTime) / duration, 1);
+          window.scrollTo({ top: startY + distance * easeInOutQuad(progress), behavior: 'instant' });
+          if (progress < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      var REVEAL_DELAY = 1000;
+
+      if (!location.hash) {
+        setTimeout(markRevealReady, REVEAL_DELAY);
+      } else {
+        markRevealReady();
+      }
+
+      function scrollToTop() {
+        animateScrollTo(0, 900);
+      }
+
+      btn.addEventListener('click', scrollToTop);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Backspace') return;
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        e.preventDefault();
+        playPianoClick();
+        scrollToTop();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'A' || tag === 'BUTTON' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        e.preventDefault();
+        playPianoClick();
+        autoOpenCanvas();
+      });
+
+      var themeToggle = document.querySelector('.theme-toggle');
+      var root = document.documentElement;
+      var THEMES = ['light', 'dark'];
+
+      function setFavicons(isDark) {
+        var suffix = isDark ? 'dark' : 'light';
+        document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
+        document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
+        document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png';
+        document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png';
+      }
+
+      function currentTheme() {
+        var stored;
+        try { stored = localStorage.getItem('theme'); } catch (e) {}
+        return THEMES.indexOf(stored) !== -1 ? stored : 'light';
+      }
+
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          root.removeAttribute('data-theme');
+        } else {
+          root.setAttribute('data-theme', theme);
+        }
+        setFavicons(theme === 'dark');
+        try { localStorage.setItem('theme', theme); } catch (e) {}
+      }
+
+      function toggleTheme() {
+        var next = THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length];
+        applyTheme(next);
+        playThemeSound(next === 'dark');
+      }
+
+      themeToggle.addEventListener('click', toggleTheme);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 't' && e.key !== 'T') return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        toggleTheme();
+      });
+
+      var audioCtx = null;
+      var pianoNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+
+      function playPianoClick() {
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+          var freq = pianoNotes[Math.floor(Math.random() * pianoNotes.length)];
+          var now = audioCtx.currentTime;
+
+          var osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+
+          var osc2 = audioCtx.createOscillator();
+          osc2.type = 'sine';
+          osc2.frequency.value = freq * 2;
+
+          var gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.1, now + 0.006);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+          var gain2 = audioCtx.createGain();
+          gain2.gain.setValueAtTime(0, now);
+          gain2.gain.linearRampToValueAtTime(0.025, now + 0.006);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+
+          osc.connect(gain).connect(audioCtx.destination);
+          osc2.connect(gain2).connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.45);
+          osc2.start(now);
+          osc2.stop(now + 0.38);
+        } catch (e) {}
+      }
+
+      document.addEventListener('click', function (e) {
+        if (e.target.closest('.theme-toggle')) return;
+        playPianoClick();
+      });
+
+      function playThemeSound(toDark) {
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+          var notes = toDark ? [392.00, 329.63, 261.63] : [261.63, 329.63, 392.00];
+          var start = audioCtx.currentTime;
+
+          notes.forEach(function (freq, i) {
+            var now = start + i * 0.17;
+            [[freq, 0.05, 2.2], [freq * 2, 0.008, 1.2]].forEach(function (partial) {
+              var osc = audioCtx.createOscillator();
+              osc.type = 'sine';
+              osc.frequency.value = partial[0];
+              var gain = audioCtx.createGain();
+              gain.gain.setValueAtTime(0, now);
+              gain.gain.linearRampToValueAtTime(partial[1], now + 0.03);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + partial[2]);
+              osc.connect(gain).connect(audioCtx.destination);
+              osc.start(now);
+              osc.stop(now + partial[2]);
+            });
+          });
+        } catch (e) {}
+      }
+
+      function playCompletionSound() {
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+          var freq = 1046.50;
+          var now = audioCtx.currentTime;
+
+          var osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+
+          var osc2 = audioCtx.createOscillator();
+          osc2.type = 'sine';
+          osc2.frequency.value = freq * 2;
+
+          var gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.08, now + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+          var gain2 = audioCtx.createGain();
+          gain2.gain.setValueAtTime(0, now);
+          gain2.gain.linearRampToValueAtTime(0.02, now + 0.004);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+          osc.connect(gain).connect(audioCtx.destination);
+          osc2.connect(gain2).connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.35);
+          osc2.start(now);
+          osc2.stop(now + 0.28);
+        } catch (e) {}
+      }
+
+      function playExpandSound() {
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+          var freq = 130.81;
+          var now = audioCtx.currentTime;
+
+          var osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+
+          var osc2 = audioCtx.createOscillator();
+          osc2.type = 'sine';
+          osc2.frequency.value = freq * 2;
+
+          var gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.13, now + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+
+          var gain2 = audioCtx.createGain();
+          gain2.gain.setValueAtTime(0, now);
+          gain2.gain.linearRampToValueAtTime(0.03, now + 0.008);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+
+          osc.connect(gain).connect(audioCtx.destination);
+          osc2.connect(gain2).connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.7);
+          osc2.start(now);
+          osc2.stop(now + 0.55);
+        } catch (e) {}
+      }
+
+      document.body.addEventListener('transitionend', function (e) {
+        if (e.target !== document.body) return;
+        if (e.propertyName !== 'padding-left') return;
+        if (document.body.classList.contains('wide')) {
+          playExpandSound();
+        }
+      });
+
+      function spawnRipple(x, y, color) {
+        var ripple = document.createElement('div');
+        ripple.className = 'click-ripple';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.borderColor = color;
+        document.body.appendChild(ripple);
+        ripple.addEventListener('animationend', function () {
+          ripple.remove();
+        });
+      }
+
+      document.addEventListener('click', function (e) {
+        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .scroll-down-btn, .sidenote-ref, .sidenote-label');
+        var x, y;
+        if (iconBtn) {
+          var rect = iconBtn.getBoundingClientRect();
+          x = rect.left + rect.width / 2;
+          y = rect.top + rect.height / 2;
+        } else {
+          x = e.clientX;
+          y = e.clientY;
+        }
+        spawnRipple(x, y, getComputedStyle(e.target).color);
+      });
+    })();
+  </script>
 </body>
 </html>
