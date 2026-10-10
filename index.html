@@ -665,11 +665,22 @@
       left: 50%;
       width: 100vw;
       transform: translateX(-50%);
-      background:
-        linear-gradient(var(--hairline), var(--hairline)) top / 100% var(--rule-width) no-repeat,
-        linear-gradient(var(--hairline), var(--hairline)) bottom / 100% var(--rule-width) no-repeat,
-        var(--panel);
+      background: var(--canvas-bg);
       z-index: -1;
+    }
+
+    /* inverse: swap text and background colours for everything in the Overview */
+    #overview {
+      --canvas-bg: #000000;
+      --canvas-ink: #ffffff;
+      --canvas-accent: #ffffff;
+      color: var(--canvas-ink);
+    }
+
+    html[data-theme="dark"] #overview {
+      --canvas-bg: #ffffff;
+      --canvas-ink: #000000;
+      --canvas-accent: #000000;
     }
 
     #overview > :last-child {
