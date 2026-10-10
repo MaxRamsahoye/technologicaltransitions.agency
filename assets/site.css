@@ -469,3 +469,41 @@ body.footer-in-view .scroll-top-btn {
     opacity: 1;
   }
 }
+
+/* vertical progress pill, centred in the space right of the text column */
+.progress-pill {
+  position: fixed;
+  top: 50%;
+  /* halfway between the column's right edge (50% + 356px) and the window's */
+  left: calc(75vw + 178px);
+  width: 6px;
+  height: 36vh;
+  margin-left: -3px;
+  transform: translateY(-50%);
+  border-radius: 3px;
+  background: var(--track-tint);
+  overflow: hidden;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.progress-pill-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background: var(--canvas-ink);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+body.past-start .progress-pill {
+  opacity: 1;
+}
+
+@media (max-width: 860px) {
+  .progress-pill {
+    display: none;
+  }
+}

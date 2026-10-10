@@ -205,34 +205,44 @@
 
   /* ---------- reading progress and up arrow (pages that have them) ---------- */
 
+  // Progress shows as a ring (.progress-ring) or a vertical pill
+  // (.progress-pill). It counts from the bottom of the element named by the
+  // indicator's data-start (default: the page title) plus data-start-offset.
   var ring = document.querySelector('.progress-ring');
   var ringFill = ring && ring.querySelector('.progress-ring-fill');
+  var pill = document.querySelector('.progress-pill');
+  var pillFill = pill && pill.querySelector('.progress-pill-fill');
+  var indicator = pill || ring;
   var upBtn = document.querySelector('.scroll-top-btn');
-  var startEl = document.querySelector('.page-title');
+  var startEl = document.querySelector((indicator && indicator.getAttribute('data-start')) || '.page-title');
+  var startOffset = parseFloat((indicator && indicator.getAttribute('data-start-offset')) || '0');
   var reachedEnd = false;
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  if (ring && ringFill) {
-    var LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
+  if (indicator) {
+    var LENGTH = ringFill ? 2 * Math.PI * ringFill.r.baseVal.value : 0;
 
     var update = function () {
       var doc = document.documentElement;
       var scrollTop = doc.scrollTop || document.body.scrollTop;
       var scrollable = doc.scrollHeight - doc.clientHeight;
-      var start = startEl ? startEl.getBoundingClientRect().bottom + scrollTop : 0;
+      var start = startEl ? startEl.getBoundingClientRect().bottom + scrollTop + startOffset : 0;
       var span = scrollable - start;
       var pct = span > 0 ? Math.min(100, Math.max(0, (scrollTop - start) / span * 100)) : 0;
       if (scrollable > 0 && scrollTop >= scrollable - 2) pct = 100;
 
-      if (pct >= 100) {
-        ringFill.style.strokeDasharray = 'none';
-      } else {
-        ringFill.style.strokeDasharray = LENGTH + ' ' + LENGTH;
-        ringFill.style.strokeDashoffset = LENGTH * (1 - pct / 100);
+      if (ringFill) {
+        if (pct >= 100) {
+          ringFill.style.strokeDasharray = 'none';
+        } else {
+          ringFill.style.strokeDasharray = LENGTH + ' ' + LENGTH;
+          ringFill.style.strokeDashoffset = LENGTH * (1 - pct / 100);
+        }
       }
+      if (pillFill) pillFill.style.transform = 'scaleY(' + pct / 100 + ')';
       document.body.classList.toggle('past-start', scrollTop > start);
 
       if (upBtn) upBtn.classList.toggle('visible', scrollTop > start + window.innerHeight * 0.5);
