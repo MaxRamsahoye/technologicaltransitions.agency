@@ -293,10 +293,11 @@
 
     .progress-ring {
       position: fixed;
-      top: 30px;
+      /* vertically centred on the theme toggle */
+      top: 34px;
       right: calc(var(--frame-margin) + 40px);
-      width: 30px;
-      height: 30px;
+      width: 22px;
+      height: 22px;
       transform: rotate(-90deg);
       z-index: 40;
       opacity: 0;
@@ -314,7 +315,7 @@
     }
 
     .progress-ring-fill {
-      stroke: var(--canvas-accent);
+      stroke: var(--muted);
     }
 
     body.past-subtitle .progress-ring {
@@ -361,7 +362,7 @@
       font-family: var(--serif);
       font-size: 20px;
       line-height: 1;
-      -webkit-text-stroke: 0.8px currentColor;
+      -webkit-text-stroke: 0.4px currentColor;
       border: 1px solid currentColor;
       color: var(--muted);
     }
