@@ -126,12 +126,21 @@
       transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .term:hover {
+    .term:hover,
+    .term:target {
       transform: scale(1.05);
     }
 
-    .term:hover::before {
+    .term:hover::before,
+    .term:target::before {
       transform: scaleY(1);
+    }
+
+    /* a concept reached by its link keeps the hover look; it starts once the
+       scroll has mostly arrived */
+    .term:target,
+    .term:target::before {
+      transition-delay: 0.45s;
     }
 
     @media (max-width: 600px) {
