@@ -24,13 +24,39 @@
       margin: 0;
     }
 
+    /* no dividers; on hover a rule appears to the left and the entry grows */
     .term {
-      padding: 40px 0;
-      border-top: 1.5px solid var(--canvas-ink);
+      position: relative;
+      padding: 28px 0;
+      transform-origin: left center;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .term:last-child {
-      border-bottom: 1.5px solid var(--canvas-ink);
+    .term::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      bottom: 28px;
+      left: -28px;
+      width: 2px;
+      background: var(--canvas-ink);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .term:hover {
+      transform: scale(1.03);
+    }
+
+    .term:hover::before {
+      transform: scaleY(1);
+    }
+
+    @media (max-width: 600px) {
+      .term::before {
+        left: -14px;
+      }
     }
 
     .term dt {
