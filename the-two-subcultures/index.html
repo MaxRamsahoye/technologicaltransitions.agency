@@ -229,7 +229,7 @@
     .left-controls {
       position: absolute;
       top: 58px;
-      left: var(--header-margin);
+      right: max(var(--header-margin), 24px);
       z-index: 50;
       display: flex;
       align-items: center;
@@ -421,6 +421,13 @@
       margin: 0;
       padding: 130px 0 0;
       text-align: left;
+    }
+
+    .article-author {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      color: var(--canvas-ink);
+      margin: 0 0 16px;
     }
 
     .article-title {
@@ -715,7 +722,6 @@
 
       .site-title {
         top: 29px;
-        left: max(calc(var(--header-margin) + 48px), calc(50% - 330px));
       }
 
       .article-header {
@@ -738,7 +744,7 @@
 
     @media (max-width: 600px) {
       :root {
-        --header-margin: 32px;
+        --header-margin: 24px;
       }
 
       body {
@@ -794,7 +800,7 @@
 </head>
 <body>
   <div class="frame-header">
-    <a class="site-title" href="./">Max<br>Ramsahoye</a>
+    <a class="site-title" href="./">Technological<br>Transitions</a>
   </div>
 
   <div class="left-controls">
@@ -835,6 +841,7 @@
       <main class="main-area">
         <article>
           <div class="article-header">
+            <p class="article-author">Max Ramsahoye</p>
             <h1 class="article-title">A Critical Evolutionary Game-Theory Model of Major Technological Transitions</h1>
             <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is enacted by the technocratic elite&rsquo;s response to them</p>
           </div>
