@@ -85,6 +85,7 @@
       --muted: #8c8c8c;
       --hairline: #dcdcdc;
       --panel: #f5f5f5;
+      --link: #0000ee;
       --selection-bg: rgba(186, 220, 240, 0.45);
       --note-highlight: #dbe9f3;
       --rule: #e4ddd3;
@@ -128,6 +129,7 @@
       --muted: #8c8c8c;
       --hairline: #333333;
       --panel: #121212;
+      --link: #8ab4f8;
     }
 
     .page {
@@ -211,6 +213,7 @@
       align-items: flex-start;
       justify-content: flex-end;
       padding: 50px var(--header-margin) 0 0;
+      background: var(--panel);
     }
 
     .frame-header::after {
@@ -317,7 +320,7 @@
     }
 
     .progress-ring-fill {
-      stroke: var(--muted);
+      stroke: var(--link);
     }
 
     body.past-subtitle .progress-ring {
@@ -495,15 +498,10 @@
     }
 
     .article-body p a {
-      color: inherit;
+      color: var(--link);
       text-decoration: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
-      text-decoration-color: var(--muted);
-    }
-
-    .article-body p a:hover {
-      text-decoration-color: var(--canvas-ink);
     }
 
     .article-body h2 {
@@ -682,6 +680,7 @@
       margin-top: 96px;
       border-top: 1px solid var(--hairline);
       padding: 40px 24px 56px;
+      background: var(--panel);
     }
 
     .site-footer p {
@@ -695,13 +694,13 @@
 
     .footer-site {
       font-weight: 500;
-      color: var(--canvas-ink);
+      color: var(--link);
       text-decoration: none;
       border-bottom: 1px solid transparent;
     }
 
     .footer-site:hover {
-      border-bottom-color: var(--canvas-ink);
+      border-bottom-color: var(--link);
     }
 
     .endnotes.has-notes {
@@ -981,7 +980,7 @@
     </div>
 
     <footer class="site-footer">
-      <p><a class="footer-site" href="./">technologicaltransitions.agency</a> is an independent research project by Max Ramsahoye on the major technological transitions that have shaped civilisation &ndash; agricultural, industrial, digital and intelligence revolutions &ndash; and on the human agency that shapes them.</p>
+      <p><a class="footer-site" href="./">technologicaltransitions.agency</a> is an independent research project by Max Ramsahoye on the major technological transitions that have shaped civilisation &ndash; agricultural, industrial, digital and intelligence revolutions &ndash; and on the human agency that has shaped them.</p>
     </footer>
   </div>
 
