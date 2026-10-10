@@ -188,13 +188,47 @@
       font-family: var(--serif);
       color: var(--frame-ink);
       -webkit-font-smoothing: antialiased;
-      opacity: 0;
-      transition: background-color 0.25s ease, padding-left 0.6s ease, padding-right 0.6s ease, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-color 0.25s ease, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    body.page-visible {
-      opacity: 1;
-      transition: background-color 0.25s ease, padding-left 0.6s ease, padding-right 0.6s ease, opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    body.page-leaving {
+      opacity: 0;
+    }
+
+    /* loading screen: a centred ring that fills, then fades to reveal the page */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--canvas-bg);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .loader.loader-done {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader svg {
+      width: 44px;
+      height: 44px;
+      transform: rotate(-90deg);
+    }
+
+    .loader circle {
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .loader-track {
+      stroke: var(--canvas-track-tint);
+    }
+
+    .loader-fill {
+      stroke: var(--link);
     }
 
     .page {
@@ -901,6 +935,63 @@
   </style>
 </head>
 <body>
+  <div class="loader" aria-hidden="true">
+    <svg viewBox="0 0 30 30">
+      <circle class="loader-track" cx="15" cy="15" r="13"/>
+      <circle class="loader-fill" cx="15" cy="15" r="13"/>
+    </svg>
+  </div>
+  <noscript><style>.loader { display: none; }</style></noscript>
+  <script>
+    (function () {
+      var loader = document.querySelector('.loader');
+      var fill = loader.querySelector('.loader-fill');
+      var LENGTH = 2 * Math.PI * 13;
+      var MIN_MS = 900;
+      var MAX_MS = 5000;
+      var start = performance.now();
+      var shown = 0;
+      var ready = false;
+      var finished = false;
+
+      fill.style.strokeDasharray = LENGTH + ' ' + LENGTH;
+      fill.style.strokeDashoffset = LENGTH;
+
+      function draw(pct) {
+        if (pct >= 100) {
+          fill.style.strokeDasharray = 'none';
+        } else {
+          fill.style.strokeDashoffset = LENGTH * (1 - pct / 100);
+        }
+      }
+
+      function finish() {
+        if (finished) return;
+        finished = true;
+        setTimeout(function () {
+          loader.classList.add('loader-done');
+          setTimeout(function () { loader.remove(); }, 700);
+        }, 200);
+      }
+
+      function tick(now) {
+        var elapsed = now - start;
+        // Creep towards 85% until the page is ready, then run to 100%.
+        var target = (ready && elapsed >= MIN_MS) || elapsed >= MAX_MS ? 100 : 85 * (1 - Math.exp(-elapsed / 700));
+        shown += (target - shown) * 0.12;
+        if (target === 100 && shown > 99.5) shown = 100;
+        draw(shown);
+        if (shown >= 100) finish(); else requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      var loaded = new Promise(function (resolve) {
+        if (document.readyState === 'complete') resolve(); else window.addEventListener('load', resolve);
+      });
+      var fonts = document.fonts ? document.fonts.ready : Promise.resolve();
+      Promise.all([loaded, fonts]).then(function () { ready = true; });
+    })();
+  </script>
   <div class="frame-header">
     <a class="site-title" href="./">Technological<br>Transitions</a>
   </div>
@@ -989,13 +1080,9 @@
 
   <script>
     (function () {
-      requestAnimationFrame(function () {
-        document.body.classList.add('page-visible');
-      });
-
       window.addEventListener('pageshow', function (e) {
         if (e.persisted) {
-          document.body.classList.add('page-visible');
+          document.body.classList.remove('page-leaving');
         }
       });
 
@@ -1009,7 +1096,7 @@
         if (url.origin !== location.origin) return;
         if (url.pathname === location.pathname && url.hash) return;
         e.preventDefault();
-        document.body.classList.remove('page-visible');
+        document.body.classList.add('page-leaving');
         setTimeout(function () {
           location.href = link.href;
         }, 800);
