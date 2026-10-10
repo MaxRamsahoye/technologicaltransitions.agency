@@ -108,6 +108,11 @@ body.page-leaving {
   opacity: 0;
 }
 
+/* after a refresh the page starts hidden and fades in */
+html.reloading body {
+  opacity: 0;
+}
+
 .click-ripple {
   position: fixed;
   left: 0;

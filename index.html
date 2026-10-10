@@ -16,6 +16,10 @@
         if (!location.hash) window.scrollTo(0, 0);
       } catch (e) {}
       try {
+        var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        if (navEntry && navEntry.type === 'reload') document.documentElement.classList.add('reloading');
+      } catch (e) {}
+      try {
         var t = localStorage.getItem('theme');
         if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
@@ -271,6 +275,11 @@
     }
 
     body.page-leaving {
+      opacity: 0;
+    }
+
+    /* after a refresh the page starts hidden and fades in */
+    html.reloading body {
       opacity: 0;
     }
 
@@ -1297,6 +1306,7 @@
         internal = !!document.referrer && new URL(document.referrer).origin === location.origin;
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         if (nav && nav.type === 'back_forward') internal = true;
+        if (nav && nav.type === 'reload') internal = true;   // a refresh fades back in instead
       } catch (e) {}
       if (internal) {
         loader.remove();
@@ -2140,6 +2150,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=31c4e465" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=d48fa54b" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>
