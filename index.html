@@ -88,6 +88,7 @@
       --canvas-track-tint: rgba(0, 0, 0, 0.08);
       --muted: #8c8c8c;
       --hairline: #dcdcdc;
+      --rule-width: 1.5px;
       --panel-tint: #f5f5f5;
       --link-blue: #0000ee;
       /* default design: no grey bands or header/footer-wide rules, no blue */
@@ -283,7 +284,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      border-bottom: 2px solid var(--band-rule);
+      height: var(--rule-width);
+      background: var(--band-rule);
     }
 
     .site-title {
@@ -655,9 +657,10 @@
       left: 50%;
       width: 100vw;
       transform: translateX(-50%);
-      background: var(--panel);
-      border-top: 2px solid var(--hairline);
-      border-bottom: 2px solid var(--hairline);
+      background:
+        linear-gradient(var(--hairline), var(--hairline)) top / 100% var(--rule-width) no-repeat,
+        linear-gradient(var(--hairline), var(--hairline)) bottom / 100% var(--rule-width) no-repeat,
+        var(--panel);
       z-index: -1;
     }
 
@@ -808,9 +811,10 @@
 
     .site-footer {
       margin-top: 96px;
-      border-top: 2px solid var(--hairline);
       padding: 40px 24px 56px;
-      background: var(--panel);
+      background:
+        linear-gradient(var(--hairline), var(--hairline)) top / 100% var(--rule-width) no-repeat,
+        var(--panel);
     }
 
     .site-footer p {
