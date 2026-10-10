@@ -393,6 +393,11 @@
         top: 22px;
         right: 24px;
       }
+
+      /* centred under the progress ring */
+      .scroll-top-btn {
+        right: 21px;
+      }
     }
 
     .scroll-top-btn {
@@ -420,7 +425,8 @@
       pointer-events: auto;
     }
 
-    .scroll-top-btn:hover {
+    .scroll-top-btn:hover,
+    .scroll-top-btn.key-hover {
       color: var(--canvas-ink);
     }
 
@@ -430,8 +436,8 @@
 
     /* same diameter as the progress ring; the button keeps a 34px hit area */
     .scroll-top-btn svg {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
     }
 
     .layout-grid {
@@ -527,7 +533,8 @@
       color: var(--muted);
     }
 
-    .next-screen:hover {
+    .next-screen:hover,
+    .next-screen.key-hover {
       color: var(--canvas-ink);
     }
 
@@ -1110,8 +1117,8 @@
   </svg>
 
   <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
-      <polygon points="11,7.41 15.375,14.59 6.625,14.59"/>
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.625 19.625,18.375 8.375,18.375"/>
     </svg>
   </button>
 
@@ -1502,6 +1509,13 @@
 
       btn.addEventListener('click', scrollToTop);
 
+      // Give an arrow its hover look for a moment when its shortcut is used.
+      function flashHover(el) {
+        el.classList.add('key-hover');
+        clearTimeout(el.keyHoverTimer);
+        el.keyHoverTimer = setTimeout(function () { el.classList.remove('key-hover'); }, 600);
+      }
+
       var nextScreenBtns = Array.prototype.slice.call(document.querySelectorAll('.next-screen'));
 
       function goTo(btn) {
@@ -1531,6 +1545,7 @@
         playPianoClick();
         var rect = btn.getBoundingClientRect();
         spawnRipple(rect.left + rect.width / 2, rect.top + rect.height / 2, getComputedStyle(btn).color);
+        flashHover(btn);
         goTo(btn);
       });
 
@@ -1540,6 +1555,7 @@
         if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
         e.preventDefault();
         playPianoClick();
+        flashHover(btn);
         scrollToTop();
       });
 
