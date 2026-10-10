@@ -1011,10 +1011,9 @@
       var loader = document.querySelector('.loader');
       var fill = loader.querySelector('.loader-fill');
       var LENGTH = 2 * Math.PI * 13;
-      var MIN_MS = 900;
+      var FILL_MS = 1400;
       var MAX_MS = 5000;
       var start = performance.now();
-      var shown = 0;
       var ready = false;
       var finished = false;
 
@@ -1038,14 +1037,14 @@
         }, 200);
       }
 
+      // One smooth, continuous fill. If the page is still loading when the
+      // ring closes, it simply stays full until it is ready.
       function tick(now) {
         var elapsed = now - start;
-        // Creep towards 85% until the page is ready, then run to 100%.
-        var target = (ready && elapsed >= MIN_MS) || elapsed >= MAX_MS ? 100 : 85 * (1 - Math.exp(-elapsed / 700));
-        shown += (target - shown) * 0.12;
-        if (target === 100 && shown > 99.5) shown = 100;
-        draw(shown);
-        if (shown >= 100) finish(); else requestAnimationFrame(tick);
+        var t = Math.min(1, elapsed / FILL_MS);
+        var eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        draw(eased * 100);
+        if (t >= 1 && (ready || elapsed >= MAX_MS)) finish(); else requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
 
