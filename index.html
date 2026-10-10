@@ -31,8 +31,8 @@
   <title>A Critical Evolutionary Game-Theory Model of Major Technological Transitions — Max Ramsahoye</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@700&display=swap" rel="stylesheet"></noscript>
   <style>
     @font-face {
       font-family: 'ET Bembo';
@@ -296,10 +296,10 @@
     .progress-ring {
       position: fixed;
       /* vertically centred on the theme toggle */
-      top: 34px;
+      top: 31px;
       right: calc(var(--frame-margin) + 40px);
-      width: 22px;
-      height: 22px;
+      width: 28px;
+      height: 28px;
       transform: rotate(-90deg);
       z-index: 40;
       opacity: 0;
@@ -326,15 +326,15 @@
 
     @media (max-width: 600px) {
       .progress-ring {
-        top: 20px;
-        right: 20px;
+        top: 22px;
+        right: 24px;
       }
     }
 
     .scroll-top-btn {
       position: fixed;
       bottom: 30px;
-      right: calc(var(--frame-margin) + 34px);
+      right: calc(var(--frame-margin) + 37px);
       width: 34px;
       height: 34px;
       display: flex;
@@ -366,8 +366,8 @@
 
     /* same diameter as the progress ring; the button keeps a 34px hit area */
     .scroll-top-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 28px;
+      height: 28px;
     }
 
     .layout-grid {
@@ -455,10 +455,13 @@
     }
 
     .article-title {
-      font-family: 'IBM Plex Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 700;
-      /* sized so "Major Technological Transitions" fits on one line */
-      font-size: min(48px, calc((100vw - 480px) / 15.2));
+      letter-spacing: -0.02em;
+      /* runs 240px into the right margin; sized so "Major Technological
+         Transitions" fits on one line */
+      width: calc(100% + 240px);
+      font-size: min(62px, calc((min(760px, 100vw - 480px) + 240px) / 15.4));
       line-height: 1.08;
       margin: 0 0 24px;
       color: var(--canvas-ink);
@@ -721,7 +724,8 @@
 
     @media (max-width: 1180px) {
       .article-title {
-        font-size: min(42px, calc((100vw - 48px) / 15.2));
+        width: auto;
+        font-size: min(43px, calc((100vw - 48px) / 15.4));
       }
 
       .site-title {
