@@ -237,6 +237,16 @@
 
   if (upBtn) upBtn.addEventListener('click', scrollToTop);
 
+  var footer = document.querySelector('.site-footer');
+  if (footer) {
+    var checkFooter = function () {
+      document.body.classList.toggle('footer-in-view', footer.getBoundingClientRect().top < window.innerHeight);
+    };
+    window.addEventListener('scroll', checkFooter, { passive: true });
+    window.addEventListener('resize', checkFooter);
+    checkFooter();
+  }
+
   /* ---------- keys ---------- */
 
   document.addEventListener('keydown', function (e) {

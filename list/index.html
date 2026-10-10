@@ -12,6 +12,8 @@
     try {
       var t = localStorage.getItem('theme');
       if (t === 'sepia' || t === 'midnight' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      var band = localStorage.getItem('band');
+      if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
   <title>Pages — Technological Transitions</title>

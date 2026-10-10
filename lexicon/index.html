@@ -12,6 +12,8 @@
     try {
       var t = localStorage.getItem('theme');
       if (t === 'sepia' || t === 'midnight' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      var band = localStorage.getItem('band');
+      if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
   <title>Lexicon — Technological Transitions</title>
@@ -269,6 +271,12 @@
 
   <a class="site-title" href="../">Technological<br>Transitions</a>
 
+  <footer class="site-footer">
+    <p class="footer-title"><span>A Critical Evolutionary <span class="nowrap">Game-Theory</span> Model of</span> <span>Major Technological Transitions</span></p>
+    <p>An independent research project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on the major technological transitions &ndash; agricultural, industrial and digital &ndash; that have shaped civilisation <em>and the human agency that has shaped them</em>. At this point in history, it is critical to see how the ongoing intelligence revolution is contingent on decisions made by the political elite and constructed by the collective actions (or inactions) of all humans alive today. Ultimately, it is time we affirm that the acceleration of AI is not as inevitable as the governments and corporations of the world would have us believe. Another future is possible, <em>it is up to us to choose it</em>.</p>
+    <p class="footer-url"><a class="footer-site" href="../">technologicaltransitions.agency</a></p>
+  </footer>
+
   <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
     <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
     <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
@@ -281,14 +289,18 @@
   </button>
 
   <script>
-    // Room after the last entry, so every entry can scroll up to the top
-    // when its link is followed.
+    // Room after the last entry (counting what follows it, the footer
+    // included), so every entry can scroll up to the top when its link is
+    // followed.
     (function () {
       var main = document.querySelector('.page-main');
       var terms = document.querySelectorAll('.term');
       var last = terms[terms.length - 1];
       function pad() {
-        main.style.paddingBottom = Math.max(120, window.innerHeight - last.offsetHeight - 20) + 'px';
+        main.style.paddingBottom = '0px';
+        var below = document.documentElement.scrollHeight - (last.getBoundingClientRect().bottom + window.scrollY);
+        var needed = window.innerHeight - 20 - last.offsetHeight;
+        main.style.paddingBottom = Math.max(120, needed - below) + 'px';
       }
       pad();
       window.addEventListener('resize', pad);
