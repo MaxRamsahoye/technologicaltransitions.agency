@@ -31,7 +31,7 @@
       try {
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
         var band = localStorage.getItem('band');
-        if (band === 'sepia' || band === 'midnight') document.documentElement.classList.add('band-' + band);
+        if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
       } catch (e) {}
     })();
   </script>
@@ -92,9 +92,9 @@
       --muted: #8c8c8c;
       --link-blue: #0000ee;
       /* colours for the inverse Overview and footer, and the blue that reads on them */
-      --inverse-bg: #000000;
-      --inverse-ink: #ffffff;
-      --inverse-link: #8ab4f8;
+      --inverse-bg: #fbf6ec;
+      --inverse-ink: #3b2f20;
+      --inverse-link: #1d4fbf;
       /* no blue by default; c turns it on */
       --link: var(--canvas-ink);
       --selection-bg: rgba(186, 220, 240, 0.45);
@@ -154,17 +154,17 @@
       --inverse-link: #0000ee;
     }
 
-    /* b (white theme only) cycles the Overview and footer: black, light sepia,
-       midnight blue */
-    html.band-sepia:not([data-theme]) {
-      --inverse-bg: #fbf6ec;
-      --inverse-ink: #3b2f20;
-      --inverse-link: #1d4fbf;
-    }
-
+    /* b (white theme only) cycles the Overview and footer: light sepia (the
+       default above), midnight blue, black */
     html.band-midnight:not([data-theme]) {
       --inverse-bg: #0d1330;
       --inverse-ink: #fbf6ec;
+      --inverse-link: #8ab4f8;
+    }
+
+    html.band-black:not([data-theme]) {
+      --inverse-bg: #000000;
+      --inverse-ink: #ffffff;
       --inverse-link: #8ab4f8;
     }
 
@@ -1699,7 +1699,7 @@
       });
 
       // b cycles the Overview and footer colours (white theme); c toggles the blue accent.
-      var BANDS = ['', 'sepia', 'midnight'];
+      var BANDS = ['', 'midnight', 'black'];  // '' is the light sepia default
 
       function cycleBand() {
         var current = BANDS.filter(function (b) { return b && root.classList.contains('band-' + b); })[0] || '';
