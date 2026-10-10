@@ -999,7 +999,7 @@
 
     /* the block is as wide as the title; the quote wraps within it */
     .footer-head {
-      --footer-title-size: min(24px, calc((100vw - 48px) / 21));
+      --footer-title-size: min(27px, calc((100vw - 48px) / 21));
       width: max-content;
       max-width: 100%;
     }
@@ -1009,7 +1009,7 @@
       min-width: 100%;
       margin-top: 12px;
       font-family: var(--serif);
-      font-size: clamp(16px, calc((100vw - 48px) / 21.9), 20.9px);
+      font-size: clamp(15px, calc((100vw - 48px) / 23), 19px);
       line-height: 1.35;
       text-wrap: balance;
     }
@@ -1023,8 +1023,8 @@
     .footer-sitemap ol {
       list-style: none;
       margin: 0;
-      padding: 2px 0 2px 24px;
-      border-left: 1.5px solid currentColor;
+      padding: 2px 0 2px 44px;
+      border-left: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
       font-family: 'Inter', sans-serif;
       font-weight: 600;
       font-size: 18px;
@@ -1085,6 +1085,10 @@
     @media (max-width: 700px) {
       .site-footer .footer-inner .footer-subtitle {
         text-wrap: pretty;
+      }
+
+      .footer-sitemap ol {
+        padding-left: 28px;
       }
 
       .footer-title > span {
