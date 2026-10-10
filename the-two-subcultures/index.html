@@ -220,8 +220,8 @@
     .site-title {
       position: absolute;
       top: 28px;
-      /* line up with the left edge of the article column */
-      left: max(240px, calc(50% - 380px));
+      /* mirror the theme toggle on the right */
+      left: max(var(--header-margin), 24px);
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 14px;
       line-height: 1.15;
@@ -668,10 +668,6 @@
     }
 
     @media (max-width: 1180px) {
-      .site-title {
-        left: max(24px, calc(50% - 330px));
-      }
-
       .layout-grid {
         grid-template-columns: 1fr;
         max-width: none;
