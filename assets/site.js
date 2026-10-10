@@ -173,7 +173,8 @@
       document.body.classList.add('page-leaving');
       setTimeout(function () {
         var fromSite = document.referrer && new URL(document.referrer).origin === location.origin;
-        if (fromSite && history.length > 1) history.back();
+        // data-direct: always go to the arrow's own page, not back in history
+        if (fromSite && history.length > 1 && !backArrow.hasAttribute('data-direct')) history.back();
         else location.href = backArrow.getAttribute('href');
       }, NAV_DELAY);
       return;
