@@ -165,6 +165,11 @@
 
     html.colour .footer-site {
       font-weight: 500;
+      color: #8ab4f8;
+    }
+
+    html.colour[data-theme="dark"] .footer-site {
+      color: #0000ee;
     }
 
     .page {
@@ -812,12 +817,12 @@
       display: none;
     }
 
+    /* inverse: text colour as the background, and the page colour as text */
     .site-footer {
       margin-top: 96px;
-      padding: 40px 24px 56px;
-      background:
-        linear-gradient(var(--hairline), var(--hairline)) top / 100% var(--rule-width) no-repeat,
-        var(--panel);
+      padding: 48px 24px 64px;
+      background: var(--canvas-ink);
+      color: var(--canvas-bg);
     }
 
     .site-footer p {
@@ -826,7 +831,7 @@
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       line-height: 1.6;
-      color: var(--canvas-ink);
+      color: inherit;
     }
 
     /* the author's name: a plain underline, nothing else */
@@ -847,13 +852,13 @@
 
     .footer-site {
       font-weight: 600;
-      color: var(--link);
+      color: inherit;
       text-decoration: none;
       border-bottom: 1px solid transparent;
     }
 
     .footer-site:hover {
-      border-bottom-color: var(--link);
+      border-bottom-color: currentColor;
     }
 
     .endnotes.has-notes {
