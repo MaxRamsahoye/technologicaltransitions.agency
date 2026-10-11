@@ -1013,6 +1013,52 @@
 
     <div class="aspects" role="tabpanel"></div>
 
+    <!-- events shown only in the domain timelines: data-era is the era they
+         fall under, data-domains the domains (m military-economic,
+         c cultural-psychological, s the state, k the market) -->
+    <template class="domain-events">
+      <li class="era sub" data-era="agricultural-revolution" data-domains="m">
+        <p class="era-date">9th century BCE onward</p>
+        <h3 class="era-name">Siege Warfare</h3>
+        <p class="era-note">The Assyrian army brings battering rams, siege towers and sappers against walled cities &ndash; turning the fortified city, the agrarian state&rsquo;s answer to raiding, into something a larger state could break, and conquest into a matter of engineering and logistics.</p>
+      </li>
+      <li class="era sub" data-era="agricultural-revolution" data-domains="s">
+        <p class="era-date">1215</p>
+        <h3 class="era-name">The Magna Carta</h3>
+        <p class="era-note">English barons force King John to accept limits on royal power &ndash; no taxation without the consent of the realm, no imprisonment without lawful judgement &ndash; an early charter of the principle that the ruler is bound by law.</p>
+      </li>
+      <li class="era sub" data-era="industrial-revolution" data-domains="c">
+        <p class="era-date">Late 18th century onward</p>
+        <h3 class="era-name">Modernity</h3>
+        <p class="era-note">The break with tradition brought by industrialisation, the democratic revolutions and the Enlightenment: a world understood as made rather than given, organised around reason, progress, the individual and the nation &ndash; in which &ldquo;all that is solid melts into air&rdquo;.</p>
+      </li>
+      <li class="era sub" data-era="industrial-revolution" data-domains="k">
+        <p class="era-date">1844 &ndash; 1886</p>
+        <h3 class="era-name">Corporate Personhood</h3>
+        <p class="era-note">Britain&rsquo;s Joint Stock Companies Acts let companies form by simple registration and, from 1855, with limited liability; in the United States, <em>Santa Clara County v. Southern Pacific Railroad</em> (1886) was taken to give corporations the rights of persons &ndash; the corporation as a legal actor in its own right.</p>
+      </li>
+      <li class="era sub" data-era="technological-revolution" data-domains="s">
+        <p class="era-date">1920</p>
+        <h3 class="era-name">The League of Nations</h3>
+        <p class="era-note">Founded after the First World War to keep the peace through collective security and arbitration &ndash; the first standing body of international governance, which failed to stop the aggression of the 1930s but set the model for the United Nations.</p>
+      </li>
+      <li class="era sub" data-era="digital-revolution" data-domains="k">
+        <p class="era-date">1970</p>
+        <h3 class="era-name">Shareholder Value</h3>
+        <p class="era-note">Milton Friedman&rsquo;s essay &ldquo;The Social Responsibility of Business Is to Increase Its Profits&rdquo; gives the doctrine its creed: the firm exists to maximise returns to its owners &ndash; a principle that came to govern corporate strategy, executive pay and the financialised economy.</p>
+      </li>
+      <li class="era sub" data-era="digital-revolution" data-domains="c">
+        <p class="era-date">1979</p>
+        <h3 class="era-name">Post-Modernity</h3>
+        <p class="era-note">In <em>The Postmodern Condition</em>, Jean-Fran&ccedil;ois Lyotard describes an &ldquo;incredulity toward metanarratives&rdquo;: the grand stories of progress, reason and emancipation lose their hold, giving way to fragmented, relative and media-saturated identities.</p>
+      </li>
+      <li class="era sub" data-era="digital-revolution" data-domains="m">
+        <p class="era-date">1989</p>
+        <h3 class="era-name">Fourth-Generation Warfare</h3>
+        <p class="era-note">Military theorists name a new kind of conflict in which states fight non-state actors &ndash; insurgents, terrorists and networks &ndash; and the lines between war and politics, soldier and civilian, blur: the characteristic form of war after the Cold War.</p>
+      </li>
+    </template>
+
     <nav class="mini-side" aria-label="Eras"><ol></ol></nav>
     <nav class="mini-side domain-side" aria-label="Domains"><ol></ol></nav>
     <button class="era-toggle era-toggle-all domain-toggle-all" type="button" aria-expanded="false"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">Expand all events</span></button>
@@ -1778,6 +1824,16 @@
       // the aspect view: for each of the four aspects every era lists, a
       // timeline of what that aspect was in each era
       var aspectsEl = document.querySelector('.aspects');
+      var domainOnly = Array.prototype.slice.call(document.querySelector('template.domain-events').content.children);
+      // a sortable year from an event's date: "1215", "c. 3500 BCE", "9th century BCE"
+      function eventYear(e) {
+        var t = e.querySelector('.era-date').textContent;
+        var m = t.match(/(\d[\d,]*)(st|nd|rd|th)?/);
+        if (!m) return 0;
+        var n = parseInt(m[1].replace(/,/g, ''), 10);
+        if (m[2]) n = (n - 1) * 100 + 50;
+        return /BCE/.test(t) ? -n : n;
+      }
       var aspectNames = Array.prototype.map.call(mains[0].querySelectorAll('.era-aspects dt'), function (dt) { return dt.textContent; });
       aspectNames.forEach(function (name, k) {
         var sec = document.createElement('section');
@@ -1799,9 +1855,13 @@
           // this era's events that belong to the domain, folded away
           var code = 'mcsk'.charAt(k);
           var btn = era.querySelector('.era-toggle');
-          var events = btn ? allEras.filter(function (e) {
-            return e.dataset.group === btn.dataset.group && (' ' + e.dataset.domains + ' ').indexOf(' ' + code + ' ') !== -1;
-          }) : [];
+          var inDomain = function (e) { return (' ' + e.dataset.domains + ' ').indexOf(' ' + code + ' ') !== -1; };
+          var events = (btn ? allEras.filter(function (e) {
+            return e.dataset.group === btn.dataset.group && inDomain(e);
+          }) : []).concat(domainOnly.filter(function (e) {
+            return e.dataset.era === era.id && inDomain(e);
+          }));
+          events.sort(function (a, b) { return eventYear(a) - eventYear(b); });
           if (events.length) {
             var toggle = document.createElement('button');
             toggle.type = 'button';
@@ -1816,6 +1876,7 @@
               var c = e.cloneNode(true);
               c.removeAttribute('id');
               c.removeAttribute('data-group');
+              c.removeAttribute('data-era');
               c.hidden = false;
               c.classList.remove('reached', 'current', 'unfolding');
               ol.appendChild(c);
