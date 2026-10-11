@@ -303,11 +303,20 @@
     }
 
     /* the timeline: a line down the left, a dot for each revolution */
+    /* --tl-gap: from the line to the text; where there is room the line moves
+       out to the left, so the text stays in the column */
     .timeline {
+      --tl-gap: 40px;
       position: relative;
       list-style: none;
-      margin: 0;
-      padding: 0 0 0 40px;
+      margin: 0 0 0 calc(40px - var(--tl-gap));
+      padding: 0 0 0 var(--tl-gap);
+    }
+
+    @media (min-width: 900px) {
+      .timeline {
+        --tl-gap: 72px;
+      }
     }
 
     /* the line runs from the first dot to the last (length set by the script) */
@@ -335,7 +344,7 @@
       position: absolute;
       /* centred on the era's title (offset measured by the script) */
       top: calc(var(--dot-y, 15px) - 6px);
-      left: -40px;
+      left: calc(-1 * var(--tl-gap));
       width: 12px;
       height: 12px;
       border-radius: 50%;
@@ -387,7 +396,7 @@
 
     .era.sub::before {
       top: 11px;
-      left: -20px;
+      left: calc(20px - var(--tl-gap));
       width: 8px;
       height: 8px;
     }
@@ -396,7 +405,7 @@
       content: '';
       position: absolute;
       top: 14.25px;
-      left: -34px;
+      left: calc(6px - var(--tl-gap));
       width: 14px;
       height: 1.5px;
       background: color-mix(in srgb, currentColor 22%, transparent);
