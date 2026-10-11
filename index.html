@@ -791,13 +791,9 @@
       margin-top: 104px;
     }
 
-    /* design 2 (d): the Overview follows straight on from the down arrow,
-       hidden until the arrow is pressed or the page is scrolled, then fading in */
-    html.design-2 .article-header {
-      min-height: 0;
-      padding: 14vh 0 40px;
-    }
-
+    /* design 2 (d): the first screen stays put, and the Overview is pulled up
+       (by script) to follow straight on from the down arrow; it is hidden until
+       the arrow is pressed or the page is scrolled, then fades in */
     html.design-2 .article-header .next-screen {
       transition: opacity 0.6s ease;
     }
@@ -807,9 +803,13 @@
       pointer-events: none;
     }
 
+    html.design-2 .next-screen-overview {
+      display: none;
+    }
+
     html.design-2 #overview {
       min-height: 0;
-      padding: 72px 0 168px;
+      padding: 72px 0 88px;
       opacity: 0;
       transform: translateY(24px);
       transition: opacity 0.9s ease, transform 0.9s ease;
@@ -1908,6 +1908,22 @@
       window.addEventListener('scroll', checkOverview, { passive: true });
       checkOverview();
 
+      // pull the Overview up to just below the first arrow, leaving the first
+      // screen where it is in design 1
+      var firstHeader = document.querySelector('.article-header');
+      var firstArrow = firstHeader.querySelector('.next-screen');
+      var overviewEl = document.getElementById('overview');
+      function placeOverview() {
+        overviewEl.style.marginTop = '';
+        if (!isDesign2()) return;
+        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom - 32;
+        overviewEl.style.marginTop = -Math.max(0, gap) + 'px';
+      }
+      window.placeOverview = placeOverview;
+      window.addEventListener('resize', placeOverview);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeOverview);
+      placeOverview();
+
       function goTo(btn) {
         if (btn.dataset.target === 'overview' && isDesign2()) {
           showOverview();
@@ -2016,6 +2032,7 @@
         var on = root.classList.toggle('design-2');
         try { localStorage.setItem('design', on ? '2' : '1'); } catch (err) {}
         if (on && window.scrollY > 10) document.body.classList.add('overview-shown');
+        if (window.placeOverview) window.placeOverview();
       }
 
       var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign };
