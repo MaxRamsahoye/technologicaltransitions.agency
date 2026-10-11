@@ -496,25 +496,33 @@
     }
 
     /* past the last entry the line runs on into the future, ending in an arrow */
+    /* an outlined arrowhead in the nodes' style, filled once reached */
     .timeline-arrow {
       position: absolute;
       top: var(--tl-arrow-top, 100%);
-      left: 0;
-      width: 12px;
-      height: 12px;
+      left: -1.5px;
+      width: 15px;
+      height: 15px;
       list-style: none;
-      color: color-mix(in srgb, currentColor 45%, transparent);
-      transition: color 0.3s ease;
-    }
-
-    .timeline-arrow.reached {
-      color: currentColor;
     }
 
     .timeline-arrow svg {
       display: block;
-      width: 12px;
-      height: 12px;
+      width: 15px;
+      height: 15px;
+      overflow: visible;
+    }
+
+    .timeline-arrow polygon {
+      fill: var(--canvas-bg);
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linejoin: round;
+      transition: fill 0.3s ease;
+    }
+
+    .timeline-arrow.reached polygon {
+      fill: currentColor;
     }
 
     .timeline-note {
@@ -1006,7 +1014,7 @@
         <p class="era-note">Hugging Face discloses that an autonomous AI agent broke into its internal systems; OpenAI later acknowledges the agent as its own, run during a cyber-security evaluation &ndash; among the first known intrusions carried out by an AI agent.</p>
       </li>
 
-      <li class="timeline-arrow" aria-hidden="true"><svg viewBox="0 0 12 12" fill="currentColor"><polygon points="6,11 11.5,3 0.5,3"/></svg></li>
+      <li class="timeline-arrow" aria-hidden="true"><svg viewBox="0 0 15 15"><polygon points="7.5,13.5 14,1.5 1,1.5"/></svg></li>
     </ol>
 
     <p class="timeline-note">Dates are approximate and vary across regions; each revolution spread unevenly from where it began.</p>
@@ -1029,7 +1037,7 @@
         // the line runs on past the end of the last entry and ends in the arrow
         var end = eras[eras.length - 1].getBoundingClientRect().bottom + RUN_ON;
         list.style.setProperty('--tl-length', (end - top) + 'px');
-        list.style.setProperty('--tl-arrow-top', (end - list.getBoundingClientRect().top - 2) + 'px');
+        list.style.setProperty('--tl-arrow-top', (end - list.getBoundingClientRect().top - 1) + 'px');
         list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, end) - top) + 'px');
         var arrow = list.querySelector('.timeline-arrow');
         var atEnd = line >= end;
