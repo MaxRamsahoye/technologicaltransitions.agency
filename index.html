@@ -1036,14 +1036,26 @@
     /* the menu's last line sits level with the subtitle's last line */
     .footer-sitemap {
       align-self: end;
+      padding: 2px 0 2px var(--line-gap);
+      border-left: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
+    }
+
+    /* "All Pages" as a small, faded, capitalised heading over the two pages */
+    .site-footer .footer-sitemap .sitemap-heading {
+      margin: 0 0 14px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
     }
 
     /* a single vertical line down the left of the menu */
     .footer-sitemap ol {
       list-style: none;
       margin: 0;
-      padding: 2px 0 2px var(--line-gap);
-      border-left: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
+      padding: 0;
       font-family: 'Inter', sans-serif;
       font-weight: 500;
       font-size: 18px;
@@ -1106,7 +1118,7 @@
         text-wrap: pretty;
       }
 
-      .footer-sitemap ol {
+      .footer-sitemap {
         padding-left: 36px;
       }
 
@@ -1547,10 +1559,10 @@
       <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on the philosophy of technology</p>
       </div>
       <nav class="footer-sitemap" aria-label="Sitemap">
+        <p class="sitemap-heading"><a href="list/">All Pages</a></p>
         <ol>
           <li><a href="./">Research Article</a></li>
           <li><a href="lexicon/">The Lexicon</a></li>
-          <li><a href="list/">All Pages</a></li>
         </ol>
       </nav>
       </div>
