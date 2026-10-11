@@ -405,6 +405,11 @@
       text-underline-offset: 3px;
     }
 
+    /* the expand / collapse all control, at the top left of the timeline */
+    .era-toggle-all {
+      margin: 0 0 48px;
+    }
+
     .era-toggle-sign {
       display: inline-block;
       width: 0.8em;
@@ -562,10 +567,12 @@
     </div>
     </div>
 
+    <button class="era-toggle era-toggle-all" type="button" aria-expanded="false"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">Expand all events</span></button>
+
     <ol class="timeline">
       <li class="era" id="cognitive-revolution" data-summary="Around seventy thousand years ago, Homo sapiens acquired the capacity for complex language and shared myth. These stories allowed people to cooperate flexibly in groups far larger than any one person could know, and to pass knowledge down the generations. The result was the nomadic hunter-gatherer way of life: small, mobile and broadly egalitarian bands that endured for tens of thousands of years.">
         <p class="era-date">c. 70,000 BCE onward</p>
-        <h2 class="era-name">Cognitive Revolution</h2>
+        <h2 class="era-name"><a href="#cognitive-revolution">Cognitive Revolution</a></h2>
         <p class="era-stack">Language, shared myth, symbolic thought, composite tools</p>
         <p class="era-note">Around seventy thousand years ago, <em>Homo sapiens</em> acquired the capacity for complex language and shared myth. Stories of spirits, kin and tribe let people cooperate flexibly in groups beyond the Dunbar number and pass knowledge down the generations. For some sixty thousand years this was the basis of the nomadic hunter-gatherer way of life: small, mobile and broadly egalitarian bands living off the abundance of wild food.</p>
         <dl class="era-aspects">
@@ -597,7 +604,7 @@
 
       <li class="era" id="agricultural-revolution" data-summary="From around twelve thousand years ago, the domestication of plants and animals turned nomadic bands into settled farming societies. Farming created a storable surplus, and with it private property, the means to defend it and the means to exchange it: the state and the market in their earliest forms. Class, inequality and poverty followed, together with a culture of competition and status-seeking. The hierarchical civilisation it produced is, in elaborated form, the one we still live within.">
         <p class="era-date">c. 10,000 BCE onward</p>
-        <h2 class="era-name"><a href="../lexicon/#agricultural-revolution">Agricultural Revolution</a></h2>
+        <h2 class="era-name"><a href="#agricultural-revolution">Agricultural Revolution</a></h2>
         <p class="era-stack">Domestication of plants and animals, irrigation, food storage, the plough</p>
         <p class="era-note">Between roughly twelve and four thousand years ago, in several regions independently, the domestication of plants and animals turned nomadic hunter-gatherer tribes into settled agrarian civilisations. Geographically-bounded food production created a storable surplus, and with it private property, its defence &ndash; city-states, law, police and armies &ndash; and its exchange &ndash; trade, currency, merchants and markets: the state and the market in proto-form. Socio-economic class, inequality and poverty followed, along with a cultural psychology of competition, domination and status-seeking. The structural formation it produced &ndash; complex hierarchy, centralised power and a division of labour &ndash; is the one we still live within.</p>
         <dl class="era-aspects">
@@ -663,7 +670,7 @@
 
       <li class="era" id="scientific-revolution" data-summary="Between the sixteenth and seventeenth centuries, observation, experiment and mathematics replaced inherited authority as the way to know nature. Knowledge became cumulative, testable and shared through print and the new scientific societies. The change began in the mind, with a mechanistic and increasingly secular picture of the world, but it laid the groundwork for the machines of the industrial age and the reforming ideas of the Enlightenment.">
         <p class="era-date">c. 1540 &ndash; 1700</p>
-        <h2 class="era-name">Scientific Revolution</h2>
+        <h2 class="era-name"><a href="#scientific-revolution">Scientific Revolution</a></h2>
         <p class="era-stack">The telescope, the microscope, the pendulum clock, the printing press, mathematics and the experimental method</p>
         <p class="era-note">Between Copernicus and Newton, observation, experiment and mathematics replaced inherited authority as the way to know nature. Knowledge itself became a technology: cumulative, testable and shared through print and the new scientific societies. It changed the superstructure first &ndash; a mechanistic, increasingly secular picture of the world &ndash; and laid the intellectual groundwork for both the machines of the industrial tech stack and the reforming ideas of the Enlightenment.</p>
         <dl class="era-aspects">
@@ -730,7 +737,7 @@
 
       <li class="era" id="industrial-revolution" data-summary="Beginning in Britain in the late eighteenth century, the steam engine and coal broke the limits of human and animal muscle. Production moved into mechanised, fossil-fuelled factories, people moved from the countryside to the cities, and wage labour became the dominant form of work. The first industrial powers gained such an economic and military advantage that every rival had to industrialise or risk being colonised.">
         <p class="era-date">c. 1760 &ndash; 1840</p>
-        <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
+        <h2 class="era-name"><a href="#industrial-revolution">Industrial Revolution</a></h2>
         <p class="era-stack">The steam engine, coal, mechanised textile production, the factory</p>
         <p class="era-note">Beginning in Britain, the steam engine and coal broke the limits of human and animal muscle. Production moved from the farm and workshop to the mechanised, fossil-fuelled factory; populations moved from the countryside to the cities; and wage labour became the dominant form of work. The states that industrialised first gained an overwhelming economic and military advantage, and the pressure on every rival to follow &ndash; or be colonised &ndash; spread industrial capitalism across the world.</p>
         <dl class="era-aspects">
@@ -780,7 +787,7 @@
 
       <li class="era" id="technological-revolution" data-summary="From the late nineteenth century, electricity, steel, chemistry and the internal combustion engine brought mass production and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity. Within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.">
         <p class="era-date">c. 1870 &ndash; 1914</p>
-        <h2 class="era-name">Technological Revolution</h2>
+        <h2 class="era-name"><a href="#technological-revolution">Technological Revolution</a></h2>
         <p class="era-stack">Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone</p>
         <p class="era-note">Often called the Second Industrial Revolution. Electricity, steel, chemistry and the internal combustion engine brought mass production, national grids and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity: within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.</p>
         <dl class="era-aspects">
@@ -858,7 +865,7 @@
 
       <li class="era" id="digital-revolution" data-summary="After the Second World War, the transistor, the computer and the network moved information to the centre of economic and social life. Much of the founding technology was paid for by wartime and Cold War military competition before being commercialised in the personal computer, the internet, the smartphone and social media. The result was a globally connected information society, and the data, compute and infrastructure on which the next transition would be built.">
         <p class="era-date">c. 1950 &ndash; 2010</p>
-        <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
+        <h2 class="era-name"><a href="#digital-revolution">Digital Revolution</a></h2>
         <p class="era-stack">The transistor, the computer, the internet, the smartphone, social media</p>
         <p class="era-note">The transistor, the computer and the network moved information to the centre of economic and social life. Much of the founding technology was paid for by the military competition of the Second World War and the Cold War, before being commercialised in the personal computer, the internet, the smartphone and social media. The result was a globally connected information society &ndash; and the data, compute and infrastructure on which the next transition would be built.</p>
         <dl class="era-aspects">
@@ -942,7 +949,7 @@
 
       <li class="era" id="intelligence-revolution" data-summary="The fourth, and likely final, major technological transition is now under way, as machine learning at the scale of today’s compute begins to automate cognitive work. It is driven by the same structural dynamic as every transition before it: military-economic adaptation, competitive pressures, multi-polar traps and arms races. As an exponential technology, however, its negative externalities could be far more powerful and catastrophic, potentially even existential. How it is developed, deployed and diffused remains a decision of the power-elite.">
         <p class="era-date">c. 2010 &ndash; now</p>
-        <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
+        <h2 class="era-name"><a href="#intelligence-revolution">Intelligence Revolution</a></h2>
         <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
         <p class="era-note">The fourth, and likely final, major technological transition, now under way. Machine learning at the scale of today&rsquo;s compute is producing systems that can do an ever wider range of cognitive work. It is driven by the same structural dynamic as every transition before it &ndash; military-economic adaptation, competitive pressures, multi-polar traps and arms races &ndash; but as an exponential technology its negative externalities could be magnitudes more powerful and catastrophic, potentially even existential. How it is developed, deployed and diffused remains a decision of the power-elite.</p>
         <dl class="era-aspects">
@@ -1020,6 +1027,12 @@
     <p class="timeline-note">Dates are approximate and vary across regions; each revolution spread unevenly from where it began.</p>
   </main>
 
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.625 19.625,18.375 8.375,18.375"/>
+    </svg>
+  </button>
+
   <a class="site-title" href="../">Technological<br>Transitions</a>
 
   <script>
@@ -1057,20 +1070,59 @@
         arrow.classList.toggle('reached', atEnd);
         eras.forEach(function (era) { era.classList.toggle('current', era === current); });
       }
-      // open and close each era's events
-      list.addEventListener('click', function (e) {
-        var btn = e.target.closest('.era-toggle');
-        if (!btn) return;
-        var open = btn.getAttribute('aria-expanded') !== 'true';
+      // open and close each era's events, one group or all at once
+      var groupBtns = Array.prototype.slice.call(list.querySelectorAll('.era-toggle'));
+      var allBtn = document.querySelector('.era-toggle-all');
+      function setGroup(btn, open) {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.querySelector('.era-toggle-sign').textContent = open ? '\u2212' : '+';
         allEras.forEach(function (era) {
-          if (era.dataset.group !== btn.dataset.group) return;
+          if (era.dataset.group !== btn.dataset.group || era.hidden === !open) return;
           era.hidden = !open;
           era.classList.toggle('unfolding', open);
         });
+      }
+      function syncAll() {
+        var allOpen = groupBtns.every(function (b) { return b.getAttribute('aria-expanded') === 'true'; });
+        allBtn.setAttribute('aria-expanded', allOpen ? 'true' : 'false');
+        allBtn.querySelector('.era-toggle-sign').textContent = allOpen ? '\u2212' : '+';
+        allBtn.querySelector('.era-toggle-label').textContent = allOpen ? 'Collapse all events' : 'Expand all events';
+      }
+      list.addEventListener('click', function (e) {
+        var btn = e.target.closest('.era-toggle');
+        if (!btn) return;
+        setGroup(btn, btn.getAttribute('aria-expanded') !== 'true');
+        syncAll();
         track();
       });
+      allBtn.addEventListener('click', function () {
+        var open = allBtn.getAttribute('aria-expanded') !== 'true';
+        groupBtns.forEach(function (b) { setGroup(b, open); });
+        syncAll();
+        track();
+      });
+
+      // the miniature timeline and the era titles glide to just above the
+      // era's date, rather than jumping
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('.mini-timeline a, .era-name a[href^="#"]');
+        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var era = document.getElementById(a.getAttribute('href').slice(1));
+        if (!era) return;
+        e.preventDefault();
+        var date = era.querySelector('.era-date');
+        window.scrollTo({ top: date.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+        history.replaceState(null, '', '#' + era.id);
+      }, true);
+
+      // the up arrow shows once the top section has scrolled away
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.timeline-top');
+      function showUp() {
+        upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0);
+      }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
 
       // the miniature timeline in the top section, built from the main eras
       var mini = document.querySelector('.mini-timeline ol');
@@ -1124,7 +1176,7 @@
       track();
     })();
   </script>
-  <script src="../assets/site.js?v=286ee41f" data-base="../"></script>
+  <script src="../assets/site.js?v=2100afca" data-base="../"></script>
   <script src="../assets/tools.js?v=d48fa54b" data-search-scope=".timeline" data-hide-until=".timeline-top"></script>
 </body>
 </html>

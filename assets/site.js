@@ -184,9 +184,11 @@
     // than adding to history, so the back arrow returns to the previous page.
     var hashLink = e.target.closest('a[href^="#"]');
     if (hashLink && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      // a page that scrolls to the target itself prevents the default first
+      var handled = e.defaultPrevented;
       e.preventDefault();
       playPianoClick();
-      location.replace(hashLink.getAttribute('href'));
+      if (!handled) location.replace(hashLink.getAttribute('href'));
       return;
     }
 
