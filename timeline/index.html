@@ -407,7 +407,32 @@
 
     /* the expand / collapse all control, at the top left of the timeline */
     .era-toggle-all {
-      margin: 0 0 48px;
+      position: fixed;
+      z-index: 20;
+      top: 34px;
+      left: 40px;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .era-toggle-all.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .era-toggle-all {
+        top: 28px;
+        left: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .era-toggle-all {
+        top: 24px;
+      }
     }
 
     .era-toggle-sign {
@@ -593,13 +618,24 @@
             <dd>There was no market: goods moved through gifts, reciprocity and sharing within and between bands, and perishable food was shared rather than stored.</dd>
           </div>
         </dl>
-        <button class="era-toggle" type="button" aria-expanded="false" data-group="0"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">1 event</span></button>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="0"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">3 events</span></button>
       </li>
 
       <li class="era sub" data-group="0" hidden>
         <p class="era-date">c. 70,000 &ndash; 50,000 BCE</p>
         <h3 class="era-name">The Global Migration of <em>Homo sapiens</em></h3>
         <p class="era-note">Modern humans spread out of Africa across Eurasia and on to Australia &ndash; what is known as the recent African origin model, or &ldquo;Out of Africa II&rdquo; &ndash; displacing or absorbing the other human species they met, such as the Neanderthals and Denisovans.</p>
+      </li>
+      <li class="era sub" data-group="0" hidden>
+        <p class="era-date">c. 70,000 &ndash; 20,000 BCE</p>
+        <h3 class="era-name">Ranged Weapons</h3>
+        <p class="era-note">The spear-thrower, the bow and composite hafted tools let hunters kill at a distance &ndash; the first military-economic adaptations, giving the groups that wielded them a decisive edge in hunting and in conflict.</p>
+      </li>
+
+      <li class="era sub" data-group="0" hidden>
+        <p class="era-date">c. 50,000 &ndash; 10,000 BCE</p>
+        <h3 class="era-name">The Megafauna Extinctions</h3>
+        <p class="era-note">Mammoths, giant sloths, cave bears and many other large animals vanish across the world, often soon after humans arrive &ndash; the first sign of humanity&rsquo;s power to reshape the ecosystems it depends on.</p>
       </li>
 
       <li class="era" id="agricultural-revolution" data-summary="From around twelve thousand years ago, the domestication of plants and animals turned nomadic bands into settled farming societies. Farming created a storable surplus, and with it private property, the means to defend it and the means to exchange it: the state and the market in their earliest forms. Class, inequality and poverty followed, together with a culture of competition and status-seeking. The hierarchical civilisation it produced is, in elaborated form, the one we still live within.">
@@ -625,7 +661,7 @@
             <dd>Trade, currency, merchants and markets grew up to exchange the surplus, alongside debt, the ownership of land and slavery, co-evolving with the state.</dd>
           </div>
         </dl>
-        <button class="era-toggle" type="button" aria-expanded="false" data-group="1"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">7 events</span></button>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="1"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">9 events</span></button>
       </li>
 
       <li class="era sub" data-group="1" hidden>
@@ -634,9 +670,19 @@
         <p class="era-note">Mesopotamia, Egypt, the Indus Valley and early China: the first cities and states, with writing, bureaucracy, monumental building and standing armies &ndash; the proto-state and market made concrete.</p>
       </li>
       <li class="era sub" data-group="1" hidden>
+        <p class="era-date">c. 3500 BCE</p>
+        <h3 class="era-name">The Domestication of Horses</h3>
+        <p class="era-note">On the steppes north of the Black Sea, horses are tamed for meat, milk and then riding and chariots &ndash; transforming transport, trade and warfare for the next five thousand years.</p>
+      </li>
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 3200 BCE</p>
         <h3 class="era-name">Writing</h3>
         <p class="era-note">Invented in Sumer to keep accounts of grain, livestock and labour, and soon afterwards in Egypt: a technology of administration, taxation and law &ndash; of the state.</p>
+      </li>
+      <li class="era sub" data-group="1" hidden>
+        <p class="era-date">c. 2300 BCE</p>
+        <h3 class="era-name">The First Empires</h3>
+        <p class="era-note">Sargon of Akkad unites the city-states of Mesopotamia under a single ruler, with a standing army and a centralised administration &ndash; the first empire, and the model for those that followed.</p>
       </li>
 
       <li class="era sub" data-group="1" hidden>
@@ -691,7 +737,7 @@
             <dd>Chartered trading companies, joint-stock finance and early banking flourished, while precise measurement and navigation opened up global trade.</dd>
           </div>
         </dl>
-        <button class="era-toggle" type="button" aria-expanded="false" data-group="2"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">7 events</span></button>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="2"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">8 events</span></button>
       </li>
 
       <li class="era sub" data-group="2" hidden>
@@ -734,6 +780,11 @@
         <h3 class="era-name">The Enlightenment</h3>
         <p class="era-note">Reason, science and individual rights set against tradition and absolutism &ndash; the intellectual ground of the industrial and democratic revolutions.</p>
       </li>
+      <li class="era sub" data-group="2" hidden>
+        <p class="era-date"><span class="nowrap"><em>Principia</em> 1687</span> &middot; <span class="nowrap"><em>Celestial Mechanics</em> 1799 &ndash; 1825</span></p>
+        <h3 class="era-name">Newton&rsquo;s <em>Principia</em> &amp; Laplace&rsquo;s <em>Celestial Mechanics</em></h3>
+        <p class="era-note">Newton&rsquo;s laws of motion and universal gravitation explain the heavens and the earth by the same few mathematical laws; Laplace extends them into a complete mechanics of the solar system, with no need of God to keep it stable. Together they made the universe appear a clockwork machine &ndash; the mechanistic worldview at its height.</p>
+      </li>
 
       <li class="era" id="industrial-revolution" data-summary="Beginning in Britain in the late eighteenth century, the steam engine and coal broke the limits of human and animal muscle. Production moved into mechanised, fossil-fuelled factories, people moved from the countryside to the cities, and wage labour became the dominant form of work. The first industrial powers gained such an economic and military advantage that every rival had to industrialise or risk being colonised.">
         <p class="era-date">c. 1760 &ndash; 1840</p>
@@ -758,7 +809,13 @@
             <dd>Industrial capitalism became dominant, built on wage labour, factories and joint-stock companies, and on global commodity markets tied together by the gold standard.</dd>
           </div>
         </dl>
-        <button class="era-toggle" type="button" aria-expanded="false" data-group="3"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">4 events</span></button>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="3"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">7 events</span></button>
+      </li>
+
+      <li class="era sub" data-group="3" hidden>
+        <p class="era-date">c. 1750 &ndash; 1850</p>
+        <h3 class="era-name">The Enclosure of the Commons</h3>
+        <p class="era-note">In Britain, Acts of Parliament fence off common land for private farming, dispossessing rural labourers and driving them into the towns and factories &ndash; the market made out of what had been shared.</p>
       </li>
 
       <li class="era sub" data-group="3" hidden>
@@ -772,6 +829,11 @@
         <h3 class="era-name"><em>The Wealth of Nations</em></h3>
         <p class="era-note">Adam Smith&rsquo;s account of the division of labour and the &ldquo;invisible hand&rdquo; of the market &ndash; the founding text of classical economics.</p>
       </li>
+      <li class="era sub" data-group="3" hidden>
+        <p class="era-date">1776</p>
+        <h3 class="era-name">The Steam Engine</h3>
+        <p class="era-note">James Watt&rsquo;s engine, with its separate condenser, makes steam power efficient enough to drive mills, mines, locomotives and ships &ndash; the engine of industrialisation.</p>
+      </li>
 
       <li class="era sub" data-group="3" hidden>
         <p class="era-date">1811 &ndash; 1816</p>
@@ -783,6 +845,11 @@
         <p class="era-date">1848</p>
         <h3 class="era-name"><em>The Communist Manifesto</em></h3>
         <p class="era-note">Marx and Engels&rsquo; critique of industrial capitalism as a system of class exploitation, and their call for workers to seize the means of production.</p>
+      </li>
+      <li class="era sub" data-group="3" hidden>
+        <p class="era-date">1859</p>
+        <h3 class="era-name">Darwin&rsquo;s <em>On the Origin of Species</em></h3>
+        <p class="era-note">Darwin sets out evolution by natural selection: variation, competition and the survival of the fittest shaping all life over time &ndash; the idea at the root of this project&rsquo;s evolutionary model.</p>
       </li>
 
       <li class="era" id="technological-revolution" data-summary="From the late nineteenth century, electricity, steel, chemistry and the internal combustion engine brought mass production and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity. Within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.">
@@ -1115,11 +1182,14 @@
         history.replaceState(null, '', '#' + era.id);
       }, true);
 
-      // the up arrow shows once the top section has scrolled away
+      // the up arrow, and the expand / collapse all control fixed in the top
+      // left corner, show once the top section has scrolled away
       var upBtn = document.querySelector('.scroll-top-btn');
       var band = document.querySelector('.timeline-top');
       function showUp() {
-        upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0);
+        var past = band.getBoundingClientRect().bottom < 0;
+        upBtn.classList.toggle('visible', past);
+        allBtn.classList.toggle('visible', past);
       }
       window.addEventListener('scroll', showUp, { passive: true });
       showUp();
