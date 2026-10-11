@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A timeline of the major technological transitions discussed in A Critical Evolutionary Game-Theory Model of Major Technological Transitions.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png">
+  <script>
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (navEntry && navEntry.type === 'reload') document.documentElement.classList.add('reloading');
+    } catch (e) {}
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
+      if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      var band = localStorage.getItem('band');
+      if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Timeline — Technological Transitions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="../assets/site.css?v=18b793c4" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .timeline-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 136px;
+    }
+
+    .timeline-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -72px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .timeline-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 600px) {
+      .timeline-top::before {
+        top: -140px;
+      }
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the timeline: a line down the left, a dot for each revolution */
+    .timeline {
+      position: relative;
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 5px;
+      width: 1.5px;
+      background: color-mix(in srgb, currentColor 22%, transparent);
+    }
+
+    .era {
+      position: relative;
+      padding: 0 0 64px;
+    }
+
+    .era:last-child {
+      padding-bottom: 0;
+    }
+
+    .era::before {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: -40px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--canvas-bg);
+      box-shadow: inset 0 0 0 1.5px currentColor;
+    }
+
+    /* the revolution now under way: a filled dot */
+    .era.now::before {
+      background: currentColor;
+    }
+
+    .era-date {
+      margin: 0 0 6px;
+      font-family: var(--mono-caps);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .era-name {
+      margin: 0;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .era-name {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    .era-name a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .era-name a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 5px;
+    }
+
+    .era-stack {
+      margin: 10px 0 0;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .era-note {
+      margin: 10px 0 0;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    .timeline-note {
+      margin: 72px 0 0;
+      font-size: 18px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      .era-name,
+      html.serif-headings .era-name {
+        font-size: 24px;
+      }
+
+      .era-note {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="timeline-top">
+    <h1 class="page-title">Timeline</h1>
+    <p class="page-intro">The major technological transitions discussed in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
+    </div>
+
+    <ol class="timeline">
+      <li class="era">
+        <p class="era-date">c. 10,000 BCE onward</p>
+        <h2 class="era-name"><a href="../lexicon/#agricultural-revolution">Agricultural Revolution</a></h2>
+        <p class="era-stack">Domestication of plants and animals, irrigation, food storage, the plough</p>
+        <p class="era-note">From nomadic hunter-gatherer tribes to settled agrarian civilisations: storable surplus, private property, the state and the market, class and inequality.</p>
+      </li>
+
+      <li class="era">
+        <p class="era-date">c. 1760 &ndash; 1840</p>
+        <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
+        <p class="era-stack">The steam engine, coal, mechanised textile production, the factory</p>
+        <p class="era-note">From agrarian to industrial society: mechanised, fossil-fuelled production, urbanisation and the wage labour of the factory system.</p>
+      </li>
+
+      <li class="era">
+        <p class="era-date">c. 1870 &ndash; 1914</p>
+        <h2 class="era-name">Technological Revolution</h2>
+        <p class="era-stack">Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone</p>
+        <p class="era-note">Often called the Second Industrial Revolution: mass production, national grids and networks, and the rise of the large corporation.</p>
+      </li>
+
+      <li class="era">
+        <p class="era-date">c. 1950 &ndash; 2010</p>
+        <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
+        <p class="era-stack">The transistor, the computer, the internet, the smartphone</p>
+        <p class="era-note">From industrial to information society: computing and networked communication across economic and social life.</p>
+      </li>
+
+      <li class="era now">
+        <p class="era-date">c. 2010 &ndash; now</p>
+        <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
+        <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
+        <p class="era-note">The fourth, and likely final, major technological transition, now under way.</p>
+      </li>
+    </ol>
+
+    <p class="timeline-note">Dates are approximate and vary across regions; each revolution spread unevenly from where it began.</p>
+  </main>
+
+  <a class="site-title" href="../">Technological<br>Transitions</a>
+
+  <script src="../assets/site.js?v=286ee41f" data-base="../"></script>
+  <script src="../assets/tools.js?v=d48fa54b" data-search-scope=".timeline" data-hide-until=".timeline-top"></script>
+</body>
+</html>
