@@ -617,6 +617,52 @@
       }
     }
 
+    /* domain view, wider windows: the four domains in a column on the left
+       and their summary panel on the right; the whole block spans the text */
+    @media (min-width: 601px) {
+      body.view-domains .timeline-top {
+        display: grid;
+        grid-template-columns: minmax(200px, 3fr) 7fr;
+        column-gap: 64px;
+        align-items: start;
+      }
+
+      body.view-domains .timeline-top > .page-title,
+      body.view-domains .timeline-top > .page-intro {
+        grid-column: 1 / -1;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      body.view-domains .timeline-top > .mini-domains,
+      body.view-domains .timeline-top > .domains-panel {
+        margin: 80px 0 32px;
+      }
+
+      body.view-domains .mini-domains ol {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      body.view-domains .mini-domains .mini-name {
+        max-width: none;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1099px) {
+      body.view-domains .timeline-top {
+        margin-left: calc(100% / 14 - 8px);
+        margin-right: calc(100% / 14 - 8px);
+      }
+    }
+
+    @media (min-width: 1100px) {
+      body.view-domains .timeline-top {
+        margin-left: calc(100% / 14 - 128px);
+        margin-right: calc(100% / 14 - 128px);
+      }
+    }
+
     /* the domains are not a sequence, so no line or dots: four columns
        across the text, each under a short rule that darkens on hover */
     .mini-domains ol {
