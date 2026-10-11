@@ -666,6 +666,26 @@
       margin-top: 144px;
     }
 
+    /* h on: no band; the contents sit in an outlined box drawn like the
+       Overview's dividing line */
+    html.overview-lines .contents-band {
+      --canvas-ink: var(--frame-ink);
+      --canvas-accent: var(--frame-ink);
+      color: var(--frame-ink);
+      border: 1.5px solid currentColor;
+      padding: 48px 48px 40px;
+    }
+
+    html.overview-lines .contents-band::before {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      html.overview-lines .contents-band {
+        padding: 36px 24px 30px;
+      }
+    }
+
     /* h off: the Overview's band runs straight on into the contents band */
     html:not(.overview-lines) .contents-band {
       margin-top: 0;
