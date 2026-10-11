@@ -369,6 +369,14 @@
       box-shadow: inset 0 0 0 1.5px currentColor;
     }
 
+    /* every node is nudged onto whole pixels (offsets set by the script), so
+       they all render as identical, crisp circles */
+    .era::before,
+    .aspect-entry::after,
+    .mini-timeline .mini-dot {
+      translate: var(--snap-x, 0px) var(--snap-y, 0px);
+    }
+
     /* scroll tracker: the line fills down to the reading position, each dot
        fills as it is passed, and the dot being read swells; the fill is in the
        band colour (b) where that is dark, otherwise in the text colour */
@@ -1844,6 +1852,44 @@
         list.style.setProperty('--tl-start', dotY(allEras[0]) + 'px');
       }
 
+      // nudge each node onto whole pixels: read every position first, then
+      // write every offset, so the page is laid out only once
+      var snapKey = '';
+      function snapNodes() {
+        var nodes = [];
+        document.querySelectorAll('.timeline .era, .aspect-entry, .aspect-events .era').forEach(function (el) {
+          if (el.offsetParent) nodes.push([el, el.classList.contains('aspect-entry') ? '::after' : '::before']);
+        });
+        document.querySelectorAll('.mini-timeline .mini-dot').forEach(function (el) {
+          if (el.offsetParent) nodes.push([el, null]);
+        });
+        nodes.forEach(function (n) { n[0].style.removeProperty('--snap-x'); n[0].style.removeProperty('--snap-y'); });
+        var reads = nodes.map(function (n) {
+          var r = n[0].getBoundingClientRect();
+          if (!n[1]) return [r.left, r.top + window.scrollY];
+          var c = getComputedStyle(n[0], n[1]);
+          return [r.left + parseFloat(c.left), r.top + window.scrollY + parseFloat(c.top)];
+        });
+        nodes.forEach(function (n, i) {
+          n[0].style.setProperty('--snap-x', (Math.round(reads[i][0]) - reads[i][0]).toFixed(3) + 'px');
+          n[0].style.setProperty('--snap-y', (Math.round(reads[i][1]) - reads[i][1]).toFixed(3) + 'px');
+        });
+      }
+      function maybeSnap() {
+        var visible = document.querySelectorAll('.timeline .era:not([hidden]), .aspect-events:not([hidden])').length;
+        var key = document.documentElement.scrollHeight + 'x' + window.innerWidth + 'x' + visible + 'x' + document.body.className;
+        if (key === snapKey) return;
+        snapKey = key;
+        snapNodes();
+        // once any unfolding events have settled, measure again
+        clearTimeout(snapTimer);
+        snapTimer = setTimeout(function () {
+          snapNodes();
+          snapTimer = setTimeout(snapNodes, 700);
+        }, 500);
+      }
+      var snapTimer = null;
+
       function track() {
         eras = allEras.filter(function (era) { return !era.hidden; });
         var line = window.innerHeight * 0.45;
@@ -1880,6 +1926,7 @@
         arrow.classList.toggle('reached', atEnd);
         eras.forEach(function (era) { era.classList.toggle('current', era === current); });
         if (sideItems) trackSide();
+        maybeSnap();
       }
       // open and close each era's events, one group or all at once
       var groupBtns = Array.prototype.slice.call(list.querySelectorAll('.era-toggle'));
@@ -2055,6 +2102,7 @@
           setAspectGroup(b, b.getAttribute('aria-expanded') !== 'true');
           syncDomainAll();
           trackDomainSide();
+          maybeSnap();
         });
       });
       domainAllBtn.addEventListener('click', function () {
@@ -2062,6 +2110,7 @@
         aspectToggles.forEach(function (b) { setAspectGroup(b, open); });
         syncDomainAll();
         trackDomainSide();
+        maybeSnap();
       });
 
       // the top-left menu in the domain view: the four domains, its line
