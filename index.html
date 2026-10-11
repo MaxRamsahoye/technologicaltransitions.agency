@@ -937,6 +937,24 @@
       transition: opacity 0.9s ease 0.4s, transform 0.9s ease 0.4s;
     }
 
+    /* the rest of the article, its notes and the footer stay hidden with the
+       Overview, and appear with it */
+    html.design-2 #overview ~ *,
+    html.design-2 .endnotes,
+    html.design-2 .site-footer {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+    }
+
+    html.design-2 body.overview-shown #overview ~ *,
+    html.design-2 body.overview-shown .endnotes,
+    html.design-2 body.overview-shown .site-footer {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.9s ease 0.4s, visibility 0s linear 0.4s;
+    }
+
     @media (max-width: 600px) {
       #overview {
         padding: 40px 0 104px;
