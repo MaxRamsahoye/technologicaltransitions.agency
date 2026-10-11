@@ -52,6 +52,70 @@
       margin-bottom: 0;
     }
 
+    /* list menu of the sources in the top section: author, then their works */
+    .sources-index {
+      margin-top: 56px;
+    }
+
+    .sources-index ol {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 48px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sources-index li {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    /* the Lexicon's ring bullet */
+    .sources-index li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      background: currentColor;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.5' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.5' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+
+    .sources-index a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .sources-index-author {
+      display: block;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .sources-index-works {
+      display: block;
+      margin-top: 4px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .sources-index a:hover .sources-index-author {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .sources-index ol {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 600px) {
       .sources-top::before {
         top: -140px;
@@ -235,6 +299,7 @@
     <div class="sources-top">
     <h1 class="page-title">Sources</h1>
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
+    <nav class="sources-index" aria-label="Sources"><ol></ol></nav>
     </div>
 
     <ol class="sources">
@@ -330,6 +395,30 @@
   </button>
 
   <script>
+    // the list menu in the top section, built from the entries; each link
+    // glides down to its entry
+    (function () {
+      var menu = document.querySelector('.sources-index ol');
+      Array.prototype.forEach.call(document.querySelectorAll('.sources > .source'), function (entry) {
+        var works = Array.prototype.map.call(entry.querySelectorAll(':scope > .source-work, :scope > .source-part > .source-work'), function (w) {
+          return w.textContent.split(':')[0].trim();
+        });
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#' + entry.id + '"><span class="sources-index-author"></span><span class="sources-index-works"></span></a>';
+        li.querySelector('.sources-index-author').textContent = entry.querySelector('.source-author').textContent;
+        li.querySelector('.sources-index-works').textContent = works.join(' \u00b7 ');
+        menu.appendChild(li);
+      });
+      menu.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var entry = document.getElementById(a.getAttribute('href').slice(1));
+        e.preventDefault();
+        window.scrollTo({ top: entry.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' });
+        history.replaceState(null, '', '#' + entry.id);
+      }, true);
+    })();
+
     // the up arrow shows once the top section has scrolled away
     (function () {
       var upBtn = document.querySelector('.scroll-top-btn');
