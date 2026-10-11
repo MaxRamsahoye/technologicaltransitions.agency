@@ -619,7 +619,7 @@
       grid-column: 2;
     }
 
-    /* the contents, centred in a full-width band beneath the Overview */
+    /* the contents, in a full-width band beneath the Overview */
     .contents-band {
       --canvas-ink: var(--inverse-ink);
       --canvas-accent: var(--inverse-ink);
@@ -628,7 +628,6 @@
       margin-top: 72px;
       padding: 64px 0 60px;
       color: var(--inverse-ink);
-      text-align: center;
     }
 
     .contents-band::before {
@@ -643,9 +642,9 @@
       z-index: -1;
     }
 
-    /* the menu as a block centred in the band, its lines aligned left */
+    /* the menu aligned left, with the article's text column */
     .contents-band .toc {
-      display: inline-block;
+      display: block;
       position: static;
       width: auto;
       transform: none;
@@ -654,7 +653,7 @@
 
     .contents-band .toc-label {
       font-size: 22px;
-      margin: 0 0 22px;
+      margin: 0 0 32px;
     }
 
     .contents-band .toc li {
