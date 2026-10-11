@@ -17,7 +17,10 @@
       } catch (e) {}
       try {
         var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-        if (navEntry && navEntry.type === 'reload') document.documentElement.classList.add('reloading');
+        // arriving from another page of the site (or a refresh, or back/forward): fade in
+        var fromSite = false;
+        try { fromSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+        if (fromSite || (navEntry && navEntry.type !== 'navigate')) document.documentElement.classList.add('page-entering');
       } catch (e) {}
       try {
         var t = localStorage.getItem('theme');
@@ -308,16 +311,20 @@
       font-family: var(--serif);
       color: var(--frame-ink);
       -webkit-font-smoothing: antialiased;
-      transition: background-color 0.25s ease, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-color 0.25s ease, opacity 0.6s cubic-bezier(0.45, 0, 0.55, 1);
     }
 
+    /* page transitions: the page eases out, then the next one eases in */
     body.page-leaving {
       opacity: 0;
     }
 
-    /* after a refresh the page starts hidden and fades in */
-    html.reloading body {
-      opacity: 0;
+    html.page-entering body {
+      animation: page-in 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.05s backwards;
+    }
+
+    @keyframes page-in {
+      from { opacity: 0; }
     }
 
     /* loading screen: a centred ring that fills, then fades to reveal the page */
@@ -1767,7 +1774,7 @@
         document.body.classList.add('page-leaving');
         setTimeout(function () {
           location.href = link.href;
-        }, 800);
+        }, 650);
       });
 
       var tocNav = document.querySelector('.toc');
@@ -2290,7 +2297,7 @@
         var g = audioCtx.ttMaster.gain, now = audioCtx.currentTime;
         g.cancelScheduledValues(now);
         g.setValueAtTime(g.value, now);
-        if (document.body.classList.contains('page-leaving')) g.linearRampToValueAtTime(0, now + 0.75);
+        if (document.body.classList.contains('page-leaving')) g.linearRampToValueAtTime(0, now + 0.6);
         else g.linearRampToValueAtTime(1, now + 0.05);
       }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
@@ -2331,7 +2338,7 @@
       }
 
       // A click that leaves for another page gets a short note, so the page
-      // change (after the 800ms fade) never cuts it off.
+      // change (after the 650ms fade) never cuts it off.
       function leavesPage(e) {
         var link = e.target.closest('a');
         if (!link || (link.target && link.target !== '_self')) return false;
@@ -2469,6 +2476,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=d48fa54b" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview, .contents-band" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=0b77ba81" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview, .contents-band" data-hide-until="#overview"></script>
 </body>
 </html>

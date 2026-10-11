@@ -61,13 +61,6 @@
 
   /* ---------- refresh: fade out, reload, fade in ---------- */
 
-  // the head script marks a reload; reveal the page with the body's fade
-  if (root.classList.contains('reloading')) {
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { root.classList.remove('reloading'); });
-    });
-  }
-
   // F5 and Ctrl/Cmd+R fade the page out before reloading (the browser's own
   // reload button can't be delayed, but still fades back in)
   document.addEventListener('keydown', function (e) {
@@ -75,7 +68,7 @@
     if (!reloadKey || document.body.classList.contains('page-leaving')) return;
     e.preventDefault();
     document.body.classList.add('page-leaving');
-    setTimeout(function () { location.reload(); }, 800);
+    setTimeout(function () { location.reload(); }, 650);
   });
 
   /* ---------- find bar ---------- */
