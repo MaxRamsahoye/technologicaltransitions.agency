@@ -34,7 +34,8 @@
       } catch (e) {}
       try {
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
-        if (localStorage.getItem('headings') === 'serif') document.documentElement.classList.add('serif-headings');
+        // ET Bembo headings are the default; f switches to Inter and back
+        if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
         var band = localStorage.getItem('band');
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
         // design 2 is the default; d switches to design 1 and back
@@ -191,9 +192,9 @@
     }
 
     html.serif-headings .article-body h3 {
-      font-weight: 600;
+      font-weight: 400;
       font-size: 1.2em;
-      -webkit-text-stroke: 0.3px currentColor;
+      -webkit-text-stroke: 0.35px currentColor;
     }
 
     /* c: only links to other sites turn blue */

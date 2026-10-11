@@ -17,7 +17,7 @@
       var t = localStorage.getItem('theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
       if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
-      if (localStorage.getItem('headings') === 'serif') document.documentElement.classList.add('serif-headings');
+      if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
       var band = localStorage.getItem('band');
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
