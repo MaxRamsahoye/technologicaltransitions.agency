@@ -2564,12 +2564,6 @@
           maybeSnap();
         });
       });
-      // the domains' events start open
-      aspectToggles.forEach(function (b) {
-        setAspectGroup(b, true);
-        Array.prototype.forEach.call(b.nextElementSibling.children, function (c) { c.classList.remove('unfolding'); });
-      });
-      if (aspectToggles.length) syncDomainAll();
       function refreshTails() {
         Array.prototype.forEach.call(aspectsEl.querySelectorAll('.aspect-entry:last-child'), function (e) {
           var ol = e.querySelector('.aspect-events');
