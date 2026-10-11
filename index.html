@@ -36,6 +36,7 @@
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
         var band = localStorage.getItem('band');
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+        if (localStorage.getItem('design') === '2') document.documentElement.classList.add('design-2');
       } catch (e) {}
     })();
   </script>
@@ -788,6 +789,35 @@
 
     .article-body #overview + section {
       margin-top: 104px;
+    }
+
+    /* design 2 (d): the Overview follows straight on from the down arrow,
+       hidden until the arrow is pressed or the page is scrolled, then fading in */
+    html.design-2 .article-header {
+      min-height: 0;
+      padding: 14vh 0 40px;
+    }
+
+    html.design-2 .article-header .next-screen {
+      transition: opacity 0.6s ease;
+    }
+
+    html.design-2 body.overview-shown .article-header .next-screen {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    html.design-2 #overview {
+      min-height: 0;
+      padding: 72px 0 168px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    html.design-2 body.overview-shown #overview {
+      opacity: 1;
+      transform: none;
     }
 
     @media (max-width: 600px) {
@@ -1862,7 +1892,27 @@
 
       var nextScreenBtns = Array.prototype.slice.call(document.querySelectorAll('.next-screen'));
 
+      // design 2: the first arrow (or any scroll) fades the Overview in
+      function isDesign2() {
+        return document.documentElement.classList.contains('design-2');
+      }
+
+      function showOverview() {
+        document.body.classList.add('overview-shown');
+      }
+
+      function checkOverview() {
+        if (isDesign2() && (window.scrollY > 10 || location.hash)) showOverview();
+      }
+
+      window.addEventListener('scroll', checkOverview, { passive: true });
+      checkOverview();
+
       function goTo(btn) {
+        if (btn.dataset.target === 'overview' && isDesign2()) {
+          showOverview();
+          return;
+        }
         var target = document.getElementById(btn.dataset.target);
         var offset = btn.dataset.target === 'overview' ? 0 : 72;
         animateScrollTo(target.getBoundingClientRect().top + window.scrollY - offset, 900);
@@ -1961,9 +2011,16 @@
         try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
       }
 
-      var SHORTCUTS = { b: cycleBand, c: toggleColour };
+      // d switches between the two designs (see design 2 in the styles)
+      function toggleDesign() {
+        var on = root.classList.toggle('design-2');
+        try { localStorage.setItem('design', on ? '2' : '1'); } catch (err) {}
+        if (on && window.scrollY > 10) document.body.classList.add('overview-shown');
+      }
 
-      // b and c have no button: their ripple shows where the pointer is
+      var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign };
+
+      // b, c and d have no button: their ripple shows where the pointer is
       var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       document.addEventListener('mousemove', function (e) {
         pointer.x = e.clientX;
