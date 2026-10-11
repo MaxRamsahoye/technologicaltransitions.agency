@@ -33,10 +33,20 @@
     }
 
     /* light sepia band from the top of the window to just below the index */
+    /* as wide as the three-column index and centred on the page; the title,
+       intro and count share the index's left edge */
     .lexicon-top {
       position: relative;
       z-index: 0;
       margin-bottom: 152px;
+      width: max-content;
+      max-width: calc(100vw - 48px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .lexicon-top .page-intro {
+      max-width: 680px;
     }
 
     .lexicon-top::before {
@@ -154,11 +164,20 @@
       list-style: none;
       margin: 0;
       padding: 0;
+      /* three columns, filled top to bottom (the script sets the row count
+         from --cols); two on narrower screens, one on phones */
+      --cols: 3;
       display: grid;
-      grid-template-columns: max-content max-content;
-      grid-template-rows: repeat(28, auto);
+      grid-template-columns: repeat(var(--cols), max-content);
       grid-auto-flow: column;
-      column-gap: 104px;
+      column-gap: 56px;
+    }
+
+    @media (max-width: 1180px) {
+      .lexicon-index ol {
+        --cols: 2;
+        column-gap: 104px;
+      }
     }
 
     /* outline circle bullets, indented */
@@ -216,9 +235,9 @@
 
     @media (max-width: 480px) {
       .lexicon-index ol {
+        --cols: 1;
         padding-left: 4px;
         grid-template-columns: 1fr;
-        grid-template-rows: none;
         grid-auto-flow: row;
       }
     }
@@ -679,6 +698,16 @@
     (function () {
       var terms = Array.prototype.slice.call(document.querySelectorAll('.lexicon .term'));
       document.querySelector('[data-concept-count]').textContent = terms.length;
+
+      // balance the index columns: rows = entries / columns, rounded up
+      var indexList = document.querySelector('.lexicon-index ol');
+      function balanceIndex() {
+        var cols = parseInt(getComputedStyle(indexList).getPropertyValue('--cols'), 10) || 1;
+        var n = indexList.children.length;
+        indexList.style.gridTemplateRows = cols > 1 ? 'repeat(' + Math.ceil(n / cols) + ', auto)' : 'none';
+      }
+      window.addEventListener('resize', balanceIndex);
+      balanceIndex();
 
       var first = {};
       terms.forEach(function (t) {
