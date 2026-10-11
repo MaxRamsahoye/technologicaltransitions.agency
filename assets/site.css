@@ -255,6 +255,11 @@ html[data-theme] .theme-toggle .icon-sun {
   padding: 180px 24px 120px;
 }
 
+/* on pages with a footer, its own top margin is the space after the last entry */
+.page-main:has(~ .site-footer) {
+  padding-bottom: 0;
+}
+
 .page-title {
   font-family: var(--sans);
   font-weight: 700;
