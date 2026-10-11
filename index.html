@@ -1075,8 +1075,16 @@
     }
 
     /* the menu's last line sits level with the subtitle's last line */
+    /* the menu sits in from the column's right edge */
     .footer-sitemap {
       align-self: center;
+      margin-right: 96px;
+    }
+
+    @media (max-width: 1000px) {
+      .footer-sitemap {
+        margin-right: 0;
+      }
     }
 
     /* "All Pages" as a small, faded, capitalised heading over the two pages */

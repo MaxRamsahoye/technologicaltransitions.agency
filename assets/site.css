@@ -506,8 +506,16 @@ html.band-black:not([data-theme]) {
   text-underline-offset: 3px;
 }
 
+/* the menu sits in from the column's right edge */
 .footer-sitemap {
   align-self: center;
+  margin-right: 96px;
+}
+
+@media (max-width: 1000px) {
+  .footer-sitemap {
+    margin-right: 0;
+  }
 }
 
 .site-footer .footer-sitemap .sitemap-heading {
