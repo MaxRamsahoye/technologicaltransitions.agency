@@ -40,6 +40,7 @@
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
         // design 2 is the default; d switches to design 1 and back
         if (localStorage.getItem('design') !== '1') document.documentElement.classList.add('design-2');
+        if (localStorage.getItem('overview') === 'lines') document.documentElement.classList.add('overview-lines');
       } catch (e) {}
     })();
   </script>
@@ -807,6 +808,40 @@
       transform: translateX(-50%);
       background: var(--canvas-bg);
       z-index: -1;
+    }
+
+    /* h: the Overview in the page's own colours, set off by a short line above
+       and below instead of a shaded band */
+    html.overview-lines #overview {
+      --canvas-bg: var(--frame-bg);
+      --canvas-ink: var(--frame-ink);
+      --canvas-accent: var(--frame-ink);
+      color: var(--frame-ink);
+    }
+
+    html.overview-lines #overview::before,
+    html.overview-lines #overview::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 96px;
+      height: 1.5px;
+      transform: none;
+      background: currentColor;
+      z-index: 0;
+    }
+
+    html.overview-lines #overview::before {
+      top: 0;
+      bottom: auto;
+    }
+
+    html.overview-lines #overview::after {
+      bottom: 0;
+    }
+
+    html.colour.overview-lines #overview a[href^="http"] {
+      color: var(--link-blue);
     }
 
     /* inverse: swap text and background colours for everything in the Overview */
@@ -2094,9 +2129,15 @@
         try { localStorage.setItem('headings', on ? 'serif' : 'sans'); } catch (err) {}
       }
 
-      var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign, f: toggleSerifHeadings };
+      // h switches the Overview between its shaded band and short dividing lines
+      function toggleOverviewLines() {
+        var on = root.classList.toggle('overview-lines');
+        try { localStorage.setItem('overview', on ? 'lines' : 'band'); } catch (err) {}
+      }
 
-      // b, c, d and f have no button: their ripple shows where the pointer is
+      var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign, f: toggleSerifHeadings, h: toggleOverviewLines };
+
+      // b, c, d, f and h have no button: their ripple shows where the pointer is
       var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       document.addEventListener('mousemove', function (e) {
         pointer.x = e.clientX;
