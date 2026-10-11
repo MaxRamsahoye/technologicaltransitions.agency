@@ -745,6 +745,17 @@
       line-height: 1.2;
     }
 
+    .aspect-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .aspect-title a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 5px;
+    }
+
     html.serif-headings .aspect-title {
       font-family: var(--serif);
       font-weight: 700;
@@ -2075,8 +2086,8 @@
       aspectNames.forEach(function (name, k) {
         var sec = document.createElement('section');
         sec.className = 'aspect';
-        sec.innerHTML = '<h2 class="aspect-title"></h2><ol class="aspect-line"></ol>';
-        sec.querySelector('.aspect-title').textContent = name;
+        sec.innerHTML = '<h2 class="aspect-title"><a></a></h2><ol class="aspect-line"></ol>';
+        sec.querySelector('.aspect-title a').textContent = name;
         var line = sec.querySelector('.aspect-line');
         mains.forEach(function (era) {
           var dd = era.querySelectorAll('.era-aspects dd')[k];
@@ -2225,6 +2236,7 @@
       domainMini.style.setProperty('--mini-count', aspectNames.length);
       var domainItems = aspectNames.map(function (name, k) {
         domainSections[k].id = 'domain-' + name.toLowerCase().replace(/^the\s+/, '').replace(/[^a-z]+/g, '-').replace(/-+$/, '');
+        domainSections[k].querySelector('.aspect-title a').href = '#' + domainSections[k].id;
         var li = document.createElement('li');
         li.innerHTML = '<a href="#' + domainSections[k].id + '"><span class="mini-dot"></span><span class="mini-name"></span><span class="mini-date"></span></a>';
         li.querySelector('.mini-name').textContent = name;
@@ -2272,14 +2284,38 @@
       function setView(view) {
         document.body.classList.toggle('view-domains', view === 'domains');
         tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
-        if (view === 'domains') { history.replaceState(null, '', '#domains'); trackDomainSide(); }
-        else if (location.hash === '#domains') history.replaceState(null, '', location.pathname + location.search);
+        var onDomain = location.hash.indexOf('#domain') === 0;
+        if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); trackDomainSide(); }
+        else if (onDomain) history.replaceState(null, '', location.pathname + location.search);
         track();
       }
+
+      // a domain's heading links to itself, as an era's does: it glides there
+      // and the address takes its anchor
+      function glideToDomain(sec, smooth) {
+        window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 40, behavior: smooth ? 'smooth' : 'instant' });
+      }
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('.aspect-title a');
+        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        var sec = a.closest('.aspect');
+        glideToDomain(sec, true);
+        history.replaceState(null, '', '#' + sec.id);
+      });
       tabs.forEach(function (t) {
         t.addEventListener('click', function () { setView(t.dataset.view); });
       });
       if (location.hash === '#domains') setView('domains');
+      else if (location.hash.indexOf('#domain-') === 0) {
+        var target = document.getElementById(location.hash.slice(1));
+        if (target && target.classList.contains('aspect')) {
+          setView('domains');
+          requestAnimationFrame(function () { glideToDomain(target, false); });
+          // and again after the browser's own jump to the anchor on load
+          window.addEventListener('load', function () { setTimeout(function () { glideToDomain(target, false); }, 0); });
+        }
+      }
       mini.style.setProperty('--mini-count', mains.length);
       var miniItems = mains.map(function (era) {
         var name = era.querySelector('.era-name').textContent.replace(/ Revolution$/, '');
