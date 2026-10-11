@@ -589,7 +589,6 @@
       display: none;
     }
 
-    /* long names wrap under their dot rather than spreading past the text */
     @media (min-width: 601px) {
       .mini-domains .mini-name {
         max-width: 10em;
@@ -610,10 +609,29 @@
       }
     }
 
-    @media (min-width: 601px) {
-      .mini-domains ol {
-        margin: 0 calc((64px - 100%) / 6);
-      }
+    /* the domains are not a sequence, so no line or dots: four columns
+       across the text, each under a short rule that darkens on hover */
+    .mini-domains ol {
+      gap: 24px;
+    }
+
+    .mini-domains ol::before,
+    .mini-domains ol::after,
+    .mini-domains .mini-dot {
+      display: none;
+    }
+
+    .mini-domains a {
+      align-items: flex-start;
+      padding-top: 14px;
+      border-top: 1.5px solid color-mix(in srgb, currentColor 30%, transparent);
+      text-align: left;
+      transition: border-color 0.3s ease;
+    }
+
+    .mini-domains li.current a,
+    .mini-domains a:hover {
+      border-top-color: currentColor;
     }
 
     body.view-domains .aspects {
@@ -753,6 +771,13 @@
     html.band-midnight:not([data-theme]) .mini-side,
     html.band-black:not([data-theme]) .mini-side {
       --tl-fill: var(--band-bg);
+    }
+
+    /* the domain menu is a plain list, not a timeline */
+    .domain-side ol::before,
+    .domain-side ol::after,
+    .domain-side .mini-side-dot {
+      display: none;
     }
 
     .mini-side.visible {
