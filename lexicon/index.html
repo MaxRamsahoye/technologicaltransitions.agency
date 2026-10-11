@@ -81,7 +81,7 @@
       padding: 0;
       list-style: none;
       font-family: var(--sans);
-      font-size: 13px;
+      font-size: 15px;
       line-height: 1;
       opacity: 0;
       pointer-events: none;
@@ -94,16 +94,18 @@
     }
 
     .az-index li + li {
-      margin-top: 7px;
+      margin-top: 8px;
     }
 
     .az-index a,
     .az-index span {
       display: block;
-      width: 20px;
+      width: 22px;
       text-align: center;
       color: inherit;
       text-decoration: none;
+      transform-origin: left center;
+      transition: transform 0.25s ease, font-weight 0.25s ease;
     }
 
     .az-index span {
@@ -116,8 +118,24 @@
       text-underline-offset: 3px;
     }
 
+    /* the letter being read swells, and its neighbours a little */
     .az-index a.current {
       font-weight: 700;
+      transform: scale(1.7);
+    }
+
+    .az-index a.near {
+      transform: scale(1.2);
+    }
+
+    /* room around the swollen letter so it clears its neighbours */
+    .az-index li {
+      transition: margin 0.25s ease;
+    }
+
+    .az-index li:has(a.current) {
+      margin-top: 14px;
+      margin-bottom: 6px;
     }
 
     @media (max-width: 1000px), (max-height: 640px) {
@@ -697,9 +715,14 @@
         }
         var letter = at ? at.dataset.letter : null;
         if (letter === current) return;
-        if (current && links[current]) links[current].classList.remove('current');
         current = letter;
-        if (current && links[current]) links[current].classList.add('current');
+        var order = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var at = current ? order.indexOf(current) : -9;
+        Object.keys(links).forEach(function (l) {
+          var d = Math.abs(order.indexOf(l) - at);
+          links[l].classList.toggle('current', d === 0);
+          links[l].classList.toggle('near', d === 1);
+        });
       }
       window.addEventListener('scroll', mark, { passive: true });
       window.addEventListener('resize', mark);
