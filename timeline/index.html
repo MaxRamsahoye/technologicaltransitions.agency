@@ -2604,6 +2604,7 @@
         var onDomain = location.hash.indexOf('#domain') === 0;
         if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); refreshTails(); trackDomainSide(); trackDomainLines(); }
         else if (onDomain) history.replaceState(null, '', location.pathname + location.search);
+        if (view === 'eras') alignMini();
         track();
       }
 
@@ -2670,6 +2671,44 @@
           li.classList.toggle('current', i === at);
         });
       }
+      // the era row is sized so that the first era's label starts where the
+      // subtitle starts and the last era's label ends where it ends (the
+      // labels are centred on their dots, in seven equal columns)
+      var miniNav = mini.parentNode;
+      var intro = document.querySelector('.timeline-top .page-intro');
+      function halfWidth(li) {
+        var w = 0;
+        li.querySelectorAll('.mini-name, .mini-date').forEach(function (el) {
+          var r = document.createRange();
+          r.selectNodeContents(el);
+          w = Math.max(w, r.getBoundingClientRect().width);
+        });
+        return w / 2;
+      }
+      function alignMini() {
+        miniNav.style.marginLeft = '';
+        miniNav.style.marginRight = '';
+        if (getComputedStyle(mini).gridTemplateColumns.split(' ').length === 1) return;   // phones: vertical
+        if (!miniNav.offsetParent) return;
+        var box = miniNav.parentNode.getBoundingClientRect();
+        var r = document.createRange();
+        r.selectNodeContents(intro);
+        var rects = r.getClientRects();
+        var L = intro.getBoundingClientRect().left;
+        var R = 0;
+        for (var i = 0; i < rects.length; i++) R = Math.max(R, rects[i].right);
+        var n = miniItems.length;
+        var a = halfWidth(miniItems[0]), b = halfWidth(miniItems[n - 1]);
+        var width = (R - L - a - b) * n / (n - 1);
+        var left = L + a - width / (2 * n);
+        miniNav.style.marginLeft = (left - box.left) + 'px';
+        miniNav.style.marginRight = (box.right - (left + width)) + 'px';
+      }
+      alignMini();
+      window.addEventListener('resize', alignMini);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignMini);
+      window.addEventListener('load', alignMini);
+
       // hovering a node fills the miniature line up to it, and the panel
       // below swaps the overview for that era's summary
       var panel = document.querySelector('.mini-panel');
