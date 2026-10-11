@@ -16,8 +16,7 @@
     try {
       var t = localStorage.getItem('theme');
       if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
-      // on this page the colour accent (c) is on unless it has been switched off
-      if (localStorage.getItem('colour') !== '0') document.documentElement.classList.add('colour');
+      if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
       if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
       var band = localStorage.getItem('band');
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
@@ -231,8 +230,10 @@
       letter-spacing: 0.08em;
     }
 
-    .source-link a {
-      color: inherit;
+    /* source links are always blue, whatever the colour (c) setting */
+    .source-link a,
+    html.colour .source-link a[href^="http"] {
+      color: var(--link-blue);
       text-decoration: none;
       border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent);
     }
