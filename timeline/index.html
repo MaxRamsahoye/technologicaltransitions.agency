@@ -485,7 +485,7 @@
       position: fixed;
       z-index: 20;
       top: 34px;
-      left: 40px;
+      right: 40px;
       margin: 0;
       opacity: 0;
       pointer-events: none;
@@ -500,13 +500,105 @@
     @media (max-width: 960px) {
       .era-toggle-all {
         top: 28px;
-        left: 24px;
+        right: 24px;
       }
     }
 
     @media (max-width: 600px) {
       .era-toggle-all {
         top: 24px;
+      }
+    }
+
+    /* a vertical mini timeline in the top-left corner once the top section has
+       gone: a dot per era on a line that fills down to the era being read */
+    .mini-side {
+      --tl-fill: currentColor;
+      position: fixed;
+      z-index: 20;
+      top: 34px;
+      left: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    html.band-midnight:not([data-theme]) .mini-side,
+    html.band-black:not([data-theme]) .mini-side {
+      --tl-fill: var(--band-bg);
+    }
+
+    .mini-side.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mini-side ol {
+      position: relative;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .mini-side ol::before,
+    .mini-side ol::after {
+      content: '';
+      position: absolute;
+      top: var(--side-start, 12px);
+      left: 5.25px;
+      width: 1.5px;
+    }
+
+    .mini-side ol::before {
+      height: var(--side-length, 0px);
+      background: color-mix(in srgb, currentColor 22%, transparent);
+    }
+
+    .mini-side ol::after {
+      height: var(--side-fill, 0px);
+      background: var(--tl-fill);
+      transition: height 0.3s ease;
+    }
+
+    .mini-side a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 5px 0;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .mini-side a:hover,
+    .mini-side li.current a {
+      color: var(--canvas-ink);
+    }
+
+    .mini-side-dot {
+      position: relative;
+      z-index: 1;
+      flex: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--canvas-bg);
+      box-shadow: inset 0 0 0 1.5px var(--canvas-ink);
+      transition: background-color 0.3s ease;
+    }
+
+    .mini-side li.reached .mini-side-dot {
+      background: var(--tl-fill);
+      box-shadow: inset 0 0 0 1.5px var(--tl-fill);
+    }
+
+    /* only where the left margin has room for it */
+    @media (max-width: 1279px) {
+      .mini-side {
+        display: none;
       }
     }
 
@@ -678,6 +770,8 @@
       <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first abstract thought to the first artificial minds. Each began with a new technology stack: a set of tools and techniques that gave the groups adopting it a decisive advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade their cultural psychology &ndash; and, from the Agricultural Revolution onward, political economy, the state and the market from proto-forms to modern institutions. The process is structurally driven, but since the rise of complex, hierarchical civilisation it has been enacted at every transitional stage by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
     </div>
     </div>
+
+    <nav class="mini-side" aria-label="Eras"><ol></ol></nav>
 
     <button class="era-toggle era-toggle-all" type="button" aria-expanded="false"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">Expand all events</span></button>
 
@@ -1360,6 +1454,7 @@
         }
         arrow.classList.toggle('reached', atEnd);
         eras.forEach(function (era) { era.classList.toggle('current', era === current); });
+        if (sideItems) trackSide();
       }
       // open and close each era's events, one group or all at once
       var groupBtns = Array.prototype.slice.call(list.querySelectorAll('.era-toggle'));
@@ -1396,7 +1491,7 @@
       // the miniature timeline and the era titles glide to just above the
       // era's date, rather than jumping
       document.addEventListener('click', function (e) {
-        var a = e.target.closest('.mini-timeline a, .era-name a[href^="#"]');
+        var a = e.target.closest('.mini-timeline a, .mini-side a, .era-name a[href^="#"]');
         if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         var era = document.getElementById(a.getAttribute('href').slice(1));
         if (!era) return;
@@ -1409,11 +1504,13 @@
       // the up arrow, and the expand / collapse all control fixed in the top
       // left corner, show once the top section has scrolled away
       var upBtn = document.querySelector('.scroll-top-btn');
+      var sideNav = document.querySelector('.mini-side');
       var band = document.querySelector('.timeline-top');
       function showUp() {
         var past = band.getBoundingClientRect().bottom < 0;
         upBtn.classList.toggle('visible', past);
         allBtn.classList.toggle('visible', past);
+        sideNav.classList.toggle('visible', past);
       }
       window.addEventListener('scroll', showUp, { passive: true });
       showUp();
@@ -1432,6 +1529,32 @@
         mini.appendChild(li);
         return li;
       });
+      // the same eras down the corner menu, following the reading position
+      var sideList = document.querySelector('.mini-side ol');
+      var sideItems = mains.map(function (era, i) {
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#' + era.id + '"><span class="mini-side-dot"></span><span></span></a>';
+        li.querySelector('a span:last-child').textContent = miniItems[i].querySelector('.mini-name').textContent;
+        sideList.appendChild(li);
+        return li;
+      });
+      function trackSide() {
+        if (!sideItems || !sideItems.length) return;
+        // the era being read: the last main era whose dot has been passed
+        var at = -1;
+        mains.forEach(function (era, i) {
+          if (era.classList.contains('reached')) at = i;
+        });
+        var dotY = function (li) { var d = li.querySelector('.mini-side-dot'); return d.offsetTop + li.offsetTop + d.offsetHeight / 2; };
+        var first = dotY(sideItems[0]);
+        sideList.style.setProperty('--side-start', first + 'px');
+        sideList.style.setProperty('--side-length', (dotY(sideItems[sideItems.length - 1]) - first) + 'px');
+        sideList.style.setProperty('--side-fill', (at < 0 ? 0 : dotY(sideItems[at]) - first) + 'px');
+        sideItems.forEach(function (li, i) {
+          li.classList.toggle('reached', i <= at);
+          li.classList.toggle('current', i === at);
+        });
+      }
       // hovering a node fills the miniature line up to it, and the panel
       // below swaps the overview for that era's summary
       var panel = document.querySelector('.mini-panel');
