@@ -767,10 +767,27 @@
         az.appendChild(li);
       });
 
-      // the letter of the term at the top of the reading area
+      // the letter of the term at the top of the reading area; near the end
+      // the reading line slides down, so the last terms (which never reach
+      // the top of the screen) are still reached before the footer comes in
+      // and the bar hides
       var current = null;
+      var footer = document.querySelector('.site-footer');
+      function readingLine() {
+        var vh = window.innerHeight;
+        var base = vh * 0.3;
+        var last = terms[terms.length - 1];
+        var maxScroll = document.documentElement.scrollHeight - vh;
+        var end = footer ? Math.min(maxScroll, footer.getBoundingClientRect().top + window.scrollY - vh) : maxScroll;
+        end -= vh * 0.25;   // the last letter then holds for the final stretch
+        // where the last term's top sits on screen at that final position
+        var lastAtEnd = last.getBoundingClientRect().top + window.scrollY - end + 2;
+        if (lastAtEnd <= base) return base;
+        var t = Math.max(0, Math.min(1, (window.scrollY - (end - vh)) / vh));
+        return base + t * (lastAtEnd - base);
+      }
       function mark() {
-        var line = window.innerHeight * 0.3;
+        var line = readingLine();
         var at = null;
         for (var i = 0; i < terms.length; i++) {
           if (terms[i].getBoundingClientRect().top <= line) at = terms[i];
