@@ -423,15 +423,38 @@ body.past-start .progress-ring {
   }
 }
 
-/* b on the article (white theme) also sets these footers */
+/* b on the article (white theme) also sets these footers and the top
+   sections of the other pages */
 html.band-midnight:not([data-theme]) {
   --inverse-bg: #0d1330;
   --inverse-ink: #fbf6ec;
+  --band-bg: #0d1330;
 }
 
 html.band-black:not([data-theme]) {
   --inverse-bg: #000000;
   --inverse-ink: #ffffff;
+  --band-bg: #000000;
+}
+
+/* on a dark band: light text, and the corner controls over it (the site name
+   and other fixed controls take .over-band while they sit over it) */
+html.band-midnight:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band),
+html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band) {
+  --canvas-ink: var(--inverse-ink);
+  --muted: #8a93ad;
+  --link-blue: #8ab4f8;
+  --track-tint: rgba(255, 255, 255, 0.15);
+  --selection-bg: rgba(180, 205, 235, 0.35);
+}
+
+html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band) {
+  --muted: #8c8c8c;
+}
+
+html.band-midnight:not([data-theme]) .on-band,
+html.band-black:not([data-theme]) .on-band {
+  color: var(--canvas-ink);
 }
 
 /* site footer, as at the end of the article: quote, title and author on

@@ -314,6 +314,23 @@
     checkFooter();
   }
 
+  // fixed controls take the band's colours while they sit over the top band
+  var bandEl = document.querySelector('.on-band:not(body)');
+  var floaters = Array.prototype.slice.call(document.querySelectorAll('.site-title, .era-toggle-all'));
+  if (bandEl && floaters.length) {
+    var checkBand = function () {
+      var extend = -parseFloat(getComputedStyle(bandEl, '::before').bottom) || 0;
+      var bandBottom = bandEl.getBoundingClientRect().bottom + extend;
+      floaters.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        el.classList.toggle('over-band', (r.top + r.bottom) / 2 < bandBottom);
+      });
+    };
+    window.addEventListener('scroll', checkBand, { passive: true });
+    window.addEventListener('resize', checkBand);
+    checkBand();
+  }
+
   /* ---------- keys ---------- */
 
   // Shortcuts press their on-screen button, so they sound, ripple and
