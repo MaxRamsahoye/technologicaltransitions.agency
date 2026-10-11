@@ -126,9 +126,29 @@
       box-shadow: inset 0 0 0 1.5px currentColor;
     }
 
-    /* the revolution now under way: a filled dot */
-    .era.now::before {
+    /* scroll tracker: the line fills down to the reading position, each dot
+       fills as it is passed, and the dot being read swells */
+    .timeline::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 5px;
+      width: 1.5px;
+      height: var(--tl-progress, 0px);
       background: currentColor;
+    }
+
+    .era::before {
+      z-index: 1;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .era.reached::before {
+      background: currentColor;
+    }
+
+    .era.current::before {
+      transform: scale(1.5);
     }
 
     .era-date {
@@ -243,7 +263,7 @@
         <p class="era-note">From industrial to information society: computing and networked communication across economic and social life.</p>
       </li>
 
-      <li class="era now">
+      <li class="era">
         <p class="era-date">c. 2010 &ndash; now</p>
         <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
         <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
@@ -256,6 +276,35 @@
 
   <a class="site-title" href="../">Technological<br>Transitions</a>
 
+  <script>
+    // scroll tracker for the timeline
+    (function () {
+      var list = document.querySelector('.timeline');
+      var eras = Array.prototype.slice.call(list.querySelectorAll('.era'));
+      function track() {
+        var line = window.innerHeight * 0.45;
+        var top = list.getBoundingClientRect().top + 14;
+        var lastDot = eras[eras.length - 1].getBoundingClientRect().top + 15;
+        list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, lastDot) - top) + 'px');
+        var current = null;
+        eras.forEach(function (era) {
+          var reached = era.getBoundingClientRect().top + 15 <= line;
+          era.classList.toggle('reached', reached);
+          if (reached) current = era;
+        });
+        // at the very bottom, the last era is the one being read
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+          current = eras[eras.length - 1];
+          current.classList.add('reached');
+          list.style.setProperty('--tl-progress', (lastDot - top) + 'px');
+        }
+        eras.forEach(function (era) { era.classList.toggle('current', era === current); });
+      }
+      window.addEventListener('scroll', track, { passive: true });
+      window.addEventListener('resize', track);
+      track();
+    })();
+  </script>
   <script src="../assets/site.js?v=286ee41f" data-base="../"></script>
   <script src="../assets/tools.js?v=d48fa54b" data-search-scope=".timeline" data-hide-until=".timeline-top"></script>
 </body>
