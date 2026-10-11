@@ -666,6 +666,12 @@
       margin-top: 144px;
     }
 
+    /* h off: the Overview's band runs straight on into the contents band */
+    html:not(.overview-lines) .contents-band {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
     /* design 2: the band appears with the Overview */
     html.design-2 .contents-band {
       opacity: 0;
