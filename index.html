@@ -643,11 +643,13 @@
       z-index: -1;
     }
 
+    /* the menu as a block centred in the band, its lines aligned left */
     .contents-band .toc {
-      display: block;
+      display: inline-block;
       position: static;
       width: auto;
       transform: none;
+      text-align: left;
     }
 
     .contents-band .toc-label {
@@ -890,8 +892,20 @@
       color: var(--frame-ink);
     }
 
-    /* no band, and no dividing lines: the contents band beneath sets it off */
-    html.overview-lines #overview::before,
+    /* no band: a short dividing line above, and the contents band beneath */
+    html.overview-lines #overview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: auto;
+      left: 0;
+      width: 96px;
+      height: 1.5px;
+      transform: none;
+      background: currentColor;
+      z-index: 0;
+    }
+
     html.overview-lines #overview::after {
       display: none;
     }
