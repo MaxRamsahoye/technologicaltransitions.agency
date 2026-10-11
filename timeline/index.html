@@ -173,6 +173,51 @@
       color: var(--muted);
     }
 
+    /* the miniature line fills up to the node under the pointer */
+    .mini-timeline ol::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: calc(50% / var(--mini-count, 7));
+      width: var(--mini-fill, 0px);
+      height: 1.5px;
+      background: currentColor;
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    /* under it: the overview, or the summary of the era under the pointer */
+    .mini-panel {
+      display: grid;
+      margin-top: 40px;
+    }
+
+    .mini-panel > * {
+      grid-area: 1 / 1;
+      margin: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .mini-panel > .show {
+      opacity: 1;
+    }
+
+    .mini-overview,
+    .mini-desc-text {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    .mini-desc-title {
+      margin: 0 0 6px;
+      font-family: var(--mono-caps);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
     /* phones: a short vertical list */
     @media (max-width: 600px) {
       .mini-timeline ol {
@@ -187,6 +232,13 @@
         right: auto;
         width: 1.5px;
         height: auto;
+      }
+
+      .mini-timeline ol::after {
+        top: 6px;
+        left: 5px;
+        width: 1.5px;
+        height: var(--mini-fill, 0px);
       }
 
       .mini-timeline a {
@@ -497,10 +549,13 @@
     <h1 class="page-title">Timeline</h1>
     <p class="page-intro">The historical developmental process discussed in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
     <nav class="mini-timeline" aria-label="Eras"><ol></ol></nav>
+    <div class="mini-panel" aria-live="polite">
+      <p class="mini-overview show">Seven transitions, from the first shared language to the first artificial minds. Each began with a new technology stack, spread through the military and economic advantage it conferred, and remade the state, the market and the cultural psychology of every society that adopted it &ndash; or was overtaken by those that did.</p>
+    </div>
     </div>
 
     <ol class="timeline">
-      <li class="era" id="cognitive-revolution">
+      <li class="era" id="cognitive-revolution" data-summary="Language and shared myth let humans cooperate beyond the band, founding the hunter-gatherer way of life.">
         <p class="era-date">c. 70,000 BCE onward</p>
         <h2 class="era-name">Cognitive Revolution</h2>
         <p class="era-stack">Language, shared myth, symbolic thought, composite tools</p>
@@ -525,7 +580,7 @@
         </dl>
       </li>
 
-      <li class="era" id="agricultural-revolution">
+      <li class="era" id="agricultural-revolution" data-summary="Farming creates a storable surplus – and with it property, the state, the market, class and inequality.">
         <p class="era-date">c. 10,000 BCE onward</p>
         <h2 class="era-name"><a href="../lexicon/#agricultural-revolution">Agricultural Revolution</a></h2>
         <p class="era-stack">Domestication of plants and animals, irrigation, food storage, the plough</p>
@@ -593,7 +648,7 @@
         <p class="era-note">National wealth pursued as bullion and trade surplus, through colonial expansion and chartered trading companies.</p>
       </li>
 
-      <li class="era" id="scientific-revolution">
+      <li class="era" id="scientific-revolution" data-summary="Observation, experiment and mathematics replace inherited authority as the way to know nature.">
         <p class="era-date">c. 1540 &ndash; 1700</p>
         <h2 class="era-name">Scientific Revolution</h2>
         <p class="era-stack">The telescope, the microscope, the pendulum clock, the printing press, mathematics and the experimental method</p>
@@ -625,7 +680,7 @@
         <p class="era-note">Reason, science and individual rights set against tradition and absolutism &ndash; the intellectual ground of the industrial and democratic revolutions.</p>
       </li>
 
-      <li class="era" id="industrial-revolution">
+      <li class="era" id="industrial-revolution" data-summary="Steam and coal mechanise production, and every rival must industrialise or be colonised.">
         <p class="era-date">c. 1760 &ndash; 1840</p>
         <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
         <p class="era-stack">The steam engine, coal, mechanised textile production, the factory</p>
@@ -650,7 +705,7 @@
         </dl>
       </li>
 
-      <li class="era" id="technological-revolution">
+      <li class="era" id="technological-revolution" data-summary="Electricity, steel and the combustion engine bring mass production – and industrialised total war.">
         <p class="era-date">c. 1870 &ndash; 1914</p>
         <h2 class="era-name">Technological Revolution</h2>
         <p class="era-stack">Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone</p>
@@ -694,7 +749,7 @@
         <p class="era-note">Total war on a global scale, ended by the first use of nuclear weapons.</p>
       </li>
 
-      <li class="era" id="digital-revolution">
+      <li class="era" id="digital-revolution" data-summary="Computing and networks move information to the centre of economic and social life.">
         <p class="era-date">c. 1950 &ndash; 2010</p>
         <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
         <p class="era-stack">The transistor, the computer, the internet, the smartphone, social media</p>
@@ -768,7 +823,7 @@
         <p class="era-note">Facebook, YouTube, Twitter and their successors connect billions through algorithmic feeds &ndash; an attention economy that monetises behavioural data and has reshaped politics, culture and psychology.</p>
       </li>
 
-      <li class="era" id="intelligence-revolution">
+      <li class="era" id="intelligence-revolution" data-summary="Machine learning automates cognitive work: the fourth, and likely final, transition, now under way.">
         <p class="era-date">c. 2010 &ndash; now</p>
         <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
         <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
@@ -914,18 +969,38 @@
         mini.appendChild(li);
         return li;
       });
-      var baseTrack = track;
-      track = function () {
-        baseTrack();
-        // the era being read is the last one reached (its events included)
-        var at = -1;
-        mains.forEach(function (era, i) {
-          var reached = era.classList.contains('reached');
-          miniItems[i].classList.toggle('reached', reached);
-          if (reached) at = i;
+      // hovering a node fills the miniature line up to it, and the panel
+      // below swaps the overview for that era's summary
+      var panel = document.querySelector('.mini-panel');
+      var overview = panel.querySelector('.mini-overview');
+      var summaries = miniItems.map(function (li, i) {
+        var era = mains[i];
+        var div = document.createElement('div');
+        div.className = 'mini-desc';
+        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p>';
+        div.querySelector('.mini-desc-title').textContent = era.querySelector('.era-name').textContent + ' \u00b7 ' + era.querySelector('.era-date').textContent;
+        div.querySelector('.mini-desc-text').textContent = era.dataset.summary || '';
+        panel.appendChild(div);
+        return div;
+      });
+      function hoverMini(at) {
+        var dots = miniItems.map(function (li) { return li.querySelector('.mini-dot').getBoundingClientRect(); });
+        var vertical = getComputedStyle(mini).gridTemplateColumns.split(' ').length === 1;
+        var fill = at < 0 ? 0 : vertical ? dots[at].top - dots[0].top : dots[at].left - dots[0].left;
+        mini.style.setProperty('--mini-fill', fill + 'px');
+        miniItems.forEach(function (li, i) {
+          li.classList.toggle('reached', i <= at);
+          li.classList.toggle('current', i === at);
         });
-        miniItems.forEach(function (li, i) { li.classList.toggle('current', i === at); });
-      };
+        overview.classList.toggle('show', at < 0);
+        summaries.forEach(function (d, i) { d.classList.toggle('show', i === at); });
+      }
+      miniItems.forEach(function (li, i) {
+        li.addEventListener('mouseenter', function () { hoverMini(i); });
+        li.addEventListener('focusin', function () { hoverMini(i); });
+      });
+      mini.addEventListener('mouseleave', function () { hoverMini(-1); });
+      mini.addEventListener('focusout', function () { hoverMini(-1); });
 
       window.addEventListener('scroll', track, { passive: true });
       window.addEventListener('resize', track);
