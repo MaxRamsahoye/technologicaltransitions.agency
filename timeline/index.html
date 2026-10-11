@@ -95,11 +95,12 @@
       padding: 0 0 0 40px;
     }
 
+    /* the line runs from the first dot to the last (length set by the script) */
     .timeline::before {
       content: '';
       position: absolute;
       top: 14px;
-      bottom: 14px;
+      height: var(--tl-length, calc(100% - 28px));
       left: 5px;
       width: 1.5px;
       background: color-mix(in srgb, currentColor 22%, transparent);
@@ -497,6 +498,7 @@
         var line = window.innerHeight * 0.45;
         var top = list.getBoundingClientRect().top + 14;
         var lastDot = eras[eras.length - 1].getBoundingClientRect().top + 15;
+        list.style.setProperty('--tl-length', (lastDot - top) + 'px');
         list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, lastDot) - top) + 'px');
         var current = null;
         eras.forEach(function (era) {
