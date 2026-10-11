@@ -557,24 +557,40 @@
       padding: 0 0 40px;
     }
 
-    /* sits in the left margin beside the Overview, centred vertically */
+    /* fixed in the top-left corner, in the empty column left of the text;
+       it appears once the Overview has been read, fades after 2 seconds, and
+       comes back while the pointer is in that column */
     .toc {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      /* up to 32px further left, where the window has room for it */
-      right: calc(100% + 90px + clamp(0px, 50vw - 794px, 32px));
-      width: 300px;
+      position: fixed;
+      top: 30px;
+      left: 40px;
+      z-index: 45;
+      width: clamp(180px, 50vw - 460px, 280px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+    }
+
+    body.toc-open .toc {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0s;
+    }
+
+    /* too little room beside the text for it on narrower windows */
+    @media (max-width: 1279px) {
+      .toc {
+        display: none;
+      }
     }
 
     .toc-label {
       font-family: 'Inter', sans-serif;
-      font-size: 19px;
+      font-size: 16px;
       letter-spacing: -0.01em;
-      white-space: nowrap;
       font-weight: 500;
       color: var(--canvas-accent);
-      margin: 0 0 16px;
+      margin: 0 0 14px;
     }
 
     .toc ol {
@@ -587,10 +603,9 @@
     .toc li {
       font-family: 'Inter', sans-serif;
       counter-increment: toc-counter;
-      margin-bottom: 9px;
-      font-size: 15px;
-      line-height: 1.4;
-      white-space: nowrap;
+      margin-bottom: 7px;
+      font-size: 14px;
+      line-height: 1.35;
     }
 
     .toc li::before {
@@ -625,91 +640,6 @@
     .main-area {
       grid-column: 2;
     }
-
-    /* the contents, in a full-width band beneath the Overview */
-    .contents-band {
-      --canvas-ink: var(--inverse-ink);
-      --canvas-accent: var(--inverse-ink);
-      position: relative;
-      z-index: 0;
-      margin-top: 72px;
-      padding: 64px 0 60px;
-      color: var(--inverse-ink);
-    }
-
-    .contents-band::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 100vw;
-      transform: translateX(-50%);
-      background: var(--inverse-bg);
-      z-index: -1;
-    }
-
-    /* the menu aligned left, with the article's text column */
-    .contents-band .toc {
-      display: block;
-      position: static;
-      width: auto;
-      transform: none;
-      text-align: left;
-    }
-
-    .contents-band .toc-label {
-      font-size: 22px;
-      margin: 0 0 32px;
-    }
-
-    .contents-band .toc li {
-      font-size: 17px;
-      margin-bottom: 10px;
-      white-space: normal;
-    }
-
-    .article-body .contents-band + section {
-      margin-top: 144px;
-    }
-
-    /* h on: no band; the contents sit in an outlined box drawn like the
-       Overview's dividing line */
-    html.overview-lines .contents-band {
-      --canvas-ink: var(--frame-ink);
-      --canvas-accent: var(--frame-ink);
-      color: var(--frame-ink);
-      border: 2px solid currentColor;
-      margin-top: 56px;
-      padding: 48px 48px 40px;
-    }
-
-    html.overview-lines .contents-band::before {
-      display: none;
-    }
-
-    @media (max-width: 600px) {
-      html.overview-lines .contents-band {
-        padding: 36px 24px 30px;
-      }
-    }
-
-    /* h off: the Overview's band runs straight on into the contents band */
-    html:not(.overview-lines) .contents-band {
-      margin-top: 0;
-      padding-top: 0;
-    }
-
-    /* design 2: the band appears with the Overview */
-    html.design-2 .contents-band {
-      opacity: 0;
-      transition: opacity 0.9s ease;
-    }
-
-    html.design-2 body.overview-shown .contents-band {
-      opacity: 1;
-    }
-
 
     /* first screen: author, title and subtitle centred vertically below the
        site header, left-aligned in the article column */
@@ -1356,19 +1286,6 @@
         column-gap: 40px;
       }
 
-      .toc {
-        right: calc(100% + 40px + clamp(0px, 50vw - 644px, 32px));
-        width: 200px;
-      }
-
-      .toc-label {
-        font-size: 15px;
-      }
-
-      .toc li {
-        font-size: 12px;
-      }
-
       .sidenote {
         width: 200px;
         margin: 4px -240px 20px 0;
@@ -1599,6 +1516,11 @@
   </script>
   <div class="frame-header">
     <a class="site-title" href="./">Technological<br>Transitions</a>
+
+    <nav class="toc" aria-label="Contents">
+      <p class="toc-label">Technological Transitions</p>
+      <ol></ol>
+    </nav>
   </div>
 
   <div class="left-controls">
@@ -1686,13 +1608,6 @@
 
               <p>Ultimately, it is an open question whether pro-human intentions can prevail over the agents and dynamics of the current world-system. As E.P Thompson insightfully put it: <em>&ldquo;If Man is ever obliterated from the earth by means of his own armaments, there will be no simple answer to the question: Did he fall, or was he pushed?&rdquo;</em>.</p>
             </section>
-
-            <div class="contents-band">
-              <nav class="toc" aria-label="Contents">
-                <p class="toc-label">Technological Transitions</p>
-                <ol></ol>
-              </nav>
-            </div>
 
             <section id="macrohistory">
               <h2><a class="heading-link" href="#macrohistory">Major Technological Transitions</a></h2>
@@ -1805,6 +1720,46 @@
       if (tocItemCount === 0) {
         tocNav.style.display = 'none';
       }
+
+      // the menu shows once the Overview is scrolled past (not over the
+      // footer), fades after 2 seconds, and comes back while the pointer is
+      // in the empty column left of the text, or on the menu itself
+      (function () {
+        var TOC_HOLD = 2000;
+        var overview = document.getElementById('overview');
+        var footer = document.querySelector('.site-footer');
+        var mainArea = document.querySelector('.main-area');
+        var active = false, hovering = false, timer = null;
+
+        function setOpen(on) { document.body.classList.toggle('toc-open', on); }
+        function fadeLater() {
+          clearTimeout(timer);
+          timer = setTimeout(function () { if (!hovering) setOpen(false); }, TOC_HOLD);
+        }
+        function check() {
+          var now = overview.getBoundingClientRect().bottom < 0 &&
+            !(footer && footer.getBoundingClientRect().top < window.innerHeight);
+          if (now === active) return;
+          active = now;
+          if (active) { setOpen(true); fadeLater(); }
+          else { clearTimeout(timer); setOpen(false); }
+        }
+        document.addEventListener('mousemove', function (e) {
+          var inColumn = e.clientX < mainArea.getBoundingClientRect().left || tocNav.contains(e.target);
+          if (inColumn === hovering) return;
+          hovering = inColumn;
+          if (!active) return;
+          if (hovering) { clearTimeout(timer); setOpen(true); }
+          else fadeLater();
+        });
+        document.addEventListener('mouseleave', function () {
+          if (hovering && active) { hovering = false; fadeLater(); }
+          hovering = false;
+        });
+        window.addEventListener('scroll', check, { passive: true });
+        window.addEventListener('resize', check);
+        check();
+      })();
 
       var endnotesContainer = document.getElementById('endnotes');
       var sidenotes = Array.prototype.slice.call(document.querySelectorAll('.sidenote'));
@@ -2477,6 +2432,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=b288a033" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview, .contents-band" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=b288a033" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>
