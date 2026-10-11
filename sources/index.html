@@ -139,6 +139,42 @@
       line-height: 1.3;
     }
 
+    /* grey dividers between entries, with room either side */
+    .sources > .source {
+      padding: 56px 0;
+    }
+
+    .sources > .source:first-child {
+      padding-top: 0;
+    }
+
+    .sources > .source + .source {
+      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    }
+
+    .source-link {
+      margin: 14px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .source-link a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    }
+
+    .source-link a:hover {
+      border-bottom-color: currentColor;
+    }
+
+    .source-link em {
+      text-transform: none;
+      letter-spacing: 0.02em;
+    }
+
     /* works a source is derived from, indented beneath it */
     .source-roots {
       list-style: none;
@@ -200,25 +236,29 @@
         <p class="source-author">Allan Dafoe</p>
         <p class="source-work">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</p>
         <p class="source-detail"><em>Science, Technology, &amp; Human Values</em>, 2015</p>
-        <p class="source-note">The mechanism of military-economic adaptationism: societies adopt the technologies that confer military and economic advantage, or are outcompeted by those that do.</p>
+        <p class="source-note">Dafoe sorts the many versions of technological determinism into a typology and asks under what conditions technology really does drive social change. His answer is a mechanism he calls military-economic adaptationism: in a competitive international system, societies that adopt technologies conferring military and economic advantage prosper, and those that do not are outcompeted, conquered or forced to follow. The article supplies the structural half of this project&rsquo;s model &ndash; the pressure that pushes each new technology stack across civilisation.</p>
+        <p class="source-link"><a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
       <li class="source" id="schmachtenberger-emergence">
         <p class="source-author">Daniel Schmachtenberger</p>
         <p class="source-work">The Emergence Model</p>
-        <p class="source-note">A society as three interacting layers &ndash; infrastructure, social structure and superstructure &ndash; through which a new technology stack reshapes political economy and cultural psychology.</p>
+        <p class="source-note">Schmachtenberger describes a society as three interacting layers: its infrastructure, the technologies and material systems through which it meets its needs; its social structure, the institutions of politics, law and economics; and its superstructure, its shared values, beliefs and culture. A change in any layer pressures the others, but the deepest and most durable shifts begin in the infrastructure. The model gives this project its way of tracing how a new technology stack reshapes political economy and cultural psychology.</p>
+        <p class="source-link"><a href="https://civilizationemerging.com/" target="_blank" rel="noopener">Civilization Emerging <span aria-hidden="true">&nearr;</span></a></p>
         <ul class="source-roots">
           <li><p class="source-label">Derived from</p></li>
           <li class="source">
             <p class="source-author">Ken Wilber</p>
             <p class="source-work">Integral Theory</p>
-            <p class="source-note">The interior and exterior, individual and collective dimensions of any whole.</p>
+            <p class="source-note">Wilber&rsquo;s four-quadrant map holds that any whole has interior and exterior, individual and collective dimensions &ndash; experience, behaviour, culture and systems &ndash; and that none can be reduced to the others. It underlies the Emergence Model&rsquo;s insistence that technological, institutional and cultural change be read together.</p>
+            <p class="source-link"><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
           </li>
           <li class="source">
             <p class="source-author">Marvin Harris</p>
-            <p class="source-work"><em>Cultural Materialism: The Struggle for a Science of Culture</em></p>
+            <p class="source-work">Cultural Materialism: The Struggle for a Science of Culture</p>
             <p class="source-detail">1979</p>
-            <p class="source-note">Infrastructure, structure and superstructure, with material conditions as the primary driver of cultural change.</p>
+            <p class="source-note">Harris divides every society into infrastructure, structure and superstructure, and argues that the material conditions of production and reproduction are the primary drivers of cultural change. It is the source of the Emergence Model&rsquo;s three layers, and of the priority it gives to infrastructure.</p>
+            <p class="source-link"><a href="https://mitpressbookstore.mit.edu/book/9780759101340" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
           </li>
         </ul>
       </li>
@@ -226,47 +266,69 @@
       <li class="source" id="schmachtenberger-economics">
         <p class="source-author">Daniel Schmachtenberger</p>
         <p class="source-work">New Economics, Part IV</p>
-        <p class="source-note">The historical emergence of the economy as something separate from ecology.</p>
+        <p class="source-note">Schmachtenberger traces how the economy came to be thought of, and managed, as something separate from the ecology that sustains it &ndash; an abstraction in which natural resources appear as inputs and their depletion as externalities. That separation, he argues, is part of what makes endless growth on a finite planet seem possible, and it is one of the roots of the present metacrisis.</p>
       </li>
 
       <li class="source" id="joseph">
         <p class="source-author">Peter Joseph</p>
-        <p class="source-work"><em>The New Human Rights Movement: Reinventing the Economy to End Oppression</em></p>
+        <p class="source-work">The New Human Rights Movement: Reinventing the Economy to End Oppression</p>
         <p class="source-detail">2017</p>
-        <p class="source-note">The root socio-economic orientation from which structural inequality and oppression follow.</p>
+        <p class="source-note">Joseph argues that poverty, inequality and declining public health are not natural features of human life but products of an outdated socio-economic orientation built on scarcity, competition and endless growth. Structural oppression, on this account, follows from the economic system itself rather than from individual prejudice alone. The book informs this project&rsquo;s view of the market as a historical construction, and of its effects as open to change.</p>
+        <p class="source-link"><a href="https://www.penguinrandomhouse.com/books/691520/the-new-human-rights-movement-by-peter-joseph/" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
       <li class="source" id="sapolsky">
         <p class="source-author">Robert Sapolsky</p>
-        <p class="source-work"><em>Behave: The Biology of Humans at Our Best and Worst</em></p>
+        <p class="source-work">Behave: The Biology of Humans at Our Best and Worst</p>
         <p class="source-detail">2017</p>
-        <p class="source-note">The invention of poverty: how agriculture, surplus and hierarchy introduced inequality on a scale unknown to hunter-gatherers.</p>
+        <p class="source-note">Sapolsky explains human behaviour across every timescale, from the neurons firing a second before an act to the evolutionary pressures of millions of years. Among the long-run influences he traces is the invention of poverty: how agriculture, surplus and hierarchy introduced inequality on a scale unknown to hunter-gatherers, with lasting effects on stress, health and behaviour. It grounds this project&rsquo;s account of cultural-psychological adaptation in biology.</p>
+        <p class="source-link"><a href="https://penguinrandomhouse.ca/books/311787/behave-by-robert-m-sapolsky" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
       <li class="source" id="diamond">
         <p class="source-author">Jared Diamond</p>
         <p class="source-work">The Worst Mistake in the History of the Human Race</p>
         <p class="source-detail"><em>Discover</em>, 1987</p>
-        <p class="source-work source-work-second"><em>Guns, Germs, and Steel: The Fates of Human Societies</em></p>
+        <p class="source-work source-work-second">Guns, Germs, and Steel: The Fates of Human Societies</p>
         <p class="source-detail">1997</p>
-        <p class="source-note">Agriculture as a mixed blessing &ndash; bringing class, inequality and disease &ndash; and geography and domestication as the shapers of which societies came to dominate.</p>
+        <p class="source-note">In his essay, Diamond argues that the adoption of agriculture, long celebrated as humanity&rsquo;s decisive step forward, was in many ways a catastrophe: it brought class, inequality, malnutrition and disease, making elites better off and most people worse off. In <em>Guns, Germs, and Steel</em> he asks why some societies came to dominate others, and finds the answer in geography, domestication and the technologies and diseases they produced. Together they frame this project&rsquo;s account of the Agricultural Revolution and of how technological advantage reshapes the world.</p>
+        <p class="source-link"><a href="https://www.discovermagazine.com/magazine/issue/may-1987" target="_blank" rel="noopener">Source: <em>Discover</em> <span aria-hidden="true">&nearr;</span></a> &middot; <a href="https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel" target="_blank" rel="noopener">Source: <em>Guns, Germs, and Steel</em> <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
       <li class="source" id="sahlins">
         <p class="source-author">Marshall Sahlins</p>
         <p class="source-work">The Original Affluent Society</p>
         <p class="source-detail">In <em>Stone Age Economics</em>, 1972</p>
-        <p class="source-note">Hunter-gatherers as affluent in a minimalist sense: few wants, readily met.</p>
+        <p class="source-note">Sahlins overturns the image of hunter-gatherers as living on the edge of starvation. Their wants were few and readily met, he argues, and they worked fewer hours than farmers or industrial workers: affluent not through abundance of goods but through the modesty of their needs. The essay underpins this project&rsquo;s account of hunter-gatherer society as affluent in a minimalist sense, and of scarcity as something agriculture created.</p>
+        <p class="source-link"><a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
       <li class="source" id="kemp">
         <p class="source-author">Luke Kemp</p>
-        <p class="source-work"><em>Goliath&rsquo;s Curse: The History and Future of Societal Collapse</em></p>
+        <p class="source-work">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</p>
         <p class="source-detail">2025</p>
-        <p class="source-note">The rise and collapse of dominance hierarchies across history, and what they mean for the future of civilisation.</p>
+        <p class="source-note">Kemp studies the rise and collapse of more than four hundred societies across five thousand years, and finds a recurring pattern: dominance hierarchies &ndash; &ldquo;Goliaths&rdquo; &ndash; grow by extraction and status competition among elites until they become fragile and fall, while more equal and democratic societies prove more resilient. He then asks what that history means for a globally connected civilisation armed with technologies of mass destruction. It sharpens this project&rsquo;s question of whether the power-elite will steer the Intelligence Revolution towards or away from catastrophe.</p>
+        <p class="source-link"><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
     </ol>
   </main>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.625 19.625,18.375 8.375,18.375"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.sources-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
 
   <a class="site-title" href="../">Technological<br>Transitions</a>
 
