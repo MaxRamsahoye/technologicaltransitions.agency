@@ -36,7 +36,7 @@
     .timeline-top {
       position: relative;
       z-index: 0;
-      margin-bottom: 240px;
+      margin-bottom: 168px;
     }
 
     .timeline-top::before {
@@ -517,6 +517,149 @@
       }
     }
 
+    /* two views of the same history: by era (the timeline below) and by
+       aspect (four timelines, one for each strand running through the eras) */
+    .view-tabs {
+      display: flex;
+      gap: 32px;
+      /* in line with the eras' text, right of the line */
+      margin: 0 0 104px 40px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .view-tabs button {
+      padding: 0 0 6px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .view-tabs button:hover {
+      color: var(--canvas-ink);
+    }
+
+    .view-tabs button[aria-selected="true"] {
+      color: var(--canvas-ink);
+      border-bottom-color: currentColor;
+    }
+
+    .aspects {
+      display: none;
+    }
+
+    body.view-aspects .aspects {
+      display: block;
+    }
+
+    body.view-aspects .timeline,
+    body.view-aspects .mini-side,
+    body.view-aspects .era-toggle-all {
+      display: none;
+    }
+
+    .aspect + .aspect {
+      margin-top: 160px;
+    }
+
+    .aspect-title {
+      margin: 0 0 56px 40px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 30px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .aspect-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 34px;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* each aspect's own line, drawn like the main timeline's: a dot on each
+       era's name, joined down to the next */
+    .aspect-line {
+      --tl-gap: 40px;
+      --dot-c: 38px;
+      list-style: none;
+      margin: 0 0 0 calc(40px - var(--tl-gap));
+      padding: 0 0 0 var(--tl-gap);
+    }
+
+    @media (min-width: 900px) {
+      .aspect-line {
+        --tl-gap: 104px;
+      }
+    }
+
+    .aspect-entry {
+      position: relative;
+      padding-bottom: 56px;
+    }
+
+    .aspect-entry:last-child {
+      padding-bottom: 0;
+    }
+
+    .aspect-entry::before {
+      content: '';
+      position: absolute;
+      top: var(--dot-c);
+      left: calc(5px - var(--tl-gap));
+      width: 1.5px;
+      height: 100%;
+      background: color-mix(in srgb, currentColor 22%, transparent);
+    }
+
+    .aspect-entry:last-child::before {
+      display: none;
+    }
+
+    .aspect-entry::after {
+      content: '';
+      position: absolute;
+      top: calc(var(--dot-c) - 6px);
+      left: calc(-1 * var(--tl-gap));
+      width: 12px;
+      height: 12px;
+      box-sizing: border-box;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      background: var(--canvas-bg);
+    }
+
+    .aspect-entry .era-name {
+      font-size: 24px;
+    }
+
+    html.serif-headings .aspect-entry .era-name {
+      font-size: 26px;
+    }
+
+    .aspect-text {
+      margin: 10px 0 0;
+      font-size: 21px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 600px) {
+      .aspect-text {
+        font-size: 19px;
+      }
+    }
+
     /* a vertical mini timeline in the top-left corner once the top section has
        gone: a dot per era on a line that fills down to the era being read */
     .mini-side {
@@ -781,6 +924,13 @@
       <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first abstract thought to the first artificial minds. Each began with a new technology stack: a set of tools and techniques that gave the groups adopting it a decisive advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade their cultural psychology &ndash; and, from the Agricultural Revolution onward, political economy, the state and the market from proto-forms to modern institutions. The process is structurally driven, but since the rise of complex, hierarchical civilisation it has been enacted at every transitional stage by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
     </div>
     </div>
+
+    <div class="view-tabs" role="tablist" aria-label="Views">
+      <button type="button" role="tab" aria-selected="true" data-view="eras">By era</button>
+      <button type="button" role="tab" aria-selected="false" data-view="aspects">By aspect</button>
+    </div>
+
+    <div class="aspects" role="tabpanel"></div>
 
     <nav class="mini-side" aria-label="Eras"><ol></ol></nav>
 
@@ -1511,10 +1661,12 @@
       // era's date, rather than jumping
       document.addEventListener('click', function (e) {
         var a = e.target.closest('.mini-timeline a, .mini-side a, .era-name a[href^="#"]');
+        // from the aspects, an era's name opens it in the era view
         if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         var era = document.getElementById(a.getAttribute('href').slice(1));
         if (!era) return;
         e.preventDefault();
+        if (document.body.classList.contains('view-aspects')) setView('eras');
         var date = era.querySelector('.era-date');
         window.scrollTo({ top: date.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
         history.replaceState(null, '', '#' + era.id);
@@ -1537,6 +1689,45 @@
       // the miniature timeline in the top section, built from the main eras
       var mini = document.querySelector('.mini-timeline ol');
       var mains = allEras.filter(function (era) { return !era.classList.contains('sub'); });
+
+      // the aspect view: for each of the four aspects every era lists, a
+      // timeline of what that aspect was in each era
+      var aspectsEl = document.querySelector('.aspects');
+      var aspectNames = Array.prototype.map.call(mains[0].querySelectorAll('.era-aspects dt'), function (dt) { return dt.textContent; });
+      aspectNames.forEach(function (name, k) {
+        var sec = document.createElement('section');
+        sec.className = 'aspect';
+        sec.innerHTML = '<h2 class="aspect-title"></h2><ol class="aspect-line"></ol>';
+        sec.querySelector('.aspect-title').textContent = name;
+        var line = sec.querySelector('.aspect-line');
+        mains.forEach(function (era) {
+          var dd = era.querySelectorAll('.era-aspects dd')[k];
+          if (!dd) return;
+          var li = document.createElement('li');
+          li.className = 'aspect-entry';
+          li.innerHTML = '<p class="era-date"></p><h3 class="era-name"><a></a></h3><p class="aspect-text"></p>';
+          li.querySelector('.era-date').textContent = era.querySelector('.era-date').textContent;
+          var a = li.querySelector('.era-name a');
+          a.href = '#' + era.id;
+          a.textContent = era.querySelector('.era-name').textContent;
+          li.querySelector('.aspect-text').innerHTML = dd.innerHTML;
+          line.appendChild(li);
+        });
+        aspectsEl.appendChild(sec);
+      });
+
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
+      function setView(view) {
+        document.body.classList.toggle('view-aspects', view === 'aspects');
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
+        if (view === 'aspects') history.replaceState(null, '', '#aspects');
+        else if (location.hash === '#aspects') history.replaceState(null, '', location.pathname + location.search);
+        track();
+      }
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () { setView(t.dataset.view); });
+      });
+      if (location.hash === '#aspects') setView('aspects');
       mini.style.setProperty('--mini-count', mains.length);
       var miniItems = mains.map(function (era) {
         var name = era.querySelector('.era-name').textContent.replace(/ Revolution$/, '');
@@ -1622,6 +1813,6 @@
     })();
   </script>
   <script src="../assets/site.js?v=371e2894" data-base="../"></script>
-  <script src="../assets/tools.js?v=e4d0d0cc" data-search-scope=".timeline" data-hide-until=".timeline-top"></script>
+  <script src="../assets/tools.js?v=e4d0d0cc" data-search-scope=".timeline, .aspects" data-hide-until=".timeline-top"></script>
 </body>
 </html>
