@@ -855,8 +855,9 @@
       color: var(--frame-ink);
     }
 
-    /* no band: a short dividing line above, and the contents band beneath */
-    html.overview-lines #overview::before {
+    /* no band: short dividing lines above and below */
+    html.overview-lines #overview::before,
+    html.overview-lines #overview::after {
       content: '';
       position: absolute;
       top: 0;
@@ -870,11 +871,13 @@
     }
 
     html.overview-lines #overview::after {
-      display: none;
+      top: auto;
+      bottom: 0;
     }
 
     html.design-2.overview-lines #overview {
       padding-top: 52px;
+      padding-bottom: 52px;
     }
 
     html.colour.overview-lines #overview a[href^="http"] {
