@@ -553,17 +553,76 @@
       border-bottom-color: currentColor;
     }
 
-    .aspects {
+    .aspects,
+    .timeline-top > .mini-domains,
+    .timeline-top > .domains-panel {
       display: none;
     }
 
-    body.view-aspects .aspects {
+    body.view-domains .timeline-top > .mini-timeline:not(.mini-domains),
+    body.view-domains .timeline-top > .mini-panel:not(.domains-panel) {
+      display: none;
+    }
+
+    body.view-domains .timeline-top > .mini-domains {
+      display: block;
+      animation: view-in 0.4s ease;
+    }
+
+    body.view-domains .timeline-top > .domains-panel {
+      display: grid;
+      animation: view-in 0.4s ease;
+    }
+
+    body:not(.view-domains) .timeline-top > .mini-timeline,
+    body:not(.view-domains) .timeline-top > .mini-panel {
+      animation: view-in 0.4s ease;
+    }
+
+    @keyframes view-in {
+      from { opacity: 0; }
+    }
+
+    /* the four domains: their dots sit under the edges of the text, like the
+       eras' (the ol reaches out by half a column, less the dot's radius) */
+    .mini-domains .mini-date:empty {
+      display: none;
+    }
+
+    /* long names wrap under their dot rather than spreading past the text */
+    @media (min-width: 601px) {
+      .mini-domains .mini-name {
+        max-width: 10em;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1099px) {
+      .timeline-top > .mini-domains {
+        margin-left: calc(100% / 14 - 8px);
+        margin-right: calc(100% / 14 - 8px);
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .timeline-top > .mini-domains {
+        margin-left: calc(100% / 14 - 128px);
+        margin-right: calc(100% / 14 - 128px);
+      }
+    }
+
+    @media (min-width: 601px) {
+      .mini-domains ol {
+        margin: 0 calc((64px - 100%) / 6);
+      }
+    }
+
+    body.view-domains .aspects {
       display: block;
     }
 
-    body.view-aspects .timeline,
-    body.view-aspects .mini-side,
-    body.view-aspects .era-toggle-all {
+    body.view-domains .timeline,
+    body.view-domains .mini-side,
+    body.view-domains .era-toggle-all {
       display: none;
     }
 
@@ -923,11 +982,15 @@
     <div class="mini-panel" aria-live="polite">
       <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first abstract thought to the first artificial minds. Each began with a new technology stack: a set of tools and techniques that gave the groups adopting it a decisive advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade their cultural psychology &ndash; and, from the Agricultural Revolution onward, political economy, the state and the market from proto-forms to modern institutions. The process is structurally driven, but since the rise of complex, hierarchical civilisation it has been enacted at every transitional stage by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
     </div>
+    <nav class="mini-timeline mini-domains" aria-label="Domains"><ol></ol></nav>
+    <div class="mini-panel domains-panel" aria-live="polite">
+      <div class="mini-overview show"><p class="mini-overview-text">Every transition reshaped four domains of life at once. Military-economic adaptation is the edge a new technology stack gives the groups that adopt it, and the pressure it puts on every rival to follow. Cultural-psychological adaptation is how the worldview, values and inner life of those groups change in turn. The state and the market are the institutions that organise power and exchange: absent among hunter-gatherers, they emerged in proto-form with the Agricultural Revolution and have been remade by every transition since. Follow a single domain across all seven eras to see how it has changed. Hover over a domain to read its summary, or select it to read more.</p><p class="mini-count">4 domains &middot; 7 eras</p></div>
+    </div>
     </div>
 
     <div class="view-tabs" role="tablist" aria-label="Views">
       <button type="button" role="tab" aria-selected="true" data-view="eras">By era</button>
-      <button type="button" role="tab" aria-selected="false" data-view="aspects">By aspect</button>
+      <button type="button" role="tab" aria-selected="false" data-view="domains">By domain</button>
     </div>
 
     <div class="aspects" role="tabpanel"></div>
@@ -1660,13 +1723,13 @@
       // the miniature timeline and the era titles glide to just above the
       // era's date, rather than jumping
       document.addEventListener('click', function (e) {
-        var a = e.target.closest('.mini-timeline a, .mini-side a, .era-name a[href^="#"]');
-        // from the aspects, an era's name opens it in the era view
+        var a = e.target.closest('.mini-timeline:not(.mini-domains) a, .mini-side a, .era-name a[href^="#"]');
+        // from the domains, an era's name opens it in the era view
         if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         var era = document.getElementById(a.getAttribute('href').slice(1));
         if (!era) return;
         e.preventDefault();
-        if (document.body.classList.contains('view-aspects')) setView('eras');
+        if (document.body.classList.contains('view-domains')) setView('eras');
         var date = era.querySelector('.era-date');
         window.scrollTo({ top: date.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
         history.replaceState(null, '', '#' + era.id);
@@ -1716,18 +1779,76 @@
         aspectsEl.appendChild(sec);
       });
 
+      // the top section's domain view: a node per domain, linking down to its
+      // timeline, and a summary of each in the panel below
+      var DOMAIN_SUMMARIES = [
+        'The edge each new technology stack gives the groups that adopt it \u2013 in hunting, farming, production and war \u2013 and the pressure it puts on every rival to adopt it too or be displaced. It is the structural engine of each transition.',
+        'How the worldview, values and inner life of a people change to fit their new way of life: from animist egalitarianism, to organised religion and hierarchy, to progress and individualism, and on to the mass and networked cultures of today.',
+        'The institutions that hold and organise political power \u2013 from the informal authority of elders, to city-states, kingdoms and empires, to the administrative and national-security states of the modern era.',
+        'The institutions of ownership and exchange \u2013 from gift and sharing, to trade, currency and property, to industrial capitalism and the global, digital and compute-driven markets of today.'
+      ];
+      var domainSections = Array.prototype.slice.call(aspectsEl.querySelectorAll('.aspect'));
+      var domainMini = document.querySelector('.mini-domains ol');
+      var domainPanel = document.querySelector('.domains-panel');
+      var domainOverview = domainPanel.querySelector('.mini-overview');
+      domainMini.style.setProperty('--mini-count', aspectNames.length);
+      var domainItems = aspectNames.map(function (name, k) {
+        domainSections[k].id = 'domain-' + name.toLowerCase().replace(/^the\s+/, '').replace(/[^a-z]+/g, '-').replace(/-+$/, '');
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#' + domainSections[k].id + '"><span class="mini-dot"></span><span class="mini-name"></span><span class="mini-date"></span></a>';
+        li.querySelector('.mini-name').textContent = name;
+        domainMini.appendChild(li);
+        return li;
+      });
+      var domainDescs = aspectNames.map(function (name, k) {
+        var div = document.createElement('div');
+        div.className = 'mini-desc';
+        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p><p class="mini-count">7 eras</p>';
+        div.querySelector('.mini-desc-title').textContent = name;
+        div.querySelector('.mini-desc-text').textContent = DOMAIN_SUMMARIES[k] || '';
+        domainPanel.appendChild(div);
+        return div;
+      });
+      function hoverDomain(at) {
+        var dots = domainItems.map(function (li) { return li.querySelector('.mini-dot').getBoundingClientRect(); });
+        var vertical = getComputedStyle(domainMini).gridTemplateColumns.split(' ').length === 1;
+        var fill = at < 0 ? 0 : vertical ? dots[at].top - dots[0].top : dots[at].left - dots[0].left;
+        domainMini.style.setProperty('--mini-fill', fill + 'px');
+        domainItems.forEach(function (li, i) {
+          li.classList.toggle('reached', i <= at);
+          li.classList.toggle('current', i === at);
+        });
+        domainOverview.classList.toggle('show', at < 0);
+        domainDescs.forEach(function (d, i) { d.classList.toggle('show', i === at); });
+      }
+      domainItems.forEach(function (li, i) {
+        li.addEventListener('mouseenter', function () { hoverDomain(i); });
+        li.addEventListener('focusin', function () { hoverDomain(i); });
+      });
+      domainMini.addEventListener('mouseleave', function () { hoverDomain(-1); });
+      domainMini.addEventListener('focusout', function () { hoverDomain(-1); });
+      domainMini.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var sec = document.getElementById(a.getAttribute('href').slice(1));
+        if (!sec) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+      }, true);
+
       var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
       function setView(view) {
-        document.body.classList.toggle('view-aspects', view === 'aspects');
+        document.body.classList.toggle('view-domains', view === 'domains');
         tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
-        if (view === 'aspects') history.replaceState(null, '', '#aspects');
-        else if (location.hash === '#aspects') history.replaceState(null, '', location.pathname + location.search);
+        if (view === 'domains') history.replaceState(null, '', '#domains');
+        else if (location.hash === '#domains') history.replaceState(null, '', location.pathname + location.search);
         track();
       }
       tabs.forEach(function (t) {
         t.addEventListener('click', function () { setView(t.dataset.view); });
       });
-      if (location.hash === '#aspects') setView('aspects');
+      if (location.hash === '#domains') setView('domains');
       mini.style.setProperty('--mini-count', mains.length);
       var miniItems = mains.map(function (era) {
         var name = era.querySelector('.era-name').textContent.replace(/ Revolution$/, '');
