@@ -597,7 +597,8 @@
       border-bottom: 1px solid transparent;
     }
 
-    .toc-upcoming {
+    .toc-upcoming,
+    .toc .toc-upcoming::before {
       color: var(--muted);
     }
 
@@ -617,6 +618,63 @@
     .main-area {
       grid-column: 2;
     }
+
+    /* the contents, centred in a full-width band beneath the Overview */
+    .contents-band {
+      --canvas-ink: var(--inverse-ink);
+      --canvas-accent: var(--inverse-ink);
+      position: relative;
+      z-index: 0;
+      margin-top: 72px;
+      padding: 64px 0 60px;
+      color: var(--inverse-ink);
+      text-align: center;
+    }
+
+    .contents-band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--inverse-bg);
+      z-index: -1;
+    }
+
+    .contents-band .toc {
+      display: block;
+      position: static;
+      width: auto;
+      transform: none;
+    }
+
+    .contents-band .toc-label {
+      font-size: 22px;
+      margin: 0 0 22px;
+    }
+
+    .contents-band .toc li {
+      font-size: 17px;
+      margin-bottom: 10px;
+      white-space: normal;
+    }
+
+    .article-body .contents-band + section {
+      margin-top: 104px;
+    }
+
+    /* design 2: the band appears with the Overview */
+    html.design-2 .contents-band {
+      opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+
+    html.design-2 body.overview-shown .contents-band {
+      opacity: 1;
+    }
+
 
     /* first screen: author, title and subtitle centred vertically below the
        site header, left-aligned in the article column */
@@ -1579,11 +1637,6 @@
 
           <div class="article-body">
             <section id="overview">
-              <nav class="toc" aria-label="Contents">
-                <p class="toc-label">Technological Transitions</p>
-                <ol></ol>
-              </nav>
-
               <button class="next-screen next-screen-overview" type="button" data-target="macrohistory" aria-label="Continue to the next section">
                 <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
                 <polygon points="14,18.375 19.625,9.625 8.375,9.625"/>
@@ -1600,6 +1653,13 @@
 
               <p>Ultimately, it is an open question whether pro-human intentions can prevail over the agents and dynamics of the current world-system. As E.P Thompson insightfully put it: <em>&ldquo;If Man is ever obliterated from the earth by means of his own armaments, there will be no simple answer to the question: Did he fall, or was he pushed?&rdquo;</em>.</p>
             </section>
+
+            <div class="contents-band">
+              <nav class="toc" aria-label="Contents">
+                <p class="toc-label">Technological Transitions</p>
+                <ol></ol>
+              </nav>
+            </div>
 
             <section id="macrohistory">
               <h2><a class="heading-link" href="#macrohistory">Major Technological Transitions</a></h2>
@@ -2394,6 +2454,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=d48fa54b" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=d48fa54b" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview, .contents-band" data-hide-until="#overview"></script>
 </body>
 </html>
