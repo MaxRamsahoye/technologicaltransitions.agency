@@ -349,6 +349,13 @@
       padding-bottom: 104px;
     }
 
+    /* nothing after the last era, folded or open: the arrow and the note
+       below follow straight on */
+    .era:not(.sub):not(:has(~ .era:not(.sub))),
+    .era.sub:not(:has(~ .era)) {
+      padding-bottom: 0;
+    }
+
     .era::before {
       content: '';
       position: absolute;
@@ -727,7 +734,7 @@
     }
 
     .timeline-note {
-      margin: 128px 0 0;
+      margin: 96px 0 0;
       font-size: 18px;
       line-height: 1.4;
       color: var(--muted);
@@ -1413,7 +1420,7 @@
       var list = document.querySelector('.timeline');
       var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
       var RUN_ON = 24;
-      var ARROW_TIP = 12.5;   // from the top of the arrowhead to its tip, less the 1px overlap
+      var ARROW_GAP = 6;   // from the bottom of the "+ events" text to the arrowhead
       var eras = allEras;
       // each main era's node sits level with the middle of its title; events
       // keep theirs level with the date
@@ -1439,15 +1446,11 @@
         // the line runs on past the end of the last entry and ends in the arrow
         var lastEra = eras[eras.length - 1];
         var end = lastEra.getBoundingClientRect().bottom + RUN_ON;
-        // with the last era's events folded away, the arrow's tip lines up
-        // with the bottom of its "+ events" text instead
+        // with the last era's events folded away, the line ends and the arrow
+        // sits just under its "+ events" text instead
         var lastToggle = lastEra.querySelector('.era-toggle');
         if (lastToggle && lastToggle.getAttribute('aria-expanded') !== 'true') {
-          // the label is in capitals: their foot sits about a third of an em
-          // above the bottom of the text box
-          var label = lastToggle.querySelector('.era-toggle-label');
-          var capFoot = label.getBoundingClientRect().bottom - parseFloat(getComputedStyle(label).fontSize) * 0.34;
-          end = capFoot - ARROW_TIP;
+          end = lastToggle.getBoundingClientRect().bottom + ARROW_GAP;
         }
         list.style.setProperty('--tl-length', (end - top) + 'px');
         list.style.setProperty('--tl-arrow-top', (end - list.getBoundingClientRect().top - 1) + 'px');
