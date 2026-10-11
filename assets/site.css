@@ -460,8 +460,8 @@ html.band-black:not([data-theme]) {
 
 /* on a dark band: light text, and the corner controls over it (the site name
    and other fixed controls take .over-band while they sit over it) */
-html.band-midnight:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band),
-html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band) {
+html.band-midnight:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .over-band),
+html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .over-band) {
   --canvas-ink: var(--inverse-ink);
   --muted: #8a93ad;
   --link-blue: #8ab4f8;
@@ -469,7 +469,7 @@ html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .ove
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
-html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .over-band) {
+html.band-black:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .over-band) {
   --muted: #8c8c8c;
 }
 

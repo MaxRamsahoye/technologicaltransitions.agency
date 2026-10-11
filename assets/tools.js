@@ -47,11 +47,39 @@
     '.copy-toast { position: fixed; z-index: 70; padding: 5px 12px; background: var(--canvas-ink); color: var(--canvas-bg);',
     '  font-family: Inter, sans-serif; font-size: 13px; border-radius: 999px; pointer-events: none;',
     '  transform: translate(-50%, -100%); opacity: 0; transition: opacity 0.2s ease; }',
-    '.copy-toast.show { opacity: 1; }'
+    '.copy-toast.show { opacity: 1; }',
+    // the top menu: the site's pages across the top centre
+    '.top-nav { position: absolute; z-index: 30; top: 33px; left: 50%; transform: translateX(-50%);',
+    '  display: flex; gap: 36px; margin: 0; padding: 0; list-style: none;',
+    '  font-family: Inter, sans-serif; font-size: 15px; letter-spacing: -0.005em; white-space: nowrap; }',
+    '.top-nav a { color: var(--muted, #8c8c8c); text-decoration: none; padding-bottom: 4px;',
+    '  border-bottom: 1.5px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; }',
+    '.top-nav a:hover { color: var(--canvas-ink); }',
+    '.top-nav a[aria-current="page"] { color: var(--canvas-ink); border-bottom-color: currentColor; }',
+    '@media (max-width: 899px) { .top-nav { display: none; } }'
   ].join('\n');
   var style = document.createElement('style');
   style.textContent = css;
   document.head.appendChild(style);
+
+  /* ---------- top menu ---------- */
+
+  (function () {
+    var base = new URL('../', script.src);
+    var pages = [['Article', ''], ['Lexicon', 'lexicon/'], ['Timeline', 'timeline/'], ['Sources', 'sources/']];
+    var nav = document.createElement('nav');
+    nav.className = 'top-nav';
+    nav.setAttribute('aria-label', 'Pages');
+    pages.forEach(function (pg) {
+      var a = document.createElement('a');
+      var url = new URL(pg[1], base);
+      a.href = url.pathname;
+      a.textContent = pg[0];
+      if (url.pathname === location.pathname) a.setAttribute('aria-current', 'page');
+      nav.appendChild(a);
+    });
+    document.body.insertBefore(nav, document.body.firstChild);
+  })();
 
   function typing() {
     var el = document.activeElement;
