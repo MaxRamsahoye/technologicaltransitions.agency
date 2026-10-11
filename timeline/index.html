@@ -718,8 +718,15 @@
       background: color-mix(in srgb, currentColor 22%, transparent);
     }
 
+    /* the last era has no line on below it, unless its events are open:
+       then the line runs down to the last event (length set by the script) */
     .aspect-entry:last-child::before {
       display: none;
+    }
+
+    .aspect-entry:last-child:has(> .aspect-events:not([hidden]))::before {
+      display: block;
+      height: var(--tail, 0px);
     }
 
     .aspect-entry::after {
@@ -2021,7 +2028,22 @@
         if (ol.hidden === !open) return;
         ol.hidden = !open;
         Array.prototype.forEach.call(ol.children, function (c) { c.classList.toggle('unfolding', open); });
+        if (open) setTail(btn.parentNode);
       }
+      // the last era's line, from its own dot to its last event's
+      function setTail(entry) {
+        if (entry.nextElementSibling) return;
+        var last = entry.querySelector('.aspect-events').lastElementChild;
+        var dotC = parseFloat(getComputedStyle(entry).getPropertyValue('--dot-c')) || 38;
+        var subDot = parseFloat(getComputedStyle(last, '::before').top) + parseFloat(getComputedStyle(last, '::before').height) / 2;
+        entry.style.setProperty('--tail', (last.offsetTop + subDot - dotC + 0.75) + 'px');
+      }
+      window.addEventListener('resize', function () {
+        Array.prototype.forEach.call(aspectsEl.querySelectorAll('.aspect-entry:last-child'), function (e) {
+          var ol = e.querySelector('.aspect-events');
+          if (ol && !ol.hidden) setTail(e);
+        });
+      });
       function syncDomainAll() {
         var allOpen = aspectToggles.every(function (b) { return b.getAttribute('aria-expanded') === 'true'; });
         domainAllBtn.setAttribute('aria-expanded', allOpen ? 'true' : 'false');
