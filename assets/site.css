@@ -287,13 +287,22 @@ html[data-theme] .theme-toggle .icon-sun {
   text-underline-offset: 3px;
 }
 
-/* f: headings and subheadings in ET Bembo, as in the article */
-html.serif-headings .page-title,
+/* f: headings and subheadings in ET Bembo, as in the article (page titles
+   stay as they are) */
 html.serif-headings .term dt,
 html.serif-headings .menu-title {
   font-family: var(--serif);
   font-weight: 700;
+  font-size: 28px;
   letter-spacing: 0;
+  -webkit-text-stroke: 0.4px currentColor;
+}
+
+@media (max-width: 600px) {
+  html.serif-headings .term dt,
+  html.serif-headings .menu-title {
+    font-size: 24px;
+  }
 }
 
 /* c: only links to other sites turn blue, as in the article */

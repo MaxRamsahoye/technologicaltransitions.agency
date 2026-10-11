@@ -176,22 +176,24 @@
     }
 
     /* c: colour — blue accent; links stay semi-bold */
-    /* f: headings and subheadings in ET Bembo */
-    html.serif-headings .article-title,
+    /* f: headings and subheadings in ET Bembo (the title stays as it is);
+       a hairline stroke takes them past the font's heaviest cut */
     html.serif-headings .article-body h2,
     html.serif-headings .article-body h3 {
       font-family: var(--serif);
       font-weight: 700;
       letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
     }
 
     html.serif-headings .article-body h2 {
-      font-size: 1.3em;
+      font-size: 1.45em;
     }
 
     html.serif-headings .article-body h3 {
       font-weight: 600;
-      font-size: 1.05em;
+      font-size: 1.2em;
+      -webkit-text-stroke: 0.3px currentColor;
     }
 
     /* c: only links to other sites turn blue */
