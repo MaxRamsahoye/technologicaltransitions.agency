@@ -1011,22 +1011,18 @@
     }
 
     .site-footer .footer-inner .footer-author {
-      width: 0;
-      min-width: 100%;
       margin-top: 14px;
       font-size: 17px;
     }
 
-    /* the block is as wide as the title; the quote wraps within it */
+    /* the block is as wide as its longest line */
     .footer-head {
-      --footer-title-size: min(27px, calc((100vw - 48px) / 21));
+      --footer-title-size: min(27px, calc((100vw - 48px) / 17.3));
       width: max-content;
       max-width: 100%;
     }
 
     .site-footer .footer-inner .footer-subtitle {
-      width: 0;
-      min-width: 100%;
       margin-bottom: 12px;
       font-family: var(--serif);
       font-size: clamp(16px, calc((100vw - 48px) / 20), 22px);
@@ -1085,7 +1081,6 @@
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
       font-size: var(--footer-title-size);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       line-height: 1.15;
     }
@@ -1555,8 +1550,8 @@
     <footer class="site-footer">
       <div class="footer-inner">
       <div class="footer-head">
-      <p class="footer-subtitle"><em>we shape our tools, and thereafter our tools shape us</em></p>
-      <p class="footer-title"><a class="heading-link" href="./">technologicaltransitions.agency</a></p>
+      <p class="footer-subtitle"><em>We shape our tools, and thereafter our tools shape us</em></p>
+      <p class="footer-title"><a class="heading-link" href="./">TechnologicalTransitions.Agency</a></p>
       <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on the philosophy of technology</p>
       </div>
       <nav class="footer-sitemap" aria-label="Sitemap">
