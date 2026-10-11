@@ -910,6 +910,10 @@
       display: none;
     }
 
+    html.design-2.overview-lines #overview {
+      padding-top: 52px;
+    }
+
     html.colour.overview-lines #overview a[href^="http"] {
       color: var(--link-blue);
     }
@@ -2086,7 +2090,10 @@
       function placeOverview() {
         overviewEl.style.marginTop = '';
         if (!isDesign2()) return;
-        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom - 32;
+        // with the dividing line (h), start the Overview higher, where the
+        // arrow sat before it faded
+        var lift = document.documentElement.classList.contains('overview-lines') ? 24 : -32;
+        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom + lift;
         overviewEl.style.marginTop = -Math.max(0, gap) + 'px';
       }
       window.placeOverview = placeOverview;
@@ -2214,6 +2221,7 @@
       // h switches the Overview between its shaded band and short dividing lines
       function toggleOverviewLines() {
         var on = root.classList.toggle('overview-lines');
+        if (window.placeOverview) window.placeOverview();
         try { localStorage.setItem('overview', on ? 'lines' : 'band'); } catch (err) {}
       }
 
