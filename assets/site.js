@@ -366,6 +366,17 @@
       try { localStorage.setItem('blueLinks', on ? 'on' : 'off'); } catch (err) {}
       playPianoClick();
       spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
+    } else if (e.key === 'b' || e.key === 'B') {
+      // b: cycle the band colour, sepia / midnight / black (shared with the article)
+      var root = document.documentElement;
+      var bands = ['', 'midnight', 'black'];
+      var cur = bands.filter(function (b) { return b && root.classList.contains('band-' + b); })[0] || '';
+      var next = bands[(bands.indexOf(cur) + 1) % bands.length];
+      bands.forEach(function (b) { if (b) root.classList.remove('band-' + b); });
+      if (next) root.classList.add('band-' + next);
+      try { localStorage.setItem('bandColour', next || 'sepia'); } catch (err) {}
+      playPianoClick();
+      spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
     } else if (e.key === 'f' || e.key === 'F') {
       // f: headings and subheadings in ET Bembo (shared with the article)
       var serif = document.documentElement.classList.toggle('serif-headings');
