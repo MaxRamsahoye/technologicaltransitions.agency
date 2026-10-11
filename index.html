@@ -36,7 +36,8 @@
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
         var band = localStorage.getItem('band');
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
-        if (localStorage.getItem('design') === '2') document.documentElement.classList.add('design-2');
+        // design 2 is the default; d switches to design 1 and back
+        if (localStorage.getItem('design') !== '1') document.documentElement.classList.add('design-2');
       } catch (e) {}
     })();
   </script>
@@ -154,7 +155,7 @@
       --rule: #232c4c;
       --muted: #8c8c8c;
       --link-blue: #8ab4f8;
-      --inverse-bg: #16181b;
+      --inverse-bg: #101113;
       --inverse-ink: #ffffff;
       --inverse-link: #8ab4f8;
     }
