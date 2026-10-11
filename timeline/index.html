@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="../assets/site.css?v=be724713" rel="stylesheet">
+  <link href="../assets/site.css?v=0ab87924" rel="stylesheet">
   <style>
     /* light sepia band from the top of the window to just below the intro */
     .timeline-top {
@@ -100,31 +100,13 @@
       margin-top: 80px;
     }
 
-    /* narrower windows: the text spans the line, which stays in the column */
-    @media (min-width: 601px) and (max-width: 1099px) {
-      .timeline-top > .page-title,
-      .timeline-top > .page-intro,
-      .timeline-top > .mini-panel {
-        margin-left: calc(100% / 14 - 8px);
-        margin-right: calc(100% / 14 - 8px);
-      }
-    }
-
-    /* wider than the text column, reaching out either side where there is room */
-    @media (min-width: 1100px) {
-      .mini-timeline {
-        margin-left: -140px;
-        margin-right: -140px;
-      }
-
-      /* the title, intro and panel text span the mini timeline's line, from
-         the outer edge of its first dot to that of its last (the dots sit at
-         the centres of seven equal columns across the widened row) */
-      .timeline-top > .page-title,
-      .timeline-top > .page-intro,
-      .timeline-top > .mini-panel {
-        margin-left: calc(100% / 14 - 128px);
-        margin-right: calc(100% / 14 - 128px);
+    /* the top section is as wide as the Lexicon's; the era row reaches out
+       either side so its first and last dots sit at the text edges (seven
+       columns: the row is 7/6 of the text less the dots, centred) */
+    @media (min-width: 601px) {
+      .timeline-top > .mini-timeline:not(.mini-domains) {
+        margin-left: calc((112px - 100%) / 12);
+        margin-right: calc((112px - 100%) / 12);
       }
     }
 
@@ -543,16 +525,8 @@
       letter-spacing: 0.08em;
     }
 
-    @media (min-width: 601px) and (max-width: 1099px) {
-      .view-tabs {
-        margin-left: calc(100% / 14 - 8px);
-      }
-    }
-
-    @media (min-width: 1100px) {
-      .view-tabs {
-        margin-left: calc(100% / 14 - 128px);
-      }
+    .view-tabs {
+      margin-left: calc((100% - var(--wide-col)) / 2);
     }
 
     .view-tabs button {
@@ -619,19 +593,6 @@
       }
     }
 
-    @media (min-width: 601px) and (max-width: 1099px) {
-      .timeline-top > .mini-domains {
-        margin-left: calc(100% / 14 - 8px);
-        margin-right: calc(100% / 14 - 8px);
-      }
-    }
-
-    @media (min-width: 1100px) {
-      .timeline-top > .mini-domains {
-        margin-left: calc(100% / 14 - 128px);
-        margin-right: calc(100% / 14 - 128px);
-      }
-    }
 
     /* domain view, wider windows: the four domains in a column on the left
        and their summary panel on the right; the whole block spans the text */
@@ -665,19 +626,6 @@
       }
     }
 
-    @media (min-width: 601px) and (max-width: 1099px) {
-      body.view-domains .timeline-top {
-        margin-left: calc(100% / 14 - 8px);
-        margin-right: calc(100% / 14 - 8px);
-      }
-    }
-
-    @media (min-width: 1100px) {
-      body.view-domains .timeline-top {
-        margin-left: calc(100% / 14 - 128px);
-        margin-right: calc(100% / 14 - 128px);
-      }
-    }
 
     /* the domains are not a sequence, so no line or dots: four columns
        across the text, each under a short rule that darkens on hover */
@@ -1107,7 +1055,7 @@
   </a>
 
   <main class="page-main">
-    <div class="timeline-top on-band">
+    <div class="timeline-top wide-top on-band">
     <h1 class="page-title">Timeline</h1>
     <p class="page-intro">The historical developmental process discussed in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
     <nav class="mini-timeline" aria-label="Eras"><ol></ol></nav>
