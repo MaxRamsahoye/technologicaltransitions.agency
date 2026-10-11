@@ -315,7 +315,7 @@
 
     @media (min-width: 900px) {
       .timeline {
-        --tl-gap: 72px;
+        --tl-gap: 104px;
       }
     }
 
@@ -332,11 +332,21 @@
 
     .era {
       position: relative;
-      padding: 0 0 104px;
+      padding: 0 0 160px;
     }
 
     .era:last-child {
       padding-bottom: 0;
+    }
+
+    /* an era's own events follow it at the old spacing; after the last of
+       them comes the full gap before the next era */
+    .era:not(.sub):has(+ .era.sub:not([hidden])) {
+      padding-bottom: 104px;
+    }
+
+    .era.sub:has(+ .era:not(.sub)) {
+      padding-bottom: 104px;
     }
 
     .era::before {
