@@ -2676,7 +2676,9 @@
       var domainDescs = aspectNames.map(function (name, k) {
         var div = document.createElement('div');
         div.className = 'mini-desc';
-        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p><p class="mini-count">8 eras</p>';
+        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p><p class="mini-count"></p>';
+        var nEvents = domainSections[k].querySelectorAll('.aspect-events > li').length;
+        div.querySelector('.mini-count').textContent = mains.length + ' eras \u00b7 ' + nEvents + (nEvents === 1 ? ' event' : ' events');
         div.querySelector('.mini-desc-title').textContent = name;
         div.querySelector('.mini-desc-text').textContent = DOMAIN_SUMMARIES[k] || '';
         domainPanel.appendChild(div);
