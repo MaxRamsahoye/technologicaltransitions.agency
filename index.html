@@ -34,6 +34,7 @@
       } catch (e) {}
       try {
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
+        if (localStorage.getItem('headings') === 'serif') document.documentElement.classList.add('serif-headings');
         var band = localStorage.getItem('band');
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
         // design 2 is the default; d switches to design 1 and back
@@ -175,6 +176,24 @@
     }
 
     /* c: colour — blue accent; links stay semi-bold */
+    /* f: headings and subheadings in ET Bembo */
+    html.serif-headings .article-title,
+    html.serif-headings .article-body h2,
+    html.serif-headings .article-body h3 {
+      font-family: var(--serif);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    html.serif-headings .article-body h2 {
+      font-size: 1.3em;
+    }
+
+    html.serif-headings .article-body h3 {
+      font-weight: 400;
+      font-size: 1.05em;
+    }
+
     /* c: only links to other sites turn blue */
     html.colour a[href^="http"] {
       color: var(--link-blue);
@@ -2047,9 +2066,15 @@
         if (window.placeOverview) window.placeOverview();
       }
 
-      var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign };
+      // f switches headings and subheadings to ET Bembo and back
+      function toggleSerifHeadings() {
+        var on = root.classList.toggle('serif-headings');
+        try { localStorage.setItem('headings', on ? 'serif' : 'sans'); } catch (err) {}
+      }
 
-      // b, c and d have no button: their ripple shows where the pointer is
+      var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign, f: toggleSerifHeadings };
+
+      // b, c, d and f have no button: their ripple shows where the pointer is
       var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       document.addEventListener('mousemove', function (e) {
         pointer.x = e.clientX;

@@ -279,6 +279,15 @@ html[data-theme] .theme-toggle .icon-sun {
   text-underline-offset: 3px;
 }
 
+/* f: headings and subheadings in ET Bembo, as in the article */
+html.serif-headings .page-title,
+html.serif-headings .term dt,
+html.serif-headings .menu-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
 /* c: only links to other sites turn blue, as in the article */
 html.colour a[href^="http"] {
   color: var(--link-blue);

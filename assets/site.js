@@ -329,6 +329,12 @@
       try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
       playPianoClick();
       spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
+    } else if (e.key === 'f' || e.key === 'F') {
+      // f: headings and subheadings in ET Bembo (shared with the article)
+      var serif = document.documentElement.classList.toggle('serif-headings');
+      try { localStorage.setItem('headings', serif ? 'serif' : 'sans'); } catch (err) {}
+      playPianoClick();
+      spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
     } else if (e.key === 'Backspace' && (upBtn || backArrow)) {
       e.preventDefault();
       // anywhere below the top: go to the top first; at the top (or still
