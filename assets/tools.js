@@ -67,7 +67,7 @@
     var reloadKey = e.key === 'F5' || ((e.key === 'r' || e.key === 'R') && (e.ctrlKey || e.metaKey) && !e.altKey);
     if (!reloadKey || document.body.classList.contains('page-leaving')) return;
     e.preventDefault();
-    document.body.classList.add('page-leaving');
+    document.body.classList.add('page-leaving', 'reloading');
     setTimeout(function () { location.reload(); }, 210);
   });
 

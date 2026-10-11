@@ -121,6 +121,22 @@ html.page-entering body {
   animation: page-in 0.25s cubic-bezier(0.25, 0.1, 0.25, 1) backwards;
 }
 
+/* where the browser crossfades between pages itself, the old page stays put
+   while it leaves (its sounds still fade), so there is no blank flash */
+@view-transition {
+  navigation: auto;
+}
+
+html.vt body.page-leaving:not(.reloading) {
+  opacity: 1;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+}
+
 @keyframes page-in {
   from { opacity: 0; }
 }
