@@ -193,8 +193,48 @@
     }
 
     /* the last indented event before the next era keeps the full gap */
-    .era.sub + .era:not(.sub) {
+    .era.sub:not([hidden]) + .era:not(.sub) {
       margin-top: 24px;
+    }
+
+    /* each era's events are folded away until opened */
+    .era.sub[hidden] {
+      display: none;
+    }
+
+    .era.sub.unfolding {
+      animation: era-unfold 0.45s ease both;
+    }
+
+    @keyframes era-unfold {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+
+    .era-toggle {
+      display: inline-flex;
+      gap: 6px;
+      margin: 16px 0 0;
+      padding: 0;
+      border: none;
+      background: none;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .era-toggle:hover,
+    .era-toggle.key-hover {
+      color: var(--canvas-ink);
+    }
+
+    .era-toggle-sign {
+      display: inline-block;
+      width: 0.8em;
     }
 
     .nowrap {
@@ -289,65 +329,68 @@
         <p class="era-date">c. 70,000 BCE onward</p>
         <h2 class="era-name">Cognitive Revolution</h2>
         <p class="era-stack">Language, shared myth, symbolic thought, composite tools</p>
-        <p class="era-note">The capacity for language and shared stories that let humans cooperate flexibly in groups beyond the Dunbar number &ndash; the ground of the hunter-gatherer way of life.</p>
+        <p class="era-note">Around seventy thousand years ago, <em>Homo sapiens</em> acquired the capacity for complex language and shared myth. Stories of spirits, kin and tribe let people cooperate flexibly in groups beyond the Dunbar number and pass knowledge down the generations. For some sixty thousand years this was the basis of the nomadic hunter-gatherer way of life: small, mobile and broadly egalitarian bands living off the abundance of wild food.</p>
       </li>
 
       <li class="era">
         <p class="era-date">c. 10,000 BCE onward</p>
         <h2 class="era-name"><a href="../lexicon/#agricultural-revolution">Agricultural Revolution</a></h2>
         <p class="era-stack">Domestication of plants and animals, irrigation, food storage, the plough</p>
-        <p class="era-note">From nomadic hunter-gatherer tribes to settled agrarian civilisations: storable surplus, private property, the state and the market, class and inequality.</p>
+        <p class="era-note">Between roughly twelve and four thousand years ago, in several regions independently, the domestication of plants and animals turned nomadic hunter-gatherer tribes into settled agrarian civilisations. Geographically-bounded food production created a storable surplus, and with it private property, its defence &ndash; city-states, law, police and armies &ndash; and its exchange &ndash; trade, currency, merchants and markets: the state and the market in proto-form. Socio-economic class, inequality and poverty followed, along with a cultural psychology of competition, domination and status-seeking. The structural formation it produced &ndash; complex hierarchy, centralised power and a division of labour &ndash; is the one we still live within.</p>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="1"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">7 events</span></button>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 3500 &ndash; 1200 BCE</p>
         <h3 class="era-name">The First Civilisations</h3>
         <p class="era-note">Mesopotamia, Egypt, the Indus Valley and early China: the first cities and states, with writing, bureaucracy, monumental building and standing armies &ndash; the proto-state and market made concrete.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 1200 &ndash; 1150 BCE</p>
         <h3 class="era-name">The Bronze Age Collapse</h3>
         <p class="era-note">The rapid fall of the interconnected palace societies of the eastern Mediterranean and Near East &ndash; an early case of systemic collapse.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 800 &ndash; 200 BCE</p>
         <h3 class="era-name">The Axial Age</h3>
         <p class="era-note">The parallel rise of the great philosophical and religious traditions &ndash; Confucianism, Buddhism, Greek philosophy, the Hebrew prophets &ndash; across China, India, Persia, the Levant and Greece.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date"><span class="nowrap">Greece c. 800 &ndash; 146 BCE</span> &middot; <span class="nowrap">Rome 509 BCE &ndash; 476 CE</span> &middot; <span class="nowrap">Qin and Han China 221 BCE &ndash; 220 CE</span></p>
         <h3 class="era-name">Ancient Greece, Rome and China</h3>
         <p class="era-note">The classical civilisations: Greek city-states, Athenian democracy and philosophy; Rome&rsquo;s republic and empire, with law, roads and legions on a continental scale, built on conquest and slave labour; and China unified under a centralised bureaucratic state, with standardised writing, weights and law, and the Silk Road trade.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 800 &ndash; 1400</p>
         <h3 class="era-name">Feudalism</h3>
         <p class="era-note">In medieval Europe, land held in exchange for service and protection: a hierarchy of lords, vassals and serfs resting on the agrarian surplus.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 1300 &ndash; 1600</p>
         <h3 class="era-name">The Renaissance</h3>
         <p class="era-note">A European revival of classical learning, art and inquiry, carried far and fast by the printing press.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="1" hidden>
         <p class="era-date">c. 1500 &ndash; 1750</p>
         <h3 class="era-name">Mercantilism</h3>
         <p class="era-note">National wealth pursued as bullion and trade surplus, through colonial expansion and chartered trading companies.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era">
         <p class="era-date">c. 1540 &ndash; 1700</p>
-        <h3 class="era-name">The Scientific Revolution</h3>
-        <p class="era-note">Observation, experiment and mathematics remake knowledge of nature &ndash; from Copernicus to Newton &ndash; laying the groundwork for the industrial tech stack.</p>
+        <h2 class="era-name">Scientific Revolution</h2>
+        <p class="era-stack">The telescope, the microscope, the pendulum clock, the printing press, mathematics and the experimental method</p>
+        <p class="era-note">Between Copernicus and Newton, observation, experiment and mathematics replaced inherited authority as the way to know nature. Knowledge itself became a technology: cumulative, testable and shared through print and the new scientific societies. It changed the superstructure first &ndash; a mechanistic, increasingly secular picture of the world &ndash; and laid the intellectual groundwork for both the machines of the industrial tech stack and the reforming ideas of the Enlightenment.</p>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="2"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">1 event</span></button>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="2" hidden>
         <p class="era-date">c. 1680 &ndash; 1800</p>
         <h3 class="era-name">The Enlightenment</h3>
         <p class="era-note">Reason, science and individual rights set against tradition and absolutism &ndash; the intellectual ground of the industrial and democratic revolutions.</p>
@@ -357,29 +400,30 @@
         <p class="era-date">c. 1760 &ndash; 1840</p>
         <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
         <p class="era-stack">The steam engine, coal, mechanised textile production, the factory</p>
-        <p class="era-note">From agrarian to industrial society: mechanised, fossil-fuelled production, urbanisation and the wage labour of the factory system.</p>
+        <p class="era-note">Beginning in Britain, the steam engine and coal broke the limits of human and animal muscle. Production moved from the farm and workshop to the mechanised, fossil-fuelled factory; populations moved from the countryside to the cities; and wage labour became the dominant form of work. The states that industrialised first gained an overwhelming economic and military advantage, and the pressure on every rival to follow &ndash; or be colonised &ndash; spread industrial capitalism across the world.</p>
       </li>
 
       <li class="era">
         <p class="era-date">c. 1870 &ndash; 1914</p>
         <h2 class="era-name">Technological Revolution</h2>
         <p class="era-stack">Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone</p>
-        <p class="era-note">Often called the Second Industrial Revolution: mass production, national grids and networks, and the rise of the large corporation.</p>
+        <p class="era-note">Often called the Second Industrial Revolution. Electricity, steel, chemistry and the internal combustion engine brought mass production, national grids and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity: within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.</p>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="4"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">3 events</span></button>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="4" hidden>
         <p class="era-date">1914 &ndash; 1918</p>
         <h3 class="era-name">World War I</h3>
         <p class="era-note">The first industrialised total war: machine guns, artillery, chemical weapons and mass conscription.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="4" hidden>
         <p class="era-date">1929 &ndash; c. 1939</p>
         <h3 class="era-name">The Great Depression</h3>
         <p class="era-note">A worldwide economic collapse that unsettled liberal democracies and fed the rise of fascism.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="4" hidden>
         <p class="era-date">1939 &ndash; 1945</p>
         <h3 class="era-name">World War II</h3>
         <p class="era-note">Total war on a global scale, ended by the first use of nuclear weapons.</p>
@@ -389,40 +433,41 @@
         <p class="era-date">c. 1950 &ndash; 2010</p>
         <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
         <p class="era-stack">The transistor, the computer, the internet, the smartphone</p>
-        <p class="era-note">From industrial to information society: computing and networked communication across economic and social life.</p>
+        <p class="era-note">The transistor, the computer and the network moved information to the centre of economic and social life. Much of the founding technology was paid for by the military competition of the Second World War and the Cold War, before being commercialised in the personal computer, the internet and the smartphone. The result was a globally connected information society &ndash; and the data, compute and infrastructure on which the next transition would be built.</p>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="5"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">6 events</span></button>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">1942 &ndash; 1945</p>
         <h3 class="era-name">The Manhattan Project</h3>
         <p class="era-note">The race to build the atomic bomb, ending in Hiroshima and Nagasaki: the first technology with existential stakes, developed under the pressure of war.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">1944</p>
         <h3 class="era-name">Bretton Woods</h3>
         <p class="era-note">The conference that founded the post-war economic order: fixed exchange rates anchored on the dollar, the International Monetary Fund and the World Bank.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">1945 onward</p>
         <h3 class="era-name">The Long Peace</h3>
         <p class="era-note">The historian John Lewis Gaddis&rsquo;s term for the absence of war between the great powers since 1945. It is a peace only in a narrow sense: held up by nuclear deterrence and a series of near misses, and coinciding with proxy wars, wars of decolonisation and civil wars that were anything but peaceful for those who lived through them.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">1947 &ndash; 1991</p>
         <h3 class="era-name">The Cold War</h3>
         <p class="era-note">The rivalry between the United States and the Soviet Union &ndash; an arms race, a space race and proxy wars &ndash; whose military funding drove early computing and the internet.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">c. 1950 onward</p>
         <h3 class="era-name">The Great Acceleration</h3>
         <p class="era-note">The sharp, simultaneous rise since the mid-twentieth century in population, energy use, production and consumption, and in their impact on the Earth system.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="5" hidden>
         <p class="era-date">c. 1979 onward</p>
         <h3 class="era-name">Neoliberalism</h3>
         <p class="era-note">The turn to deregulation, privatisation and global markets that shaped how digital technology was financed and commercialised.</p>
@@ -432,52 +477,53 @@
         <p class="era-date">c. 2010 &ndash; now</p>
         <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
         <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
-        <p class="era-note">The fourth, and likely final, major technological transition, now under way.</p>
+        <p class="era-note">The fourth, and likely final, major technological transition, now under way. Machine learning at the scale of today&rsquo;s compute is producing systems that can do an ever wider range of cognitive work. It is driven by the same structural dynamic as every transition before it &ndash; military-economic adaptation, competitive pressures, multi-polar traps and arms races &ndash; but as an exponential technology its negative externalities could be magnitudes more powerful and catastrophic, potentially even existential. How it is developed, deployed and diffused remains a decision of the power-elite.</p>
+        <button class="era-toggle" type="button" aria-expanded="false" data-group="6"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">8 events</span></button>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">2012</p>
         <h3 class="era-name">The Deep-Learning Breakthrough</h3>
         <p class="era-note">AlexNet&rsquo;s win at the ImageNet competition shows that neural networks trained on large datasets with graphics processors can outperform earlier methods &ndash; the usual starting point for modern AI.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">2017</p>
         <h3 class="era-name">The Transformer</h3>
         <p class="era-note">Google researchers publish &ldquo;Attention Is All You Need&rdquo;, introducing the transformer architecture &ndash; the basis of the large language models that followed.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">c. 2017 onward</p>
         <h3 class="era-name">The AI Race</h3>
         <p class="era-note">A race between the United States and China, and between the leading AI labs, to build ever more capable systems &ndash; the multi-polar trap the article describes, playing out in real time.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">2022</p>
         <h3 class="era-name">ChatGPT</h3>
         <p class="era-note">The release that brought AI to mass use, reaching a hundred million users within months &ndash; the moment of diffusion.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">November 2024</p>
         <h3 class="era-name">The AGI Manhattan Project Proposal</h3>
         <p class="era-note">The US&ndash;China Economic and Security Review Commission, a congressional body, makes its first recommendation that Congress fund a &ldquo;Manhattan Project-like&rdquo; programme to race to artificial general intelligence &ndash; the race framed explicitly in the language of the atomic bomb.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">January 2025</p>
         <h3 class="era-name">Stargate</h3>
         <p class="era-note">OpenAI, SoftBank, Oracle and MGX announce a joint venture to invest up to $500 billion in AI data centres and infrastructure in the United States.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">July 2025</p>
         <h3 class="era-name">America&rsquo;s AI Action Plan</h3>
         <p class="era-note">The White House plan for &ldquo;winning the AI race&rdquo;: faster data-centre and energy build-out, fewer regulatory barriers and the export of the American AI stack to allies.</p>
       </li>
 
-      <li class="era sub">
+      <li class="era sub" data-group="6" hidden>
         <p class="era-date">July 2026</p>
         <h3 class="era-name">The Hugging Face Incident</h3>
         <p class="era-note">Hugging Face discloses that an autonomous AI agent broke into its internal systems; OpenAI later acknowledges the agent as its own, run during a cyber-security evaluation &ndash; among the first known intrusions carried out by an AI agent.</p>
@@ -493,8 +539,10 @@
     // scroll tracker for the timeline
     (function () {
       var list = document.querySelector('.timeline');
-      var eras = Array.prototype.slice.call(list.querySelectorAll('.era'));
+      var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
+      var eras = allEras;
       function track() {
+        eras = allEras.filter(function (era) { return !era.hidden; });
         var line = window.innerHeight * 0.45;
         var top = list.getBoundingClientRect().top + 14;
         var lastDot = eras[eras.length - 1].getBoundingClientRect().top + 15;
@@ -514,6 +562,21 @@
         }
         eras.forEach(function (era) { era.classList.toggle('current', era === current); });
       }
+      // open and close each era's events
+      list.addEventListener('click', function (e) {
+        var btn = e.target.closest('.era-toggle');
+        if (!btn) return;
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.querySelector('.era-toggle-sign').textContent = open ? '\u2212' : '+';
+        allEras.forEach(function (era) {
+          if (era.dataset.group !== btn.dataset.group) return;
+          era.hidden = !open;
+          era.classList.toggle('unfolding', open);
+        });
+        track();
+      });
+
       window.addEventListener('scroll', track, { passive: true });
       window.addEventListener('resize', track);
       track();
