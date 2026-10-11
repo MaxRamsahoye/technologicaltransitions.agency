@@ -45,8 +45,11 @@
       transform: translateX(-50%);
     }
 
-    .lexicon-top .page-intro {
-      max-width: 680px;
+    /* the subtitle on a single line wherever the top section is wide enough */
+    @media (min-width: 1181px) {
+      .lexicon-top .page-intro {
+        white-space: nowrap;
+      }
     }
 
     .lexicon-top::before {
