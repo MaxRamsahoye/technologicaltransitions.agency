@@ -36,7 +36,7 @@
         }
       } catch (e) {}
       try {
-        if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
+        if (localStorage.getItem('blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
         // ET Bembo headings are the default; f switches to Inter and back
         if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
         // the band colour (b): midnight blue by default, or sepia or black
@@ -220,6 +220,12 @@
     html.colour #overview a[href^="http"],
     html.colour .site-footer a[href^="http"] {
       color: var(--inverse-link);
+    }
+
+    /* the author's name stays in the text colour, at the top and in the footer */
+    html.colour a.author-link,
+    html.colour .site-footer a.author-link {
+      color: inherit;
     }
 
     /* custom cursor: a small outlined dart; filled over things you can click */
@@ -2197,7 +2203,7 @@
 
       function toggleColour() {
         var on = root.classList.toggle('colour');
-        try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
+        try { localStorage.setItem('blueLinks', on ? 'on' : 'off'); } catch (err) {}
       }
 
       // d switches between the two designs (see design 2 in the styles)

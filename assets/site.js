@@ -363,7 +363,7 @@
     } else if (e.key === 'c' || e.key === 'C') {
       // c: toggle the blue link accent (shared with the article)
       var on = document.documentElement.classList.toggle('colour');
-      try { localStorage.setItem('colour', on ? '1' : '0'); } catch (err) {}
+      try { localStorage.setItem('blueLinks', on ? 'on' : 'off'); } catch (err) {}
       playPianoClick();
       spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
     } else if (e.key === 'f' || e.key === 'F') {

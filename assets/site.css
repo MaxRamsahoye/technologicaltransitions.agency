@@ -319,6 +319,11 @@ html.colour a[href^="http"] {
   color: var(--link-blue);
 }
 
+/* the author's name stays in the text colour, in the footer too */
+html.colour a.author-link {
+  color: inherit;
+}
+
 /* custom cursor: a small outlined dart; filled over things you can click */
 /* the same in every theme: white with a black line, solid black over links */
 :root {
