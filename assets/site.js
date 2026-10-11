@@ -26,6 +26,24 @@
   }
 
   // A soft sine tone with a gentle swell and long fade, plus a faint octave.
+  // every sound passes through one master volume, which fades out as a page
+  // leaves, so notes still ringing die away instead of being cut off
+  function out() {
+    if (!audioCtx.ttMaster) {
+      audioCtx.ttMaster = audioCtx.createGain();
+      audioCtx.ttMaster.connect(audioCtx.destination);
+    }
+    return audioCtx.ttMaster;
+  }
+  new MutationObserver(function () {
+    if (!audioCtx || !audioCtx.ttMaster) return;
+    var g = audioCtx.ttMaster.gain, now = audioCtx.currentTime;
+    g.cancelScheduledValues(now);
+    g.setValueAtTime(g.value, now);
+    if (document.body.classList.contains('page-leaving')) g.linearRampToValueAtTime(0, now + 0.75);
+    else g.linearRampToValueAtTime(1, now + 0.05);
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
   function playSoftTone(freq, when, peak, decay) {
     [[freq, peak, decay], [freq * 2, peak * 0.12, decay * 0.6]].forEach(function (partial) {
       var osc = audioCtx.createOscillator();
@@ -35,7 +53,7 @@
       gain.gain.setValueAtTime(0, when);
       gain.gain.linearRampToValueAtTime(partial[1], when + 0.03);
       gain.gain.exponentialRampToValueAtTime(0.0001, when + partial[2]);
-      osc.connect(gain).connect(audioCtx.destination);
+      osc.connect(gain).connect(out());
       osc.start(when);
       osc.stop(when + partial[2]);
     });
@@ -50,10 +68,10 @@
       if (next < 0 || next >= pianoNotes.length) next = noteIndex - (next - noteIndex);
       noteIndex = next;
       var now = audioCtx.currentTime;
-      var decay = short ? 0.7 : 2.8;
+      var decay = short ? 0.6 : 2.8;
       playSoftTone(pianoNotes[noteIndex], now, 0.045, decay);
       var answer = pianoNotes[Math.min(noteIndex + 2, pianoNotes.length - 1)];
-      if (answer !== pianoNotes[noteIndex]) playSoftTone(answer, now + 0.16, 0.018, short ? 0.5 : 2.4);
+      if (answer !== pianoNotes[noteIndex]) playSoftTone(answer, now + 0.16, 0.018, short ? 0.4 : 2.4);
     } catch (e) {}
   }
 
