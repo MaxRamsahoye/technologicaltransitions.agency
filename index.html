@@ -155,7 +155,7 @@
       --rule: #232c4c;
       --muted: #8c8c8c;
       --link-blue: #8ab4f8;
-      --inverse-bg: #101113;
+      --inverse-bg: #131517;
       --inverse-ink: #ffffff;
       --inverse-link: #8ab4f8;
     }
@@ -992,8 +992,7 @@
     }
 
     /* author, title and subtitle on the left; sitemap on the right */
-    /* centred: equal space on either side of the footer content; the menu's
-       line sits midway between the title block and the links */
+    /* centred: equal space on either side of the footer content */
     .footer-inner {
       --line-gap: 80px;
       display: grid;
@@ -1033,8 +1032,6 @@
     /* the menu's last line sits level with the subtitle's last line */
     .footer-sitemap {
       align-self: end;
-      padding: 2px 0 2px var(--line-gap);
-      border-left: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
     }
 
     /* "All Pages" as a small, faded, capitalised heading over the two pages */
@@ -1114,9 +1111,6 @@
         text-wrap: pretty;
       }
 
-      .footer-sitemap {
-        padding-left: 36px;
-      }
 
       .footer-title > span {
         display: inline;
