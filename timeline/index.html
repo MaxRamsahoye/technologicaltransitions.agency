@@ -224,12 +224,13 @@
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--muted);
+      color: var(--canvas-ink);
     }
 
-    .era-toggle:hover,
-    .era-toggle.key-hover {
-      color: var(--canvas-ink);
+    .era-toggle:hover .era-toggle-label,
+    .era-toggle.key-hover .era-toggle-label {
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     .era-toggle-sign {
