@@ -49,7 +49,7 @@
     '  transform: translate(-50%, -100%); opacity: 0; transition: opacity 0.2s ease; }',
     '.copy-toast.show { opacity: 1; }',
     // the top menu: the site's pages across the top centre
-    '.top-nav { position: absolute; z-index: 30; top: 33px; left: 50%; transform: translateX(-50%);',
+    '.top-nav { position: absolute; z-index: 30; top: 36px; left: 50%; transform: translateX(-50%);',
     '  display: flex; gap: 36px; margin: 0; padding: 0; list-style: none;',
     '  font-family: Inter, sans-serif; font-size: 15px; letter-spacing: -0.005em; white-space: nowrap; }',
     '.top-nav a { color: var(--muted, #8c8c8c); text-decoration: none; padding-bottom: 4px;',
