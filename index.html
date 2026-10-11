@@ -175,11 +175,13 @@
     }
 
     /* c: colour — blue accent; links stay semi-bold */
-    html.colour {
-      --link: var(--link-blue);
+    /* c: only links to other sites turn blue */
+    html.colour a[href^="http"] {
+      color: var(--link-blue);
     }
 
-    html.colour .footer-site {
+    html.colour #overview a[href^="http"],
+    html.colour .site-footer a[href^="http"] {
       color: var(--inverse-link);
     }
 
