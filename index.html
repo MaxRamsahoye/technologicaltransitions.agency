@@ -856,7 +856,7 @@
       color: var(--frame-ink);
     }
 
-    /* no band: short dividing lines above and below */
+    /* no band: dividing lines above and below, across the text column */
     html.overview-lines #overview::before,
     html.overview-lines #overview::after {
       content: '';
@@ -864,7 +864,7 @@
       top: 0;
       bottom: auto;
       left: 0;
-      width: 96px;
+      width: 100%;
       height: 2px;
       transform: none;
       background: currentColor;
