@@ -1097,7 +1097,7 @@
     </div>
     <nav class="mini-timeline mini-domains" aria-label="Domains"><ol></ol></nav>
     <div class="mini-panel domains-panel" aria-live="polite">
-      <div class="mini-overview show"><p class="mini-overview-text">Every transition reshaped four domains of life at once. Military-economic adaptation is the edge a new technology stack gives the groups that adopt it, and the pressure it puts on every rival to follow. Cultural-psychological adaptation is how the worldview, values and inner life of those groups change in turn. The state and the market are the institutions that organise power and exchange: absent among hunter-gatherers, they emerged in proto-form with the Agricultural and Urban Revolutions and have been remade by every transition since.</p><p class="mini-count">4 domains &middot; 8 eras</p></div>
+      <div class="mini-overview show"><p class="mini-overview-text">Every transition reshaped four domains of life at once. Military-economic adaptation is the edge a new technology stack gives the groups that adopt it, and the pressure it puts on every rival to follow. Cultural-psychological adaptation is how the worldview, values and inner life of those groups change in turn. The state and the market are the institutions that organise power and exchange: absent among hunter-gatherers, they emerged in proto-form with the Agricultural and Urban Revolutions and have been remade by every transition since.</p><p class="mini-count" data-domain-total>4 domains &middot; 8 eras</p></div>
     </div>
     </div>
 
@@ -2678,6 +2678,10 @@
         domainPanel.appendChild(div);
         return div;
       });
+      // the overview counts every event across the four domain timelines
+      var domainTotal = aspectsEl.querySelectorAll('.aspect-events > li').length;
+      domainPanel.querySelector('[data-domain-total]').textContent = aspectNames.length + ' domains \u00b7 ' + mains.length + ' eras \u00b7 ' + domainTotal + ' events';
+
       function hoverDomain(at) {
         var dots = domainItems.map(function (li) { return li.querySelector('.mini-dot').getBoundingClientRect(); });
         var vertical = getComputedStyle(domainMini).gridTemplateColumns.split(' ').length === 1;
