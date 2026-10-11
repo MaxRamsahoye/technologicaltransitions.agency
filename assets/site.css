@@ -430,7 +430,7 @@ html.band-black:not([data-theme]) {
 .site-footer {
   --text-column: min(760px, 100vw - 480px);
   margin-top: 96px;
-  padding: 80px 24px 96px;
+  padding: 80px 24px 64px;
   background: var(--inverse-bg);
   color: var(--inverse-ink);
 }
@@ -454,7 +454,7 @@ html.band-black:not([data-theme]) {
   grid-template-columns: max-content max-content;
   justify-content: space-between;
   column-gap: 48px;
-  align-items: start;
+  align-items: center;
   width: var(--text-column);
   max-width: 100%;
   margin: 0 auto;
@@ -507,7 +507,7 @@ html.band-black:not([data-theme]) {
 }
 
 .footer-sitemap {
-  align-self: end;
+  align-self: center;
 }
 
 .site-footer .footer-sitemap .sitemap-heading {
