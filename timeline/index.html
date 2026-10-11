@@ -282,7 +282,7 @@
     .timeline::before {
       content: '';
       position: absolute;
-      top: 14px;
+      top: var(--tl-start, 14px);
       height: var(--tl-length, calc(100% - 28px));
       left: 5px;
       width: 1.5px;
@@ -301,7 +301,8 @@
     .era::before {
       content: '';
       position: absolute;
-      top: 9px;
+      /* centred on the era's title (offset measured by the script) */
+      top: calc(var(--dot-y, 15px) - 6px);
       left: -40px;
       width: 12px;
       height: 12px;
@@ -315,7 +316,7 @@
     .timeline::after {
       content: '';
       position: absolute;
-      top: 14px;
+      top: var(--tl-start, 14px);
       left: 5px;
       width: 1.5px;
       height: var(--tl-progress, 0px);
@@ -600,7 +601,7 @@
     <p class="page-intro">The historical developmental process discussed in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
     <nav class="mini-timeline" aria-label="Eras"><ol></ol></nav>
     <div class="mini-panel" aria-live="polite">
-      <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first abstract thought to the first artificial minds. Each began with a new technology stack: a set of tools and techniques that gave the groups adopting it a decisive advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade their cultural psychology &ndash; and, from the Agricultural Revolution onward, the state and the market, from proto-forms to modern institutions. The process is structurally driven, but since the rise of that complex, hierarchical civilisation it has been enacted at every stage by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
+      <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first abstract thought to the first artificial minds. Each began with a new technology stack: a set of tools and techniques that gave the groups adopting it a decisive advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade their cultural psychology &ndash; and, from the Agricultural Revolution onward, the state and the market, from proto-forms to modern institutions. The process is structurally driven, but since the rise of complex, hierarchical civilisation it has been enacted at every stage by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
     </div>
     </div>
 
@@ -1222,11 +1223,27 @@
       var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
       var RUN_ON = 24;
       var eras = allEras;
+      // each main era's node sits level with the middle of its title; events
+      // keep theirs level with the date
+      function dotY(era) {
+        return era.classList.contains('sub') ? 15 : (parseFloat(era.style.getPropertyValue('--dot-y')) || 15);
+      }
+      function placeDots() {
+        allEras.forEach(function (era) {
+          if (era.classList.contains('sub')) return;
+          var t = era.querySelector('.era-name').getBoundingClientRect();
+          var y = t.top + t.height / 2 - era.getBoundingClientRect().top;
+          era.style.setProperty('--dot-y', y.toFixed(2) + 'px');
+        });
+        list.style.setProperty('--tl-start', dotY(allEras[0]) + 'px');
+      }
+
       function track() {
         eras = allEras.filter(function (era) { return !era.hidden; });
         var line = window.innerHeight * 0.45;
-        var top = list.getBoundingClientRect().top + 14;
-        var lastDot = eras[eras.length - 1].getBoundingClientRect().top + 15;
+        placeDots();
+        var top = list.getBoundingClientRect().top + dotY(eras[0]);
+        var lastDot = eras[eras.length - 1].getBoundingClientRect().top + dotY(eras[eras.length - 1]);
         // the line runs on past the end of the last entry and ends in the arrow
         var end = eras[eras.length - 1].getBoundingClientRect().bottom + RUN_ON;
         list.style.setProperty('--tl-length', (end - top) + 'px');
@@ -1236,7 +1253,7 @@
         var atEnd = line >= end;
         var current = null;
         eras.forEach(function (era) {
-          var reached = era.getBoundingClientRect().top + 15 <= line;
+          var reached = era.getBoundingClientRect().top + dotY(era) <= line;
           era.classList.toggle('reached', reached);
           if (reached) current = era;
         });
@@ -1359,6 +1376,9 @@
       });
       mini.addEventListener('mouseleave', function () { hoverMini(-1); });
       mini.addEventListener('focusout', function () { hoverMini(-1); });
+
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { track(); });
+      new MutationObserver(function () { track(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
       window.addEventListener('scroll', track, { passive: true });
       window.addEventListener('resize', track);
