@@ -899,13 +899,16 @@
     /* design 2 (d): the first screen stays put, and the Overview is pulled up
        (by script) to follow straight on from the down arrow; it is hidden until
        the arrow is pressed or the page is scrolled, then fades in */
+    /* one after the other: the arrow fades out before the Overview fades in,
+       and the Overview fades out before the arrow comes back */
     html.design-2 .article-header .next-screen {
-      transition: opacity 0.6s ease;
+      transition: opacity 0.4s ease 0.4s;
     }
 
     html.design-2 body.overview-shown .article-header .next-screen {
       opacity: 0;
       pointer-events: none;
+      transition: opacity 0.4s ease;
     }
 
     html.design-2 .next-screen-overview {
@@ -918,12 +921,13 @@
       padding: 72px 0;
       opacity: 0;
       transform: translateY(24px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     html.design-2 body.overview-shown #overview {
       opacity: 1;
       transform: none;
+      transition: opacity 0.9s ease 0.4s, transform 0.9s ease 0.4s;
     }
 
     @media (max-width: 600px) {
