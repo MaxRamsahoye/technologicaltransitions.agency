@@ -994,14 +994,26 @@
     }
 
     /* author, title and subtitle on the left; sitemap on the right */
-    /* centred: equal space on either side of the footer content */
+    /* the footer spans the central text column exactly: the left block starts
+       at its left edge and the menu ends at its right edge (the column is 760px,
+       narrower as the window closes in, 660px at 1180px and below) */
+    .site-footer {
+      --text-column: min(760px, 100vw - 480px);
+    }
+
+    @media (max-width: 1180px) {
+      .site-footer {
+        --text-column: 660px;
+      }
+    }
+
     .footer-inner {
-      --line-gap: 80px;
       display: grid;
       grid-template-columns: max-content max-content;
-      column-gap: var(--line-gap);
+      justify-content: space-between;
+      column-gap: 48px;
       align-items: start;
-      width: max-content;
+      width: var(--text-column);
       max-width: 100%;
       margin: 0 auto;
     }
@@ -1096,10 +1108,7 @@
 
     @media (max-width: 1000px) {
       .footer-inner {
-        grid-template-columns: minmax(0, 760px);
-        justify-content: center;
-        width: auto;
-        margin: 0;
+        grid-template-columns: minmax(0, 1fr);
       }
 
       .footer-inner {
