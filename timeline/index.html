@@ -2227,6 +2227,22 @@
           maybeSnap();
         });
       });
+      // the domains' events start open
+      aspectToggles.forEach(function (b) {
+        setAspectGroup(b, true);
+        Array.prototype.forEach.call(b.nextElementSibling.children, function (c) { c.classList.remove('unfolding'); });
+      });
+      if (aspectToggles.length) syncDomainAll();
+      function refreshTails() {
+        Array.prototype.forEach.call(aspectsEl.querySelectorAll('.aspect-entry:last-child'), function (e) {
+          var ol = e.querySelector('.aspect-events');
+          if (ol && !ol.hidden) setTail(e);
+        });
+      }
+      // once fonts have loaded and the page has settled, measure again
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshTails);
+      window.addEventListener('load', refreshTails);
+
       domainAllBtn.addEventListener('click', function () {
         var open = domainAllBtn.getAttribute('aria-expanded') !== 'true';
         aspectToggles.forEach(function (b) { setAspectGroup(b, open); });
@@ -2333,7 +2349,7 @@
         document.body.classList.toggle('view-domains', view === 'domains');
         tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
         var onDomain = location.hash.indexOf('#domain') === 0;
-        if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); trackDomainSide(); }
+        if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); refreshTails(); trackDomainSide(); }
         else if (onDomain) history.replaceState(null, '', location.pathname + location.search);
         track();
       }
