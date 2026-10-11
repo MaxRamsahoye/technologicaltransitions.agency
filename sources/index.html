@@ -21,7 +21,8 @@
       if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
       if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
       if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
-      var band = localStorage.getItem('band');
+      // the band colour (b): midnight blue by default, or sepia or black
+      var band = localStorage.getItem('bandColour') || 'midnight';
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>

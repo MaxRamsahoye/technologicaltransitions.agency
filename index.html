@@ -39,12 +39,13 @@
         if (localStorage.getItem('colour') === '1') document.documentElement.classList.add('colour');
         // ET Bembo headings are the default; f switches to Inter and back
         if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
-        var band = localStorage.getItem('band');
+        // the band colour (b): midnight blue by default, or sepia or black
+        var band = localStorage.getItem('bandColour') || 'midnight';
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
         // design 2 is the default; d switches to design 1 and back
         if (localStorage.getItem('design') !== '1') document.documentElement.classList.add('design-2');
-        // the Overview's dividing lines (h) are the default; h switches to the shaded band
-        if (localStorage.getItem('overview') !== 'band') document.documentElement.classList.add('overview-lines');
+        // the Overview's shaded band is the default; h switches to dividing lines
+        if (localStorage.getItem('overviewStyle') === 'lines') document.documentElement.classList.add('overview-lines');
       } catch (e) {}
     })();
   </script>
@@ -2184,14 +2185,14 @@
       });
 
       // b cycles the Overview and footer colours (white theme); c toggles the blue accent.
-      var BANDS = ['', 'midnight', 'black'];  // '' is the light sepia default
+      var BANDS = ['', 'midnight', 'black'];  // '' is light sepia; midnight is the default
 
       function cycleBand() {
         var current = BANDS.filter(function (b) { return b && root.classList.contains('band-' + b); })[0] || '';
         var next = BANDS[(BANDS.indexOf(current) + 1) % BANDS.length];
         BANDS.forEach(function (b) { if (b) root.classList.remove('band-' + b); });
         if (next) root.classList.add('band-' + next);
-        try { localStorage.setItem('band', next); } catch (err) {}
+        try { localStorage.setItem('bandColour', next || 'sepia'); } catch (err) {}
       }
 
       function toggleColour() {
@@ -2217,7 +2218,7 @@
       function toggleOverviewLines() {
         var on = root.classList.toggle('overview-lines');
         if (window.placeOverview) window.placeOverview();
-        try { localStorage.setItem('overview', on ? 'lines' : 'band'); } catch (err) {}
+        try { localStorage.setItem('overviewStyle', on ? 'lines' : 'band'); } catch (err) {}
       }
 
 
