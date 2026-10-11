@@ -362,6 +362,43 @@
       white-space: nowrap;
     }
 
+    /* four aspects of each era: two by two, stacked on phones */
+    .era-aspects {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px 40px;
+      margin: 26px 0 0;
+    }
+
+    .era-aspects dt {
+      margin: 0 0 6px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    html.serif-headings .era-aspects dt {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.3px currentColor;
+    }
+
+    .era-aspects dd {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 700px) {
+      .era-aspects {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .era-date {
       margin: 0 0 6px;
       font-family: var(--mono-caps);
@@ -452,6 +489,24 @@
         <h2 class="era-name">Cognitive Revolution</h2>
         <p class="era-stack">Language, shared myth, symbolic thought, composite tools</p>
         <p class="era-note">Around seventy thousand years ago, <em>Homo sapiens</em> acquired the capacity for complex language and shared myth. Stories of spirits, kin and tribe let people cooperate flexibly in groups beyond the Dunbar number and pass knowledge down the generations. For some sixty thousand years this was the basis of the nomadic hunter-gatherer way of life: small, mobile and broadly egalitarian bands living off the abundance of wild food.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>Coordinated hunting, ambush and composite tools let larger bands take bigger game, and outcompete, displace or absorb other groups and human species.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>Shared myth, ritual and kinship stories bind groups beyond the Dunbar number; animist worldviews, and egalitarian norms enforced by gossip, ridicule and sharing.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>None. Authority is informal and situational &ndash; held by elders and the skilled, and checked by the group.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>None. Gift, reciprocity and sharing within and between bands; perishable food is shared rather than stored.</dd>
+          </div>
+        </dl>
       </li>
 
       <li class="era" id="agricultural-revolution">
@@ -459,6 +514,24 @@
         <h2 class="era-name"><a href="../lexicon/#agricultural-revolution">Agricultural Revolution</a></h2>
         <p class="era-stack">Domestication of plants and animals, irrigation, food storage, the plough</p>
         <p class="era-note">Between roughly twelve and four thousand years ago, in several regions independently, the domestication of plants and animals turned nomadic hunter-gatherer tribes into settled agrarian civilisations. Geographically-bounded food production created a storable surplus, and with it private property, its defence &ndash; city-states, law, police and armies &ndash; and its exchange &ndash; trade, currency, merchants and markets: the state and the market in proto-form. Socio-economic class, inequality and poverty followed, along with a cultural psychology of competition, domination and status-seeking. The structural formation it produced &ndash; complex hierarchy, centralised power and a division of labour &ndash; is the one we still live within.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>Surplus feeds specialists, soldiers among them; denser farming societies outnumber and displace foragers. Fortification, bronze and iron, chariots and standing armies follow.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>Organised religion, divine kingship and patriarchy; property, status and accumulation become virtues, and hierarchy and obedience are internalised.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>From chiefdoms to city-states, kingdoms and empires: taxation, law, writing for administration, and police and armies to defend property.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Trade, currency, merchants and markets grow to exchange the surplus, alongside debt, land ownership and slavery &ndash; co-evolving with the state.</dd>
+          </div>
+        </dl>
         <button class="era-toggle" type="button" aria-expanded="false" data-group="1"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">7 events</span></button>
       </li>
 
@@ -509,6 +582,24 @@
         <h2 class="era-name">Scientific Revolution</h2>
         <p class="era-stack">The telescope, the microscope, the pendulum clock, the printing press, mathematics and the experimental method</p>
         <p class="era-note">Between Copernicus and Newton, observation, experiment and mathematics replaced inherited authority as the way to know nature. Knowledge itself became a technology: cumulative, testable and shared through print and the new scientific societies. It changed the superstructure first &ndash; a mechanistic, increasingly secular picture of the world &ndash; and laid the intellectual groundwork for both the machines of the industrial tech stack and the reforming ideas of the Enlightenment.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>Gunpowder, ballistics, navigation and cartography give European states and navies a decisive edge &ndash; a military revolution that underwrote colonial expansion.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>A mechanistic, increasingly secular worldview: authority shifts from scripture and tradition to reason, evidence and the individual knower.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>Centralising states with standing armies and fiscal-military bureaucracies, patronising science as a source of power &ndash; the Royal Society, the Acad&eacute;mie des Sciences.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Chartered trading companies, joint-stock finance and early banking; precise measurement and navigation open up global trade.</dd>
+          </div>
+        </dl>
         <button class="era-toggle" type="button" aria-expanded="false" data-group="2"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">1 event</span></button>
       </li>
 
@@ -523,6 +614,24 @@
         <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
         <p class="era-stack">The steam engine, coal, mechanised textile production, the factory</p>
         <p class="era-note">Beginning in Britain, the steam engine and coal broke the limits of human and animal muscle. Production moved from the farm and workshop to the mechanised, fossil-fuelled factory; populations moved from the countryside to the cities; and wage labour became the dominant form of work. The states that industrialised first gained an overwhelming economic and military advantage, and the pressure on every rival to follow &ndash; or be colonised &ndash; spread industrial capitalism across the world.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>Steam-powered industry, railways and gunboats give the industrialising powers overwhelming advantage; every rival must industrialise or be colonised.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>Clock-time discipline, the work ethic, individualism and faith in progress &ndash; alongside the dislocation and alienation of factory life.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>The nation-state, mass schooling, bureaucracy and policing to keep industrial order; the vote extended as workers organise.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Industrial capitalism: wage labour, factories, joint-stock companies and global commodity markets on the gold standard.</dd>
+          </div>
+        </dl>
       </li>
 
       <li class="era" id="technological-revolution">
@@ -530,6 +639,24 @@
         <h2 class="era-name">Technological Revolution</h2>
         <p class="era-stack">Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone</p>
         <p class="era-note">Often called the Second Industrial Revolution. Electricity, steel, chemistry and the internal combustion engine brought mass production, national grids and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity: within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>Steel navies, machine guns, chemicals and the combustion engine industrialise war; imperial competition ends in two world wars.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>Mass society: mass media, mass consumption, nationalism and the great ideologies &ndash; liberalism, socialism and fascism.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>The administrative state grows &ndash; regulation, early welfare and, in wartime, the total mobilisation of economy and society.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Corporate capitalism: giant firms, trusts and cartels, mass production and advertising, and the financial crises that culminate in the Great Depression.</dd>
+          </div>
+        </dl>
         <button class="era-toggle" type="button" aria-expanded="false" data-group="4"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">3 events</span></button>
       </li>
 
@@ -556,6 +683,24 @@
         <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
         <p class="era-stack">The transistor, the computer, the internet, the smartphone, social media</p>
         <p class="era-note">The transistor, the computer and the network moved information to the centre of economic and social life. Much of the founding technology was paid for by the military competition of the Second World War and the Cold War, before being commercialised in the personal computer, the internet, the smartphone and social media. The result was a globally connected information society &ndash; and the data, compute and infrastructure on which the next transition would be built.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>The military-industrial complex: computing, the internet and satellites born of war and Cold War funding; nuclear deterrence, then information and cyber warfare.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>An information society: consumerism, globalised culture and the networked self; social media&rsquo;s attention economy and polarisation.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>The welfare state, then its neoliberal retreat; the security and surveillance state; global institutions &ndash; the UN, the IMF, the World Bank.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Global finance and supply chains; data as an asset; platforms that concentrate attention, wealth and power in a handful of firms.</dd>
+          </div>
+        </dl>
         <button class="era-toggle" type="button" aria-expanded="false" data-group="5"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">10 events</span></button>
       </li>
 
@@ -624,6 +769,24 @@
         <h2 class="era-name"><a href="../lexicon/#intelligence-revolution">Intelligence Revolution</a></h2>
         <p class="era-stack">Machine learning, large-scale compute, artificial intelligence</p>
         <p class="era-note">The fourth, and likely final, major technological transition, now under way. Machine learning at the scale of today&rsquo;s compute is producing systems that can do an ever wider range of cognitive work. It is driven by the same structural dynamic as every transition before it &ndash; military-economic adaptation, competitive pressures, multi-polar traps and arms races &ndash; but as an exponential technology its negative externalities could be magnitudes more powerful and catastrophic, potentially even existential. How it is developed, deployed and diffused remains a decision of the power-elite.</p>
+        <dl class="era-aspects">
+          <div>
+            <dt>Military-Economic Adaptation</dt>
+            <dd>An AI race between the United States and China, and between the labs; autonomous weapons, cyber operations and compute as strategic assets &ndash; a multi-polar trap.</dd>
+          </div>
+          <div>
+            <dt>Cultural-Psychological Adaptation</dt>
+            <dd>Cognitive work is automated; persuasion and synthetic media at scale; open questions of meaning, agency and dependence on machines.</dd>
+          </div>
+          <div>
+            <dt>The State</dt>
+            <dd>AI framed as national security &ndash; Manhattan Project proposals, export controls and industrial policy &ndash; while the capacity to govern it lags behind.</dd>
+          </div>
+          <div>
+            <dt>The Market</dt>
+            <dd>Capital concentrates in compute, data centres and a few firms; the possible displacement of labour and further concentration of wealth.</dd>
+          </div>
+        </dl>
         <button class="era-toggle" type="button" aria-expanded="false" data-group="6"><span class="era-toggle-sign">+</span> <span class="era-toggle-label">8 events</span></button>
       </li>
 
