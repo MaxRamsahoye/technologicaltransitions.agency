@@ -362,12 +362,12 @@
       white-space: nowrap;
     }
 
-    /* four aspects of each era: two by two, stacked on phones */
+    /* four aspects of each era, one under another */
     .era-aspects {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px 40px;
-      margin: 26px 0 0;
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+      margin: 44px 0 40px;
     }
 
     .era-aspects dt {
@@ -391,12 +391,6 @@
       margin: 0;
       font-size: 19px;
       line-height: 1.35;
-    }
-
-    @media (max-width: 700px) {
-      .era-aspects {
-        grid-template-columns: 1fr;
-      }
     }
 
     .era-date {
@@ -449,8 +443,30 @@
       line-height: 1.3;
     }
 
+    /* past the last entry the line runs on into the future, ending in an arrow */
+    .timeline-arrow {
+      position: absolute;
+      top: var(--tl-arrow-top, 100%);
+      left: 0;
+      width: 12px;
+      height: 12px;
+      list-style: none;
+      color: color-mix(in srgb, currentColor 45%, transparent);
+      transition: color 0.3s ease;
+    }
+
+    .timeline-arrow.reached {
+      color: currentColor;
+    }
+
+    .timeline-arrow svg {
+      display: block;
+      width: 12px;
+      height: 12px;
+    }
+
     .timeline-note {
-      margin: 72px 0 0;
+      margin: 128px 0 0;
       font-size: 18px;
       line-height: 1.4;
       color: var(--muted);
@@ -825,6 +841,8 @@
         <h3 class="era-name">The Hugging Face Incident</h3>
         <p class="era-note">Hugging Face discloses that an autonomous AI agent broke into its internal systems; OpenAI later acknowledges the agent as its own, run during a cyber-security evaluation &ndash; among the first known intrusions carried out by an AI agent.</p>
       </li>
+
+      <li class="timeline-arrow" aria-hidden="true"><svg viewBox="0 0 12 12" fill="currentColor"><polygon points="6,11 11.5,3 0.5,3"/></svg></li>
     </ol>
 
     <p class="timeline-note">Dates are approximate and vary across regions; each revolution spread unevenly from where it began.</p>
@@ -837,14 +855,20 @@
     (function () {
       var list = document.querySelector('.timeline');
       var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
+      var RUN_ON = 24;
       var eras = allEras;
       function track() {
         eras = allEras.filter(function (era) { return !era.hidden; });
         var line = window.innerHeight * 0.45;
         var top = list.getBoundingClientRect().top + 14;
         var lastDot = eras[eras.length - 1].getBoundingClientRect().top + 15;
-        list.style.setProperty('--tl-length', (lastDot - top) + 'px');
-        list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, lastDot) - top) + 'px');
+        // the line runs on past the end of the last entry and ends in the arrow
+        var end = eras[eras.length - 1].getBoundingClientRect().bottom + RUN_ON;
+        list.style.setProperty('--tl-length', (end - top) + 'px');
+        list.style.setProperty('--tl-arrow-top', (end - list.getBoundingClientRect().top - 2) + 'px');
+        list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, end) - top) + 'px');
+        var arrow = list.querySelector('.timeline-arrow');
+        var atEnd = line >= end;
         var current = null;
         eras.forEach(function (era) {
           var reached = era.getBoundingClientRect().top + 15 <= line;
@@ -855,8 +879,10 @@
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
           current = eras[eras.length - 1];
           current.classList.add('reached');
-          list.style.setProperty('--tl-progress', (lastDot - top) + 'px');
+          list.style.setProperty('--tl-progress', (end - top) + 'px');
+          atEnd = true;
         }
+        arrow.classList.toggle('reached', atEnd);
         eras.forEach(function (era) { era.classList.toggle('current', era === current); });
       }
       // open and close each era's events
