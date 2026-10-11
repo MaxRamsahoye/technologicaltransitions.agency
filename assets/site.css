@@ -19,6 +19,14 @@
 
 @font-face {
   font-family: 'ET Bembo';
+  src: url('../fonts/et-book-bold-line-figures.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ET Bembo';
   src: url('../fonts/ETBembo-DisplayItalic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
@@ -284,7 +292,7 @@ html.serif-headings .page-title,
 html.serif-headings .term dt,
 html.serif-headings .menu-title {
   font-family: var(--serif);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
