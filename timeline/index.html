@@ -734,7 +734,8 @@
     }
 
     .timeline-note {
-      margin: 96px 0 0;
+      margin: 128px 0 0;
+      padding-bottom: 32px;   /* padding, so it adds to the footer's margin */
       font-size: 18px;
       line-height: 1.4;
       color: var(--muted);
@@ -1419,8 +1420,8 @@
     (function () {
       var list = document.querySelector('.timeline');
       var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
-      var RUN_ON = 24;
-      var ARROW_GAP = 6;   // from the bottom of the "+ events" text to the arrowhead
+      var RUN_ON = 36;
+      var ARROW_GAP = 20;   // from the bottom of the "+ events" text to the arrowhead
       var eras = allEras;
       // each main era's node sits level with the middle of its title; events
       // keep theirs level with the date
