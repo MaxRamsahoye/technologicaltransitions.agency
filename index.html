@@ -882,8 +882,7 @@
       z-index: -1;
     }
 
-    /* h: the Overview in the page's own colours, set off by a short line above
-       and below instead of a shaded band */
+    /* h: the Overview in the page's own colours instead of a shaded band */
     html.overview-lines #overview {
       --canvas-bg: var(--frame-bg);
       --canvas-ink: var(--frame-ink);
@@ -891,27 +890,10 @@
       color: var(--frame-ink);
     }
 
+    /* no band, and no dividing lines: the contents band beneath sets it off */
     html.overview-lines #overview::before,
     html.overview-lines #overview::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 96px;
-      height: 1.5px;
-      transform: none;
-      background: currentColor;
-      z-index: 0;
-    }
-
-    html.overview-lines #overview::before {
-      top: 0;
-      bottom: auto;
-    }
-
-    /* the bottom line is nudged (by the script) onto the same sub-pixel grid
-       as the top one, so the two render identically */
-    html.overview-lines #overview::after {
-      bottom: var(--ov-line-shift, 0px);
+      display: none;
     }
 
     html.colour.overview-lines #overview a[href^="http"] {
@@ -2219,22 +2201,8 @@
       function toggleOverviewLines() {
         var on = root.classList.toggle('overview-lines');
         try { localStorage.setItem('overview', on ? 'lines' : 'band'); } catch (err) {}
-        alignOverviewLines();
       }
 
-      // put the bottom line on the same device-pixel offset as the top one
-      var overviewSect = document.getElementById('overview');
-      function alignOverviewLines() {
-        overviewSect.style.setProperty('--ov-line-shift', '0px');
-        var r = overviewSect.getBoundingClientRect();
-        var dpr = window.devicePixelRatio || 1;
-        var gap = ((r.bottom - 1.5 - r.top) * dpr) % 1;
-        overviewSect.style.setProperty('--ov-line-shift', (gap / dpr).toFixed(3) + 'px');
-      }
-      window.addEventListener('resize', alignOverviewLines);
-      new MutationObserver(function () { requestAnimationFrame(alignOverviewLines); }).observe(root, { attributes: true, attributeFilter: ['class'] });
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignOverviewLines);
-      alignOverviewLines();
 
       var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign, f: toggleSerifHeadings, h: toggleOverviewLines };
 
