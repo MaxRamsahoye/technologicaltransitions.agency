@@ -151,6 +151,51 @@
       transform: scale(1.5);
     }
 
+    /* indented events within an era: a smaller dot, joined to the line */
+    .era.sub {
+      padding-left: 36px;
+      padding-bottom: 44px;
+    }
+
+    .era.sub::before {
+      top: 11px;
+      left: -20px;
+      width: 8px;
+      height: 8px;
+    }
+
+    .era.sub::after {
+      content: '';
+      position: absolute;
+      top: 14.25px;
+      left: -34px;
+      width: 14px;
+      height: 1.5px;
+      background: color-mix(in srgb, currentColor 22%, transparent);
+    }
+
+    .era.sub.reached::after {
+      background: currentColor;
+    }
+
+    .era.sub .era-date {
+      font-size: 12px;
+    }
+
+    .era.sub .era-name,
+    html.serif-headings .era.sub .era-name {
+      font-size: 21px;
+    }
+
+    .era.sub .era-note {
+      font-size: 19px;
+    }
+
+    /* the last indented event before the next era keeps the full gap */
+    .era.sub + .era:not(.sub) {
+      margin-top: 24px;
+    }
+
     .era-date {
       margin: 0 0 6px;
       font-family: var(--mono-caps);
@@ -242,6 +287,36 @@
         <p class="era-note">From nomadic hunter-gatherer tribes to settled agrarian civilisations: storable surplus, private property, the state and the market, class and inequality.</p>
       </li>
 
+      <li class="era sub">
+        <p class="era-date">c. 800 &ndash; 200 BCE</p>
+        <h3 class="era-name">The Axial Age</h3>
+        <p class="era-note">The parallel rise of the great philosophical and religious traditions &ndash; Confucianism, Buddhism, Greek philosophy, the Hebrew prophets &ndash; across China, India, Persia, the Levant and Greece.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">c. 800 &ndash; 1400</p>
+        <h3 class="era-name">Feudalism</h3>
+        <p class="era-note">In medieval Europe, land held in exchange for service and protection: a hierarchy of lords, vassals and serfs resting on the agrarian surplus.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">c. 1300 &ndash; 1600</p>
+        <h3 class="era-name">The Renaissance</h3>
+        <p class="era-note">A European revival of classical learning, art and inquiry, carried far and fast by the printing press.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">c. 1500 &ndash; 1750</p>
+        <h3 class="era-name">Mercantilism</h3>
+        <p class="era-note">National wealth pursued as bullion and trade surplus, through colonial expansion and chartered trading companies.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">c. 1680 &ndash; 1800</p>
+        <h3 class="era-name">The Enlightenment</h3>
+        <p class="era-note">Reason, science and individual rights set against tradition and absolutism &ndash; the intellectual ground of the industrial and democratic revolutions.</p>
+      </li>
+
       <li class="era">
         <p class="era-date">c. 1760 &ndash; 1840</p>
         <h2 class="era-name"><a href="../lexicon/#industrial-revolution">Industrial Revolution</a></h2>
@@ -256,11 +331,47 @@
         <p class="era-note">Often called the Second Industrial Revolution: mass production, national grids and networks, and the rise of the large corporation.</p>
       </li>
 
+      <li class="era sub">
+        <p class="era-date">1914 &ndash; 1918</p>
+        <h3 class="era-name">World War I</h3>
+        <p class="era-note">The first industrialised total war: machine guns, artillery, chemical weapons and mass conscription.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">1929 &ndash; c. 1939</p>
+        <h3 class="era-name">The Great Depression</h3>
+        <p class="era-note">A worldwide economic collapse that unsettled liberal democracies and fed the rise of fascism.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">1939 &ndash; 1945</p>
+        <h3 class="era-name">World War II</h3>
+        <p class="era-note">Total war on a global scale, ended by the first use of nuclear weapons.</p>
+      </li>
+
       <li class="era">
         <p class="era-date">c. 1950 &ndash; 2010</p>
         <h2 class="era-name"><a href="../lexicon/#digital-revolution">Digital Revolution</a></h2>
         <p class="era-stack">The transistor, the computer, the internet, the smartphone</p>
         <p class="era-note">From industrial to information society: computing and networked communication across economic and social life.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">1945 onward</p>
+        <h3 class="era-name">The Long Peace</h3>
+        <p class="era-note">The historian John Lewis Gaddis&rsquo;s term for the absence of war between the great powers since 1945. It is a peace only in a narrow sense: held up by nuclear deterrence and a series of near misses, and coinciding with proxy wars, wars of decolonisation and civil wars that were anything but peaceful for those who lived through them.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">1947 &ndash; 1991</p>
+        <h3 class="era-name">The Cold War</h3>
+        <p class="era-note">The rivalry between the United States and the Soviet Union &ndash; an arms race, a space race and proxy wars &ndash; whose military funding drove early computing and the internet.</p>
+      </li>
+
+      <li class="era sub">
+        <p class="era-date">c. 1950 onward</p>
+        <h3 class="era-name">The Great Acceleration</h3>
+        <p class="era-note">The sharp, simultaneous rise since the mid-twentieth century in population, energy use, production and consumption, and in their impact on the Earth system.</p>
       </li>
 
       <li class="era">
