@@ -385,8 +385,14 @@
       --tl-fill: currentColor;
     }
 
+    .aspects {
+      --tl-fill: currentColor;
+    }
+
     html.band-midnight:not([data-theme]) .timeline,
-    html.band-black:not([data-theme]) .timeline {
+    html.band-black:not([data-theme]) .timeline,
+    html.band-midnight:not([data-theme]) .aspects,
+    html.band-black:not([data-theme]) .aspects {
       --tl-fill: var(--band-bg);
     }
 
@@ -759,7 +765,8 @@
       left: calc(5px - var(--tl-gap));
       width: 1.5px;
       height: 100%;
-      background: color-mix(in srgb, currentColor 22%, transparent);
+      /* filled down to the reading position (--fill, set by the script) */
+      background: linear-gradient(to bottom, var(--tl-fill) var(--fill, 0px), color-mix(in srgb, currentColor 22%, transparent) var(--fill, 0px));
     }
 
     /* the last era has no line on below it, unless its events are open:
@@ -784,6 +791,16 @@
       border: 1.5px solid currentColor;
       border-radius: 50%;
       background: var(--canvas-bg);
+      transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .aspect-entry.reached::after {
+      background: var(--tl-fill);
+      border-color: var(--tl-fill);
+    }
+
+    .aspect-entry.current::after {
+      transform: scale(1.5);
     }
 
     .aspect-entry .era-name {
@@ -2234,6 +2251,7 @@
           setAspectGroup(b, b.getAttribute('aria-expanded') !== 'true');
           syncDomainAll();
           trackDomainSide();
+          trackDomainLines();
           maybeSnap();
         });
       });
@@ -2258,6 +2276,7 @@
         aspectToggles.forEach(function (b) { setAspectGroup(b, open); });
         syncDomainAll();
         trackDomainSide();
+        trackDomainLines();
         maybeSnap();
       });
 
@@ -2292,6 +2311,34 @@
           li.classList.toggle('current', i === at);
         });
       }
+      // the domain timelines fill as they are read, like the era timeline:
+      // each line down to the reading position, each dot as it is passed,
+      // and the one being read swells
+      function trackDomainLines() {
+        if (!document.body.classList.contains('view-domains')) return;
+        var line = window.innerHeight * 0.45;
+        var current = null;
+        Array.prototype.forEach.call(aspectsEl.querySelectorAll('.aspect-entry'), function (entry) {
+          var cs = getComputedStyle(entry, '::before');
+          var dotY = entry.getBoundingClientRect().top + parseFloat(cs.top);
+          var h = cs.display === 'none' ? 0 : parseFloat(cs.height) || 0;
+          entry.style.setProperty('--fill', Math.max(0, Math.min(h, line - dotY)) + 'px');
+          var reached = dotY <= line;
+          entry.classList.toggle('reached', reached);
+          if (reached) current = entry;
+          var ol = entry.querySelector('.aspect-events');
+          if (ol && !ol.hidden) Array.prototype.forEach.call(ol.children, function (ev) {
+            var r = ev.getBoundingClientRect().top + 15 <= line;
+            ev.classList.toggle('reached', r);
+            if (r) current = ev;
+          });
+        });
+        Array.prototype.forEach.call(aspectsEl.querySelectorAll('.aspect-entry, .aspect-events .era'), function (el) {
+          el.classList.toggle('current', el === current);
+        });
+      }
+      window.addEventListener('scroll', trackDomainLines, { passive: true });
+      window.addEventListener('resize', trackDomainLines);
       window.addEventListener('scroll', trackDomainSide, { passive: true });
       window.addEventListener('resize', trackDomainSide);
 
@@ -2359,7 +2406,7 @@
         document.body.classList.toggle('view-domains', view === 'domains');
         tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
         var onDomain = location.hash.indexOf('#domain') === 0;
-        if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); refreshTails(); trackDomainSide(); }
+        if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); refreshTails(); trackDomainSide(); trackDomainLines(); }
         else if (onDomain) history.replaceState(null, '', location.pathname + location.search);
         track();
       }
