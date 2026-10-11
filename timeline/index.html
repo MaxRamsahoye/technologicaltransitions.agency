@@ -545,7 +545,7 @@
       content: '';
       position: absolute;
       top: var(--side-start, 12px);
-      left: 5.25px;
+      left: 3.25px;
       width: 1.5px;
     }
 
@@ -560,12 +560,14 @@
       transition: height 0.3s ease;
     }
 
+    /* whole-pixel rows, so every dot lands on the pixel grid alike */
     .mini-side a {
       position: relative;
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 5px 0;
+      height: 26px;
+      line-height: 26px;
       font-family: var(--sans);
       font-size: 14px;
       color: var(--muted);
@@ -582,17 +584,18 @@
       position: relative;
       z-index: 1;
       flex: none;
-      width: 12px;
-      height: 12px;
+      box-sizing: border-box;
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid var(--canvas-ink);
       border-radius: 50%;
       background: var(--canvas-bg);
-      box-shadow: inset 0 0 0 1.5px var(--canvas-ink);
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .mini-side li.reached .mini-side-dot {
       background: var(--tl-fill);
-      box-shadow: inset 0 0 0 1.5px var(--tl-fill);
+      border-color: var(--tl-fill);
     }
 
     /* only where the left margin has room for it */
@@ -1410,6 +1413,7 @@
       var list = document.querySelector('.timeline');
       var allEras = Array.prototype.slice.call(list.querySelectorAll('.era'));
       var RUN_ON = 24;
+      var ARROW_TIP = 12.5;   // from the top of the arrowhead to its tip, less the 1px overlap
       var eras = allEras;
       // each main era's node sits level with the middle of its title; events
       // keep theirs level with the date
@@ -1433,7 +1437,18 @@
         var top = list.getBoundingClientRect().top + dotY(eras[0]);
         var lastDot = eras[eras.length - 1].getBoundingClientRect().top + dotY(eras[eras.length - 1]);
         // the line runs on past the end of the last entry and ends in the arrow
-        var end = eras[eras.length - 1].getBoundingClientRect().bottom + RUN_ON;
+        var lastEra = eras[eras.length - 1];
+        var end = lastEra.getBoundingClientRect().bottom + RUN_ON;
+        // with the last era's events folded away, the arrow's tip lines up
+        // with the bottom of its "+ events" text instead
+        var lastToggle = lastEra.querySelector('.era-toggle');
+        if (lastToggle && lastToggle.getAttribute('aria-expanded') !== 'true') {
+          // the label is in capitals: their foot sits about a third of an em
+          // above the bottom of the text box
+          var label = lastToggle.querySelector('.era-toggle-label');
+          var capFoot = label.getBoundingClientRect().bottom - parseFloat(getComputedStyle(label).fontSize) * 0.34;
+          end = capFoot - ARROW_TIP;
+        }
         list.style.setProperty('--tl-length', (end - top) + 'px');
         list.style.setProperty('--tl-arrow-top', (end - list.getBoundingClientRect().top - 1) + 'px');
         list.style.setProperty('--tl-progress', Math.max(0, Math.min(line, end) - top) + 'px');
