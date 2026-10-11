@@ -68,7 +68,7 @@
     if (!reloadKey || document.body.classList.contains('page-leaving')) return;
     e.preventDefault();
     document.body.classList.add('page-leaving');
-    setTimeout(function () { location.reload(); }, 320);
+    setTimeout(function () { location.reload(); }, 210);
   });
 
   /* ---------- find bar ---------- */

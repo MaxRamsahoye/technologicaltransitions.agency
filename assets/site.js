@@ -4,7 +4,7 @@
 (function () {
   var THEMES = ['light', 'dark'];  // sepia and midnight hidden for now
   var DARK = ['dark', 'midnight'];
-  var NAV_DELAY = 320;
+  var NAV_DELAY = 210;
   var root = document.documentElement;
   var base = document.currentScript.getAttribute('data-base') || '../';
 
@@ -40,7 +40,7 @@
     var g = audioCtx.ttMaster.gain, now = audioCtx.currentTime;
     g.cancelScheduledValues(now);
     g.setValueAtTime(g.value, now);
-    if (document.body.classList.contains('page-leaving')) g.linearRampToValueAtTime(0, now + 0.3);
+    if (document.body.classList.contains('page-leaving')) g.linearRampToValueAtTime(0, now + 0.2);
     else g.linearRampToValueAtTime(1, now + 0.05);
   }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
