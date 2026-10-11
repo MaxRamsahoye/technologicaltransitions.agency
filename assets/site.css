@@ -71,8 +71,8 @@ html[data-theme="dark"] {
   --canvas-ink: #ffffff;
   --muted: #8c8c8c;
   --track-tint: rgba(255, 255, 255, 0.15);
-  --band-bg: #090a0b;
-  --inverse-bg: #090a0b;
+  --band-bg: #16181b;
+  --inverse-bg: #16181b;
   --inverse-ink: #ffffff;
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
