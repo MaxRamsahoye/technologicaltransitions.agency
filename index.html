@@ -40,7 +40,8 @@
         if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
         // design 2 is the default; d switches to design 1 and back
         if (localStorage.getItem('design') !== '1') document.documentElement.classList.add('design-2');
-        if (localStorage.getItem('overview') === 'lines') document.documentElement.classList.add('overview-lines');
+        // the Overview's dividing lines (h) are the default; h switches to the shaded band
+        if (localStorage.getItem('overview') !== 'band') document.documentElement.classList.add('overview-lines');
       } catch (e) {}
     })();
   </script>
@@ -836,8 +837,10 @@
       bottom: auto;
     }
 
+    /* the bottom line is nudged (by the script) onto the same sub-pixel grid
+       as the top one, so the two render identically */
     html.overview-lines #overview::after {
-      bottom: 0;
+      bottom: var(--ov-line-shift, 0px);
     }
 
     html.colour.overview-lines #overview a[href^="http"] {
@@ -2133,7 +2136,22 @@
       function toggleOverviewLines() {
         var on = root.classList.toggle('overview-lines');
         try { localStorage.setItem('overview', on ? 'lines' : 'band'); } catch (err) {}
+        alignOverviewLines();
       }
+
+      // put the bottom line on the same device-pixel offset as the top one
+      var overviewSect = document.getElementById('overview');
+      function alignOverviewLines() {
+        overviewSect.style.setProperty('--ov-line-shift', '0px');
+        var r = overviewSect.getBoundingClientRect();
+        var dpr = window.devicePixelRatio || 1;
+        var gap = ((r.bottom - 1.5 - r.top) * dpr) % 1;
+        overviewSect.style.setProperty('--ov-line-shift', (gap / dpr).toFixed(3) + 'px');
+      }
+      window.addEventListener('resize', alignOverviewLines);
+      new MutationObserver(function () { requestAnimationFrame(alignOverviewLines); }).observe(root, { attributes: true, attributeFilter: ['class'] });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignOverviewLines);
+      alignOverviewLines();
 
       var SHORTCUTS = { b: cycleBand, c: toggleColour, d: toggleDesign, f: toggleSerifHeadings, h: toggleOverviewLines };
 
