@@ -202,11 +202,21 @@
       opacity: 1;
     }
 
-    .mini-overview,
+    .mini-overview-text,
     .mini-desc-text {
       margin: 0;
       font-size: 20px;
       line-height: 1.35;
+    }
+
+    /* the count of events (or of transitions and events) under each text */
+    .mini-count {
+      margin: 18px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
     }
 
     .mini-desc-title {
@@ -588,7 +598,7 @@
     <p class="page-intro">The historical developmental process discussed in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
     <nav class="mini-timeline" aria-label="Eras"><ol></ol></nav>
     <div class="mini-panel" aria-live="polite">
-      <p class="mini-overview show">This timeline traces seven transitions, from the first shared language to the first artificial minds. Each began with a new technology stack: a set of tools and infrastructure that gave the societies adopting it a decisive military and economic advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade the state, the market and the cultural psychology of each society it reached. The process is structurally driven, but at every stage it has been enacted by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p>
+      <div class="mini-overview show"><p class="mini-overview-text">This timeline traces seven transitions, from the first shared language to the first artificial minds. Each began with a new technology stack: a set of tools and infrastructure that gave the societies adopting it a decisive military and economic advantage. Competitive pressure then spread it, as rivals were forced to adapt or be overtaken, and in spreading it remade the state, the market and the cultural psychology of each society it reached. The process is structurally driven, but at every stage it has been enacted by the decisions of the power-elite. Hover over an era to read its summary, or select it to read more.</p><p class="mini-count" data-total></p></div>
     </div>
     </div>
 
@@ -1222,12 +1232,18 @@
         var era = mains[i];
         var div = document.createElement('div');
         div.className = 'mini-desc';
-        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p>';
+        div.innerHTML = '<p class="mini-desc-title"></p><p class="mini-desc-text"></p><p class="mini-count"></p>';
+        var btn = era.querySelector('.era-toggle');
+        var n = btn ? allEras.filter(function (e) { return e.dataset.group === btn.dataset.group; }).length : 0;
+        div.querySelector('.mini-count').textContent = n + (n === 1 ? ' event' : ' events');
         div.querySelector('.mini-desc-title').textContent = era.querySelector('.era-name').textContent + ' \u00b7 ' + era.querySelector('.era-date').textContent;
         div.querySelector('.mini-desc-text').textContent = era.dataset.summary || '';
         panel.appendChild(div);
         return div;
       });
+      var totalEvents = allEras.filter(function (e) { return e.classList.contains('sub'); }).length;
+      panel.querySelector('[data-total]').textContent = mains.length + ' transitions \u00b7 ' + totalEvents + ' events';
+
       function hoverMini(at) {
         var dots = miniItems.map(function (li) { return li.querySelector('.mini-dot').getBoundingClientRect(); });
         var vertical = getComputedStyle(mini).gridTemplateColumns.split(' ').length === 1;
