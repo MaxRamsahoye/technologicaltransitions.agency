@@ -2063,12 +2063,16 @@
         document.body.classList.add('overview-shown');
       }
 
+      // scrolling down shows it; scrolling back up to the very top hides it
+      // again and brings back the down arrow
       function checkOverview() {
-        if (isDesign2() && (window.scrollY > 10 || location.hash)) showOverview();
+        if (!isDesign2()) return;
+        if (window.scrollY > 10) showOverview();
+        else if (window.scrollY <= 0) document.body.classList.remove('overview-shown');
       }
 
       window.addEventListener('scroll', checkOverview, { passive: true });
-      checkOverview();
+      if (isDesign2() && (window.scrollY > 10 || location.hash)) showOverview();
 
       // pull the Overview up to just below the first arrow, leaving the first
       // screen where it is in design 1
