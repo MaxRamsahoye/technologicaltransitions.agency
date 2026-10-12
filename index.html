@@ -872,7 +872,7 @@
     }
 
 
-    /* the start of the title alternates every two seconds between "A
+    /* the start of the title alternates every four seconds between "A
        Critical Evolutionary Game-Theory" and "A Multi-Agent Systems", on the
        first of its two lines; "Model of Major Technological Transitions"
        never moves */
@@ -1948,7 +1948,7 @@
     (function () {
       var title = document.querySelector('.article-title');
       if (!title || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-      setInterval(function () { title.classList.toggle('title-alt'); }, 2000);
+      setInterval(function () { title.classList.toggle('title-alt'); }, 4000);
     })();
   </script>
   <script>
