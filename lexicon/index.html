@@ -213,8 +213,7 @@
       padding-left: 24px;
     }
 
-    /* every row of the two menus on whole pixels (a 23px line), so each
-       bullet lands on the pixel grid alike */
+    /* every row of the two menus on a 23px line */
     .lexicon-index li,
     .curated-menu li {
       position: relative;
@@ -227,21 +226,6 @@
       padding: 6px 0 6px 22px;
     }
 
-    /* the bullets: a white circle (U+25CB), the same in both menus, set on
-       the item's own 23px line */
-    .lexicon-index li::before,
-    .curated-menu li li::before {
-      content: '\25CB';
-      position: absolute;
-      left: 0;
-      top: 6px;
-      font-family: var(--sans);
-      font-size: 13px;
-      line-height: 23px;
-      /* nudged onto whole pixels by the script (columns and centring can
-         leave a row on a fraction of a pixel) */
-      transform: translate(var(--snap-x, 0px), var(--snap-y, 0px));
-    }
 
     /* grouped by letter: each letter heads its run of concepts, and the
        script deals the runs into balanced columns, never splitting one */
@@ -1349,28 +1333,6 @@
         var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if (t) t.scrollIntoView();
       }
-    })();
-  </script>
-  <script>
-    // every menu bullet on whole pixels, so all are drawn as the same circle
-    (function () {
-      function snap() {
-        document.querySelectorAll('.lexicon-index li:not(.index-col):not(.index-group), .curated-menu li li').forEach(function (li) {
-          li.style.removeProperty('--snap-x');
-          li.style.removeProperty('--snap-y');
-          if (!li.offsetParent) return;
-          var r = li.getBoundingClientRect();
-          var top = r.top + parseFloat(getComputedStyle(li, '::before').top);
-          li.style.setProperty('--snap-x', (Math.round(r.left) - r.left) + 'px');
-          li.style.setProperty('--snap-y', (Math.round(top) - top) + 'px');
-        });
-      }
-      window.snapBullets = snap;
-      window.addEventListener('resize', snap);
-      window.addEventListener('load', snap);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
-      document.addEventListener('click', function (e) { if (e.target.closest('.view-tabs')) requestAnimationFrame(snap); });
-      snap();
     })();
   </script>
   <nav class="curated-side" aria-label="Curated terms"><ol></ol></nav>
