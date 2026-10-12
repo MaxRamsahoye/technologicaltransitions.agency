@@ -697,6 +697,12 @@
       transition: opacity 0.5s ease, visibility 0s linear 0.5s;
     }
 
+    /* italicised words in the article are set semi-bold too (there is no
+       semi-bold italic cut of ET Bembo, so the browser thickens the italic) */
+    .main-area em {
+      font-weight: 600;
+    }
+
     body.toc-open .toc {
       opacity: 1;
       visibility: visible;
