@@ -1621,17 +1621,17 @@
       try { useRing = localStorage.getItem('loader') === 'ring'; } catch (e) {}
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) useRing = true;
       if (!useRing) {
-        var LEVELS = 8, STEP = 360, DUR = 700, MAX_WAIT = 7000, H = 12;
+        var LEVELS = 4, STEP = 520, DUR = 800, MAX_WAIT = 7000, H = 28, SIZE = 150;
         var stack = document.createElement('div');
         stack.className = 'loader-stack';
         stack.style.setProperty('--lift', (LEVELS * H / 2 + 20) + 'px');
         // the slab's footprint, trimmed along the axis it slid in on
-        var w = 84, d = 84, x = 0, y = 0;
+        var w = SIZE, d = SIZE, x = 0, y = 0;
         for (var i = 0; i < LEVELS; i++) {
           var alongX = i % 2 === 1;   // from the left along x, from the right along y
           if (i > 0) {
-            if (alongX) { w -= 6; x += (i % 4 === 1 ? 4 : 2); }
-            else { d -= 6; y += (i % 4 === 2 ? 4 : 2); }
+            if (alongX) { w -= 14; x += (i % 4 === 1 ? 9 : 5); }
+            else { d -= 14; y += (i % 4 === 2 ? 9 : 5); }
           }
           var b = document.createElement('div');
           b.className = 'loader-block';
@@ -1639,11 +1639,11 @@
           b.style.setProperty('--w', w + 'px');
           b.style.setProperty('--d', d + 'px');
           b.style.setProperty('--h', H + 'px');
-          b.style.setProperty('--x', (x - 42) + 'px');
-          b.style.setProperty('--y', (y - 42) + 'px');
+          b.style.setProperty('--x', (x - SIZE / 2) + 'px');
+          b.style.setProperty('--y', (y - SIZE / 2) + 'px');
           b.style.setProperty('--z', (i * H) + 'px');
-          b.style.setProperty('--sx', (i === 0 ? 0 : alongX ? -170 : 0) + 'px');
-          b.style.setProperty('--sy', (i === 0 ? 0 : alongX ? 0 : -170) + 'px');
+          b.style.setProperty('--sx', (i === 0 ? 0 : alongX ? -300 : 0) + 'px');
+          b.style.setProperty('--sy', (i === 0 ? 0 : alongX ? 0 : -300) + 'px');
           b.style.setProperty('--delay', (i * STEP) + 'ms');
           b.style.setProperty('--dur', DUR + 'ms');
           stack.appendChild(b);
