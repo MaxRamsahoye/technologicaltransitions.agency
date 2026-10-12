@@ -58,7 +58,7 @@
       position: relative;
       z-index: 0;
       margin-bottom: 192px;
-      width: max-content;
+      width: var(--wide-col);
       max-width: calc(100vw - 48px);
       left: 50%;
       transform: translateX(-50%);
@@ -366,8 +366,16 @@
       padding-top: 0;
     }
 
+    /* set in like the A to Z index */
     .curated-menu {
-      margin: 28px 0 48px;
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .curated-menu {
+        padding-left: 4px;
+      }
     }
 
     .curated-menu ol {
@@ -377,8 +385,20 @@
     }
 
     .curated-menu > ol {
-      columns: 2;
-      column-gap: 56px;
+      columns: 3;
+      column-gap: 40px;
+    }
+
+    @media (min-width: 1181px) {
+      .curated-menu a {
+        white-space: nowrap;
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .curated-menu > ol {
+        columns: 2;
+      }
     }
 
     .curated-menu > ol > li {
@@ -433,7 +453,70 @@
     }
 
     .lexicon-curated {
-      margin: 0;
+      margin: 28px 0 0;
+    }
+
+    /* the top section's two tabs: the curated terms, or the A to Z */
+    body:not(.view-az) .lexicon-index,
+    body.view-az .curated-menu {
+      display: none;
+    }
+
+    .lexicon-index,
+    .curated-menu {
+      animation: view-in 0.4s ease;
+    }
+
+    @keyframes view-in {
+      from { opacity: 0; }
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 40px;
+      margin: 48px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* on wide windows, the tabs one above the other at the left of the band,
+       at the same height whichever is showing */
+    @media (min-width: 1280px) {
+      .view-tabs {
+        position: absolute;
+        top: 360px;
+        left: calc(40px - (100vw - 100%) / 2);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 0;
+        transform: translateY(-50%);
+      }
+    }
+
+    .view-tabs button {
+      padding: 0 0 6px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .view-tabs button:hover,
+    .view-tabs button[aria-selected="true"] {
+      color: var(--canvas-ink);
+    }
+
+    .view-tabs button[aria-selected="true"] {
+      border-bottom-color: currentColor;
     }
 
     .lexicon-curated .term-sub {
@@ -602,46 +685,50 @@
       <li><a href="#world-system">World-System</a></li>
       </ol>
     </nav>
+    <nav class="curated-menu" id="curated-menu" aria-label="Curated terms">
+      <ol>
+        <li><a href="#curated-major-technological-transitions">Major Technological Transitions</a>
+          <ol>
+            <li><a href="#curated-tech-stack">Tech Stack (Infrastructure)</a></li>
+            <li><a href="#curated-political-economy">Political Economy (Social Structure)</a></li>
+            <li><a href="#curated-cultural-psychology">Cultural Psychology (Superstructure)</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-military-economic-adaptationism">Military-Economic Adaptationism</a>
+          <ol>
+            <li><a href="#curated-accelerationism">Accelerationism</a></li>
+            <li><a href="#curated-exterminism">Exterminism</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a>
+          <ol>
+            <li><a href="#curated-multi-agent-system">Multi-Agent System</a></li>
+            <li><a href="#curated-negative-externalities">Negative Externalities</a></li>
+            <li><a href="#curated-attractor-states">Attractor States</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-macrohistory">Macrohistory</a>
+          <ol>
+            <li><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></li>
+            <li><a href="#curated-civilisational-collapse">Civilisational Collapse</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-philosophy-of-technology">Philosophy of Technology</a>
+          <ol>
+            <li><a href="#curated-technological-determinism">Technological Determinism</a></li>
+            <li><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></li>
+          </ol>
+        </li>
+      </ol>
+    </nav>
+    <div class="view-tabs" role="tablist" aria-label="Views">
+      <button type="button" role="tab" aria-selected="true" data-view="curated">Curated terms</button>
+      <button type="button" role="tab" aria-selected="false" data-view="az">A to Z</button>
+    </div>
     </div>
 
     <section class="curated" id="curated" aria-labelledby="curated-heading">
       <h2 class="lexicon-letter curated-heading" id="curated-heading">Curated Terms</h2>
-      <nav class="curated-menu" aria-label="Curated terms">
-        <ol>
-          <li><a href="#curated-major-technological-transitions">Major Technological Transitions</a>
-            <ol>
-              <li><a href="#curated-tech-stack">Tech Stack (Infrastructure)</a></li>
-              <li><a href="#curated-political-economy">Political Economy (Social Structure)</a></li>
-              <li><a href="#curated-cultural-psychology">Cultural Psychology (Superstructure)</a></li>
-            </ol>
-          </li>
-          <li><a href="#curated-military-economic-adaptationism">Military-Economic Adaptationism</a>
-            <ol>
-              <li><a href="#curated-accelerationism">Accelerationism</a></li>
-              <li><a href="#curated-exterminism">Exterminism</a></li>
-            </ol>
-          </li>
-          <li><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a>
-            <ol>
-              <li><a href="#curated-multi-agent-system">Multi-Agent System</a></li>
-              <li><a href="#curated-negative-externalities">Negative Externalities</a></li>
-              <li><a href="#curated-attractor-states">Attractor States</a></li>
-            </ol>
-          </li>
-          <li><a href="#curated-macrohistory">Macrohistory</a>
-            <ol>
-              <li><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></li>
-              <li><a href="#curated-civilisational-collapse">Civilisational Collapse</a></li>
-            </ol>
-          </li>
-          <li><a href="#curated-philosophy-of-technology">Philosophy of Technology</a>
-            <ol>
-              <li><a href="#curated-technological-determinism">Technological Determinism</a></li>
-              <li><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></li>
-            </ol>
-          </li>
-        </ol>
-      </nav>
       <dl class="lexicon-curated">
       <div class="term" id="curated-major-technological-transitions">
         <dt><a href="#curated-major-technological-transitions">Major Technological Transitions</a></dt>
@@ -1043,6 +1130,18 @@
       });
 
       if (location.hash) highlight(location.hash.slice(1));
+    })();
+  </script>
+  <script>
+    // the top section's tabs: the curated terms' menu, or the A to Z index
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.body.classList.toggle('view-az', tab.dataset.view === 'az');
+          tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+        });
+      });
     })();
   </script>
   <ol class="az-index" aria-label="A to Z"></ol>
