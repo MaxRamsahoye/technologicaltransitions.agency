@@ -227,18 +227,17 @@
       padding: 6px 0 6px 22px;
     }
 
-    /* the bullets: one whole-pixel ring, the same in both menus */
+    /* the bullets: a white circle (U+25CB), the same in both menus, set on
+       the item's own 23px line */
     .lexicon-index li::before,
     .curated-menu li li::before {
-      content: '';
+      content: '\25CB';
       position: absolute;
       left: 0;
-      top: 14px; /* 6px above the line, then centred on it: (23 - 7) / 2 */
-      box-sizing: border-box;
-      width: 7px;
-      height: 7px;
-      border: 1.25px solid currentColor;
-      border-radius: 50%;
+      top: 6px;
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 23px;
       /* nudged onto whole pixels by the script (columns and centring can
          leave a row on a fraction of a pixel) */
       transform: translate(var(--snap-x, 0px), var(--snap-y, 0px));
@@ -444,7 +443,7 @@
     }
 
     .curated-menu li li::before {
-      top: 13px; /* 5px above the line, then centred on it */
+      top: 5px;
     }
 
     .curated-menu li ol {
