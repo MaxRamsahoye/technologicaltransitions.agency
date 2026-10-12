@@ -354,7 +354,8 @@
       from { opacity: 0; }
     }
 
-    /* loading screen: a centred ring that fills, then fades to reveal the page */
+    /* loading screen: a centred ring that fills, then fades to reveal the page
+       (the fallback; the stack below is the default) */
     .loader {
       position: fixed;
       inset: 0;
@@ -388,6 +389,45 @@
 
     .loader-fill {
       stroke: var(--link);
+    }
+
+    /* the default loading screen: a tech stack built up level by level, each
+       block sliding in from alternate sides and landing on the one below, a
+       little narrower each time (the ring above is kept as the fallback) */
+    .loader-stack {
+      position: relative;
+      width: 120px;
+      height: calc(var(--levels, 8) * 13px);
+    }
+
+    .loader-block {
+      position: absolute;
+      left: 50%;
+      bottom: calc(var(--i) * 13px);
+      width: var(--w);
+      height: 10px;
+      background: var(--link);
+      opacity: 0;
+      transform: translateX(calc(-50% + var(--from)));
+      animation: loader-block-in var(--dur, 0.34s) cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    }
+
+    @keyframes loader-block-in {
+      from {
+        opacity: 0;
+        transform: translateX(calc(-50% + var(--from)));
+      }
+      30% {
+        opacity: 1;
+      }
+      to {
+        opacity: 1;
+        transform: translateX(calc(-50% + var(--land)));
+      }
+    }
+
+    .loader.loader-stacking svg {
+      display: none;
     }
 
     .page {
@@ -1515,12 +1555,64 @@
         return;
       }
 
+      var ready = false;
+      var loaded = new Promise(function (resolve) {
+        if (document.readyState === 'complete') resolve(); else window.addEventListener('load', resolve);
+      });
+      var fonts = document.fonts ? document.fonts.ready : Promise.resolve();
+      Promise.all([loaded, fonts]).then(function () { ready = true; });
+
+      function finishLoader() {
+        // The page script plays the completion chord on this.
+        window.loaderComplete = true;
+        document.dispatchEvent(new Event('loadercomplete'));
+        setTimeout(function () {
+          loader.classList.add('loader-done');
+          setTimeout(function () { loader.remove(); }, 700);
+        }, 200);
+      }
+
+      // Default: the stack. The ring stays as the fallback, for anyone who
+      // prefers reduced motion (or who sets localStorage.loader = 'ring').
+      var useRing = false;
+      try { useRing = localStorage.getItem('loader') === 'ring'; } catch (e) {}
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) useRing = true;
+      if (!useRing) {
+        var LEVELS = 8, STEP = 170, DUR = 340, MAX_WAIT = 5000;
+        var stack = document.createElement('div');
+        stack.className = 'loader-stack';
+        stack.style.setProperty('--levels', LEVELS);
+        for (var i = 0; i < LEVELS; i++) {
+          var b = document.createElement('div');
+          b.className = 'loader-block';
+          var fromLeft = i % 2 === 0;
+          // each level a little narrower, landing a touch off-centre towards
+          // the side it came from, as if trimmed where it overhung
+          b.style.setProperty('--i', i);
+          b.style.setProperty('--w', (104 - i * 8) + 'px');
+          b.style.setProperty('--from', (fromLeft ? -140 : 140) + 'px');
+          b.style.setProperty('--land', (i === 0 ? 0 : (fromLeft ? -2 : 2)) + 'px');
+          b.style.setProperty('--delay', (i * STEP) + 'ms');
+          b.style.setProperty('--dur', DUR + 'ms');
+          stack.appendChild(b);
+        }
+        loader.appendChild(stack);
+        loader.classList.add('loader-stacking');
+        var built = (LEVELS - 1) * STEP + DUR + 120;
+        var t0 = performance.now();
+        (function wait() {
+          var elapsed = performance.now() - t0;
+          if (elapsed >= built && (ready || elapsed >= MAX_WAIT)) finishLoader();
+          else setTimeout(wait, 60);
+        })();
+        return;
+      }
+
       var fill = loader.querySelector('.loader-fill');
       var LENGTH = 2 * Math.PI * 13;
       var FILL_MS = 1400;
       var MAX_MS = 5000;
       var start = performance.now();
-      var ready = false;
       var finished = false;
 
       fill.style.strokeDasharray = LENGTH + ' ' + LENGTH;
@@ -1537,13 +1629,7 @@
       function finish() {
         if (finished) return;
         finished = true;
-        // The page script plays the completion chord on this.
-        window.loaderComplete = true;
-        document.dispatchEvent(new Event('loadercomplete'));
-        setTimeout(function () {
-          loader.classList.add('loader-done');
-          setTimeout(function () { loader.remove(); }, 700);
-        }, 200);
+        finishLoader();
       }
 
       // One smooth, continuous fill. If the page is still loading when the
@@ -1556,12 +1642,6 @@
         if (t >= 1 && (ready || elapsed >= MAX_MS)) finish(); else requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-
-      var loaded = new Promise(function (resolve) {
-        if (document.readyState === 'complete') resolve(); else window.addEventListener('load', resolve);
-      });
-      var fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-      Promise.all([loaded, fonts]).then(function () { ready = true; });
     })();
   </script>
   <div class="frame-header">
