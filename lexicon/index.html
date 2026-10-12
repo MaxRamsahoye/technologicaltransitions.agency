@@ -328,11 +328,13 @@
       transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
+    .lexicon-curated:not(.hover-locked) .term:hover,
     .lexicon:not(.hover-locked) .term:hover,
     .term.is-clicked {
       transform: scale(1.05);
     }
 
+    .lexicon-curated:not(.hover-locked) .term:hover::before,
     .lexicon:not(.hover-locked) .term:hover::before,
     .term.is-clicked::before {
       transform: scaleY(1);
@@ -349,6 +351,98 @@
     @media (max-width: 600px) {
       .term::before {
         left: -14px;
+      }
+    }
+
+    /* curated terms: above the A to Z, a menu of the key terms (each with
+       the terms that belong to it), then their entries, the belonging terms
+       set in under their head term */
+    .curated {
+      margin: 0 0 136px;
+    }
+
+    .curated-heading {
+      margin: 0;
+      padding-top: 0;
+    }
+
+    .curated-menu {
+      margin: 28px 0 48px;
+    }
+
+    .curated-menu ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .curated-menu > ol {
+      columns: 2;
+      column-gap: 56px;
+    }
+
+    .curated-menu > ol > li {
+      break-inside: avoid;
+      padding-bottom: 22px;
+    }
+
+    .curated-menu a {
+      color: inherit;
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .curated-menu > ol > li > a {
+      font-weight: 600;
+    }
+
+    .curated-menu li li {
+      position: relative;
+      padding: 5px 0 0 22px;
+    }
+
+    .curated-menu li li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(5px + 0.68em - 3.5px);
+      width: 7px;
+      height: 7px;
+      font-size: 17px;
+      box-sizing: border-box;
+      border: 1.25px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .curated-menu li ol {
+      margin-top: 4px;
+    }
+
+    .curated-menu a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .curated-menu > ol {
+        columns: 1;
+      }
+    }
+
+    .lexicon-curated {
+      margin: 0;
+    }
+
+    .lexicon-curated .term-sub {
+      margin-left: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .lexicon-curated .term-sub {
+        margin-left: 20px;
       }
     }
 
@@ -436,7 +530,7 @@
     <h1 class="page-title">Lexicon</h1>
     <p class="page-intro">Key terms used in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
 
-    <p class="concept-count">Concepts Count: <span data-concept-count>61</span></p>
+    <p class="concept-count">Concepts Count: <span data-concept-count>66</span></p>
 
     <nav class="lexicon-index" id="concepts" aria-label="Concepts">
       <ol>
@@ -448,8 +542,11 @@
       <li><a href="#animism">Animism</a></li>
       <li><a href="#arms-race">Arms Race</a></li>
       <li><a href="#artificial-scarcity">Artificial Scarcity</a></li>
+      <li><a href="#attractor-states">Attractor States</a></li>
       <li><a href="#city-state">City-State</a></li>
       <li><a href="#civilisation">Civilisation</a></li>
+      <li><a href="#civilisational-collapse">Civilisational Collapse</a></li>
+      <li><a href="#civilisational-paradigm">Civilisational Paradigm</a></li>
       <li><a href="#co-evolution">Co-Evolution</a></li>
       <li><a href="#collective-action">Collective Action</a></li>
       <li><a href="#competitive-pressures">Competitive Pressures</a></li>
@@ -478,6 +575,7 @@
       <li><a href="#means-of-production">Means of Production</a></li>
       <li><a href="#military-economic-adaptation">Military-Economic Adaptation</a></li>
       <li><a href="#mode-of-production">Mode of Production</a></li>
+      <li><a href="#multi-agent-system">Multi-Agent System</a></li>
       <li><a href="#multi-polar-trap">Multi-Polar Trap</a></li>
       <li><a href="#negative-externalities">Negative Externalities</a></li>
       <li><a href="#nomadism">Nomadism</a></li>
@@ -490,6 +588,7 @@
       <li><a href="#private-property">Private Property</a></li>
       <li><a href="#science-and-technology-studies">Science and Technology Studies</a></li>
       <li><a href="#selection-pressure">Selection Pressure</a></li>
+      <li><a href="#social-construction-of-technology">Social Construction of Technology</a></li>
       <li><a href="#socio-economic-class">Socio-Economic Class</a></li>
       <li><a href="#socio-technical-system">Socio-Technical System</a></li>
       <li><a href="#status-seeking">Status-Seeking</a></li>
@@ -504,6 +603,116 @@
       </ol>
     </nav>
     </div>
+
+    <section class="curated" id="curated" aria-labelledby="curated-heading">
+      <h2 class="lexicon-letter curated-heading" id="curated-heading">Curated Terms</h2>
+      <nav class="curated-menu" aria-label="Curated terms">
+        <ol>
+          <li><a href="#curated-major-technological-transitions">Major Technological Transitions</a>
+            <ol>
+              <li><a href="#curated-tech-stack">Tech Stack (Infrastructure)</a></li>
+              <li><a href="#curated-political-economy">Political Economy (Social Structure)</a></li>
+              <li><a href="#curated-cultural-psychology">Cultural Psychology (Superstructure)</a></li>
+            </ol>
+          </li>
+          <li><a href="#curated-military-economic-adaptationism">Military-Economic Adaptationism</a>
+            <ol>
+              <li><a href="#curated-accelerationism">Accelerationism</a></li>
+              <li><a href="#curated-exterminism">Exterminism</a></li>
+            </ol>
+          </li>
+          <li><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a>
+            <ol>
+              <li><a href="#curated-multi-agent-system">Multi-Agent System</a></li>
+              <li><a href="#curated-negative-externalities">Negative Externalities</a></li>
+              <li><a href="#curated-attractor-states">Attractor States</a></li>
+            </ol>
+          </li>
+          <li><a href="#curated-macrohistory">Macrohistory</a>
+            <ol>
+              <li><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></li>
+              <li><a href="#curated-civilisational-collapse">Civilisational Collapse</a></li>
+            </ol>
+          </li>
+          <li><a href="#curated-philosophy-of-technology">Philosophy of Technology</a>
+            <ol>
+              <li><a href="#curated-technological-determinism">Technological Determinism</a></li>
+              <li><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+      <dl class="lexicon-curated">
+      <div class="term" id="curated-major-technological-transitions">
+        <dt><a href="#curated-major-technological-transitions">Major Technological Transitions</a></dt>
+        <dd>Periods of time where the introduction of a new form of technology stack (infrastructure) fundamentally changes the wider political economy (social structures) and cultural psychology (superstructures) of the populations that deploy it, conferring competitive advantage and ultimately reshaping the fitness landscape of civilisation as a whole. So far: the Agricultural, Industrial and Digital Revolutions.</dd>
+      </div>
+      <div class="term term-sub" id="curated-tech-stack">
+        <dt><a href="#curated-tech-stack">Tech Stack (Infrastructure)</a></dt>
+        <dd>The layered infrastructure of technologies through which a society produces, communicates and organises itself.</dd>
+      </div>
+      <div class="term term-sub" id="curated-political-economy">
+        <dt><a href="#curated-political-economy">Political Economy (Social Structure)</a></dt>
+        <dd>The social structures through which a society organises production, distribution and power.</dd>
+      </div>
+      <div class="term term-sub" id="curated-cultural-psychology">
+        <dt><a href="#curated-cultural-psychology">Cultural Psychology (Superstructure)</a></dt>
+        <dd>The shared beliefs, values and habits of mind of a population &ndash; the superstructures that each technology stack reshapes.</dd>
+      </div>
+      <div class="term" id="curated-military-economic-adaptationism">
+        <dt><a href="#curated-military-economic-adaptationism">Military-Economic Adaptationism</a></dt>
+        <dd>Allan Dafoe&rsquo;s account of how technology drives social change: in a competitive international system, societies that adopt technologies conferring military and economic advantage prosper, while those that do not are outcompeted, conquered or forced to follow.</dd>
+      </div>
+      <div class="term term-sub" id="curated-accelerationism">
+        <dt><a href="#curated-accelerationism">Accelerationism</a></dt>
+        <dd>The view that the development of technology, and of the capitalism driving it, should be sped up rather than restrained &ndash; whether to hasten its benefits or to push the existing order beyond itself.</dd>
+      </div>
+      <div class="term term-sub" id="curated-exterminism">
+        <dt><a href="#curated-exterminism">Exterminism</a></dt>
+        <dd>E.P. Thompson&rsquo;s term for the tendencies of a society &ndash; in its economy, its polity and its ideology &ndash; that thrust it in a direction whose outcome must be the extermination of multitudes: for him, the logic of the nuclear arms race.</dd>
+      </div>
+      <div class="term" id="curated-systemic-existential-risk">
+        <dt><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a></dt>
+        <dd>An existential risk that arises not from a single catastrophe or bad actor but from the structure of a system as a whole &ndash; the interaction of competitive pressures, institutions and technologies that moves it, step by step, towards catastrophe.</dd>
+      </div>
+      <div class="term term-sub" id="curated-multi-agent-system">
+        <dt><a href="#curated-multi-agent-system">Multi-Agent System</a></dt>
+        <dd>A system of many interacting agents &ndash; people, firms, states or machines &ndash; each pursuing its own ends, whose collective behaviour emerges from their interactions rather than from any one agent&rsquo;s design.</dd>
+      </div>
+      <div class="term term-sub" id="curated-negative-externalities">
+        <dt><a href="#curated-negative-externalities">Negative Externalities</a></dt>
+        <dd>Costs of an activity borne by those outside it, rather than by the actors who choose to undertake it.</dd>
+      </div>
+      <div class="term term-sub" id="curated-attractor-states">
+        <dt><a href="#curated-attractor-states">Attractor States</a></dt>
+        <dd>The stable configurations a system tends to settle into, whatever its starting point &ndash; in civilisational terms, outcomes such as runaway arms races, collapse or lock-in, towards which competitive dynamics pull.</dd>
+      </div>
+      <div class="term" id="curated-macrohistory">
+        <dt><a href="#curated-macrohistory">Macrohistory</a></dt>
+        <dd>The study of history at the largest scales of time and space &ndash; the long-run patterns of whole civilisations and eras, rather than particular events, people or places.</dd>
+      </div>
+      <div class="term term-sub" id="curated-civilisational-paradigm">
+        <dt><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></dt>
+        <dd>The overall configuration of a civilisation in a given era &ndash; its technology stack, political economy and cultural psychology taken together, as in the agrarian, industrial or digital paradigms.</dd>
+      </div>
+      <div class="term term-sub" id="curated-civilisational-collapse">
+        <dt><a href="#curated-civilisational-collapse">Civilisational Collapse</a></dt>
+        <dd>The rapid and lasting loss of a society&rsquo;s complexity &ndash; its population, institutions, economy and capacity to govern &ndash; as befell the Western Roman Empire or the palace states of the Late Bronze Age.</dd>
+      </div>
+      <div class="term" id="curated-philosophy-of-technology">
+        <dt><a href="#curated-philosophy-of-technology">Philosophy of Technology</a></dt>
+        <dd>The branch of philosophy that examines the nature of technology and its effects on human life and society &ndash; how tools shape the people who make and use them, and how they might be governed.</dd>
+      </div>
+      <div class="term term-sub" id="curated-technological-determinism">
+        <dt><a href="#curated-technological-determinism">Technological Determinism</a></dt>
+        <dd>The view that technology develops by its own logic and drives social change on its own &ndash; the view this article argues against.</dd>
+      </div>
+      <div class="term term-sub" id="curated-social-construction-of-technology">
+        <dt><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></dt>
+        <dd>The view, set against technological determinism, that technologies are shaped by the social groups who design, contest and use them, rather than following an inevitable logic of their own.</dd>
+      </div>
+      </dl>
+    </section>
 
     <dl class="lexicon">
       <div class="term" id="acceleration">
@@ -538,6 +747,10 @@
         <dt><a href="#artificial-scarcity">Artificial Scarcity</a></dt>
         <dd>Scarcity created not by nature but by social arrangements, such as private property and the unequal distribution of surplus.</dd>
       </div>
+      <div class="term" id="attractor-states">
+        <dt><a href="#attractor-states">Attractor States</a></dt>
+        <dd>The stable configurations a system tends to settle into, whatever its starting point &ndash; in civilisational terms, outcomes such as runaway arms races, collapse or lock-in, towards which competitive dynamics pull.</dd>
+      </div>
       <div class="term" id="city-state">
         <dt><a href="#city-state">City-State</a></dt>
         <dd>An independent city and its surrounding territory, governed as a state &ndash; among the first forms of organised defence for private property.</dd>
@@ -545,6 +758,14 @@
       <div class="term" id="civilisation">
         <dt><a href="#civilisation">Civilisation</a></dt>
         <dd>The structural formation of complex hierarchical societies, with centralised decision-making (political power) and a division of labour (economic specialisation).</dd>
+      </div>
+      <div class="term" id="civilisational-collapse">
+        <dt><a href="#civilisational-collapse">Civilisational Collapse</a></dt>
+        <dd>The rapid and lasting loss of a society&rsquo;s complexity &ndash; its population, institutions, economy and capacity to govern &ndash; as befell the Western Roman Empire or the palace states of the Late Bronze Age.</dd>
+      </div>
+      <div class="term" id="civilisational-paradigm">
+        <dt><a href="#civilisational-paradigm">Civilisational Paradigm</a></dt>
+        <dd>The overall configuration of a civilisation in a given era &ndash; its technology stack, political economy and cultural psychology taken together, as in the agrarian, industrial or digital paradigms.</dd>
       </div>
       <div class="term" id="co-evolution">
         <dt><a href="#co-evolution">Co-Evolution</a></dt>
@@ -658,6 +879,10 @@
         <dt><a href="#mode-of-production">Mode of Production</a></dt>
         <dd>The way a society organises the production of what it needs: who works, with what tools, and who owns the results.</dd>
       </div>
+      <div class="term" id="multi-agent-system">
+        <dt><a href="#multi-agent-system">Multi-Agent System</a></dt>
+        <dd>A system of many interacting agents &ndash; people, firms, states or machines &ndash; each pursuing its own ends, whose collective behaviour emerges from their interactions rather than from any one agent&rsquo;s design.</dd>
+      </div>
       <div class="term" id="multi-polar-trap">
         <dt><a href="#multi-polar-trap">Multi-Polar Trap</a></dt>
         <dd>A situation in which competing actors each pursue their own advantage, locking all of them into an outcome that is worse for everyone &ndash; as in an arms race.</dd>
@@ -705,6 +930,10 @@
       <div class="term" id="selection-pressure">
         <dt><a href="#selection-pressure">Selection Pressure</a></dt>
         <dd>A force in the environment that favours some traits or strategies over others, so that they spread while the rest decline.</dd>
+      </div>
+      <div class="term" id="social-construction-of-technology">
+        <dt><a href="#social-construction-of-technology">Social Construction of Technology</a></dt>
+        <dd>The view, set against technological determinism, that technologies are shaped by the social groups who design, contest and use them, rather than following an inevitable logic of their own.</dd>
       </div>
       <div class="term" id="socio-economic-class">
         <dt><a href="#socio-economic-class">Socio-Economic Class</a></dt>
@@ -780,7 +1009,7 @@
     <div class="progress-pill-fill"></div>
   </div>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".lexicon .term">
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".curated">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
       <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
     </svg>
@@ -788,7 +1017,7 @@
 
   <script>
     (function () {
-      var lexicon = document.querySelector('.lexicon');
+      var lexicons = Array.prototype.slice.call(document.querySelectorAll('.lexicon, .lexicon-curated'));
       var ARRIVE_MS = 450;   // matches the transition-delay above
       var HOLD_MS = 1000;
       var timer = null;
@@ -800,11 +1029,11 @@
         Array.prototype.forEach.call(document.querySelectorAll('.term.is-clicked'), function (t) {
           t.classList.remove('is-clicked');
         });
-        lexicon.classList.add('hover-locked');
+        lexicons.forEach(function (l) { l.classList.add('hover-locked'); });
         term.classList.add('is-clicked');
         timer = setTimeout(function () {
           term.classList.remove('is-clicked');
-          lexicon.classList.remove('hover-locked');
+          lexicons.forEach(function (l) { l.classList.remove('hover-locked'); });
         }, ARRIVE_MS + HOLD_MS);
       }
 
