@@ -213,24 +213,35 @@
       padding-left: 24px;
     }
 
-    .lexicon-index li {
+    /* every row of the two menus on whole pixels (a 23px line), so each
+       bullet lands on the pixel grid alike */
+    .lexicon-index li,
+    .curated-menu li {
       position: relative;
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 23px;
+    }
+
+    .lexicon-index li {
       padding: 6px 0 6px 22px;
     }
 
-    /* a vector ring used as a mask, so every bullet is a true circle at any
-       position or zoom, in the text colour */
-    .lexicon-index li::before {
+    /* the bullets: one whole-pixel ring, the same in both menus */
+    .lexicon-index li::before,
+    .curated-menu li li::before {
       content: '';
       position: absolute;
       left: 0;
-      top: calc(6px + 0.68em - 3.5px);
+      top: 14px; /* 6px above the line, then centred on it: (23 - 7) / 2 */
+      box-sizing: border-box;
       width: 7px;
       height: 7px;
-      font-size: 17px;
-      background: currentColor;
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.5' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.5' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
+      border: 1.25px solid currentColor;
+      border-radius: 50%;
+      /* nudged onto whole pixels by the script (columns and centring can
+         leave a row on a fraction of a pixel) */
+      transform: translate(var(--snap-x, 0px), var(--snap-y, 0px));
     }
 
     /* grouped by letter: each letter heads its run of concepts, and the
@@ -267,7 +278,7 @@
       font-size: 17px;
       font-weight: 600;
       letter-spacing: 0.08em;
-      line-height: 1.35;
+      line-height: 23px;
     }
 
     .lexicon-index a,
@@ -279,7 +290,17 @@
     .lexicon-index a {
       font-family: var(--sans);
       font-size: 17px;
-      line-height: 1.35;
+      line-height: inherit;
+    }
+
+    @media (min-width: 1181px) {
+      .lexicon-index a {
+        white-space: nowrap;
+      }
+
+      .lexicon-index li.index-col {
+        flex: none;
+      }
     }
 
     .lexicon-index a:hover,
@@ -411,7 +432,7 @@
       text-decoration: none;
       font-family: var(--sans);
       font-size: 17px;
-      line-height: 1.35;
+      line-height: inherit;
     }
 
     .curated-menu > ol > li > a {
@@ -419,21 +440,11 @@
     }
 
     .curated-menu li li {
-      position: relative;
       padding: 5px 0 0 22px;
     }
 
     .curated-menu li li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: calc(5px + 0.68em - 3.5px);
-      width: 7px;
-      height: 7px;
-      font-size: 17px;
-      box-sizing: border-box;
-      border: 1.25px solid currentColor;
-      border-radius: 50%;
+      top: 13px; /* 5px above the line, then centred on it */
     }
 
     .curated-menu li ol {
@@ -1250,6 +1261,28 @@
         var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if (t) t.scrollIntoView();
       }
+    })();
+  </script>
+  <script>
+    // every menu bullet on whole pixels, so all are drawn as the same circle
+    (function () {
+      function snap() {
+        document.querySelectorAll('.lexicon-index li:not(.index-col):not(.index-group), .curated-menu li li').forEach(function (li) {
+          li.style.removeProperty('--snap-x');
+          li.style.removeProperty('--snap-y');
+          if (!li.offsetParent) return;
+          var r = li.getBoundingClientRect();
+          var top = r.top + parseFloat(getComputedStyle(li, '::before').top);
+          li.style.setProperty('--snap-x', (Math.round(r.left) - r.left) + 'px');
+          li.style.setProperty('--snap-y', (Math.round(top) - top) + 'px');
+        });
+      }
+      window.snapBullets = snap;
+      window.addEventListener('resize', snap);
+      window.addEventListener('load', snap);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
+      document.addEventListener('click', function (e) { if (e.target.closest('.view-tabs')) requestAnimationFrame(snap); });
+      snap();
     })();
   </script>
   <nav class="curated-side" aria-label="Curated terms"><ol></ol></nav>
