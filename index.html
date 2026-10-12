@@ -871,6 +871,29 @@
       white-space: nowrap;
     }
 
+    /* the start of the title alternates every two seconds between "A
+       Critical Evolutionary Game-Theory Model of" and "A Multi-Agent Systems
+       Model of"; the two sit in the same place, aligned on their last line,
+       so "Major Technological Transitions" never moves */
+    .title-swap {
+      display: grid;
+    }
+
+    .title-variant {
+      grid-area: 1 / 1;
+      align-self: end;
+      transition: opacity 0.6s ease;
+    }
+
+    .title-variant + .title-variant,
+    .article-title.title-alt .title-variant:first-child {
+      opacity: 0;
+    }
+
+    .article-title.title-alt .title-variant + .title-variant {
+      opacity: 1;
+    }
+
     .article-subtitle {
       font-family: var(--serif);
       font-weight: 600;
@@ -1792,7 +1815,7 @@
         <article>
           <div class="article-header">
             <p class="article-author"><a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
-            <h1 class="article-title">A Critical Evolutionary <span class="title-line">Game-Theory Model of</span> <span class="title-line">Major Technological Transitions</span></h1>
+            <h1 class="article-title"><span class="title-swap"><span class="title-variant">A Critical Evolutionary <span class="title-line">Game-Theory Model of</span></span> <span class="title-variant" aria-hidden="true">A <span class="title-line">Multi-Agent Systems</span> <span class="title-line">Model of</span></span></span> <span class="title-line">Major Technological Transitions</span></h1>
             <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is <em>enacted</em> by the power-elite&rsquo;s response to them</p>
             <button class="next-screen" type="button" data-target="overview" aria-label="Continue to the overview">
               <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
@@ -1906,6 +1929,14 @@
     </footer>
   </div>
 
+  <script>
+    // the title's alternating start (see .title-swap)
+    (function () {
+      var title = document.querySelector('.article-title');
+      if (!title || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+      setInterval(function () { title.classList.toggle('title-alt'); }, 2000);
+    })();
+  </script>
   <script>
     (function () {
       window.addEventListener('pageshow', function (e) {
