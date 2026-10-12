@@ -1052,7 +1052,7 @@
     html.design-2 body.overview-shown #overview {
       opacity: 1;
       pointer-events: auto;
-      transition: opacity 0.6s ease 0.4s;
+      transition: opacity 0.3s ease 0.4s;
     }
 
     @media (max-width: 600px) {
@@ -1623,7 +1623,7 @@
       try { useRing = localStorage.getItem('loader') === 'ring'; } catch (e) {}
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) useRing = true;
       if (!useRing) {
-        var LEVELS = 4, STEP = 520, DUR = 800, MAX_WAIT = 7000, H = 17, SIZE = 100;
+        var LEVELS = 4, STEP = 520, DUR = 800, MAX_WAIT = 7000, H = 13, SIZE = 75;
         var stack = document.createElement('div');
         stack.className = 'loader-stack';
         stack.style.setProperty('--lift', (LEVELS * H / 2 + 20) + 'px');
@@ -1632,8 +1632,8 @@
         for (var i = 0; i < LEVELS; i++) {
           var alongX = i % 2 === 1;   // from the left along x, from the right along y
           if (i > 0) {
-            if (alongX) { w -= 9; x += (i % 4 === 1 ? 6 : 3); }
-            else { d -= 9; y += (i % 4 === 2 ? 6 : 3); }
+            if (alongX) { w -= 7; x += (i % 4 === 1 ? 5 : 2); }
+            else { d -= 7; y += (i % 4 === 2 ? 5 : 2); }
           }
           var b = document.createElement('div');
           b.className = 'loader-block';
@@ -1644,8 +1644,8 @@
           b.style.setProperty('--x', (x - SIZE / 2) + 'px');
           b.style.setProperty('--y', (y - SIZE / 2) + 'px');
           b.style.setProperty('--z', (i * H) + 'px');
-          b.style.setProperty('--sx', (i === 0 ? 0 : alongX ? -205 : 0) + 'px');
-          b.style.setProperty('--sy', (i === 0 ? 0 : alongX ? 0 : -205) + 'px');
+          b.style.setProperty('--sx', (i === 0 ? 0 : alongX ? -155 : 0) + 'px');
+          b.style.setProperty('--sy', (i === 0 ? 0 : alongX ? 0 : -155) + 'px');
           b.style.setProperty('--delay', (i * STEP) + 'ms');
           b.style.setProperty('--dur', DUR + 'ms');
           stack.appendChild(b);
