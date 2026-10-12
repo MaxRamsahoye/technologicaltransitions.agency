@@ -1065,13 +1065,22 @@
       transition: opacity 0.4s ease, visibility 0s linear 0.4s;
     }
 
-    /* ...and only once the Overview has finished fading in (0.4s + 0.9s) */
-    html.design-2 body.overview-shown #overview ~ *,
-    html.design-2 body.overview-shown .endnotes,
-    html.design-2 body.overview-shown .site-footer {
+    /* until then they are taken out of the page altogether, so there is
+       nothing below the Overview to scroll down to */
+    html.design-2 body:not(.rest-in-page) #overview ~ *,
+    html.design-2 body:not(.rest-in-page) .endnotes,
+    html.design-2 body:not(.rest-in-page) .site-footer {
+      display: none;
+    }
+
+    /* ...and only once the Overview has finished fading in (0.4s + 0.9s),
+       when the script puts them back and fades them in */
+    html.design-2 body.rest-shown #overview ~ *,
+    html.design-2 body.rest-shown .endnotes,
+    html.design-2 body.rest-shown .site-footer {
       opacity: 1;
       visibility: visible;
-      transition: opacity 0.7s ease 1.3s, visibility 0s linear 1.3s;
+      transition: opacity 0.7s ease, visibility 0s;
     }
 
     @media (max-width: 600px) {
@@ -2292,8 +2301,37 @@
         return document.documentElement.classList.contains('design-2');
       }
 
-      function showOverview() {
-        document.body.classList.add('overview-shown');
+      // the rest of the article only enters the page once the Overview has
+      // faded in (0.4s + 0.9s), so until then there is nothing to scroll to
+      var restTimer;
+      function showRest() {
+        var body = document.body;
+        body.classList.add('rest-in-page');
+        void body.offsetHeight;
+        body.classList.add('rest-shown');
+        window.dispatchEvent(new Event('resize'));
+      }
+
+      function showOverview(now) {
+        var body = document.body;
+        if (now) { clearTimeout(restTimer); body.classList.add('overview-shown'); showRest(); return; }
+        if (body.classList.contains('overview-shown')) return;
+        body.classList.add('overview-shown');
+        clearTimeout(restTimer);
+        restTimer = setTimeout(showRest, 1300);
+      }
+      window.showOverview = showOverview;
+
+      function hideOverview() {
+        var body = document.body;
+        if (!body.classList.contains('overview-shown')) return;
+        body.classList.remove('overview-shown', 'rest-shown');
+        clearTimeout(restTimer);
+        // out of the page once it has faded out
+        restTimer = setTimeout(function () {
+          body.classList.remove('rest-in-page');
+          window.dispatchEvent(new Event('resize'));
+        }, 400);
       }
 
       // scrolling down shows it; scrolling back up to the very top hides it
@@ -2301,11 +2339,22 @@
       function checkOverview() {
         if (!isDesign2()) return;
         if (window.scrollY > 10) showOverview();
-        else if (window.scrollY <= 0) document.body.classList.remove('overview-shown');
+        else if (window.scrollY <= 0) hideOverview();
       }
 
       window.addEventListener('scroll', checkOverview, { passive: true });
-      if (isDesign2() && (window.scrollY > 10 || location.hash)) showOverview();
+      // a link straight to a section needs the whole article there at once
+      if (isDesign2() && location.hash) {
+        showOverview(true);
+        var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) target.scrollIntoView();
+      } else if (isDesign2() && window.scrollY > 10) showOverview(true);
+      window.addEventListener('hashchange', function () {
+        if (!isDesign2() || document.body.classList.contains('rest-shown')) return;
+        showOverview(true);
+        var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) target.scrollIntoView();
+      });
 
       // pull the Overview up to just below the first arrow, leaving the first
       // screen where it is in design 1
@@ -2432,7 +2481,7 @@
       function toggleDesign() {
         var on = root.classList.toggle('design-2');
         try { localStorage.setItem('design', on ? '2' : '1'); } catch (err) {}
-        if (on && window.scrollY > 10) document.body.classList.add('overview-shown');
+        if (on && window.scrollY > 10 && window.showOverview) window.showOverview(true);
         if (window.placeOverview) window.placeOverview();
       }
 
