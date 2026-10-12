@@ -1065,17 +1065,8 @@
       transition: opacity 0.4s ease, visibility 0s linear 0.4s;
     }
 
-    /* until then they are taken out of the page altogether, all but the
-       first section (Major Technological Transitions), which keeps its place
-       unseen, so the page runs only to the end of it */
-    html.design-2 body:not(.rest-in-page) #overview ~ *:not(#macrohistory),
-    html.design-2 body:not(.rest-in-page) .endnotes,
-    html.design-2 body:not(.rest-in-page) .site-footer {
-      display: none;
-    }
-
     /* ...and only once the Overview has finished fading in (0.4s + 0.9s),
-       when the script puts them back and fades them in */
+       when the script fades them in */
     html.design-2 body.rest-shown #overview ~ *,
     html.design-2 body.rest-shown .endnotes,
     html.design-2 body.rest-shown .site-footer {
@@ -2302,15 +2293,11 @@
         return document.documentElement.classList.contains('design-2');
       }
 
-      // the rest of the article only enters the page once the Overview has
-      // faded in (0.4s + 0.9s), so until then there is nothing to scroll to
+      // the rest of the article only appears once the Overview has faded in
+      // (0.4s + 0.9s)
       var restTimer;
       function showRest() {
-        var body = document.body;
-        body.classList.add('rest-in-page');
-        void body.offsetHeight;
-        body.classList.add('rest-shown');
-        window.dispatchEvent(new Event('resize'));
+        document.body.classList.add('rest-shown');
       }
 
       function showOverview(now) {
@@ -2328,11 +2315,6 @@
         if (!body.classList.contains('overview-shown')) return;
         body.classList.remove('overview-shown', 'rest-shown');
         clearTimeout(restTimer);
-        // out of the page once it has faded out
-        restTimer = setTimeout(function () {
-          body.classList.remove('rest-in-page');
-          window.dispatchEvent(new Event('resize'));
-        }, 400);
       }
 
       // scrolling down shows it; scrolling back up to the very top hides it
