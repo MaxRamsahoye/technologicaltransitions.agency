@@ -431,7 +431,7 @@
       left: 0;
       top: 0;
       backface-visibility: visible;
-      transition: background-color 0.5s ease;
+      transition: background-color 0.3s ease;
     }
 
     /* complete: the stack turns the blue accent before the page appears */
@@ -1625,13 +1625,15 @@
         // The page script plays the completion chord on this.
         window.loaderComplete = true;
         document.dispatchEvent(new Event('loadercomplete'));
-        // the finished stack turns blue, holds a moment, then fades away
+        // the finished stack (already blue from the moment the last slab
+        // landed) holds a moment, then fades away
         var stacking = loader.classList.contains('loader-stacking');
+        var hold = stacking ? Math.max(200, 650 - (performance.now() - (window.loaderBlueAt || 0))) : 200;
         loader.classList.add('loader-complete');
         setTimeout(function () {
           loader.classList.add('loader-done');
           setTimeout(function () { loader.remove(); }, 700);
-        }, stacking ? 750 : 200);
+        }, hold);
       }
 
       // Default: the stack. The ring stays as the fallback, for anyone who
@@ -1671,6 +1673,12 @@
         loader.classList.add('loader-stacking');
         var built = (LEVELS - 1) * STEP + DUR + 120;
         var t0 = performance.now();
+        // turn blue the moment the last slab lands (the ease-out has it
+        // settled well before its animation formally ends)
+        setTimeout(function () {
+          window.loaderBlueAt = performance.now();
+          loader.classList.add('loader-complete');
+        }, (LEVELS - 1) * STEP + DUR * 0.55);
         (function wait() {
           var elapsed = performance.now() - t0;
           if (elapsed >= built && (ready || elapsed >= MAX_WAIT)) finishLoader();
