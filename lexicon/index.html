@@ -1393,8 +1393,12 @@
         return li;
       });
       function track() {
-        var past = band.getBoundingClientRect().bottom < 0 &&
-          !(footer && footer.getBoundingClientRect().top < window.innerHeight);
+        // gone the moment the band (which runs on below the section) or the
+        // footer reaches it
+        var bandBottom = band.getBoundingClientRect().bottom - (parseFloat(getComputedStyle(band, '::before').bottom) || 0);
+        var box = side.getBoundingClientRect();
+        var past = bandBottom < box.top &&
+          !(footer && footer.getBoundingClientRect().top < box.bottom);
         side.classList.toggle('visible', past);
         var line = window.innerHeight * 0.45, at = -1;
         heads.forEach(function (t, i) { if (t.getBoundingClientRect().top <= line) at = i; });

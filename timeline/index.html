@@ -2507,13 +2507,14 @@
       var upBtn = document.querySelector('.scroll-top-btn');
       var sideNav = document.querySelector('.mini-side');
       var band = document.querySelector('.timeline-top');
+      // the corner menus and buttons go the moment the band (which runs on
+      // below the section) reaches them, so they never sit over it
       function showUp() {
-        var past = band.getBoundingClientRect().bottom < 0;
-        upBtn.classList.toggle('visible', past);
-        allBtn.classList.toggle('visible', past);
-        sideNav.classList.toggle('visible', past);
-        document.querySelector('.domain-side').classList.toggle('visible', past);
-        document.querySelector('.domain-toggle-all').classList.toggle('visible', past);
+        var bandBottom = band.getBoundingClientRect().bottom - (parseFloat(getComputedStyle(band, '::before').bottom) || 0);
+        upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0);
+        [allBtn, sideNav, document.querySelector('.domain-side'), document.querySelector('.domain-toggle-all')].forEach(function (el) {
+          el.classList.toggle('visible', bandBottom < el.getBoundingClientRect().top);
+        });
       }
       window.addEventListener('scroll', showUp, { passive: true });
       showUp();
