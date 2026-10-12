@@ -553,8 +553,9 @@
     @media (min-width: 1280px) {
       .view-tabs {
         position: absolute;
-        /* the band runs 180px above this section and 112px below it */
-        top: calc(50% - 34px);
+        /* pinned at the same height in both views: the middle of the era
+           view's band */
+        top: 292px;
         left: calc((var(--wide-col) - 100vw) / 2 + 40px);
         flex-direction: column;
         align-items: flex-start;
