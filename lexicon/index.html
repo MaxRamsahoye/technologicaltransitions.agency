@@ -223,6 +223,43 @@
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.5' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center / contain no-repeat;
     }
 
+    /* grouped by letter: each letter heads its run of concepts, and the
+       script deals the runs into balanced columns, never splitting one */
+    .lexicon-index ol.by-letter {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .lexicon-index li.index-col,
+    .lexicon-index li.index-group {
+      padding: 0;
+    }
+
+    .lexicon-index li.index-group + li.index-group {
+      padding-top: 22px;
+    }
+
+    .lexicon-index li.index-col::before,
+    .lexicon-index li.index-group::before {
+      content: none;
+    }
+
+    .lexicon-index li.index-col > ol,
+    .lexicon-index li.index-group > ol {
+      display: block;
+      padding-left: 0;
+    }
+
+    .index-letter {
+      display: block;
+      padding-bottom: 4px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+    }
+
     .lexicon-index a,
     .term dt a {
       color: inherit;
@@ -762,12 +799,60 @@
       var terms = Array.prototype.slice.call(document.querySelectorAll('.lexicon .term'));
       document.querySelector('[data-concept-count]').textContent = terms.length;
 
-      // balance the index columns: rows = entries / columns, rounded up
+      // the index grouped by letter, each group headed by its letter
       var indexList = document.querySelector('.lexicon-index ol');
+      var group = null, groupLetter = '';
+      Array.prototype.slice.call(indexList.children).forEach(function (li) {
+        var letter = li.textContent.trim().charAt(0).toUpperCase();
+        if (letter !== groupLetter) {
+          groupLetter = letter;
+          group = document.createElement('li');
+          group.className = 'index-group';
+          group.innerHTML = '<span class="index-letter" aria-hidden="true"></span><ol></ol>';
+          group.firstChild.textContent = letter;
+          indexList.insertBefore(group, li);
+        }
+        group.lastChild.appendChild(li);
+      });
+      indexList.classList.add('by-letter');
+
+      // deal the letter groups into the columns (three, two or one, from
+      // --cols), in order, so that the longest column is as short as can be
+      var groups = Array.prototype.slice.call(indexList.children);
+      var LETTER_WEIGHT = 1.6;   // a letter and the space above it, in entries
+      var dealtCols = 0;
       function balanceIndex() {
         var cols = parseInt(getComputedStyle(indexList).getPropertyValue('--cols'), 10) || 1;
-        var n = indexList.children.length;
-        indexList.style.gridTemplateRows = cols > 1 ? 'repeat(' + Math.ceil(n / cols) + ', auto)' : 'none';
+        if (cols === dealtCols) return;
+        dealtCols = cols;
+        var sizes = groups.map(function (g) { return g.lastChild.children.length + LETTER_WEIGHT; });
+        // best[k][i]: the smallest longest column putting groups i.. into k columns
+        var n = groups.length, best = [], cut = [];
+        function span(i, j) { var t = 0; for (var x = i; x < j; x++) t += sizes[x]; return t; }
+        for (var k = 1; k <= cols; k++) {
+          best[k] = []; cut[k] = [];
+          for (var i = 0; i <= n; i++) {
+            if (k === 1) { best[k][i] = span(i, n); cut[k][i] = n; continue; }
+            best[k][i] = Infinity;
+            for (var j = i + 1; j <= n; j++) {
+              var worst = Math.max(span(i, j), best[k - 1][j]);
+              if (worst < best[k][i]) { best[k][i] = worst; cut[k][i] = j; }
+            }
+            if (i === n) { best[k][i] = 0; cut[k][i] = n; }
+          }
+        }
+        while (indexList.firstChild) indexList.removeChild(indexList.firstChild);
+        var at = 0;
+        for (var c = cols; c >= 1 && at < n; c--) {
+          var end = cut[c][at];
+          var col = document.createElement('li');
+          col.className = 'index-col';
+          var ol = document.createElement('ol');
+          groups.slice(at, end).forEach(function (g) { ol.appendChild(g); });
+          col.appendChild(ol);
+          indexList.appendChild(col);
+          at = end;
+        }
       }
       window.addEventListener('resize', balanceIndex);
       balanceIndex();
