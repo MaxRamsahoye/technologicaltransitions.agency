@@ -342,6 +342,21 @@
       }
     }
 
+    /* a letter heading each letter's subsection of the lexicon */
+    .lexicon-letter {
+      padding: 64px 0 4px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+      scroll-margin-top: 20px;
+    }
+
+    .lexicon-letter:first-child {
+      padding-top: 0;
+    }
+
     .term dt {
       font-family: var(--sans);
       font-weight: 600;
@@ -755,7 +770,7 @@
     <div class="progress-pill-fill"></div>
   </div>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".lexicon .term:first-child">
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".lexicon .term">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
       <polygon points="14,9.625 19.625,18.375 8.375,18.375"/>
     </svg>
@@ -857,11 +872,20 @@
       window.addEventListener('resize', balanceIndex);
       balanceIndex();
 
+      // a subheading opens each letter's subsection, and the A–Z jumps to it
       var first = {};
       terms.forEach(function (t) {
         var letter = t.querySelector('dt').textContent.trim().charAt(0).toUpperCase();
-        if (!first[letter]) first[letter] = t;
         t.dataset.letter = letter;
+        if (first[letter]) return;
+        var h = document.createElement('div');
+        h.className = 'lexicon-letter';
+        h.id = 'letter-' + letter.toLowerCase();
+        h.setAttribute('role', 'heading');
+        h.setAttribute('aria-level', '2');
+        h.textContent = letter;
+        t.parentNode.insertBefore(h, t);
+        first[letter] = h;
       });
 
       var az = document.querySelector('.az-index');
