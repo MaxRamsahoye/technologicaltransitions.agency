@@ -443,6 +443,11 @@
       padding: 6px 0 6px 22px;
     }
 
+    /* a term with terms of its own: they follow on its rows' spacing */
+    .curated-menu li li:has(> ol) {
+      padding-bottom: 0;
+    }
+
     .curated-menu li ol {
       margin-top: 6px;
     }
@@ -539,6 +544,10 @@
       margin-left: 40px;
     }
 
+    .lexicon-curated .term-sub2 {
+      margin-left: 80px;
+    }
+
     /* more room above each head term, setting its group apart */
     .lexicon-curated .term:not(.term-sub):not(:first-child) {
       margin-top: 72px;
@@ -547,6 +556,10 @@
     @media (max-width: 600px) {
       .lexicon-curated .term-sub {
         margin-left: 20px;
+      }
+
+      .lexicon-curated .term-sub2 {
+        margin-left: 40px;
       }
     }
 
@@ -685,7 +698,7 @@
     <h1 class="page-title"><a class="heading-link title-top" href="#">Lexicon</a></h1>
     <p class="page-intro">Key terms used in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
 
-    <p class="concept-count">Concepts Count: <span data-concept-count>21 / 67</span></p>
+    <p class="concept-count">Concepts Count: <span data-concept-count>27 / 74</span></p>
 
     <nav class="lexicon-index" id="concepts" aria-label="Concepts">
       <ol>
@@ -701,12 +714,14 @@
       <li><a href="#city-state">City-State</a></li>
       <li><a href="#civilisation">Civilisation</a></li>
       <li><a href="#civilisational-collapse">Civilisational Collapse</a></li>
+      <li><a href="#civilisational-dynamics">Civilisational Dynamics</a></li>
       <li><a href="#civilisational-paradigm">Civilisational Paradigm</a></li>
       <li><a href="#co-evolution">Co-Evolution</a></li>
       <li><a href="#collective-action">Collective Action</a></li>
       <li><a href="#competitive-pressures">Competitive Pressures</a></li>
       <li><a href="#critical-evolutionary-game-theory-model">Critical Evolutionary Game-Theory Model</a></li>
       <li><a href="#cultural-psychology">Cultural Psychology</a></li>
+      <li><a href="#darwinian-trap">Darwinian Trap</a></li>
       <li><a href="#design-development-deployment-diffusion">Design, Development, Deployment, Diffusion</a></li>
       <li><a href="#digital-revolution">Digital Revolution</a></li>
       <li><a href="#division-of-labour">Division of Labour</a></li>
@@ -718,7 +733,9 @@
       <li><a href="#existential-risk">Existential Risk</a></li>
       <li><a href="#exponential-technology">Exponential Technology</a></li>
       <li><a href="#exterminism">Exterminism</a></li>
+      <li><a href="#extractivism">Extractivism</a></li>
       <li><a href="#fitness-landscape">Fitness Landscape</a></li>
+      <li><a href="#hobbesian-trap">Hobbesian Trap</a></li>
       <li><a href="#hunter-gatherers">Hunter-Gatherers</a></li>
       <li><a href="#industrial-revolution">Industrial Revolution</a></li>
       <li><a href="#infrastructure">Infrastructure</a></li>
@@ -742,11 +759,14 @@
       <li><a href="#post-industrial">Post-Industrial</a></li>
       <li><a href="#power-elite">Power-Elite</a></li>
       <li><a href="#private-property">Private Property</a></li>
+      <li><a href="#red-queen-race">Red Queen Race</a></li>
       <li><a href="#science-and-technology-studies">Science and Technology Studies</a></li>
+      <li><a href="#security-dilemma">Security Dilemma</a></li>
       <li><a href="#selection-pressure">Selection Pressure</a></li>
       <li><a href="#social-construction-of-technology">Social Construction of Technology</a></li>
       <li><a href="#socio-economic-class">Socio-Economic Class</a></li>
       <li><a href="#socio-technical-system">Socio-Technical System</a></li>
+      <li><a href="#spiral-model">Spiral Model</a></li>
       <li><a href="#status-seeking">Status-Seeking</a></li>
       <li><a href="#storable-surplus">Storable Surplus</a></li>
       <li><a href="#strategic-advantage">Strategic Advantage</a></li>
@@ -771,6 +791,7 @@
           <ol>
             <li><a href="#curated-accelerationism">Accelerationism</a></li>
             <li><a href="#curated-exterminism">Exterminism</a></li>
+            <li><a href="#curated-extractivism">Extractivism</a></li>
           </ol>
         </li>
         <li><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a>
@@ -783,6 +804,7 @@
         <li><a href="#curated-macrohistory">Macrohistory</a>
           <ol>
             <li><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></li>
+            <li><a href="#curated-civilisational-dynamics">Civilisational Dynamics</a></li>
             <li><a href="#curated-civilisational-collapse">Civilisational Collapse</a></li>
           </ol>
         </li>
@@ -790,13 +812,26 @@
           <ol>
             <li><a href="#curated-technological-determinism">Technological Determinism</a></li>
             <li><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></li>
+            <li><a href="#curated-exponential-technology">Exponential Technology</a></li>
           </ol>
         </li>
         <li><a href="#curated-critical-evolutionary-game-theory">Critical Evolutionary Game-Theory</a>
           <ol>
-            <li><a href="#curated-evolutionary-prisoners-dilemma">Evolutionary Prisoner&rsquo;s Dilemma</a></li>
-            <li><a href="#curated-multi-polar-trap">Multi-Polar Trap (also Darwinian Trap, Hobbesian Trap)</a></li>
-            <li><a href="#curated-arms-race">Arms Race</a></li>
+            <li><a href="#curated-evolutionary-prisoners-dilemma">Evolutionary Prisoner&rsquo;s Dilemma</a>
+              <ol>
+                <li><a href="#curated-security-dilemma">Security Dilemma (also Spiral Model)</a></li>
+              </ol>
+            </li>
+            <li><a href="#curated-multi-polar-trap">Multi-Polar Trap</a>
+              <ol>
+                <li><a href="#curated-darwinian-hobbesian-trap">Darwinian Trap &amp; Hobbesian Trap</a></li>
+              </ol>
+            </li>
+            <li><a href="#curated-arms-race">Arms Race</a>
+              <ol>
+                <li><a href="#curated-red-queen-race">Red Queen Race</a></li>
+              </ol>
+            </li>
           </ol>
         </li>
       </ol>
@@ -838,6 +873,10 @@
         <dt><a href="#curated-exterminism">Exterminism</a></dt>
         <dd>E.P. Thompson&rsquo;s term for the tendencies of a society &ndash; in its economy, its polity and its ideology &ndash; that thrust it in a direction whose outcome must be the extermination of multitudes: for him, the logic of the nuclear arms race.</dd>
       </div>
+      <div class="term term-sub" id="curated-extractivism">
+        <dt><a href="#curated-extractivism">Extractivism</a></dt>
+        <dd>An economy, or a way of developing one, built on taking natural resources &ndash; minerals, fossil fuels, timber, land and labour &ndash; in bulk for use elsewhere, with little return to the places and people they are taken from.</dd>
+      </div>
       <div class="term" id="curated-systemic-existential-risk">
         <dt><a href="#curated-systemic-existential-risk">Systemic Existential Risk</a></dt>
         <dd>An existential risk that arises not from a single catastrophe or bad actor but from the structure of a system as a whole &ndash; the interaction of competitive pressures, institutions and technologies that moves it, step by step, towards catastrophe.</dd>
@@ -862,6 +901,10 @@
         <dt><a href="#curated-civilisational-paradigm">Civilisational Paradigm</a></dt>
         <dd>The overall configuration of a civilisation in a given era &ndash; its technology stack, political economy and cultural psychology taken together, as in the agrarian, industrial or digital paradigms.</dd>
       </div>
+      <div class="term term-sub" id="curated-civilisational-dynamics">
+        <dt><a href="#curated-civilisational-dynamics">Civilisational Dynamics</a></dt>
+        <dd>The forces and feedbacks that move a civilisation through time &ndash; growth, competition, innovation, inequality, overreach and decline &ndash; carrying it from one paradigm towards the next, or towards collapse.</dd>
+      </div>
       <div class="term term-sub" id="curated-civilisational-collapse">
         <dt><a href="#curated-civilisational-collapse">Civilisational Collapse</a></dt>
         <dd>The rapid and lasting loss of a society&rsquo;s complexity &ndash; its population, institutions, economy and capacity to govern &ndash; as befell the Western Roman Empire or the palace states of the Late Bronze Age.</dd>
@@ -878,6 +921,10 @@
         <dt><a href="#curated-social-construction-of-technology">Social Construction of Technology</a></dt>
         <dd>The view, set against technological determinism, that technologies are shaped by the social groups who design, contest and use them, rather than following an inevitable logic of their own.</dd>
       </div>
+      <div class="term term-sub" id="curated-exponential-technology">
+        <dt><a href="#curated-exponential-technology">Exponential Technology</a></dt>
+        <dd>A technology whose capabilities grow at an accelerating rate, so that its effects can outpace the institutions meant to govern it.</dd>
+      </div>
       <div class="term" id="curated-critical-evolutionary-game-theory">
         <dt><a href="#curated-critical-evolutionary-game-theory">Critical Evolutionary Game-Theory</a></dt>
         <dd>Evolutionary game theory made critical: the study of how strategies spread by the advantage they confer, joined to an account of the agents who choose them &ndash; the basis of the model proposed here, in which major technological transitions are <em>structurally driven</em> by global competitive pressures and <em>agentially enacted</em> by the power-elite.</dd>
@@ -886,13 +933,25 @@
         <dt><a href="#curated-evolutionary-prisoners-dilemma">Evolutionary Prisoner&rsquo;s Dilemma</a></dt>
         <dd>The prisoner&rsquo;s dilemma played over and over across a population, in which cooperating and defecting strategies spread according to their payoffs &ndash; showing how defection can come to dominate even when every player would gain from cooperation.</dd>
       </div>
+      <div class="term term-sub term-sub2" id="curated-security-dilemma">
+        <dt><a href="#curated-security-dilemma">Security Dilemma (also Spiral Model)</a></dt>
+        <dd>The predicament in which one state&rsquo;s efforts to make itself secure &ndash; arming, allying, fortifying &ndash; make its rivals less secure, so that they respond in kind and all end up less safe. The <em>spiral model</em> describes how this mutual fear escalates towards arms races and war.</dd>
+      </div>
       <div class="term term-sub" id="curated-multi-polar-trap">
-        <dt><a href="#curated-multi-polar-trap">Multi-Polar Trap (also Darwinian Trap, Hobbesian Trap)</a></dt>
-        <dd>A situation in which competing actors each pursue their own advantage, locking all of them into an outcome that is worse for everyone &ndash; as in an arms race. Also called a Darwinian trap or, after Hobbes&rsquo;s war of all against all, a Hobbesian trap.</dd>
+        <dt><a href="#curated-multi-polar-trap">Multi-Polar Trap</a></dt>
+        <dd>A situation in which competing actors each pursue their own advantage, locking all of them into an outcome that is worse for everyone &ndash; as in an arms race.</dd>
+      </div>
+      <div class="term term-sub term-sub2" id="curated-darwinian-hobbesian-trap">
+        <dt><a href="#curated-darwinian-hobbesian-trap">Darwinian Trap &amp; Hobbesian Trap</a></dt>
+        <dd>Two names for the bind a multi-polar trap creates. In a Darwinian trap, selection rewards a strategy that serves the individual but harms the whole, so that it spreads anyway; in a Hobbesian trap, mutual fear of attack drives each party to arm, or to strike, first.</dd>
       </div>
       <div class="term term-sub" id="curated-arms-race">
         <dt><a href="#curated-arms-race">Arms Race</a></dt>
         <dd>A competition in which rival actors each escalate their capabilities to keep pace with one another &ndash; a common form of multi-polar trap.</dd>
+      </div>
+      <div class="term term-sub term-sub2" id="curated-red-queen-race">
+        <dt><a href="#curated-red-queen-race">Red Queen Race</a></dt>
+        <dd>An arms race in which each side must keep improving merely to hold its place against the others &ndash; after the Red Queen in <em>Through the Looking-Glass</em>, who must run as fast as she can to stay where she is.</dd>
       </div>
       </dl>
     </section>
@@ -946,6 +1005,10 @@
         <dt><a href="#civilisational-collapse">Civilisational Collapse</a></dt>
         <dd>The rapid and lasting loss of a society&rsquo;s complexity &ndash; its population, institutions, economy and capacity to govern &ndash; as befell the Western Roman Empire or the palace states of the Late Bronze Age.</dd>
       </div>
+      <div class="term" id="civilisational-dynamics">
+        <dt><a href="#civilisational-dynamics">Civilisational Dynamics</a></dt>
+        <dd>The forces and feedbacks that move a civilisation through time &ndash; growth, competition, innovation, inequality, overreach and decline &ndash; carrying it from one paradigm towards the next, or towards collapse.</dd>
+      </div>
       <div class="term" id="civilisational-paradigm">
         <dt><a href="#civilisational-paradigm">Civilisational Paradigm</a></dt>
         <dd>The overall configuration of a civilisation in a given era &ndash; its technology stack, political economy and cultural psychology taken together, as in the agrarian, industrial or digital paradigms.</dd>
@@ -969,6 +1032,10 @@
       <div class="term" id="cultural-psychology">
         <dt><a href="#cultural-psychology">Cultural Psychology</a></dt>
         <dd>The shared beliefs, values and habits of mind of a population &ndash; the superstructures that each technology stack reshapes.</dd>
+      </div>
+      <div class="term" id="darwinian-trap">
+        <dt><a href="#darwinian-trap">Darwinian Trap</a></dt>
+        <dd>A situation in which selection rewards a strategy that serves the individual but harms the whole, so that it spreads even as it leaves everyone worse off.</dd>
       </div>
       <div class="term" id="design-development-deployment-diffusion">
         <dt><a href="#design-development-deployment-diffusion">Design, Development, Deployment, Diffusion</a></dt>
@@ -1014,9 +1081,17 @@
         <dt><a href="#exterminism">Exterminism</a></dt>
         <dd>E.P. Thompson&rsquo;s term for the tendencies of a society &ndash; in its economy, its polity and its ideology &ndash; that thrust it in a direction whose outcome must be the extermination of multitudes: for him, the logic of the nuclear arms race.</dd>
       </div>
+      <div class="term" id="extractivism">
+        <dt><a href="#extractivism">Extractivism</a></dt>
+        <dd>An economy, or a way of developing one, built on taking natural resources &ndash; minerals, fossil fuels, timber, land and labour &ndash; in bulk for use elsewhere, with little return to the places and people they are taken from.</dd>
+      </div>
       <div class="term" id="fitness-landscape">
         <dt><a href="#fitness-landscape">Fitness Landscape</a></dt>
         <dd>The terrain of competitive advantage on which societies are selected &ndash; which political economies and cultural psychologies prosper, and which are outcompeted, under a given technology stack.</dd>
+      </div>
+      <div class="term" id="hobbesian-trap">
+        <dt><a href="#hobbesian-trap">Hobbesian Trap</a></dt>
+        <dd>A situation in which mutual fear of attack drives each party to arm, or to strike, first &ndash; after Hobbes&rsquo;s war of all against all, in which the fear of violence is itself its cause.</dd>
       </div>
       <div class="term" id="hunter-gatherers">
         <dt><a href="#hunter-gatherers">Hunter-Gatherers</a></dt>
@@ -1110,9 +1185,17 @@
         <dt><a href="#private-property">Private Property</a></dt>
         <dd>Resources owned and controlled by individuals or groups to the exclusion of others &ndash; made possible by storable surplus.</dd>
       </div>
+      <div class="term" id="red-queen-race">
+        <dt><a href="#red-queen-race">Red Queen Race</a></dt>
+        <dd>An arms race in which each side must keep improving merely to hold its place against the others &ndash; after the Red Queen in <em>Through the Looking-Glass</em>, who must run as fast as she can to stay where she is.</dd>
+      </div>
       <div class="term" id="science-and-technology-studies">
         <dt><a href="#science-and-technology-studies">Science and Technology Studies</a></dt>
         <dd>The field that studies how science and technology shape society, and how society in turn shapes them.</dd>
+      </div>
+      <div class="term" id="security-dilemma">
+        <dt><a href="#security-dilemma">Security Dilemma</a></dt>
+        <dd>The predicament in which one state&rsquo;s efforts to make itself secure &ndash; arming, allying, fortifying &ndash; make its rivals less secure, so that they respond in kind and all end up less safe.</dd>
       </div>
       <div class="term" id="selection-pressure">
         <dt><a href="#selection-pressure">Selection Pressure</a></dt>
@@ -1129,6 +1212,10 @@
       <div class="term" id="socio-technical-system">
         <dt><a href="#socio-technical-system">Socio-Technical System</a></dt>
         <dd>A society understood as a single configuration of its technologies and the social structures built around them.</dd>
+      </div>
+      <div class="term" id="spiral-model">
+        <dt><a href="#spiral-model">Spiral Model</a></dt>
+        <dd>An account of how conflict escalates through the security dilemma: each side reads the other&rsquo;s defensive moves as a threat and answers in kind, so that mutual fear spirals towards arms races and war.</dd>
       </div>
       <div class="term" id="status-seeking">
         <dt><a href="#status-seeking">Status-Seeking</a></dt>
