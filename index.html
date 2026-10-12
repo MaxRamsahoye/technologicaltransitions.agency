@@ -391,38 +391,81 @@
       stroke: var(--link);
     }
 
-    /* the default loading screen: a tech stack built up level by level, each
-       block sliding in from alternate sides and landing on the one below, a
-       little narrower each time (the ring above is kept as the fallback) */
+    /* the default loading screen: a tech stack built up level by level, in
+       3D like the game Stack - each slab slides in from alternate sides and
+       lands on the one below, trimmed a little where it overhung (the ring
+       above is kept as the fallback) */
     .loader-stack {
       position: relative;
-      width: 120px;
-      height: calc(var(--levels, 8) * 13px);
+      width: 0;
+      height: 0;
+      transform: translateY(var(--lift, 40px)) rotateX(58deg) rotateZ(45deg);
+      transform-style: preserve-3d;
+      --top: color-mix(in srgb, var(--link) 38%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--link) 70%, var(--canvas-bg));
+      --right: var(--link);
+    }
+
+    /* lit from above in either theme: the top palest in light, brightest in dark */
+    html[data-theme="dark"] .loader-stack {
+      --top: var(--link);
+      --left: color-mix(in srgb, var(--link) 62%, var(--canvas-bg));
+      --right: color-mix(in srgb, var(--link) 38%, var(--canvas-bg));
     }
 
     .loader-block {
       position: absolute;
-      left: 50%;
-      bottom: calc(var(--i) * 13px);
+      left: 0;
+      top: 0;
       width: var(--w);
-      height: 10px;
-      background: var(--link);
-      opacity: 0;
-      transform: translateX(calc(-50% + var(--from)));
-      animation: loader-block-in var(--dur, 0.34s) cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+      height: var(--d);
+      transform-style: preserve-3d;
+      /* hidden until its turn (not faded: opacity would flatten the 3D) */
+      visibility: hidden;
+      transform: translate3d(calc(var(--x) + var(--sx)), calc(var(--y) + var(--sy)), var(--z));
+      animation: loader-block-in var(--dur) cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    }
+
+    .loader-block > span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      backface-visibility: visible;
+    }
+
+    .loader-face-top {
+      width: var(--w);
+      height: var(--d);
+      background: var(--top);
+      transform: translateZ(var(--h));
+    }
+
+    .loader-face-front {
+      width: var(--w);
+      height: var(--h);
+      top: var(--d) !important;
+      background: var(--left);
+      transform-origin: top;
+      transform: translateZ(var(--h)) rotateX(-90deg);
+    }
+
+    .loader-face-side {
+      width: var(--h);
+      height: var(--d);
+      left: var(--w) !important;
+      background: var(--right);
+      transform-origin: left;
+      transform: translateZ(var(--h)) rotateY(90deg);
     }
 
     @keyframes loader-block-in {
       from {
-        opacity: 0;
-        transform: translateX(calc(-50% + var(--from)));
-      }
-      30% {
-        opacity: 1;
+        visibility: visible;
+        transform: translate3d(calc(var(--x) + var(--sx)), calc(var(--y) + var(--sy)), var(--z));
       }
       to {
-        opacity: 1;
-        transform: translateX(calc(-50% + var(--land)));
+        visibility: visible;
+        transform: translate3d(var(--x), var(--y), var(--z));
       }
     }
 
@@ -1578,20 +1621,29 @@
       try { useRing = localStorage.getItem('loader') === 'ring'; } catch (e) {}
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) useRing = true;
       if (!useRing) {
-        var LEVELS = 8, STEP = 170, DUR = 340, MAX_WAIT = 5000;
+        var LEVELS = 8, STEP = 360, DUR = 700, MAX_WAIT = 7000, H = 12;
         var stack = document.createElement('div');
         stack.className = 'loader-stack';
-        stack.style.setProperty('--levels', LEVELS);
+        stack.style.setProperty('--lift', (LEVELS * H / 2 + 20) + 'px');
+        // the slab's footprint, trimmed along the axis it slid in on
+        var w = 84, d = 84, x = 0, y = 0;
         for (var i = 0; i < LEVELS; i++) {
+          var alongX = i % 2 === 1;   // from the left along x, from the right along y
+          if (i > 0) {
+            if (alongX) { w -= 6; x += (i % 4 === 1 ? 4 : 2); }
+            else { d -= 6; y += (i % 4 === 2 ? 4 : 2); }
+          }
           var b = document.createElement('div');
           b.className = 'loader-block';
-          var fromLeft = i % 2 === 0;
-          // each level a little narrower, landing a touch off-centre towards
-          // the side it came from, as if trimmed where it overhung
-          b.style.setProperty('--i', i);
-          b.style.setProperty('--w', (104 - i * 8) + 'px');
-          b.style.setProperty('--from', (fromLeft ? -140 : 140) + 'px');
-          b.style.setProperty('--land', (i === 0 ? 0 : (fromLeft ? -2 : 2)) + 'px');
+          b.innerHTML = '<span class="loader-face-top"></span><span class="loader-face-front"></span><span class="loader-face-side"></span>';
+          b.style.setProperty('--w', w + 'px');
+          b.style.setProperty('--d', d + 'px');
+          b.style.setProperty('--h', H + 'px');
+          b.style.setProperty('--x', (x - 42) + 'px');
+          b.style.setProperty('--y', (y - 42) + 'px');
+          b.style.setProperty('--z', (i * H) + 'px');
+          b.style.setProperty('--sx', (i === 0 ? 0 : alongX ? -170 : 0) + 'px');
+          b.style.setProperty('--sy', (i === 0 ? 0 : alongX ? 0 : -170) + 'px');
           b.style.setProperty('--delay', (i * STEP) + 'ms');
           b.style.setProperty('--dur', DUR + 'ms');
           stack.appendChild(b);
