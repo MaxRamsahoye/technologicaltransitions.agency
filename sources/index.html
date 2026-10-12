@@ -60,76 +60,39 @@
       margin-bottom: 0;
     }
 
-    /* list menu of the sources in the top section: author, then their works */
-    .sources-index {
-      margin-top: 56px;
-    }
-
-    .sources-index ol {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px 48px;
-      list-style: none;
-      margin: 0;
+    /* the top section's bibliography: one reference per work, by author
+       surname, each title linking to the work itself */
+    .bibliography {
+      max-width: 820px;
+      margin: 56px 0 0;
       padding: 0;
-    }
-
-    /* each author, then their works one per line, each with a ring bullet */
-    .sources-index-list {
       list-style: none;
-      margin: 8px 0 0;
-      padding: 0;
     }
 
-    .sources-index-list li {
-      position: relative;
-      padding: 3px 0 3px 22px;
-      font-size: 18px;
-      line-height: 23px;
+    .bibliography li {
+      margin: 0 0 14px;
+      padding-left: 32px;
+      text-indent: -32px;
+      font-size: 19px;
+      line-height: 1.4;
     }
 
-    /* a small ring bullet: a whole-pixel box with a border, so every one is
-       the same perfect circle */
-    .sources-index-list li::before {
-      content: '';
-      position: absolute;
-      left: 2px;
-      top: 11px; /* centred on the 23px line: 3 + 11.5 - 3.5 */
-      box-sizing: border-box;
-      width: 7px;
-      height: 7px;
-      border: 1.25px solid currentColor;
-      border-radius: 50%;
-    }
-
-    .sources-index-author {
-      margin: 0;
-      line-height: 20px;
-      font-family: var(--sans);
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .sources-index-list a {
+    .bibliography a {
       color: inherit;
-      text-decoration: none;
-    }
-
-    .sources-index-list a:hover {
       text-decoration: underline;
+      text-decoration-thickness: 1px;
       text-underline-offset: 3px;
     }
 
-    @media (max-width: 900px) {
-      .sources-index ol {
-        grid-template-columns: 1fr 1fr;
-      }
+    .bibliography a:hover {
+      text-decoration-thickness: 1.5px;
     }
 
     @media (max-width: 600px) {
-      .sources-index ol {
-        grid-template-columns: 1fr;
+      .bibliography li {
+        padding-left: 20px;
+        text-indent: -20px;
+        font-size: 17px;
       }
     }
 
@@ -318,7 +281,19 @@
     <div class="sources-top wide-top on-band">
     <h1 class="page-title">Sources</h1>
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
-    <nav class="sources-index" aria-label="Sources"><ol></ol></nav>
+    <ol class="bibliography" aria-label="Bibliography">
+      <li>Dafoe, Allan. 2015. &ldquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>.&rdquo; <em>Science, Technology, &amp; Human Values</em> 40 (6): 1047&ndash;1076.</li>
+      <li>Diamond, Jared. 1987. &ldquo;<a href="https://www.discovermagazine.com/magazine/issue/may-1987" target="_blank" rel="noopener">The Worst Mistake in the History of the Human Race</a>.&rdquo; <em>Discover</em>, May 1987, 64&ndash;66.</li>
+      <li>Diamond, Jared. 1997. <em><a href="https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel" target="_blank" rel="noopener">Guns, Germs, and Steel: The Fates of Human Societies</a></em>. New York: W. W. Norton.</li>
+      <li>Harris, Marvin. 1979. <em><a href="https://mitpressbookstore.mit.edu/book/9780759101340" target="_blank" rel="noopener">Cultural Materialism: The Struggle for a Science of Culture</a></em>. New York: Random House.</li>
+      <li>Joseph, Peter. 2017. <em><a href="https://www.penguinrandomhouse.com/books/691520/the-new-human-rights-movement-by-peter-joseph/" target="_blank" rel="noopener">The New Human Rights Movement: Reinventing the Economy to End Oppression</a></em>. Dallas: BenBella Books.</li>
+      <li>Kemp, Luke. 2025. <em><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</a></em>. New York: Knopf.</li>
+      <li>Sahlins, Marshall. 1972. &ldquo;<a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">The Original Affluent Society</a>.&rdquo; In <em>Stone Age Economics</em>, 1&ndash;39. Chicago: Aldine-Atherton.</li>
+      <li>Sapolsky, Robert M. 2017. <em><a href="https://penguinrandomhouse.ca/books/311787/behave-by-robert-m-sapolsky" target="_blank" rel="noopener">Behave: The Biology of Humans at Our Best and Worst</a></em>. New York: Penguin Press.</li>
+      <li>Schmachtenberger, Daniel. n.d. &ldquo;<a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">The Emergence Model</a>.&rdquo;</li>
+      <li>Schmachtenberger, Daniel. n.d. &ldquo;<a href="https://civilizationemerging.com/new-economics-series-4/" target="_blank" rel="noopener">New Economics, Part IV</a>.&rdquo; <em>Civilization Emerging</em>.</li>
+      <li>Wilber, Ken. 1995. <em><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Sex, Ecology, Spirituality: The Spirit of Evolution</a></em>. Boston: Shambhala.</li>
+    </ol>
     </div>
 
     <ol class="sources">
@@ -434,38 +409,6 @@
   </button>
 
   <script>
-    // the list menu in the top section, built from the entries; each link
-    // glides down to its entry
-    (function () {
-      var menu = document.querySelector('.sources-index ol');
-      Array.prototype.forEach.call(document.querySelectorAll('.sources > .source'), function (entry) {
-        var li = document.createElement('li');
-        li.innerHTML = '<p class="sources-index-author"></p><ul class="sources-index-list"></ul>';
-        li.querySelector('.sources-index-author').textContent = entry.querySelector('.source-author').textContent;
-        var list = li.querySelector('.sources-index-list');
-        // each work links to its own place: the entry, or the part it sits in
-        entry.querySelectorAll(':scope > .source-work, :scope > .source-part > .source-work').forEach(function (w, i) {
-          var target = w.parentNode.classList.contains('source-part') ? w.parentNode : entry;
-          if (!target.id) target.id = entry.id + '-' + (i + 1);
-          var item = document.createElement('li');
-          var a = document.createElement('a');
-          a.href = '#' + target.id;
-          a.textContent = w.textContent.split(':')[0].trim();
-          item.appendChild(a);
-          list.appendChild(item);
-        });
-        menu.appendChild(li);
-      });
-      menu.addEventListener('click', function (e) {
-        var a = e.target.closest('a');
-        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        var entry = document.getElementById(a.getAttribute('href').slice(1));
-        e.preventDefault();
-        window.scrollTo({ top: entry.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' });
-        history.replaceState(null, '', '#' + entry.id);
-      }, true);
-    })();
-
     // the up arrow shows once the top section has scrolled away
     (function () {
       var upBtn = document.querySelector('.scroll-top-btn');
