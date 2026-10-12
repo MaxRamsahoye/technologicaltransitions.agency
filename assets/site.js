@@ -96,6 +96,16 @@
     } catch (e) {}
   }
 
+  /* ---------- page title ---------- */
+
+  // the page title takes you back to the top of the page
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a.title-top');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   /* ---------- theme ---------- */
 
   function currentTheme() {
