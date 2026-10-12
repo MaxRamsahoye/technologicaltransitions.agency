@@ -872,7 +872,7 @@
     }
 
 
-    /* the first two of the title's three lines alternate every four seconds
+    /* the first two of the title's three lines alternate every three seconds
        between "A Critical Evolutionary / Game-Theory Model of" and "A
        Multi-Agent / Systems Model of"; "Major Technological Transitions"
        never moves */
@@ -888,7 +888,7 @@
     .title-variant {
       grid-area: 1 / 1;
       align-self: end;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.3s ease;
     }
 
     .title-variant + .title-variant,
@@ -1940,7 +1940,7 @@
     (function () {
       var title = document.querySelector('.article-title');
       if (!title || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-      setInterval(function () { title.classList.toggle('title-alt'); }, 4000);
+      setInterval(function () { title.classList.toggle('title-alt'); }, 3000);
     })();
   </script>
   <script>
