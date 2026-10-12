@@ -1044,11 +1044,14 @@
       /* the band (h) spans exactly where the dividing lines sit */
       padding: 72px 0;
       opacity: 0;
+      /* while hidden it lets clicks through to the down arrow it overlaps */
+      pointer-events: none;
       transition: opacity 0.4s ease;
     }
 
     html.design-2 body.overview-shown #overview {
       opacity: 1;
+      pointer-events: auto;
       transition: opacity 0.9s ease 0.4s;
     }
 
@@ -1062,12 +1065,13 @@
       transition: opacity 0.4s ease, visibility 0s linear 0.4s;
     }
 
+    /* ...and only once the Overview has finished fading in (0.4s + 0.9s) */
     html.design-2 body.overview-shown #overview ~ *,
     html.design-2 body.overview-shown .endnotes,
     html.design-2 body.overview-shown .site-footer {
       opacity: 1;
       visibility: visible;
-      transition: opacity 0.9s ease 0.4s, visibility 0s linear 0.4s;
+      transition: opacity 0.7s ease 1.3s, visibility 0s linear 1.3s;
     }
 
     @media (max-width: 600px) {
