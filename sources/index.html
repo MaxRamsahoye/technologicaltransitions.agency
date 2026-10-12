@@ -94,15 +94,17 @@
       margin-bottom: 0;
     }
 
-    .bibliography a {
+    /* titles in the text colour, turning blue and underlined on hover */
+    .sources-top .bibliography a[href] {
       color: inherit;
-      text-decoration: underline;
+      text-decoration: none;
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
     }
 
-    .bibliography a:hover {
-      text-decoration-thickness: 1.5px;
+    .sources-top .bibliography a[href]:hover {
+      color: var(--link-blue);
+      text-decoration: underline;
     }
 
     /* wherever there is room, each reference on one line (the longest may
