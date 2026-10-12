@@ -858,10 +858,10 @@
       font-family: 'Inter', sans-serif;
       font-weight: 700;
       letter-spacing: -0.02em;
-      /* runs 240px into the right margin; two lines, sized so "Model of
-         Major Technological Transitions" fits on one */
+      /* runs 240px into the right margin; three lines, sized so "Major
+         Technological Transitions" fits on one */
       width: calc(100% + 240px);
-      font-size: min(52px, calc((min(760px, 100vw - 480px) + 240px) / 19.9));
+      font-size: min(52px, calc((min(760px, 100vw - 480px) + 240px) / 15.4));
       line-height: 1.08;
       margin: 0 0 24px;
       color: var(--canvas-ink);
@@ -872,18 +872,22 @@
     }
 
 
-    /* the start of the title alternates every four seconds between "A
-       Critical Evolutionary Game-Theory" and "A Multi-Agent Systems", on the
-       first of its two lines; "Model of Major Technological Transitions"
+    /* the first two of the title's three lines alternate every four seconds
+       between "A Critical Evolutionary / Game-Theory Model of" and "A
+       Multi-Agent / Systems Model of"; "Major Technological Transitions"
        never moves */
     .title-swap {
       display: grid;
     }
 
+    .title-swap .title-line,
+    .title-swap + .title-line {
+      display: block;
+    }
+
     .title-variant {
       grid-area: 1 / 1;
       align-self: end;
-      white-space: nowrap;
       transition: opacity 0.6s ease;
     }
 
@@ -1472,7 +1476,7 @@
     @media (max-width: 1180px) {
       .article-title {
         width: auto;
-        font-size: min(37px, calc((100vw - 48px) / 19.9));
+        font-size: min(37px, calc((100vw - 48px) / 15.4));
       }
 
       .layout-grid {
@@ -1510,18 +1514,6 @@
         border-left: 2px solid var(--rule);
         opacity: 1;
         font-size: 16px;
-      }
-    }
-
-    /* on phones the two lines would be too small: the title wraps instead */
-    @media (max-width: 600px) {
-      .article-title {
-        font-size: min(37px, calc((100vw - 48px) / 15.4));
-      }
-
-      .title-line,
-      .title-variant {
-        white-space: normal;
       }
     }
 
@@ -1829,7 +1821,7 @@
         <article>
           <div class="article-header">
             <p class="article-author"><a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
-            <h1 class="article-title"><span class="title-swap"><span class="title-variant">A Critical Evolutionary <span class="nowrap">Game-Theory</span></span> <span class="title-variant" aria-hidden="true">A <span class="nowrap">Multi-Agent</span> Systems</span></span> <span class="title-line">Model of Major Technological Transitions</span></h1>
+            <h1 class="article-title"><span class="title-swap"><span class="title-variant"><span class="title-line">A Critical Evolutionary</span> <span class="title-line">Game-Theory Model of</span></span> <span class="title-variant" aria-hidden="true"><span class="title-line">A Multi-Agent</span> <span class="title-line">Systems Model of</span></span></span> <span class="title-line">Major Technological Transitions</span></h1>
             <p class="article-subtitle">The civilisation-wide diffusion of a new tech stack is not predetermined by competitive pressures, but is <em>enacted</em> by the power-elite&rsquo;s response to them</p>
             <button class="next-screen" type="button" data-target="overview" aria-label="Continue to the overview">
               <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
