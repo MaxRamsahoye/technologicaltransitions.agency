@@ -60,8 +60,8 @@
       margin-bottom: 0;
     }
 
-    /* the top section's bibliography: one reference per work, by author
-       surname, each title linking to the work itself */
+    /* the top section's bibliography: one reference per work, in the page's
+       order, each title linking to the work itself, each with an em dash */
     .bibliography {
       max-width: 820px;
       margin: 56px 0 0;
@@ -70,25 +70,24 @@
     }
 
     .bibliography li {
+      position: relative;
       margin: 0 0 14px;
-      padding-left: 32px;
-      text-indent: -32px;
-      font-size: 19px;
+      padding-left: 34px;
+      font-size: 20px;
       line-height: 1.4;
+    }
+
+    .bibliography li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
     }
 
     /* the works an entry derives from, indented under it as in the page */
     .bibliography ol {
       margin: 14px 0 0;
-      padding: 0 0 0 28px;
+      padding: 0;
       list-style: none;
-    }
-
-    /* where references wrap, their hanging indent already sets them in */
-    @media (max-width: 1180px) {
-      .bibliography ol {
-        padding-left: 0;
-      }
     }
 
     .bibliography ol li:last-child {
@@ -106,25 +105,23 @@
       text-decoration-thickness: 1.5px;
     }
 
-    /* wherever the top section is wide enough, each reference on one line */
-    @media (min-width: 1181px) {
+    /* wherever there is room, each reference on one line (the longest may
+       run past the column on the right) */
+    @media (min-width: 1360px) {
       .bibliography {
         max-width: none;
       }
 
       .bibliography li {
-        padding-left: 0;
-        text-indent: 0;
-        font-size: 16.5px;
+        font-size: 18px;
         white-space: nowrap;
       }
     }
 
     @media (max-width: 600px) {
       .bibliography li {
-        padding-left: 20px;
-        text-indent: -20px;
-        font-size: 17px;
+        padding-left: 26px;
+        font-size: 18px;
       }
     }
 
