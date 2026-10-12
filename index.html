@@ -27,7 +27,8 @@
         if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
       } catch (e) {}
       try {
-        var t = localStorage.getItem('theme');
+        // no theme chosen yet: follow the system setting
+        var t = localStorage.getItem('theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
         }
@@ -2380,18 +2381,29 @@
       function currentTheme() {
         var stored;
         try { stored = localStorage.getItem('theme'); } catch (e) {}
-        return THEMES.indexOf(stored) !== -1 ? stored : 'light';
+        if (THEMES.indexOf(stored) !== -1) return stored;
+        // no theme chosen yet: follow the system setting
+        return systemDark && systemDark.matches ? 'dark' : 'light';
       }
 
-      function applyTheme(theme) {
+      var systemDark = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+
+      function applyTheme(theme, fromSystem) {
         if (theme === 'light') {
           root.removeAttribute('data-theme');
         } else {
           root.setAttribute('data-theme', theme);
         }
         setFavicons(DARK_THEMES.indexOf(theme) !== -1);
-        try { localStorage.setItem('theme', theme); } catch (e) {}
+        if (!fromSystem) try { localStorage.setItem('theme', theme); } catch (e) {}
       }
+
+      // until a theme is chosen here (t), the page follows the system as it changes
+      if (systemDark && systemDark.addEventListener) systemDark.addEventListener('change', function () {
+        var stored;
+        try { stored = localStorage.getItem('theme'); } catch (e) {}
+        if (THEMES.indexOf(stored) === -1) applyTheme(currentTheme(), true);
+      });
 
       function toggleTheme() {
         var next = THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length];

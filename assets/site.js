@@ -101,8 +101,12 @@
   function currentTheme() {
     var t;
     try { t = localStorage.getItem('theme'); } catch (e) {}
-    return THEMES.indexOf(t) !== -1 ? t : 'light';
+    if (THEMES.indexOf(t) !== -1) return t;
+    // no theme chosen yet: follow the system setting
+    return systemDark && systemDark.matches ? 'dark' : 'light';
   }
+
+  var systemDark = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
 
   function setFavicons(isDark) {
     var suffix = isDark ? 'dark' : 'light';
@@ -114,12 +118,19 @@
     });
   }
 
-  function applyTheme(theme) {
+  function applyTheme(theme, fromSystem) {
     if (theme === 'light') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
     setFavicons(DARK.indexOf(theme) !== -1);
-    try { localStorage.setItem('theme', theme); } catch (e) {}
+    if (!fromSystem) try { localStorage.setItem('theme', theme); } catch (e) {}
   }
+
+  // until a theme is chosen here (t), the page follows the system as it changes
+  if (systemDark && systemDark.addEventListener) systemDark.addEventListener('change', function () {
+    var t;
+    try { t = localStorage.getItem('theme'); } catch (e) {}
+    if (THEMES.indexOf(t) === -1) applyTheme(currentTheme(), true);
+  });
 
   function toggleTheme() {
     var next = THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length];

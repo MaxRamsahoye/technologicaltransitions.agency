@@ -21,7 +21,8 @@
       if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
     } catch (e) {}
     try {
-      var t = localStorage.getItem('theme');
+      // no theme chosen yet: follow the system setting
+      var t = localStorage.getItem('theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
       if (localStorage.getItem('blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
       if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
@@ -2965,7 +2966,7 @@
       track();
     })();
   </script>
-  <script src="../assets/site.js?v=34c294bb" data-base="../"></script>
+  <script src="../assets/site.js?v=280eca2e" data-base="../"></script>
   <script src="../assets/tools.js?v=42099ac1" data-search-scope=".timeline, .aspects" data-hide-until=".timeline-top"></script>
 </body>
 </html>
