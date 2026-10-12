@@ -1065,9 +1065,10 @@
       transition: opacity 0.4s ease, visibility 0s linear 0.4s;
     }
 
-    /* until then they are taken out of the page altogether, so there is
-       nothing below the Overview to scroll down to */
-    html.design-2 body:not(.rest-in-page) #overview ~ *,
+    /* until then they are taken out of the page altogether, all but the
+       first section (Major Technological Transitions), which keeps its place
+       unseen, so the page runs only to the end of it */
+    html.design-2 body:not(.rest-in-page) #overview ~ *:not(#macrohistory),
     html.design-2 body:not(.rest-in-page) .endnotes,
     html.design-2 body:not(.rest-in-page) .site-footer {
       display: none;
