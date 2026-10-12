@@ -637,8 +637,6 @@
         grid-template-columns: minmax(200px, 3fr) 7fr;
         column-gap: 104px;
         align-items: start;
-        /* held at the era view's height: the spare room goes below, not
-           between the rows */
         align-content: start;
       }
 
@@ -2775,32 +2773,6 @@
         window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
       }, true);
 
-      // the domain view's top section keeps the era view's height, so the two
-      // tabs' top sections are the same size (measured in the era view)
-      var topSection = document.querySelector('.timeline-top');
-      var eraTopHeight = 0;
-      function measureEraTop() {
-        if (document.body.classList.contains('view-domains')) return;
-        topSection.style.minHeight = '';
-        eraTopHeight = topSection.offsetHeight;
-      }
-      function holdTopHeight() {
-        topSection.style.minHeight = document.body.classList.contains('view-domains') && eraTopHeight ? eraTopHeight + 'px' : '';
-      }
-      window.addEventListener('resize', function () { measureEraTop(); holdTopHeight(); });
-      // once fonts and the page have loaded, measure the era view again, even
-      // while the domain view is showing
-      function remeasureTop() {
-        var onDomains = document.body.classList.contains('view-domains');
-        document.body.classList.remove('view-domains');
-        alignMini();
-        measureEraTop();
-        if (onDomains) document.body.classList.add('view-domains');
-        holdTopHeight();
-      }
-      window.addEventListener('load', remeasureTop);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasureTop);
-
       var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
       function setView(view) {
         document.body.classList.toggle('view-domains', view === 'domains');
@@ -2808,8 +2780,7 @@
         var onDomain = location.hash.indexOf('#domain') === 0;
         if (view === 'domains') { if (!onDomain) history.replaceState(null, '', '#domains'); refreshTails(); trackDomainSide(); trackDomainLines(); }
         else if (onDomain) history.replaceState(null, '', location.pathname + location.search);
-        if (view === 'eras') { alignMini(); measureEraTop(); }
-        holdTopHeight();
+        if (view === 'eras') alignMini();
         track();
       }
 
@@ -2911,13 +2882,7 @@
         miniNav.style.marginLeft = (left - box.left) + 'px';
         miniNav.style.marginRight = (box.right - (left + width)) + 'px';
       }
-      // measure the era view's top once, even when the page opens on domains
-      var openOnDomains = document.body.classList.contains('view-domains');
-      document.body.classList.remove('view-domains');
       alignMini();
-      measureEraTop();
-      if (openOnDomains) document.body.classList.add('view-domains');
-      holdTopHeight();
       window.addEventListener('resize', alignMini);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignMini);
       window.addEventListener('load', alignMini);
