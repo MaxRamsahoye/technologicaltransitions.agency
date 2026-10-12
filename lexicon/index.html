@@ -538,6 +538,57 @@
       }
     }
 
+    /* curated view: the head terms as a plain list in the top-left corner
+       once the top section has gone, the one being read in the text colour
+       (as the domain menu on the timeline) */
+    .curated-side {
+      position: fixed;
+      z-index: 20;
+      top: 34px;
+      left: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .curated-side.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.view-az .curated-side {
+      display: none;
+    }
+
+    .curated-side ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .curated-side a {
+      display: block;
+      height: 26px;
+      line-height: 26px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+
+    .curated-side a:hover,
+    .curated-side li.current a {
+      color: var(--canvas-ink);
+    }
+
+    @media (max-width: 1279px) {
+      .curated-side {
+        display: none;
+      }
+    }
+
     /* a letter heading each letter's subsection of the lexicon */
     .lexicon-letter {
       padding: 64px 0 4px;
@@ -1171,6 +1222,38 @@
         var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if (t) t.scrollIntoView();
       }
+    })();
+  </script>
+  <nav class="curated-side" aria-label="Curated terms"><ol></ol></nav>
+  <script>
+    // the curated view's corner menu: one link per head term, the one being
+    // read marked as the page scrolls
+    (function () {
+      var side = document.querySelector('.curated-side');
+      var list = side.querySelector('ol');
+      var band = document.querySelector('.lexicon-top');
+      var footer = document.querySelector('.site-footer');
+      var heads = Array.prototype.slice.call(document.querySelectorAll('.lexicon-curated .term:not(.term-sub)'));
+      var items = heads.map(function (term) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + term.id;
+        a.textContent = term.querySelector('dt').textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+        return li;
+      });
+      function track() {
+        var past = band.getBoundingClientRect().bottom < 0 &&
+          !(footer && footer.getBoundingClientRect().top < window.innerHeight);
+        side.classList.toggle('visible', past);
+        var line = window.innerHeight * 0.45, at = -1;
+        heads.forEach(function (t, i) { if (t.getBoundingClientRect().top <= line) at = i; });
+        items.forEach(function (li, i) { li.classList.toggle('current', i === at); });
+      }
+      window.addEventListener('scroll', track, { passive: true });
+      window.addEventListener('resize', track);
+      track();
     })();
   </script>
   <ol class="az-index" aria-label="A to Z"></ol>
