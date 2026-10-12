@@ -1937,10 +1937,10 @@
       }
 
       // the menu shows once the Overview is scrolled past (not over the
-      // footer), fades after 2 seconds, and comes back while the pointer is
+      // footer), fades after a second, and comes back while the pointer is
       // in the empty column left of the text, or on the menu itself
       (function () {
-        var TOC_HOLD = 2000;
+        var TOC_HOLD = 1000;
         var overview = document.getElementById('overview');
         var footer = document.querySelector('.site-footer');
         var mainArea = document.querySelector('.main-area');
