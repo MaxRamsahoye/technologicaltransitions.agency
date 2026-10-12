@@ -88,6 +88,20 @@
       text-decoration-thickness: 1.5px;
     }
 
+    /* wherever the top section is wide enough, each reference on one line */
+    @media (min-width: 1181px) {
+      .bibliography {
+        max-width: none;
+      }
+
+      .bibliography li {
+        padding-left: 0;
+        text-indent: 0;
+        font-size: 16.5px;
+        white-space: nowrap;
+      }
+    }
+
     @media (max-width: 600px) {
       .bibliography li {
         padding-left: 20px;
