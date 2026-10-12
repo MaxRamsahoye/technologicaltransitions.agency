@@ -358,7 +358,7 @@
        the terms that belong to it), then their entries, the belonging terms
        set in under their head term */
     .curated {
-      margin: 0 0 136px;
+      margin: 0;
     }
 
     .curated-heading {
@@ -456,10 +456,19 @@
       margin: 28px 0 0;
     }
 
-    /* the top section's two tabs: the curated terms, or the A to Z */
+    /* the two tabs: the curated terms (their menu and entries), or the A
+       to Z (its index, entries and letter bar) */
     body:not(.view-az) .lexicon-index,
-    body.view-az .curated-menu {
+    body:not(.view-az) dl.lexicon,
+    body:not(.view-az) .az-index,
+    body.view-az .curated-menu,
+    body.view-az .curated {
       display: none;
+    }
+
+    .curated,
+    dl.lexicon {
+      animation: view-in 0.4s ease;
     }
 
     .lexicon-index,
@@ -613,7 +622,7 @@
     <h1 class="page-title">Lexicon</h1>
     <p class="page-intro">Key terms used in <a class="plain-link" href="../"><em>A Critical Evolutionary Game-Theory Model of Major Technological Transitions</em></a>.</p>
 
-    <p class="concept-count">Concepts Count: <span data-concept-count>66</span></p>
+    <p class="concept-count">Concepts Count: <span data-concept-count>17 / 66</span></p>
 
     <nav class="lexicon-index" id="concepts" aria-label="Concepts">
       <ol>
@@ -1096,7 +1105,7 @@
     <div class="progress-pill-fill"></div>
   </div>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".curated">
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".lexicon-top">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
       <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
     </svg>
@@ -1133,15 +1142,35 @@
     })();
   </script>
   <script>
-    // the top section's tabs: the curated terms' menu, or the A to Z index
+    // the tabs: the curated terms, or the A to Z; each shows its own menu,
+    // entries and count (the curated count out of the whole lexicon)
     (function () {
       var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
+      var count = document.querySelector('[data-concept-count]');
+      var total = document.querySelectorAll('dl.lexicon .term').length;
+      var curated = document.querySelectorAll('.lexicon-curated .term').length;
+      function setView(view) {
+        document.body.classList.toggle('view-az', view === 'az');
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
+        count.textContent = view === 'az' ? total : curated + ' / ' + total;
+        window.dispatchEvent(new Event('resize'));
+      }
       tabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-          document.body.classList.toggle('view-az', tab.dataset.view === 'az');
-          tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
-        });
+        tab.addEventListener('click', function () { setView(tab.dataset.view); });
       });
+      // a link to a term opens the tab it is in
+      function fromHash() {
+        var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target && target.closest('dl.lexicon')) setView('az');
+        else if (target && target.closest('.curated, .curated-menu')) setView('curated');
+      }
+      window.addEventListener('hashchange', fromHash);
+      setView('curated');
+      fromHash();
+      if (location.hash) {
+        var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (t) t.scrollIntoView();
+      }
     })();
   </script>
   <ol class="az-index" aria-label="A to Z"></ol>
@@ -1150,7 +1179,6 @@
     // concept count, and the A–Z: each letter jumps to its first term
     (function () {
       var terms = Array.prototype.slice.call(document.querySelectorAll('.lexicon .term'));
-      document.querySelector('[data-concept-count]').textContent = terms.length;
 
       // the index grouped by letter, each group headed by its letter
       var indexList = document.querySelector('.lexicon-index ol');
@@ -1287,6 +1315,6 @@
     })();
   </script>
   <script src="../assets/site.js?v=280eca2e" data-base="../"></script>
-  <script src="../assets/tools.js?v=42099ac1" data-search-scope="dl.lexicon" data-hide-until=".lexicon-top"></script>
+  <script src="../assets/tools.js?v=42099ac1" data-search-scope="dl.lexicon, .curated" data-hide-until=".lexicon-top"></script>
 </body>
 </html>
