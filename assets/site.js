@@ -129,6 +129,16 @@
     } catch (e) {}
   }
 
+  // a soft note for a timeline node under the pointer: the nodes run up the
+  // C major pentatonic in order, from C4 (later nodes sound higher)
+  var nodeNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+  window.ttNodeSound = function (i) {
+    try {
+      if (!ctx()) return;
+      playSoftTone(nodeNotes[Math.max(0, Math.min(i, nodeNotes.length - 1))], audioCtx.currentTime, 0.03, 1.4);
+    } catch (e) {}
+  };
+
   function playCompletionSound() {
     try {
       if (!ctx()) return;
