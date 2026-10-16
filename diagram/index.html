@@ -570,6 +570,11 @@
       text-underline-offset: 4px;
     }
 
+    .diagram:not(.all) .d-date.d8:not(:last-child),
+    .diagram.all .d-date.d4 {
+      display: none;
+    }
+
     .d-date {
       margin-top: 4px;
       font-family: var(--mono-caps);
@@ -749,14 +754,14 @@
     <div class="diagram-wrap">
     <div class="diagram" role="figure" aria-label="The major technological transitions: for each, its tech stack, political economy and cultural psychology">
       <div class="axis-line" aria-hidden="true"></div>
-      <a class="d-head" href="../timeline/#cognitive-revolution" style="--c8: 2; --c4: 2" data-minor><span class="d-dot"></span><span class="d-name">Cognitive</span><span class="d-date">c. 70,000 BCE</span></a>
-      <a class="d-head" href="../timeline/#agricultural-revolution" style="--c8: 3; --c4: 2"><span class="d-dot"></span><span class="d-name">Agricultural</span><span class="d-date">c. 10,000 BCE</span></a>
-      <a class="d-head" href="../timeline/#urban-revolution" style="--c8: 4; --c4: 4" data-minor><span class="d-dot"></span><span class="d-name">Urban</span><span class="d-date">c. 4000 BCE</span></a>
-      <a class="d-head" href="../timeline/#scientific-revolution" style="--c8: 5; --c4: 5" data-minor><span class="d-dot"></span><span class="d-name">Scientific</span><span class="d-date">c. 1540</span></a>
-      <a class="d-head" href="../timeline/#industrial-revolution" style="--c8: 6; --c4: 3"><span class="d-dot"></span><span class="d-name">Industrial</span><span class="d-date">c. 1760</span></a>
-      <a class="d-head" href="../timeline/#technological-revolution" style="--c8: 7; --c4: 7" data-minor><span class="d-dot"></span><span class="d-name">Technological</span><span class="d-date">c. 1870</span></a>
-      <a class="d-head" href="../timeline/#digital-revolution" style="--c8: 8; --c4: 4"><span class="d-dot"></span><span class="d-name">Digital</span><span class="d-date">c. 1950</span></a>
-      <a class="d-head now" href="../timeline/#intelligence-revolution" style="--c8: 9; --c4: 5"><span class="d-dot"></span><span class="d-name">Intelligence</span><span class="d-date">c. 2010 &ndash; now</span></a>
+      <a class="d-head" href="../timeline/#cognitive-revolution" style="--c8: 2; --c4: 2" data-minor><span class="d-dot"></span><span class="d-name">Cognitive</span><span class="d-date d8">c. 70,000 &ndash; 10,000 BCE</span></a>
+      <a class="d-head" href="../timeline/#agricultural-revolution" style="--c8: 3; --c4: 2"><span class="d-dot"></span><span class="d-name">Agricultural</span><span class="d-date d8">c. 10,000 &ndash; 4000 BCE</span><span class="d-date d4">c. 10,000 BCE &ndash; 1760 CE</span></a>
+      <a class="d-head" href="../timeline/#urban-revolution" style="--c8: 4; --c4: 4" data-minor><span class="d-dot"></span><span class="d-name">Urban</span><span class="d-date d8">c. 4000 BCE &ndash; 1540 CE</span></a>
+      <a class="d-head" href="../timeline/#scientific-revolution" style="--c8: 5; --c4: 5" data-minor><span class="d-dot"></span><span class="d-name">Scientific</span><span class="d-date d8">c. 1540 &ndash; 1760</span></a>
+      <a class="d-head" href="../timeline/#industrial-revolution" style="--c8: 6; --c4: 3"><span class="d-dot"></span><span class="d-name">Industrial</span><span class="d-date d8">c. 1760 &ndash; 1870</span><span class="d-date d4">c. 1760 &ndash; 1950</span></a>
+      <a class="d-head" href="../timeline/#technological-revolution" style="--c8: 7; --c4: 7" data-minor><span class="d-dot"></span><span class="d-name">Technological</span><span class="d-date d8">c. 1870 &ndash; 1950</span></a>
+      <a class="d-head" href="../timeline/#digital-revolution" style="--c8: 8; --c4: 4"><span class="d-dot"></span><span class="d-name">Digital</span><span class="d-date d8">c. 1950 &ndash; 2010</span><span class="d-date d4">c. 1950 &ndash; 2010</span></a>
+      <a class="d-head now" href="../timeline/#intelligence-revolution" style="--c8: 9; --c4: 5"><span class="d-dot"></span><span class="d-name">Intelligence</span><span class="d-date d8">c. 2010 &ndash; now</span><span class="d-date d4">c. 2010 &ndash; now</span></a>
       <a class="d-label" href="../lexicon/#curated-cultural-psychology" style="grid-row: 2"><span class="d-label-name">Cultural Psychology</span><span class="d-label-sub">Superstructure</span></a>
       <div class="d-cell d-culture" style="grid-row: 2; --c8: 2; --c4: 2" data-minor>Shared myth and animism</div>
       <div class="d-cell d-culture" style="grid-row: 2; --c8: 3; --c4: 2">Ancestor cults, fertility gods and the first hierarchies</div>
@@ -838,7 +843,7 @@
     // the views and the count: the stack (default) or the table, with four
     // or eight transitions
     (function () {
-      var DATA = [{"key": "cognitive", "major": false, "name": "Cognitive", "date": "c. 70,000 BCE", "tech": "Abstract thought, language and ranged weapons", "economy": "Small, mobile and broadly egalitarian bands", "culture": "Shared myth and animism"}, {"key": "agricultural", "major": true, "name": "Agricultural", "date": "c. 10,000 BCE", "tech": "Domestication, farming and the storable surplus", "economy": "Settled villages, private property and chiefdoms", "culture": "Ancestor cults, fertility gods and the first hierarchies"}, {"key": "urban", "major": false, "name": "Urban", "date": "c. 4000 BCE", "tech": "Writing, bronze, the wheel and the city", "economy": "City-states, kings, taxes, law and markets", "culture": "Organised religion and divine kingship"}, {"key": "scientific", "major": false, "name": "Scientific", "date": "c. 1540", "tech": "Print, instruments and experiment", "economy": "Centralising states, standing armies and oceanic trade", "culture": "Reason, mechanism and a disenchanted nature"}, {"key": "industrial", "major": true, "name": "Industrial", "date": "c. 1760", "tech": "Coal, steam and the factory", "economy": "Industrial capitalism, wage labour and the nation-state", "culture": "Progress, individualism and nationalism"}, {"key": "technological", "major": false, "name": "Technological", "date": "c. 1870", "tech": "Electricity, steel, chemistry and combustion", "economy": "Corporations, mass production and total war", "culture": "Mass culture and consumerism"}, {"key": "digital", "major": true, "name": "Digital", "date": "c. 1950", "tech": "The transistor, the computer and the network", "economy": "Global networks, platforms and the information economy", "culture": "Networked identity and the attention economy"}, {"key": "intelligence", "major": true, "name": "Intelligence", "date": "c. 2010 &ndash; now", "tech": "Machine learning, compute and AI agents", "economy": "Automated cognitive labour and AI hyper-agents &ndash; still being enacted", "culture": "Still to be decided by the power-elite&rsquo;s response"}];
+      var DATA = [{"key": "cognitive", "major": false, "name": "Cognitive", "tech": "Abstract thought, language and ranged weapons", "economy": "Small, mobile and broadly egalitarian bands", "culture": "Shared myth and animism", "date8": "c. 70,000 &ndash; 10,000 BCE", "date4": "c. 70,000 &ndash; 10,000 BCE"}, {"key": "agricultural", "major": true, "name": "Agricultural", "tech": "Domestication, farming and the storable surplus", "economy": "Settled villages, private property and chiefdoms", "culture": "Ancestor cults, fertility gods and the first hierarchies", "date8": "c. 10,000 &ndash; 4000 BCE", "date4": "c. 10,000 BCE &ndash; 1760 CE"}, {"key": "urban", "major": false, "name": "Urban", "tech": "Writing, bronze, the wheel and the city", "economy": "City-states, kings, taxes, law and markets", "culture": "Organised religion and divine kingship", "date8": "c. 4000 BCE &ndash; 1540 CE", "date4": "c. 4000 BCE &ndash; 1540 CE"}, {"key": "scientific", "major": false, "name": "Scientific", "tech": "Print, instruments and experiment", "economy": "Centralising states, standing armies and oceanic trade", "culture": "Reason, mechanism and a disenchanted nature", "date8": "c. 1540 &ndash; 1760", "date4": "c. 1540 &ndash; 1760"}, {"key": "industrial", "major": true, "name": "Industrial", "tech": "Coal, steam and the factory", "economy": "Industrial capitalism, wage labour and the nation-state", "culture": "Progress, individualism and nationalism", "date8": "c. 1760 &ndash; 1870", "date4": "c. 1760 &ndash; 1950"}, {"key": "technological", "major": false, "name": "Technological", "tech": "Electricity, steel, chemistry and combustion", "economy": "Corporations, mass production and total war", "culture": "Mass culture and consumerism", "date8": "c. 1870 &ndash; 1950", "date4": "c. 1870 &ndash; 1950"}, {"key": "digital", "major": true, "name": "Digital", "tech": "The transistor, the computer and the network", "economy": "Global networks, platforms and the information economy", "culture": "Networked identity and the attention economy", "date8": "c. 1950 &ndash; 2010", "date4": "c. 1950 &ndash; 2010"}, {"key": "intelligence", "major": true, "name": "Intelligence", "tech": "Machine learning, compute and AI agents", "economy": "Automated cognitive labour and AI hyper-agents &ndash; still being enacted", "culture": "Still to be decided by the power-elite&rsquo;s response", "date8": "c. 2010 &ndash; now", "date4": "c. 2010 &ndash; now"}];
       var body = document.body;
       var diagram = document.querySelector('.diagram');
       var viewTabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
@@ -892,7 +897,7 @@
           // the panel's account of this layer
           var det = document.createElement('div');
           det.className = 'st-detail';
-          det.innerHTML = '<p class="st-detail-name">' + t.name + ' Revolution</p><p class="st-detail-date">' + t.date + '</p>' +
+          det.innerHTML = '<p class="st-detail-name">' + t.name + ' Revolution</p><p class="st-detail-date">' + (count === '8' ? t.date8 : t.date4) + '</p>' +
             '<dl><dt>Tech Stack</dt><dd>' + t.tech + '</dd><dt>Political Economy</dt><dd>' + t.economy + '</dd><dt>Cultural Psychology</dt><dd>' + t.culture + '</dd></dl>' +
             '<a class="st-detail-link" href="../timeline/#' + t.key + '-revolution">On the Timeline</a>';
           panel.appendChild(det);
@@ -901,7 +906,7 @@
         // the list, newest first like the stack it sits beside
         layers.forEach(function (t, i) {
           var li = document.createElement('li');
-          li.innerHTML = '<button type="button"><span class="st-name">' + t.name + '</span><span class="st-date">' + t.date + '</span></button>';
+          li.innerHTML = '<button type="button"><span class="st-name">' + t.name + '</span><span class="st-date">' + (count === '8' ? t.date8 : t.date4) + '</span></button>';
           li.addEventListener('mouseenter', function () { point(i); });
           li.querySelector('button').addEventListener('focus', function () { point(i); });
           li.querySelector('button').addEventListener('click', function () { locked = locked === i ? -1 : i; point(locked); });
