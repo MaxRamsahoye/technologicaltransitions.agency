@@ -367,9 +367,11 @@
     }
 
     html.band-midnight:not([data-theme="dark"]) .st-stack {
-      --top: color-mix(in srgb, var(--band-bg) 58%, var(--canvas-bg));
-      --left: color-mix(in srgb, var(--band-bg) 74%, var(--canvas-bg));
-      --right: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
+      /* lighter shades of the band's own blue, rather than mixes with
+         white, which turn grey */
+      --top: #3d4b94;
+      --left: #2a3674;
+      --right: #1a2455;
     }
 
     html[data-theme="dark"] .st-stack {
