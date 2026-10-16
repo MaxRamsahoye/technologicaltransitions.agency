@@ -35,10 +35,10 @@
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
-  <title>Diagram — Technological Transitions</title>
+  <title>The Civilisational Tech Stack — Technological Transitions</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Technological Transitions">
-  <meta property="og:title" content="Diagram — Technological Transitions">
+  <meta property="og:title" content="The Civilisational Tech Stack — Technological Transitions">
   <meta property="og:description" content="A diagram of the major technological transitions discussed in A Multi-Agent Model of Major Technological Transitions.">
   <meta property="og:url" content="https://maxramsahoye.github.io/technologicaltransitions.agency/diagram/">
   <meta property="og:image" content="https://maxramsahoye.github.io/technologicaltransitions.agency/preview.png">
@@ -72,6 +72,14 @@
 
     .diagram-top .page-intro {
       margin-bottom: 0;
+    }
+
+    /* the description below the intro, as wide as the text column */
+    .diagram-desc {
+      max-width: 760px;
+      margin: 36px 0 0;
+      font-size: 21px;
+      line-height: 1.4;
     }
 
     @media (max-width: 600px) {
@@ -725,8 +733,9 @@
 
   <main class="page-main">
     <div class="diagram-top wide-top on-band">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">Diagram</a></h1>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Tech Stack</a></h1>
     <p class="page-intro">The major technological transitions discussed in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
+    <p class="diagram-desc">Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressure, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
     <div class="view-tabs" role="tablist" aria-label="Views">
       <button type="button" role="tab" aria-selected="true" data-view="stack">The Stack</button>
       <button type="button" role="tab" aria-selected="false" data-view="table">Alternative View</button>
@@ -738,8 +747,7 @@
       <button type="button" aria-pressed="false" data-count="8">8 transitions</button>
     </div>
 
-    <section class="stack-view" aria-labelledby="stack-title">
-      <h2 class="stack-title" id="stack-title">The Civilisational Tech Stack</h2>
+    <section class="stack-view" aria-label="The Civilisational Tech Stack">
       <div class="stack-layout">
         <div class="stack-scene" aria-hidden="true"><div class="st-stack"></div></div>
         <div class="stack-side">
