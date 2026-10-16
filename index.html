@@ -2411,10 +2411,12 @@
       function placeOverview() {
         overviewEl.style.marginTop = '';
         if (!isDesign2()) return;
-        // the Overview band starts halfway between the foot of the first
-        // screen and just under the down arrow
-        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom + 24;
-        overviewEl.style.marginTop = -Math.round(Math.max(0, gap) / 2) + 'px';
+        // the Overview band starts 700px down the page (never higher than
+        // where the down arrow sits, nor lower than the foot of the first screen)
+        var headerBottom = firstHeader.getBoundingClientRect().bottom + window.scrollY;
+        var underArrow = firstArrow.getBoundingClientRect().bottom + window.scrollY - 24;
+        var bandTop = Math.min(headerBottom, Math.max(700, underArrow));
+        overviewEl.style.marginTop = Math.round(bandTop - headerBottom) + 'px';
       }
       window.placeOverview = placeOverview;
       window.addEventListener('resize', placeOverview);
