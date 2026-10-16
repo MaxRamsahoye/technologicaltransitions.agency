@@ -2411,10 +2411,8 @@
       function placeOverview() {
         overviewEl.style.marginTop = '';
         if (!isDesign2()) return;
-        // start the Overview where the arrow sat before it faded; the band
-        // and the dividing lines take the same place
-        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom + 24;
-        overviewEl.style.marginTop = -Math.max(0, gap) + 'px';
+        // the Overview band now starts at the foot of the first screen (no
+        // longer pulled up under the arrow)
       }
       window.placeOverview = placeOverview;
       window.addEventListener('resize', placeOverview);
@@ -2423,7 +2421,9 @@
 
       function goTo(btn) {
         if (btn.dataset.target === 'overview' && isDesign2()) {
+          // fade the Overview in and move down to the top of its band
           showOverview();
+          animateScrollTo(overviewEl.getBoundingClientRect().top + window.scrollY, 900);
           return;
         }
         var target = document.getElementById(btn.dataset.target);
@@ -2450,13 +2450,7 @@
         if (!btn) return;
         e.preventDefault();
         flashHover(btn);
-        if (btn.dataset.target === 'overview' && isDesign2()) {
-          // the arrow only fades the Overview in; Enter also moves down to it
-          showOverview();
-          animateScrollTo(overviewEl.getBoundingClientRect().top + window.scrollY, 900);   // the top of its band
-        } else {
-          btn.click();
-        }
+        btn.click();
       });
 
       document.addEventListener('keydown', function (e) {
