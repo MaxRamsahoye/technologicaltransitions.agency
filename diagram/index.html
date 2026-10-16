@@ -445,7 +445,7 @@
     /* measuring the stack at rest: no lift, no movement */
     .st-stack.measuring .st-block {
       transition: none !important;
-      animation: none !important;
+      translate: none !important;
       visibility: visible !important;
       transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float))) !important;
     }
@@ -458,13 +458,23 @@
 
     .st-stack.floating .st-block {
       --float: calc((var(--i) - (var(--n) - 1) / 2) * var(--gap));
+    }
+
+    /* the drift moves a slab's faces, leaving the slab itself free to rise
+       when selected or slide in when added */
+    .st-stack.floating .st-block > span {
       animation: st-bob 4.2s ease-in-out calc(var(--i) * -0.7s) infinite alternate;
     }
 
+    .st-stack.measuring .st-block > span {
+      translate: none !important;
+    }
+
     @property --float { syntax: '<length>'; inherits: false; initial-value: 0px; }
+    @property --gap { syntax: '<length>'; inherits: true; initial-value: 0px; }
 
     .st-stack.reshaping {
-      transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+      transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1), --gap 1.1s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     .st-stack.reshaping .st-block {
@@ -472,10 +482,30 @@
       transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }
 
+    .st-stack.reshaping-late,
+    .st-stack.reshaping-late .st-block:not(.st-gone) {
+      transition-delay: 0.45s;
+    }
+
     /* a slab added: it slides in once the others have made room */
     .st-stack .st-block.st-enter {
       visibility: hidden;
-      animation: st-in 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+      animation: st-slide 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    }
+
+    .st-stack.reshaping .st-block.st-enter {
+      transition: none;
+    }
+
+    @keyframes st-slide {
+      from {
+        visibility: visible;
+        translate: var(--sx) var(--sy) 0;
+      }
+      to {
+        visibility: visible;
+        translate: 0 0 0;
+      }
     }
 
     /* a slab taken away slides back out the way it came */
@@ -1199,7 +1229,9 @@
         function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
         function clearTimers() { timers.forEach(clearTimeout); timers = []; playing = false; }
 
+        var shown = -1, lastG = null;
         function showAt(at) {
+          shown = at;
           // with only the short introduction showing, the column moves down
           // so that what is visible sits level with the middle of the stack
           shifted = at < 0;
@@ -1297,6 +1329,7 @@
 
         function build(layers, g) {
           clearTimers();
+          lastG = JSON.stringify(g);
           var n = layers.length;
           stack.innerHTML = '';
           menu.innerHTML = '';
@@ -1368,7 +1401,16 @@
         // four transitions or eight: the slabs that stay move to their new
         // places, new ones slide in and those no longer shown slide out
         function update(layers, g) {
+          // the same slabs, only new text: the slabs and whatever they are
+          // doing carry on undisturbed
+          if (blocks.length && JSON.stringify(g) === lastG && layers.map(function (t) { return t.key; }).join() === blocks.map(function (b) { return b.dataset.key; }).join()) {
+            var at = shown;
+            fill(layers);
+            showAt(at);
+            return;
+          }
           if (!blocks.length || stack.querySelector('.st-ghost, .st-wait')) return build(layers, g);
+          lastG = JSON.stringify(g);
           clearTimers();
           var lockedKey = locked >= 0 && blocks[locked] ? blocks[locked].dataset.key : null;
           var n = layers.length, keep = {}, next = [];
@@ -1381,7 +1423,7 @@
               b = slab(i, g);
               b.dataset.key = t.key;
               b.classList.add('st-enter', 'st-new');
-              b.style.setProperty('--delay', '200ms');
+              b.style.setProperty('--delay', '750ms');
               listen(b);
             }
             next.push(b);
@@ -1416,16 +1458,18 @@
           void stack.offsetHeight;
           stack.classList.remove('measuring');
           void stack.offsetHeight;
+          // slabs taken away go first, and the rest close up after them
+          stack.classList.toggle('reshaping-late', stack.querySelector('.st-gone') !== null);
           stack.classList.add('reshaping', 'floating');
           setStack(n, g);
           blocks.forEach(function (b, i) { place(b, i, g); b.style.setProperty('--i', i); b.classList.remove('st-new'); });
           stack.style.setProperty('--align', target);
-          blocks.forEach(function (b, i) { if (b.classList.contains('st-enter')) later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 750); });
+          blocks.forEach(function (b, i) { if (b.classList.contains('st-enter')) later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 1250); });
           later(function () {
             stack.querySelectorAll('.st-gone').forEach(function (b) { b.remove(); });
             stack.querySelectorAll('.st-enter').forEach(function (b) { b.classList.remove('st-enter'); });
-            stack.classList.remove('reshaping');
-          }, 1300);
+            stack.classList.remove('reshaping', 'reshaping-late');
+          }, 1900);
         }
         function stop() { clearTimers(); }
         return { build: build, update: update, stop: stop };
@@ -1494,7 +1538,11 @@
         if (show === 'stack-main') buildTech(how);
         if (show === 'structures-main') buildStructures(how);
         buildStructuresAlt();
-        [diagram, alt].forEach(function (el) { el.style.animation = 'none'; void el.offsetHeight; el.style.animation = ''; });
+        // the table fades in afresh, except The Structures' on a change of count
+        [diagram, alt].forEach(function (el) {
+          if (el === alt && rebuild === 'count') return;
+          el.style.animation = 'none'; void el.offsetHeight; el.style.animation = '';
+        });
         setSlug();
       }
       viewBtns.forEach(function (b) { b.addEventListener('click', function () { show = b.dataset.show; render(); }); });
