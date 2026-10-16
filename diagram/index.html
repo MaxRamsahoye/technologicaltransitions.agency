@@ -55,7 +55,7 @@
     .diagram-top {
       position: relative;
       z-index: 0;
-      margin-bottom: 112px;
+      margin-bottom: 48px;
     }
 
     .diagram-top::before {
@@ -172,8 +172,16 @@
       }
     }
 
-    .view-tabs [data-count] {
+    .view-tabs [data-count],
+    .view-tabs [data-show$="-alt"] {
       font-size: 11px;
+    }
+
+    /* each alternative view sits indented under its diagram */
+    @media (min-width: 1280px) {
+      .view-tabs [data-show$="-alt"] {
+        margin-left: 14px;
+      }
     }
 
     .view-tabs button[aria-pressed="true"] {
@@ -1239,7 +1247,7 @@
 
       function setSlug() {
         var d = show.split('-');
-        var slug = (d[0] === 'structures' ? 'structures-' : '') + (d[1] === 'alt' ? 'alternative-view-' : '') + (count === '8' ? 'eight' : 'four') + '-transitions';
+        var slug = (d[0] === 'structures' ? 'structures-' : 'stack-') + (d[1] === 'alt' ? 'alternative-view-' : '') + (count === '8' ? 'eight' : 'four') + '-transitions';
         history.replaceState(null, '', '#' + slug);
       }
       function render(rebuild) {
