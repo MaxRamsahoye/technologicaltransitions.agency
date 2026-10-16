@@ -2411,8 +2411,10 @@
       function placeOverview() {
         overviewEl.style.marginTop = '';
         if (!isDesign2()) return;
-        // the Overview band now starts at the foot of the first screen (no
-        // longer pulled up under the arrow)
+        // the Overview band starts halfway between the foot of the first
+        // screen and just under the down arrow
+        var gap = firstHeader.getBoundingClientRect().bottom - firstArrow.getBoundingClientRect().bottom + 24;
+        overviewEl.style.marginTop = -Math.round(Math.max(0, gap) / 2) + 'px';
       }
       window.placeOverview = placeOverview;
       window.addEventListener('resize', placeOverview);
