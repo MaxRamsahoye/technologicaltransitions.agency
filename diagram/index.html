@@ -460,6 +460,10 @@
     }
 
     /* the list of layers beside the stack, newest at the top as in the stack */
+    .stack-side {
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     .stack-menu {
       list-style: none;
       margin: 0 0 32px;
@@ -1087,6 +1091,10 @@
         function clearTimers() { timers.forEach(clearTimeout); timers = []; playing = false; }
 
         function showAt(at) {
+          // with only the short introduction showing, the column moves down
+          // so that what is visible sits level with the middle of the stack
+          shifted = at < 0;
+          setShift();
           blocks.forEach(function (b, i) { b.classList.toggle('active', i === at); });
           items.forEach(function (li, i) { li.classList.toggle('active', i === at); });
           intro.classList.toggle('show', at < 0);
@@ -1102,6 +1110,12 @@
         function press(i) { touched = true; if (playing) return; locked = locked === i ? -1 : i; point(locked); }
         root.querySelector('.stack-layout').addEventListener('mouseleave', function () { if (!playing) { sounding = -1; showAt(locked); } });
 
+        var shifted = false, shift = 0;
+        function setShift() {
+          shift = shifted && !narrow() ? Math.round((panel.offsetHeight - intro.offsetHeight) / 2) : 0;
+          side.style.transform = shift ? 'translateY(' + shift + 'px)' : '';
+        }
+        function narrow() { return getComputedStyle(root.querySelector('.stack-layout')).gridTemplateColumns.split(' ').length < 2; }
         function align() {
           if (!blocks.length || !root.offsetParent) return;
           if (getComputedStyle(root.querySelector('.stack-layout')).gridTemplateColumns.split(' ').length < 2) { stack.style.setProperty('--align', '0px'); return; }
@@ -1113,8 +1127,11 @@
           });
           stack.classList.remove('measuring');
           var current = parseFloat(stack.style.getPropertyValue('--align')) || 0;
+          // measured without the shift, which may be part-way through moving
+          var moved = new DOMMatrixReadOnly(getComputedStyle(side).transform === 'none' ? undefined : getComputedStyle(side).transform).m42;
           var sr = side.getBoundingClientRect();
-          stack.style.setProperty('--align', Math.round((sr.top + sr.height / 2) - ((top + bottom) / 2 - current)) + 'px');
+          setShift();
+          stack.style.setProperty('--align', Math.round((sr.top - moved + sr.height / 2) - ((top + bottom) / 2 - current)) + 'px');
         }
         window.addEventListener('resize', align);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
