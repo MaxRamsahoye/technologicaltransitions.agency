@@ -293,9 +293,10 @@
       height: 0;
       transform: translateY(var(--lift, 90px)) rotateX(58deg) rotateZ(45deg);
       transform-style: preserve-3d;
-      --top: color-mix(in srgb, var(--canvas-ink) 22%, var(--canvas-bg));
-      --left: color-mix(in srgb, var(--canvas-ink) 50%, var(--canvas-bg));
-      --right: color-mix(in srgb, var(--canvas-ink) 75%, var(--canvas-bg));
+      /* in the light theme, the slabs take the band's colour */
+      --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
+      --right: var(--band-bg);
     }
 
     html[data-theme="dark"] .st-stack {
@@ -368,7 +369,7 @@
 
     /* the layer pointed to rises out of the stack and turns the blue accent */
     .st-block.active {
-      transform: translate3d(var(--x), var(--y), calc(var(--z) + 18px));
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + 30px));
       --top: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--link-blue) 75%, var(--canvas-bg));
       --right: var(--link-blue);
@@ -381,7 +382,7 @@
     }
 
     .st-block.active ~ .st-block {
-      transform: translate3d(var(--x), var(--y), calc(var(--z) + 36px));
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + 60px));
     }
 
     /* the list of layers beside the stack, newest at the top as in the stack */
@@ -860,13 +861,28 @@
       var menu = document.querySelector('.stack-menu');
       var panel = document.querySelector('.stack-panel');
       var intro = panel.querySelector('.stack-intro');
-      var count = '4', view = 'stack', locked = -1, blocks = [], items = [], details = [];
+      var count = '4', view = 'stack', locked = -1, blocks = [], items = [], details = [], firstBuild = true;
 
       function show(at) {
         blocks.forEach(function (b, i) { b.classList.toggle('active', i === at); });
         items.forEach(function (li, i) { li.classList.toggle('active', i === at); });
         intro.classList.toggle('show', at < 0);
         details.forEach(function (d, i) { d.classList.toggle('show', i === at); });
+      }
+
+      // on arriving, the layers light one by one from the base to the top,
+      // until the last, or until the reader points to one or changes view
+      var playTimer = null;
+      function stopPlay() { clearTimeout(playTimer); playTimer = null; }
+      function autoplay(n, startDelay) {
+        stopPlay();
+        var i = 0;
+        function step() {
+          if (i >= n) { playTimer = setTimeout(function () { playTimer = null; show(locked); }, 1600); return; }
+          point(i++);
+          playTimer = setTimeout(step, 1300);
+        }
+        playTimer = setTimeout(step, startDelay);
       }
 
       var sounding = -1;
@@ -879,27 +895,24 @@
       function buildStack(animate) {
         var layers = DATA.filter(function (t) { return count === '8' || t.major; });
         var n = layers.length;
-        var SIZE = 250, H = n === 8 ? 26 : 44, TRIM = n === 8 ? 12 : 22;
+        var SIZE = 250, H = n === 8 ? 26 : 44, TRIM = n === 8 ? 16 : 30;
         stack.innerHTML = '';
         menu.innerHTML = '';
         panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
         blocks = []; items = []; details = []; locked = -1; sounding = -1;
         stack.style.setProperty('--lift', (n * H / 2 + 40) + 'px');
-        var w = SIZE, d = SIZE, x = 0, y = 0;
         layers.forEach(function (t, i) {
+          // each slab smaller than the one below by the same step, centred
           var alongX = i % 2 === 1;
-          if (i > 0) {
-            if (alongX) { w -= TRIM; x += TRIM / 2; }
-            else { d -= TRIM; y += TRIM / 2; }
-          }
+          var w = SIZE - i * TRIM, d = w, x = i * TRIM / 2, y = x;
           var b = document.createElement('div');
           b.className = 'st-block';
           b.innerHTML = '<span class="st-top"></span><span class="st-front"></span><span class="st-side"></span>';
           [['--w', w], ['--d', d], ['--h', H], ['--x', x - SIZE / 2], ['--y', y - SIZE / 2], ['--z', i * H],
            ['--sx', alongX ? -260 : 0], ['--sy', alongX ? 0 : -260]].forEach(function (v) { b.style.setProperty(v[0], v[1] + 'px'); });
           b.style.setProperty('--delay', (i * 110) + 'ms');
-          b.addEventListener('mouseenter', function () { point(i); });
-          b.addEventListener('click', function () { locked = locked === i ? -1 : i; point(locked); });
+          b.addEventListener('mouseenter', function () { stopPlay(); point(i); });
+          b.addEventListener('click', function () { stopPlay(); locked = locked === i ? -1 : i; point(locked); });
           stack.appendChild(b);
           blocks.push(b);
           // the panel's account of this layer
@@ -915,9 +928,9 @@
         layers.forEach(function (t, i) {
           var li = document.createElement('li');
           li.innerHTML = '<button type="button"><span class="st-name">' + t.name + '</span><span class="st-date">' + (count === '8' ? t.date8 : t.date4) + '</span></button>';
-          li.addEventListener('mouseenter', function () { point(i); });
-          li.querySelector('button').addEventListener('focus', function () { point(i); });
-          li.querySelector('button').addEventListener('click', function () { locked = locked === i ? -1 : i; point(locked); });
+          li.addEventListener('mouseenter', function () { stopPlay(); point(i); });
+          li.querySelector('button').addEventListener('focus', function () { stopPlay(); point(i); });
+          li.querySelector('button').addEventListener('click', function () { stopPlay(); locked = locked === i ? -1 : i; point(locked); });
           menu.insertBefore(li, menu.firstChild);
           items[i] = li;
         });
@@ -930,8 +943,9 @@
           });
           setTimeout(function () { stack.classList.remove('building'); }, n * 110 + 700);
         }
+        if (firstBuild && view === 'stack') { firstBuild = false; autoplay(n, n * 110 + 900); } else { firstBuild = false; stopPlay(); }
       }
-      document.querySelector('.stack-layout').addEventListener('mouseleave', function () { sounding = -1; show(locked); });
+      document.querySelector('.stack-layout').addEventListener('mouseleave', function () { if (playTimer) return; sounding = -1; show(locked); });
 
       function setCount(c) {
         count = c;
