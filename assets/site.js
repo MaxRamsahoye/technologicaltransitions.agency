@@ -44,22 +44,65 @@
     else g.linearRampToValueAtTime(1, now + 0.05);
   }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
+  // Sounds carry across page changes: every note is kept as a frequency, a
+  // start time and a fade; when the page goes, the notes still ringing are
+  // handed to the next page, which picks them up where they had reached.
+  var liveTones = [];
+  function toneAt(f, t0, p, d) {
+    var c = audioCtx.currentTime, nowMs = Date.now();
+    var start = c + (t0 - nowMs) / 1000, end = c + (t0 + d * 1000 - nowMs) / 1000;
+    if (end <= c + 0.05) return;
+    var A = 0.03;
+    var osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    var gain = audioCtx.createGain();
+    if (start >= c) {
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(p, start + A);
+      gain.gain.exponentialRampToValueAtTime(0.0001, end);
+      osc.start(start);
+    } else {
+      // already sounding: come in at the level it had reached
+      var el = c - start;
+      var v = el < A ? p * el / A : p * Math.pow(0.0001 / p, (el - A) / (d - A));
+      gain.gain.setValueAtTime(0.0001, c);
+      gain.gain.exponentialRampToValueAtTime(Math.max(v, 0.0002), c + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, end);
+      osc.start(c);
+    }
+    osc.connect(gain).connect(out());
+    osc.stop(end);
+    liveTones.push({ f: f, t0: t0, p: p, d: d });
+  }
+  window.addEventListener('pagehide', function () {
+    var now = Date.now();
+    var ringing = liveTones.filter(function (t) { return t.t0 + t.d * 1000 > now + 100; });
+    try { sessionStorage.setItem('ttTones', JSON.stringify({ at: now, tones: ringing })); } catch (e) {}
+  });
+  (function () {
+    var data = null;
+    try { data = JSON.parse(sessionStorage.getItem('ttTones')); sessionStorage.removeItem('ttTones'); } catch (e) {}
+    if (!data || !data.tones || !data.tones.length || Date.now() - data.at > 4000) return;
+    try {
+      if (!audioCtx) {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        audioCtx = new AC();
+      }
+      var play = function () { data.tones.forEach(function (t) { toneAt(t.f, t.t0, t.p, t.d); }); };
+      if (audioCtx.state === 'running') play();
+      else audioCtx.resume().then(play, function () {});
+    } catch (e) {}
+  })();
+
   function playSoftTone(freq, when, peak, decay) {
-    [[freq, peak, decay], [freq * 2, peak * 0.12, decay * 0.6]].forEach(function (partial) {
-      var osc = audioCtx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = partial[0];
-      var gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(0, when);
-      gain.gain.linearRampToValueAtTime(partial[1], when + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, when + partial[2]);
-      osc.connect(gain).connect(out());
-      osc.start(when);
-      osc.stop(when + partial[2]);
-    });
+    var t0 = Date.now() + (when - audioCtx.currentTime) * 1000;
+    toneAt(freq, t0, peak, decay);
+    toneAt(freq * 2, t0, peak * 0.12, decay * 0.6);
   }
 
-  // short: a clipped tail that has fully faded before a page change.
+  // short: a clipped tail (page changes now carry the full note over).
   function playPianoClick(short) {
     try {
       if (!ctx()) return;
@@ -208,7 +251,7 @@
 
     if (backArrow && e.target.closest('.back-arrow')) {
       e.preventDefault();
-      playPianoClick(true);
+      playPianoClick();
       document.body.classList.add('page-leaving');
       setTimeout(function () {
         var fromSite = document.referrer && new URL(document.referrer).origin === location.origin;
@@ -232,7 +275,7 @@
     }
 
     var link = internalLink(e);
-    playPianoClick(!!link);
+    playPianoClick();
     if (link) {
       e.preventDefault();
       leaveTo(link.href);
