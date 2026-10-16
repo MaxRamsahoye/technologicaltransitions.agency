@@ -266,12 +266,22 @@
       display: none;
     }
 
+    /* each diagram, with its table below it */
     body[data-show="stack-main"] .stack-view,
-    body[data-show="stack-alt"] .diagram-wrap,
-    body[data-show="stack-alt"] .diagram-note,
+    body[data-show="stack-main"] .diagram-wrap,
+    body[data-show="stack-main"] .diagram-note,
     body[data-show="structures-main"] .structures-view,
-    body[data-show="structures-alt"] .structures-alt {
+    body[data-show="structures-main"] .structures-alt {
       display: block;
+    }
+
+    body[data-show="stack-main"] .diagram-wrap,
+    body[data-show="structures-main"] .structures-alt {
+      margin-top: 120px;
+    }
+
+    .diagram-note {
+      padding-bottom: 120px;
     }
 
     .stack-view,
@@ -657,7 +667,7 @@
     }
 
     .st-detail dt {
-      margin: 14px 0 2px;
+      margin: 22px 0 2px;
       font-family: var(--mono-caps);
       font-size: 11px;
       font-weight: 600;
@@ -1024,11 +1034,9 @@
     <div class="view-tabs" aria-label="Diagrams">
       <div class="tab-group" role="tablist" aria-label="The Civilisational Stack">
         <button type="button" role="tab" aria-selected="true" data-show="stack-main">The Stack</button>
-        <button type="button" role="tab" aria-selected="false" data-show="stack-alt">Alternative View</button>
       </div>
       <div class="tab-group" role="tablist" aria-label="The Structures">
         <button type="button" role="tab" aria-selected="false" data-show="structures-main">The Structures</button>
-        <button type="button" role="tab" aria-selected="false" data-show="structures-alt">Alternative View</button>
       </div>
       <div class="tab-group" role="group" aria-label="Transitions shown">
         <button type="button" aria-pressed="true" data-count="4">4 transitions</button>
@@ -1468,7 +1476,7 @@
 
       function setSlug() {
         var d = show.split('-');
-        var slug = (d[0] === 'structures' ? 'structures-' : 'stack-') + (d[1] === 'alt' ? 'alternative-view-' : '') + (count === '8' ? 'eight' : 'four') + '-transitions';
+        var slug = (d[0] === 'structures' ? 'structures-' : 'stack-') + (count === '8' ? 'eight' : 'four') + '-transitions';
         history.replaceState(null, '', '#' + slug);
       }
       function render(rebuild) {
@@ -1495,7 +1503,7 @@
 
       var hash = location.hash.slice(1);
       if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
-      show = (/structures/.test(hash) ? 'structures' : 'stack') + '-' + (/alternative|table/.test(hash) ? 'alt' : 'main');
+      show = (/structures/.test(hash) ? 'structures' : 'stack') + '-main';
       render();
     })();
 
