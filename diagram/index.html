@@ -282,6 +282,7 @@
     .stack-scene {
       position: relative;
       height: 600px;
+      pointer-events: none;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -291,7 +292,8 @@
       position: relative;
       width: 0;
       height: 0;
-      transform: translateY(var(--lift, 90px)) rotateX(58deg) rotateZ(45deg);
+      /* the script lines the stack's middle up with the text column's */
+      transform: translateY(calc(var(--lift, 90px) + var(--align, 0px))) rotateX(58deg) rotateZ(45deg);
       transform-style: preserve-3d;
       /* in the light theme, the slabs take the band's colour */
       --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
@@ -315,12 +317,21 @@
       transform: translate3d(var(--x), var(--y), var(--z));
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
       cursor: pointer;
+      pointer-events: auto;
     }
 
     /* building: each slab slides in from alternate sides, as on the loader */
     .st-stack.building .st-block {
       visibility: hidden;
       animation: st-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    }
+
+    /* measuring the stack at rest: no lift, no movement */
+    .st-stack.measuring .st-block {
+      transition: none !important;
+      animation: none !important;
+      visibility: visible !important;
+      transform: translate3d(var(--x), var(--y), var(--z)) !important;
     }
 
     @keyframes st-in {
@@ -943,9 +954,32 @@
           });
           setTimeout(function () { stack.classList.remove('building'); }, n * 110 + 700);
         }
+        align();
         if (firstBuild && view === 'stack') { firstBuild = false; autoplay(n, n * 110 + 900); } else { firstBuild = false; stopPlay(); }
       }
       document.querySelector('.stack-layout').addEventListener('mouseleave', function () { if (playTimer) return; sounding = -1; show(locked); });
+
+      // line the middle of the stack (as drawn, at rest) up with the middle of
+      // the text column beside it
+      var scene = document.querySelector('.stack-scene');
+      var side = document.querySelector('.stack-side');
+      function align() {
+        if (!blocks.length || !scene.offsetParent) return;
+        if (getComputedStyle(document.querySelector('.stack-layout')).gridTemplateColumns.split(' ').length < 2) { stack.style.setProperty('--align', '0px'); return; }
+        stack.classList.add('measuring');
+        var top = Infinity, bottom = -Infinity;
+        stack.querySelectorAll('.st-block > span').forEach(function (f) {
+          var r = f.getBoundingClientRect();
+          top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom);
+        });
+        stack.classList.remove('measuring');
+        var current = parseFloat(stack.style.getPropertyValue('--align')) || 0;
+        var sr = side.getBoundingClientRect();
+        var shift = (sr.top + sr.height / 2) - ((top + bottom) / 2 - current);
+        stack.style.setProperty('--align', Math.round(shift) + 'px');
+      }
+      window.addEventListener('resize', align);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
 
       function setCount(c) {
         count = c;
