@@ -349,7 +349,7 @@
     /* building: each slab slides in from alternate sides, as on the loader */
     .st-stack.building .st-block {
       visibility: hidden;
-      animation: st-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+      animation: st-in 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
     }
 
     /* measuring the stack at rest: no lift, no movement */
@@ -898,7 +898,7 @@
       var menu = document.querySelector('.stack-menu');
       var panel = document.querySelector('.stack-panel');
       var intro = panel.querySelector('.stack-intro');
-      var count = '4', view = 'stack', locked = -1, blocks = [], items = [], details = [], firstBuild = true;
+      var count = '4', view = 'stack', locked = -1, blocks = [], items = [], details = [];
 
       function show(at) {
         blocks.forEach(function (b, i) { b.classList.toggle('active', i === at); });
@@ -933,6 +933,7 @@
         var layers = DATA.filter(function (t) { return count === '8' || t.major; });
         var n = layers.length;
         var SIZE = 250, H = n === 8 ? 26 : 44, TRIM = n === 8 ? 16 : 30;
+        var STEP = n === 8 ? 380 : 520;   // ms between slabs as the stack builds
         stack.innerHTML = '';
         menu.innerHTML = '';
         panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
@@ -947,7 +948,7 @@
           b.innerHTML = '<span class="st-top"></span><span class="st-front"></span><span class="st-side"></span>';
           [['--w', w], ['--d', d], ['--h', H], ['--x', x - SIZE / 2], ['--y', y - SIZE / 2], ['--z', i * H],
            ['--sx', alongX ? -260 : 0], ['--sy', alongX ? 0 : -260]].forEach(function (v) { b.style.setProperty(v[0], v[1] + 'px'); });
-          b.style.setProperty('--delay', (i * 110) + 'ms');
+          b.style.setProperty('--delay', (i * STEP) + 'ms');
           b.addEventListener('mouseenter', function () { stopPlay(); point(i); });
           b.addEventListener('click', function () { stopPlay(); locked = locked === i ? -1 : i; point(locked); });
           stack.appendChild(b);
@@ -976,12 +977,13 @@
           stack.classList.add('building');
           // a note as each slab lands
           layers.forEach(function (t, i) {
-            setTimeout(function () { if (window.ttNodeSound && view === 'stack') window.ttNodeSound(i); }, i * 110 + 330);
+            setTimeout(function () { if (window.ttNodeSound && view === 'stack') window.ttNodeSound(i); }, i * STEP + 550);
           });
-          setTimeout(function () { stack.classList.remove('building'); }, n * 110 + 700);
+          setTimeout(function () { stack.classList.remove('building'); }, n * STEP + 1100);
         }
         align();
-        if (firstBuild && view === 'stack') { firstBuild = false; autoplay(n, n * 110 + 900); } else { firstBuild = false; stopPlay(); }
+        // every new build plays through, until the reader takes over
+        if (animate && view === 'stack') autoplay(n, n * STEP + 1300); else stopPlay();
       }
       document.querySelector('.stack-layout').addEventListener('mouseleave', function () { if (playTimer) return; sounding = -1; show(locked); });
 
@@ -1016,19 +1018,27 @@
         void diagram.offsetHeight;
         diagram.style.animation = '';
         buildStack(view === 'stack');
+        setSlug();
+      }
+      // each view has its own address: four-transitions or eight-transitions,
+      // with alternative-view- in front for the table
+      function setSlug() {
+        var slug = (view === 'table' ? 'alternative-view-' : '') + (count === '8' ? 'eight' : 'four') + '-transitions';
+        history.replaceState(null, '', '#' + slug);
       }
       function setView(v) {
         view = v;
         body.classList.toggle('view-table', v === 'table');
         viewTabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === v ? 'true' : 'false'); });
-        if (v === 'stack') buildStack(true);
+        if (v === 'stack') buildStack(true); else stopPlay();
+        setSlug();
       }
       viewTabs.forEach(function (t) { t.addEventListener('click', function () { setView(t.dataset.view); }); });
       countBtns.forEach(function (b) { b.addEventListener('click', function () { setCount(b.dataset.count); }); });
 
-      var hash = location.hash.slice(1).split('-');
-      if (hash.indexOf('8') !== -1) count = '8';
-      view = hash.indexOf('table') !== -1 ? 'table' : 'stack';
+      var hash = location.hash.slice(1);
+      if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
+      view = /alternative|table/.test(hash) ? 'table' : 'stack';
       body.classList.toggle('view-table', view === 'table');
       viewTabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
       setCount(count);
