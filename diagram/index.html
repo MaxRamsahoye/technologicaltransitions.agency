@@ -55,7 +55,7 @@
     .diagram-top {
       position: relative;
       z-index: 0;
-      margin-bottom: 208px;
+      margin-bottom: 112px;
     }
 
     .diagram-top::before {
@@ -66,8 +66,21 @@
       left: 50%;
       width: 100vw;
       transform: translateX(-50%);
-      background: var(--band-bg);
+      /* on this page the top section sits on the page's own background */
+      background: var(--canvas-bg);
       z-index: -1;
+    }
+
+    .site-footer {
+      display: none;
+    }
+
+    /* with no band, the corner controls and the top menu keep the page's
+       own colours whatever the band setting */
+    html:not([data-theme]) body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #000000;
+      --muted: #8c8c8c;
+      --link-blue: #1a3a9c;
     }
 
     .diagram-top .page-intro {
@@ -299,6 +312,19 @@
       --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
       --right: var(--band-bg);
+    }
+
+    /* a little darker than the sepia band, a little lighter than the blue */
+    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) .st-stack {
+      --top: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 8%);
+      --left: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 16%);
+      --right: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 24%);
+    }
+
+    html.band-midnight:not([data-theme="dark"]) .st-stack {
+      --top: color-mix(in srgb, var(--band-bg) 58%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--band-bg) 74%, var(--canvas-bg));
+      --right: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
     }
 
     html[data-theme="dark"] .st-stack {
@@ -735,7 +761,7 @@
     }
   </style>
 </head>
-<body>
+<body class="no-band">
   <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
     <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
       <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
@@ -744,7 +770,7 @@
   </a>
 
   <main class="page-main">
-    <div class="diagram-top wide-top on-band">
+    <div class="diagram-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Tech Stack</a></h1>
     <p class="page-intro">The major technological transitions discussed in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
     <p class="diagram-desc">Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressure, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
