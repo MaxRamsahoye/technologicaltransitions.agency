@@ -119,7 +119,7 @@
       font-size: 13px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.04em;
     }
 
     @media (min-width: 1280px) {
@@ -200,6 +200,314 @@
 
     .diagram:not(.all) [data-minor] {
       display: none;
+    }
+
+
+    /* the views: the stack (default), or the table (Alternative View) */
+    body:not(.view-table) .diagram-wrap,
+    body:not(.view-table) .diagram-note,
+    body.view-table .stack-view {
+      display: none;
+    }
+
+    .stack-view {
+      animation: view-in 0.4s ease;
+    }
+
+    /* how many transitions both views show */
+    .count-toggle {
+      display: flex;
+      gap: 28px;
+      width: var(--wide-col);
+      margin: 0 0 56px calc((100% - var(--wide-col)) / 2);
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .count-toggle button {
+      padding: 0 0 5px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .count-toggle button:hover,
+    .count-toggle button[aria-pressed="true"] {
+      color: var(--canvas-ink);
+    }
+
+    .count-toggle button[aria-pressed="true"] {
+      border-bottom-color: currentColor;
+    }
+
+    /* the civilisational tech stack: the loading screen's stack, a slab per
+       revolution, the oldest at the base */
+    .stack-view {
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
+    }
+
+    .stack-title {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .stack-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      column-gap: 56px;
+      align-items: center;
+    }
+
+    .stack-scene {
+      position: relative;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .st-stack {
+      position: relative;
+      width: 0;
+      height: 0;
+      transform: translateY(var(--lift, 90px)) rotateX(58deg) rotateZ(45deg);
+      transform-style: preserve-3d;
+      --top: color-mix(in srgb, var(--canvas-ink) 22%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--canvas-ink) 50%, var(--canvas-bg));
+      --right: color-mix(in srgb, var(--canvas-ink) 75%, var(--canvas-bg));
+    }
+
+    html[data-theme="dark"] .st-stack {
+      --top: color-mix(in srgb, var(--canvas-ink) 80%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--canvas-ink) 48%, var(--canvas-bg));
+      --right: color-mix(in srgb, var(--canvas-ink) 30%, var(--canvas-bg));
+    }
+
+    .st-block {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--w);
+      height: var(--d);
+      transform-style: preserve-3d;
+      transform: translate3d(var(--x), var(--y), var(--z));
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+
+    /* building: each slab slides in from alternate sides, as on the loader */
+    .st-stack.building .st-block {
+      visibility: hidden;
+      animation: st-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    }
+
+    @keyframes st-in {
+      from {
+        visibility: visible;
+        transform: translate3d(calc(var(--x) + var(--sx)), calc(var(--y) + var(--sy)), var(--z));
+      }
+      to {
+        visibility: visible;
+        transform: translate3d(var(--x), var(--y), var(--z));
+      }
+    }
+
+    .st-block > span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      backface-visibility: visible;
+      transition: background-color 0.3s ease;
+    }
+
+    .st-top {
+      width: var(--w);
+      height: var(--d);
+      background: var(--top);
+      transform: translateZ(var(--h));
+    }
+
+    .st-front {
+      width: var(--w);
+      height: var(--h);
+      top: var(--d) !important;
+      background: var(--left);
+      transform-origin: top;
+      transform: translateZ(var(--h)) rotateX(-90deg);
+    }
+
+    .st-side {
+      width: var(--h);
+      height: var(--d);
+      left: var(--w) !important;
+      background: var(--right);
+      transform-origin: left;
+      transform: translateZ(var(--h)) rotateY(90deg);
+    }
+
+    /* the layer pointed to rises out of the stack and turns the blue accent */
+    .st-block.active {
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + 18px));
+      --top: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--link-blue) 75%, var(--canvas-bg));
+      --right: var(--link-blue);
+    }
+
+    html[data-theme="dark"] .st-block.active {
+      --top: var(--link-blue);
+      --left: color-mix(in srgb, var(--link-blue) 62%, var(--canvas-bg));
+      --right: color-mix(in srgb, var(--link-blue) 38%, var(--canvas-bg));
+    }
+
+    .st-block.active ~ .st-block {
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + 36px));
+    }
+
+    /* the list of layers beside the stack, newest at the top as in the stack */
+    .stack-menu {
+      list-style: none;
+      margin: 0 0 32px;
+      padding: 0;
+    }
+
+    .stack-menu button {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      width: 100%;
+      padding: 6px 0;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .stack-menu .st-name {
+      font-family: var(--sans);
+      font-size: 17px;
+    }
+
+    .stack-menu .st-date {
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stack-menu li.active button,
+    .stack-menu button:hover {
+      color: var(--canvas-ink);
+    }
+
+    .stack-menu li.active .st-name {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    /* the panel: what the layer pointed to brought */
+    .stack-panel {
+      display: grid;
+      min-height: 330px;
+    }
+
+    .stack-panel > * {
+      grid-area: 1 / 1;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+    }
+
+    .stack-panel > .show {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.25s ease, visibility 0s;
+    }
+
+    .stack-intro p {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .st-detail-name {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    .st-detail-date {
+      margin: 4px 0 18px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .st-detail dl {
+      margin: 0;
+    }
+
+    .st-detail dt {
+      margin: 14px 0 2px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .st-detail dd {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.3;
+    }
+
+    .st-detail-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: inherit;
+    }
+
+    @media (max-width: 1180px) {
+      .stack-view,
+      .count-toggle {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .stack-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stack-scene {
+        height: 420px;
+      }
     }
 
     @keyframes view-in {
@@ -415,10 +723,28 @@
     <h1 class="page-title"><a class="heading-link title-top" href="#">Diagram</a></h1>
     <p class="page-intro">The major technological transitions discussed in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
     <div class="view-tabs" role="tablist" aria-label="Views">
-      <button type="button" role="tab" aria-selected="true" data-view="4">4 transitions</button>
-      <button type="button" role="tab" aria-selected="false" data-view="8">8 transitions</button>
+      <button type="button" role="tab" aria-selected="true" data-view="stack">The Stack</button>
+      <button type="button" role="tab" aria-selected="false" data-view="table">Alternative View</button>
     </div>
     </div>
+
+    <div class="count-toggle" role="group" aria-label="Transitions shown">
+      <button type="button" aria-pressed="true" data-count="4">4 transitions</button>
+      <button type="button" aria-pressed="false" data-count="8">8 transitions</button>
+    </div>
+
+    <section class="stack-view" aria-labelledby="stack-title">
+      <h2 class="stack-title" id="stack-title">The Civilisational Tech Stack</h2>
+      <div class="stack-layout">
+        <div class="stack-scene" aria-hidden="true"><div class="st-stack"></div></div>
+        <div class="stack-side">
+          <ol class="stack-menu" aria-label="The layers of the stack, newest first"></ol>
+          <div class="stack-panel" aria-live="polite">
+            <div class="stack-intro show"><p>Each revolution adds a new layer to the civilisational tech stack, built on every layer before it. Point to a layer to see what it brought.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <div class="diagram-wrap">
     <div class="diagram" role="figure" aria-label="The major technological transitions: for each, its tech stack, political economy and cultural psychology">
@@ -507,21 +833,118 @@
     </svg>
   </button>
 
+
   <script>
-    // the tabs: the four major transitions, or all eight revolutions
+    // the views and the count: the stack (default) or the table, with four
+    // or eight transitions
     (function () {
+      var DATA = [{"key": "cognitive", "major": false, "name": "Cognitive", "date": "c. 70,000 BCE", "tech": "Abstract thought, language and ranged weapons", "economy": "Small, mobile and broadly egalitarian bands", "culture": "Shared myth and animism"}, {"key": "agricultural", "major": true, "name": "Agricultural", "date": "c. 10,000 BCE", "tech": "Domestication, farming and the storable surplus", "economy": "Settled villages, private property and chiefdoms", "culture": "Ancestor cults, fertility gods and the first hierarchies"}, {"key": "urban", "major": false, "name": "Urban", "date": "c. 4000 BCE", "tech": "Writing, bronze, the wheel and the city", "economy": "City-states, kings, taxes, law and markets", "culture": "Organised religion and divine kingship"}, {"key": "scientific", "major": false, "name": "Scientific", "date": "c. 1540", "tech": "Print, instruments and experiment", "economy": "Centralising states, standing armies and oceanic trade", "culture": "Reason, mechanism and a disenchanted nature"}, {"key": "industrial", "major": true, "name": "Industrial", "date": "c. 1760", "tech": "Coal, steam and the factory", "economy": "Industrial capitalism, wage labour and the nation-state", "culture": "Progress, individualism and nationalism"}, {"key": "technological", "major": false, "name": "Technological", "date": "c. 1870", "tech": "Electricity, steel, chemistry and combustion", "economy": "Corporations, mass production and total war", "culture": "Mass culture and consumerism"}, {"key": "digital", "major": true, "name": "Digital", "date": "c. 1950", "tech": "The transistor, the computer and the network", "economy": "Global networks, platforms and the information economy", "culture": "Networked identity and the attention economy"}, {"key": "intelligence", "major": true, "name": "Intelligence", "date": "c. 2010 &ndash; now", "tech": "Machine learning, compute and AI agents", "economy": "Automated cognitive labour and AI hyper-agents &ndash; still being enacted", "culture": "Still to be decided by the power-elite&rsquo;s response"}];
+      var body = document.body;
       var diagram = document.querySelector('.diagram');
-      var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
-      function setView(v) {
-        diagram.classList.toggle('all', v === '8');
-        diagram.parentNode.classList.toggle('all', v === '8');
-        tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === v ? 'true' : 'false'); });
+      var viewTabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
+      var countBtns = Array.prototype.slice.call(document.querySelectorAll('.count-toggle button'));
+      var stack = document.querySelector('.st-stack');
+      var menu = document.querySelector('.stack-menu');
+      var panel = document.querySelector('.stack-panel');
+      var intro = panel.querySelector('.stack-intro');
+      var count = '4', view = 'stack', locked = -1, blocks = [], items = [], details = [];
+
+      function show(at) {
+        blocks.forEach(function (b, i) { b.classList.toggle('active', i === at); });
+        items.forEach(function (li, i) { li.classList.toggle('active', i === at); });
+        intro.classList.toggle('show', at < 0);
+        details.forEach(function (d, i) { d.classList.toggle('show', i === at); });
+      }
+
+      var sounding = -1;
+      function point(i) {
+        if (i !== sounding && i >= 0 && window.ttNodeSound) window.ttNodeSound(i);
+        sounding = i;
+        show(i);
+      }
+
+      function buildStack(animate) {
+        var layers = DATA.filter(function (t) { return count === '8' || t.major; });
+        var n = layers.length;
+        var SIZE = 250, H = n === 8 ? 26 : 44, TRIM = n === 8 ? 12 : 22;
+        stack.innerHTML = '';
+        menu.innerHTML = '';
+        panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
+        blocks = []; items = []; details = []; locked = -1; sounding = -1;
+        stack.style.setProperty('--lift', (n * H / 2 + 40) + 'px');
+        var w = SIZE, d = SIZE, x = 0, y = 0;
+        layers.forEach(function (t, i) {
+          var alongX = i % 2 === 1;
+          if (i > 0) {
+            if (alongX) { w -= TRIM; x += TRIM / 2; }
+            else { d -= TRIM; y += TRIM / 2; }
+          }
+          var b = document.createElement('div');
+          b.className = 'st-block';
+          b.innerHTML = '<span class="st-top"></span><span class="st-front"></span><span class="st-side"></span>';
+          [['--w', w], ['--d', d], ['--h', H], ['--x', x - SIZE / 2], ['--y', y - SIZE / 2], ['--z', i * H],
+           ['--sx', alongX ? -260 : 0], ['--sy', alongX ? 0 : -260]].forEach(function (v) { b.style.setProperty(v[0], v[1] + 'px'); });
+          b.style.setProperty('--delay', (i * 110) + 'ms');
+          b.addEventListener('mouseenter', function () { point(i); });
+          b.addEventListener('click', function () { locked = locked === i ? -1 : i; point(locked); });
+          stack.appendChild(b);
+          blocks.push(b);
+          // the panel's account of this layer
+          var det = document.createElement('div');
+          det.className = 'st-detail';
+          det.innerHTML = '<p class="st-detail-name">' + t.name + ' Revolution</p><p class="st-detail-date">' + t.date + '</p>' +
+            '<dl><dt>Tech Stack</dt><dd>' + t.tech + '</dd><dt>Political Economy</dt><dd>' + t.economy + '</dd><dt>Cultural Psychology</dt><dd>' + t.culture + '</dd></dl>' +
+            '<a class="st-detail-link" href="../timeline/#' + t.key + '-revolution">On the Timeline</a>';
+          panel.appendChild(det);
+          details.push(det);
+        });
+        // the list, newest first like the stack it sits beside
+        layers.forEach(function (t, i) {
+          var li = document.createElement('li');
+          li.innerHTML = '<button type="button"><span class="st-name">' + t.name + '</span><span class="st-date">' + t.date + '</span></button>';
+          li.addEventListener('mouseenter', function () { point(i); });
+          li.querySelector('button').addEventListener('focus', function () { point(i); });
+          li.querySelector('button').addEventListener('click', function () { locked = locked === i ? -1 : i; point(locked); });
+          menu.insertBefore(li, menu.firstChild);
+          items[i] = li;
+        });
+        show(-1);
+        if (animate) {
+          stack.classList.add('building');
+          // a note as each slab lands
+          layers.forEach(function (t, i) {
+            setTimeout(function () { if (window.ttNodeSound && view === 'stack') window.ttNodeSound(i); }, i * 110 + 330);
+          });
+          setTimeout(function () { stack.classList.remove('building'); }, n * 110 + 700);
+        }
+      }
+      document.querySelector('.stack-layout').addEventListener('mouseleave', function () { sounding = -1; show(locked); });
+
+      function setCount(c) {
+        count = c;
+        diagram.classList.toggle('all', c === '8');
+        diagram.parentNode.classList.toggle('all', c === '8');
+        countBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.count === c ? 'true' : 'false'); });
         diagram.style.animation = 'none';
         void diagram.offsetHeight;
         diagram.style.animation = '';
+        buildStack(view === 'stack');
       }
-      tabs.forEach(function (t) { t.addEventListener('click', function () { setView(t.dataset.view); }); });
-      if (location.hash === '#8') setView('8');
+      function setView(v) {
+        view = v;
+        body.classList.toggle('view-table', v === 'table');
+        viewTabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === v ? 'true' : 'false'); });
+        if (v === 'stack') buildStack(true);
+      }
+      viewTabs.forEach(function (t) { t.addEventListener('click', function () { setView(t.dataset.view); }); });
+      countBtns.forEach(function (b) { b.addEventListener('click', function () { setCount(b.dataset.count); }); });
+
+      var hash = location.hash.slice(1).split('-');
+      if (hash.indexOf('8') !== -1) count = '8';
+      view = hash.indexOf('table') !== -1 ? 'table' : 'stack';
+      body.classList.toggle('view-table', view === 'table');
+      viewTabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
+      setCount(count);
     })();
 
     // the up arrow shows once the top section has scrolled away
