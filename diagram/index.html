@@ -1310,7 +1310,8 @@
             if (touched) return;
             playing = true;
             layers.forEach(function (t, i) { later(function () { point(i); }, i * 1300); });
-            later(function () { playing = false; sounding = -1; showAt(locked); }, n * 1300 + 300);
+            // and then the base stays selected
+            later(function () { playing = false; locked = 0; point(0); }, n * 1300 + 300);
           }, start);
         }
         function stop() { clearTimers(); }
