@@ -22,7 +22,11 @@
     } catch (e) {}
     try {
       // no theme chosen yet: follow the system setting
-      var t = localStorage.getItem('theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('themeSystem') !== sys) { t = null; localStorage.removeItem('theme'); }
+      t = t || sys;
       if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
       if (localStorage.getItem('blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
       if (localStorage.getItem('headings') !== 'sans') document.documentElement.classList.add('serif-headings');
@@ -167,15 +171,15 @@
 
     <ul class="menu">
       <li><a href="../"><span class="menu-title">Research Article</span><span class="menu-desc"><em>A Multi-Agent Model of Major Technological Transitions</em></span></a></li>
+      <li><a href="../diagram/"><span class="menu-title">Diagram</span><span class="menu-desc">The transitions and the three layers they reshape</span></a></li>
+      <li><a href="../timeline/"><span class="menu-title">Timeline</span><span class="menu-desc">The major technological transitions</span></a></li>
       <li><a href="../lexicon/"><span class="menu-title">Lexicon</span><span class="menu-desc">A list of key terms</span></a></li>
       <li><a href="../sources/"><span class="menu-title">Sources</span><span class="menu-desc">Works the article draws on</span></a></li>
-      <li><a href="../timeline/"><span class="menu-title">Timeline</span><span class="menu-desc">The major technological transitions</span></a></li>
-      <li><a href="../diagram/"><span class="menu-title">Diagram</span><span class="menu-desc">The transitions and the three layers they reshape</span></a></li>
     </ul>
     </div>
   </main>
 
-  <script src="../assets/site.js?v=31b50f70" data-base="../"></script>
-  <script src="../assets/tools.js?v=e3557510"></script>
+  <script src="../assets/site.js?v=b9046339" data-base="../"></script>
+  <script src="../assets/tools.js?v=34004b27"></script>
 </body>
 </html>

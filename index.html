@@ -28,7 +28,11 @@
       } catch (e) {}
       try {
         // no theme chosen yet: follow the system setting
-        var t = localStorage.getItem('theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var t = localStorage.getItem('theme');
+        // a theme chosen with t holds only until the system setting changes
+        if (t && localStorage.getItem('themeSystem') !== sys) { t = null; localStorage.removeItem('theme'); }
+        t = t || sys;
         if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
         }
@@ -1932,10 +1936,10 @@
         <p class="sitemap-heading"><a href="list/">All Pages</a></p>
         <ol>
           <li><a href="./">Article</a></li>
+          <li><a href="diagram/">Diagram</a></li>
+          <li><a href="timeline/">Timeline</a></li>
           <li><a href="lexicon/">Lexicon</a></li>
           <li><a href="sources/">Sources</a></li>
-          <li><a href="timeline/">Timeline</a></li>
-        <li><a href="diagram/">Diagram</a></li>
         </ol>
       </nav>
       </div>
@@ -2467,14 +2471,14 @@
           root.setAttribute('data-theme', theme);
         }
         setFavicons(DARK_THEMES.indexOf(theme) !== -1);
-        if (!fromSystem) try { localStorage.setItem('theme', theme); } catch (e) {}
+        if (!fromSystem) try { localStorage.setItem('theme', theme); localStorage.setItem('themeSystem', systemDark && systemDark.matches ? 'dark' : 'light'); } catch (e) {}
       }
 
       // until a theme is chosen here (t), the page follows the system as it changes
       if (systemDark && systemDark.addEventListener) systemDark.addEventListener('change', function () {
-        var stored;
-        try { stored = localStorage.getItem('theme'); } catch (e) {}
-        if (THEMES.indexOf(stored) === -1) applyTheme(currentTheme(), true);
+        // a change of the system setting wins over a theme chosen with t
+        try { localStorage.removeItem('theme'); } catch (e) {}
+        applyTheme(currentTheme(), true);
       });
 
       function toggleTheme() {
@@ -2772,6 +2776,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=e3557510" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=34004b27" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>

@@ -185,14 +185,14 @@
     if (theme === 'light') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
     setFavicons(DARK.indexOf(theme) !== -1);
-    if (!fromSystem) try { localStorage.setItem('theme', theme); } catch (e) {}
+    if (!fromSystem) try { localStorage.setItem('theme', theme); localStorage.setItem('themeSystem', systemDark && systemDark.matches ? 'dark' : 'light'); } catch (e) {}
   }
 
   // until a theme is chosen here (t), the page follows the system as it changes
   if (systemDark && systemDark.addEventListener) systemDark.addEventListener('change', function () {
-    var t;
-    try { t = localStorage.getItem('theme'); } catch (e) {}
-    if (THEMES.indexOf(t) === -1) applyTheme(currentTheme(), true);
+    // a change of the system setting wins over a theme chosen with t
+    try { localStorage.removeItem('theme'); } catch (e) {}
+    applyTheme(currentTheme(), true);
   });
 
   function toggleTheme() {
