@@ -35,10 +35,10 @@
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
-  <title>The Civilisational Tech Stack — Technological Transitions</title>
+  <title>The Civilisational Stack — Technological Transitions</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Technological Transitions">
-  <meta property="og:title" content="The Civilisational Tech Stack — Technological Transitions">
+  <meta property="og:title" content="The Civilisational Stack — Technological Transitions">
   <meta property="og:description" content="A diagram of the major technological transitions discussed in A Multi-Agent Model of Major Technological Transitions.">
   <meta property="og:url" content="https://maxramsahoye.github.io/technologicaltransitions.agency/diagram/">
   <meta property="og:image" content="https://maxramsahoye.github.io/technologicaltransitions.agency/preview.png">
@@ -387,7 +387,7 @@
       width: var(--w);
       height: var(--d);
       transform-style: preserve-3d;
-      transform: translate3d(var(--x), var(--y), var(--z));
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float)));
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
       cursor: pointer;
       pointer-events: auto;
@@ -437,7 +437,27 @@
       transition: none !important;
       animation: none !important;
       visibility: visible !important;
-      transform: translate3d(var(--x), var(--y), var(--z)) !important;
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float))) !important;
+    }
+
+    /* settled, the slabs hover apart about the middle of the stack, each
+       drifting gently up and down out of step with the others */
+    .st-block {
+      --float: 0px;
+    }
+
+    .st-stack.floating .st-block {
+      --float: calc((var(--i) - (var(--n) - 1) / 2) * var(--gap));
+      animation: st-bob 4.2s ease-in-out calc(var(--i) * -0.7s) infinite alternate;
+    }
+
+    .st-stack.spreading .st-block {
+      transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    @keyframes st-bob {
+      from { translate: 0 0 -3px; }
+      to { translate: 0 0 4px; }
     }
 
     @keyframes st-in {
@@ -486,7 +506,7 @@
 
     /* the layer pointed to rises out of the stack and turns the blue accent */
     .st-block.active {
-      transform: translate3d(var(--x), var(--y), calc(var(--z) + 30px));
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float) + 30px));
       --top: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--link-blue) 75%, var(--canvas-bg));
       --right: var(--link-blue);
@@ -499,7 +519,16 @@
     }
 
     .st-block.active ~ .st-block {
-      transform: translate3d(var(--x), var(--y), calc(var(--z) + 60px));
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float) + 60px));
+    }
+
+    /* hovering apart, the layer pointed to rises further to stand out */
+    .st-stack.floating .st-block.active {
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float) + 30px + var(--gap) * 0.8));
+    }
+
+    .st-stack.floating .st-block.active ~ .st-block {
+      transform: translate3d(var(--x), var(--y), calc(var(--z) + var(--float) + 60px + var(--gap) * 1.6));
     }
 
     /* the list of layers beside the stack, newest at the top as in the stack */
@@ -960,11 +989,11 @@
 
   <main class="page-main">
     <div class="diagram-top wide-top">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Tech Stack</a></h1>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Stack</a></h1>
     <p class="page-intro">The major technological transitions discussed in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
     <p class="diagram-desc">Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
     <div class="view-tabs" aria-label="Diagrams">
-      <div class="tab-group" role="tablist" aria-label="The Civilisational Tech Stack">
+      <div class="tab-group" role="tablist" aria-label="The Civilisational Stack">
         <button type="button" role="tab" aria-selected="true" data-show="stack-main">The Stack</button>
         <button type="button" role="tab" aria-selected="false" data-show="stack-alt">Alternative View</button>
       </div>
@@ -979,7 +1008,7 @@
     </div>
     </div>
 
-    <section class="stack-view" aria-label="The Civilisational Tech Stack">
+    <section class="stack-view" aria-label="The Civilisational Stack">
       <div class="stack-layout">
         <div class="stack-scene" aria-hidden="true"><div class="st-stack"></div></div>
         <div class="stack-side">
@@ -1105,7 +1134,7 @@
       ];
       var TEXT = {
         stack: {
-          title: 'The Civilisational Tech Stack',
+          title: 'The Civilisational Stack',
           desc: 'Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
         },
         structures: {
@@ -1188,6 +1217,9 @@
           panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
           blocks = []; items = []; details = []; locked = -1; sounding = -1; touched = false;
           stack.style.setProperty('--lift', (n * g.H / 2 + 40) + 'px');
+          stack.style.setProperty('--n', n);
+          stack.style.setProperty('--gap', Math.round(g.H * 0.5 + 6) + 'px');
+          stack.classList.remove('floating', 'spreading', 'splitting');
           // each slab smaller than the one below by the same step, centred
           function place(b, i, geo) {
             var w = geo.SIZE - i * geo.TRIM, x = i * geo.TRIM / 2;
@@ -1203,6 +1235,7 @@
             b.style.setProperty('--sx', (alongX ? -260 : 0) + 'px');
             b.style.setProperty('--sy', (alongX ? 0 : -260) + 'px');
             b.style.setProperty('--delay', (i * geo.STEP) + 'ms');
+            b.style.setProperty('--i', i);
             stack.appendChild(b);
             return b;
           }
@@ -1240,7 +1273,6 @@
           stack.classList.remove('building');
           void stack.offsetHeight;
           stack.classList.add('building');
-          var start = n * g.STEP + 1300;
           if (pre) {
             // the tech stack builds, its top three slabs slide back out the
             // way they came, and the base splits into the three layers
@@ -1264,11 +1296,16 @@
               blocks.forEach(function (b, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 250 + i * 220); });
             }, split);
             later(function () { stack.classList.remove('splitting'); }, split + 1400);
-            start = split + 1900;
+            var settled = split + 1100;
           } else {
             layers.forEach(function (t, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * g.STEP + 550); });
             later(function () { stack.classList.remove('building'); }, n * g.STEP + 1100);
+            var settled = n * g.STEP + 1100;
           }
+          // a second after the stack has settled, the slabs hover apart
+          later(function () { stack.classList.add('floating', 'spreading'); }, settled + 1000);
+          later(function () { stack.classList.remove('spreading'); }, settled + 2500);
+          var start = settled + 2700;
           later(function () {
             if (touched) return;
             playing = true;
