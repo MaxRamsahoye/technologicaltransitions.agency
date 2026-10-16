@@ -618,6 +618,7 @@
     }
 
     .sa-tech {
+      margin-bottom: 120px;
       border-color: var(--canvas-ink);
     }
 
@@ -1238,7 +1239,7 @@
         var revs = revolutions();
         var html = '';
         LAYERS.slice().reverse().forEach(function (L, k) {
-          if (k > 0) html += '<div class="sa-arrows" aria-hidden="true"><span>&uarr; shapes</span><span>&darr; legitimises</span></div>';
+          if (k > 0) html += '<div class="sa-arrows" aria-hidden="true"><span>&uarr; shapes</span><span>&darr; ' + (L.key === 'tech' ? 'operationalises' : 'legitimises') + '</span></div>';
           html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + '</h3><p class="sa-aka">' + L.aka + '</p><p class="sa-def">' + L.def + '</p></div>' +
             '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl></section>';
         });
