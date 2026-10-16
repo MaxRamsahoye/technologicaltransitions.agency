@@ -399,6 +399,39 @@
       animation: st-in 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
     }
 
+    /* the structures begin as the tech stack: its slabs build, the top
+       three slide back out, and the base splits into the three layers */
+    @property --w { syntax: '<length>'; inherits: true; initial-value: 0px; }
+    @property --d { syntax: '<length>'; inherits: true; initial-value: 0px; }
+    @property --h { syntax: '<length>'; inherits: true; initial-value: 0px; }
+    @property --x { syntax: '<length>'; inherits: true; initial-value: 0px; }
+    @property --y { syntax: '<length>'; inherits: true; initial-value: 0px; }
+    @property --z { syntax: '<length>'; inherits: true; initial-value: 0px; }
+
+    .st-ghost {
+      pointer-events: none;
+    }
+
+    .st-stack .st-block.st-wait {
+      visibility: hidden;
+      animation: none;
+    }
+
+    .st-stack .st-ghost.st-out {
+      transform: translate3d(calc(var(--x) + var(--sx) * 1.6), calc(var(--y) + var(--sy) * 1.6), var(--z));
+      transition: transform 0.9s cubic-bezier(0.55, 0, 0.78, 0.3);
+    }
+
+    .st-ghost.st-out > span {
+      opacity: 0;
+      transition: opacity 0.5s ease-in 0.35s;
+    }
+
+    .st-stack.splitting .st-block {
+      transition: --w 1.1s, --d 1.1s, --h 1.1s, --x 1.1s, --y 1.1s, --z 1.1s;
+      transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
     /* measuring the stack at rest: no lift, no movement */
     .st-stack.measuring .st-block {
       transition: none !important;
@@ -1132,7 +1165,7 @@
           if (getComputedStyle(root.querySelector('.stack-layout')).gridTemplateColumns.split(' ').length < 2) { stack.style.setProperty('--align', '0px'); return; }
           stack.classList.add('measuring');
           var top = Infinity, bottom = -Infinity;
-          stack.querySelectorAll('.st-block > span').forEach(function (f) {
+          stack.querySelectorAll('.st-block:not(.st-ghost) > span').forEach(function (f) {
             var r = f.getBoundingClientRect();
             top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom);
           });
@@ -1155,19 +1188,33 @@
           panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
           blocks = []; items = []; details = []; locked = -1; sounding = -1; touched = false;
           stack.style.setProperty('--lift', (n * g.H / 2 + 40) + 'px');
-          layers.forEach(function (t, i) {
-            // each slab smaller than the one below by the same step, centred
+          // each slab smaller than the one below by the same step, centred
+          function place(b, i, geo) {
+            var w = geo.SIZE - i * geo.TRIM, x = i * geo.TRIM / 2;
+            [['--w', w], ['--d', w], ['--h', geo.H], ['--x', x - geo.SIZE / 2], ['--y', x - geo.SIZE / 2], ['--z', i * geo.H]]
+              .forEach(function (v) { b.style.setProperty(v[0], v[1] + 'px'); });
+          }
+          function slab(i, geo) {
             var alongX = i % 2 === 1;
-            var w = g.SIZE - i * g.TRIM, x = i * g.TRIM / 2;
             var b = document.createElement('div');
             b.className = 'st-block';
             b.innerHTML = '<span class="st-top"></span><span class="st-front"></span><span class="st-side"></span>';
-            [['--w', w], ['--d', w], ['--h', g.H], ['--x', x - g.SIZE / 2], ['--y', x - g.SIZE / 2], ['--z', i * g.H],
-             ['--sx', alongX ? -260 : 0], ['--sy', alongX ? 0 : -260]].forEach(function (v) { b.style.setProperty(v[0], v[1] + 'px'); });
-            b.style.setProperty('--delay', (i * g.STEP) + 'ms');
+            place(b, i, geo);
+            b.style.setProperty('--sx', (alongX ? -260 : 0) + 'px');
+            b.style.setProperty('--sy', (alongX ? 0 : -260) + 'px');
+            b.style.setProperty('--delay', (i * geo.STEP) + 'ms');
+            stack.appendChild(b);
+            return b;
+          }
+          // first, if asked, the four slabs of the tech stack, which the
+          // layers then take the place of
+          var pre = g.prelude, ghosts = [];
+          if (pre) for (var k = 0; k < pre.n; k++) { ghosts.push(slab(k, pre)); ghosts[k].classList.add('st-ghost'); }
+          layers.forEach(function (t, i) {
+            var b = slab(i, g);
+            if (pre) b.classList.add('st-wait');
             b.addEventListener('mouseenter', function () { hover(i); });
             b.addEventListener('click', function () { press(i); });
-            stack.appendChild(b);
             blocks.push(b);
             var det = document.createElement('div');
             det.className = 'st-detail';
@@ -1193,14 +1240,41 @@
           stack.classList.remove('building');
           void stack.offsetHeight;
           stack.classList.add('building');
-          layers.forEach(function (t, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * g.STEP + 550); });
-          later(function () { stack.classList.remove('building'); }, n * g.STEP + 1100);
+          var start = n * g.STEP + 1300;
+          if (pre) {
+            // the tech stack builds, its top three slabs slide back out the
+            // way they came, and the base splits into the three layers
+            var m = pre.n, out = m * pre.STEP + 1100;
+            ghosts.forEach(function (b, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * pre.STEP + 550); });
+            later(function () { stack.classList.remove('building'); }, out);
+            for (var j = m - 1; j > 0; j--) (function (b, d) { later(function () { b.classList.add('st-out'); }, out + 200 + d); })(ghosts[j], (m - 1 - j) * 160);
+            var split = out + 200 + (m - 2) * 160 + 900;
+            later(function () {
+              // the layers begin as thin slices of the base, then take shape
+              blocks.forEach(function (b, i) {
+                b.style.setProperty('--w', pre.SIZE + 'px'); b.style.setProperty('--d', pre.SIZE + 'px');
+                b.style.setProperty('--x', -pre.SIZE / 2 + 'px'); b.style.setProperty('--y', -pre.SIZE / 2 + 'px');
+                b.style.setProperty('--h', pre.H / n + 'px'); b.style.setProperty('--z', i * pre.H / n + 'px');
+                b.classList.remove('st-wait');
+              });
+              ghosts.forEach(function (b) { b.remove(); });
+              void stack.offsetHeight;
+              stack.classList.add('splitting');
+              blocks.forEach(function (b, i) { place(b, i, g); });
+              blocks.forEach(function (b, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 250 + i * 220); });
+            }, split);
+            later(function () { stack.classList.remove('splitting'); }, split + 1400);
+            start = split + 1900;
+          } else {
+            layers.forEach(function (t, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * g.STEP + 550); });
+            later(function () { stack.classList.remove('building'); }, n * g.STEP + 1100);
+          }
           later(function () {
             if (touched) return;
             playing = true;
             layers.forEach(function (t, i) { later(function () { point(i); }, i * 1300); });
             later(function () { playing = false; sounding = -1; showAt(locked); }, n * 1300 + 300);
-          }, n * g.STEP + 1300);
+          }, start);
         }
         function stop() { clearTimers(); }
         return { build: build, stop: stop };
@@ -1232,7 +1306,7 @@
               '<p class="st-detail-def">' + L.def + '</p>' +
               '<dl class="st-across">' + revs.map(function (t) { return '<dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd>'; }).join('') + '</dl>'
           };
-        }), { SIZE: 250, H: 64, TRIM: 34, STEP: 700 });
+        }), { SIZE: 250, H: 64, TRIM: 34, STEP: 700, prelude: { n: 4, SIZE: 250, H: 44, TRIM: 30, STEP: 520 } });
       }
       // the alternative view of the structures: the three layers, one above
       // the other, with what each revolution brought to each
