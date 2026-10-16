@@ -1631,14 +1631,14 @@
     (function () {
       var loader = document.querySelector('.loader');
 
-      // Only on arriving at the site: skip it when coming from another page of
-      // the site, or when going back/forward through history.
+      // On arriving at the site, and on every refresh: skip it only when
+      // coming from another page of the site, or going back/forward.
       var internal = false;
       try {
         internal = !!document.referrer && new URL(document.referrer).origin === location.origin;
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         if (nav && nav.type === 'back_forward') internal = true;
-        if (nav && nav.type === 'reload') internal = true;   // a refresh fades back in instead
+        if (nav && nav.type === 'reload') internal = false;   // a refresh plays it again
       } catch (e) {}
       if (internal) {
         loader.remove();
@@ -1704,6 +1704,36 @@
         loader.classList.add('loader-stacking');
         var built = (LEVELS - 1) * STEP + DUR + 120;
         var t0 = performance.now();
+        // a soft note as each slab lands, rising a step each time (the
+        // browser may hold sound back until the page has been interacted with)
+        var layerCtx = null;
+        function layerSound(i) {
+          try {
+            if (!layerCtx) {
+              var AC = window.AudioContext || window.webkitAudioContext;
+              if (!AC) return;
+              layerCtx = new AC();
+            }
+            if (layerCtx.state === 'suspended') layerCtx.resume();
+            var when = layerCtx.currentTime;
+            var freq = [130.81, 164.81, 196.00, 261.63][i % 4];   // C3 E3 G3 C4
+            [[freq, 0.05, 0.7], [freq * 2, 0.012, 0.35]].forEach(function (partial) {
+              var osc = layerCtx.createOscillator();
+              osc.type = 'sine';
+              osc.frequency.value = partial[0];
+              var gain = layerCtx.createGain();
+              gain.gain.setValueAtTime(0, when);
+              gain.gain.linearRampToValueAtTime(partial[1], when + 0.008);
+              gain.gain.exponentialRampToValueAtTime(0.0001, when + partial[2]);
+              osc.connect(gain).connect(layerCtx.destination);
+              osc.start(when);
+              osc.stop(when + partial[2]);
+            });
+          } catch (e) {}
+        }
+        for (var n = 0; n < LEVELS; n++) {
+          setTimeout(layerSound.bind(null, n), n * STEP + DUR * 0.55);
+        }
         // turn blue the moment the last slab lands (the ease-out has it
         // settled well before its animation formally ends)
         setTimeout(function () {
@@ -2420,7 +2450,13 @@
         if (!btn) return;
         e.preventDefault();
         flashHover(btn);
-        btn.click();
+        if (btn.dataset.target === 'overview' && isDesign2()) {
+          // the arrow only fades the Overview in; Enter also moves down to it
+          showOverview();
+          animateScrollTo(overviewEl.getBoundingClientRect().top + window.scrollY - 72, 900);
+        } else {
+          btn.click();
+        }
       });
 
       document.addEventListener('keydown', function (e) {

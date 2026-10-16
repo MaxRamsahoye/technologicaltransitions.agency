@@ -357,7 +357,17 @@
   // Shortcuts press their on-screen button, so they sound, ripple and
   // highlight exactly like a click.
   // Enter presses the link marked data-enter (e.g. the Lexicon's first concept)
-  var enterTarget = document.querySelector('[data-enter]');
+  // Enter moves down from the top section to the page's canvas: the first
+  // thing showing after it
+  var topSection = document.querySelector('.lexicon-top, .sources-top, .timeline-top, .wide-top');
+  function canvasStart() {
+    for (var el = topSection && topSection.nextElementSibling; el; el = el.nextElementSibling) {
+      if (/^(SCRIPT|TEMPLATE|STYLE)$/.test(el.tagName) || !el.getClientRects().length) continue;
+      if (getComputedStyle(el).position === 'fixed') continue;   // corner menus and buttons
+      return el;
+    }
+    return null;
+  }
 
   function press(el) {
     if (!el) return;
@@ -376,11 +386,13 @@
         toggleTheme();
         spawnRipple(pointer.x, pointer.y, getComputedStyle(document.body).color);
       }
-    } else if (e.key === 'Enter' && enterTarget) {
+    } else if (e.key === 'Enter' && !e.shiftKey && topSection) {
       var tag = document.activeElement && document.activeElement.tagName;
       if (tag === 'A' || tag === 'BUTTON') return;
+      var canvas = canvasStart();
+      if (!canvas) return;
       e.preventDefault();
-      press(enterTarget);
+      window.scrollTo({ top: canvas.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
     } else if (e.key === 'c' || e.key === 'C') {
       // c: toggle the blue link accent (shared with the article)
       var on = document.documentElement.classList.toggle('colour');
