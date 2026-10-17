@@ -1527,9 +1527,10 @@
         desc.innerHTML = TEXT[d].desc;
         diagram.classList.toggle('all', count === '8');
         diagram.parentNode.classList.toggle('all', count === '8');
-        // a change of count reshapes the stack in view; a change of view
-        // builds it afresh
-        var how = rebuild === 'count' ? 'update' : 'build';
+        // the stack builds afresh on any change; The Structures, whose slabs
+        // are the same for four or eight, only update their text on a change
+        // of count
+        var how = rebuild === 'count' && show === 'structures-main' ? 'update' : 'build';
         if (how === 'build') { techStack.stop(); structStack.stop(); }
         if (show === 'stack-main') buildTech(how);
         if (show === 'structures-main') buildStructures(how);
