@@ -2085,18 +2085,27 @@
 
       // the tables' parts open up into fuller material below them: each
       // revolution, and what it brought to each layer
-      // the key beliefs and values of each revolution, to sit beside its
-      // cultural-psychological adaptation as the key technologies sit
-      // beside its military-economic one
-      var BELIEFS = {
-        cognitive: 'Animism, shared myth, kinship, reciprocity and egalitarian sharing',
-        agricultural: 'Ancestor worship, fertility gods, property, inheritance and rank',
-        urban: 'Organised religion, divine kingship, written law and hierarchy',
-        scientific: 'Reason, empirical inquiry, mechanism and a disenchanted nature',
-        industrial: 'Progress, individualism, nationalism and the work ethic',
-        technological: 'Mass culture, consumerism, faith in expertise and the mass ideologies',
-        digital: 'Networked identity, self-expression, globalism and polarisation',
-        intelligence: 'Still being decided &ndash; contested between human agency, techno-optimism and the response of the power-elite'
+      // longer accounts of each revolution's key technologies, and of its
+      // key beliefs and values, for the opened sections
+      var TECH_PROSE = {
+        "cognitive": "Language and abstract thought were the first tech stack: tools of the mind that let people name, plan, teach and imagine together. With them came composite tools, ranged weapons, controlled fire and the art and ritual that carried shared knowledge from one generation to the next.",
+        "agricultural": "The domestication of wheat, rice, maize, sheep, goats and cattle made food something that could be grown, herded and stored. Irrigation, granaries, pottery and, later, the plough turned land into a reliable surplus &ndash; the foundation on which every later stack would be built.",
+        "urban": "Writing let records, laws and accounts outlast memory; bronze gave tools and weapons an edge stone could not; the wheel, the sail and monumental building let goods, armies and authority move and concentrate. Together they made the city possible, and with it the state.",
+        "scientific": "The printing press spread knowledge faster and further than ever before, while the telescope, microscope, clock and compass, and the method of controlled experiment, turned nature into something to be measured, predicted and mastered &ndash; and navigation into a means of global reach.",
+        "industrial": "The steam engine, fed by coal, released production from the limits of muscle, wind and water. Mechanised spinning and weaving, iron, railways and the factory system multiplied output many times over, and tied human work to the rhythm of the machine.",
+        "technological": "Electricity, steel, industrial chemistry and the internal combustion engine reached into every corner of life: the light bulb, the telephone, the car, the aeroplane and the assembly line, along with fertilisers, plastics and the machinery of total war.",
+        "digital": "The transistor and the integrated circuit made computation cheap and ubiquitous, and the internet and mobile phone networked it together. Software, data and platforms came to run finance, commerce, communication and the flow of information worldwide.",
+        "intelligence": "Machine learning trained on vast data and compute is producing systems that can see, speak, write, code and reason, and increasingly act as agents in the world. For the first time a technology begins to automate cognition itself, rather than only extending human strength or reach."
+      };
+      var BELIEF_PROSE = {
+        "cognitive": "Forager bands lived within an animist world in which animals, places and ancestors were persons, and kinship and reciprocity bound people together. Sharing was a duty, boasting was ridiculed, and the egalitarian ethos was enforced by the group as a whole.",
+        "agricultural": "With settled life came reverence for ancestors who had worked and held the land, and for gods of fertility, rain and harvest on whom the surplus depended. Property, inheritance and rank came to seem part of the natural order.",
+        "urban": "Organised religion, with its priesthoods and temples, explained and upheld the new order: kings ruled by divine right or as gods themselves, written law fixed each person&rsquo;s place, and hierarchy became sacred.",
+        "scientific": "Reason and observation became the measure of truth, and nature came to be seen as a mechanism governed by laws rather than as a realm of spirits and purposes. Authority grounded in tradition and revelation began to give way to that of evidence.",
+        "industrial": "Faith in progress, and in the improvement of humanity through industry and reason, took hold. The individual, the work ethic and the nation became central values, and a person&rsquo;s worth was increasingly measured by their productivity.",
+        "technological": "A culture of mass production became one of mass consumption, advertising and mass media, and of trust in experts and engineers. Mass ideologies &ndash; liberalism, socialism, nationalism and fascism &ndash; competed to give meaning to modern life.",
+        "digital": "Identity became something to be expressed, curated and performed online, and global networks spread values across borders. Self-expression, connection and choice became central values &ndash; alongside a growing polarisation of beliefs.",
+        "intelligence": "A contest of worldviews is under way: between post-humanism and accelerationism, which welcome humanity being superseded or transformed, and a pro-human vision of mature progress, in which technology is steered to serve human flourishing."
       };
       var LAYER_NAMES = { tech: 'Tech Stack', economy: 'Political Economy', culture: 'Cultural Psychology' };
       // how each structure acts on its neighbour, above and below
@@ -2117,9 +2126,9 @@
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
         var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
         var body = layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
-          : layer === 'tech' ? sec('Key Technologies', m.stack) + sec('Military-Economic Adaptation', m.mil)
+          : layer === 'tech' ? sec('Key Technologies', TECH_PROSE[key]) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
-          : sec('Key Beliefs &amp; Values', BELIEFS[key]) + sec('Cultural-Psychological Adaptation', m.cult);
+          : sec('Key Beliefs &amp; Values', BELIEF_PROSE[key]) + sec('Cultural-Psychological Adaptation', m.cult);
         return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
           '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
           (layer === 'head' ? '' : '<p class="d-more-desc">' + DESC[key] + '</p>') +
