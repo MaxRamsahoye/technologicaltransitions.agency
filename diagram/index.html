@@ -1116,8 +1116,19 @@
       margin-bottom: 120px;
     }
 
+    /* a structure and its other name, side by side in the same type */
+    .name-sep {
+      margin: 0 0.15em;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .st-detail-name-only {
+      margin-bottom: 22px;
+    }
+
     .sa-name {
-      margin: 0;
+      margin: 0 0 18px;
       font-family: var(--serif);
       font-weight: 600;
       font-size: 30px;
@@ -1888,7 +1899,7 @@
         structStack[how](LAYERS.map(function (L) {
           return {
             key: L.key, name: L.name, sub: L.aka,
-            detail: '<p class="st-detail-name">' + L.name + '</p><p class="st-detail-date">' + L.aka + '</p>' +
+            detail: '<p class="st-detail-name st-detail-name-only">' + L.name + ' <span class="name-sep">|</span> ' + L.aka + '</p>' +
               '<p class="st-detail-def">' + L.def + '</p>' +
               '<dl class="st-across">' + revs.map(function (t) { return '<dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd>'; }).join('') + '</dl>'
           };
@@ -1902,7 +1913,7 @@
         var html = '';
         LAYERS.slice().reverse().forEach(function (L, k) {
           if (k > 0) html += '<div class="sa-arrows" aria-hidden="true"><span>&uarr; shapes</span><span>&darr; ' + (L.key === 'tech' ? 'operationalises' : 'legitimises') + '</span></div>';
-          html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + '</h3><p class="sa-aka">' + L.aka + '</p><p class="sa-def">' + L.def + '</p></div>' +
+          html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + ' <span class="name-sep">|</span> ' + L.aka + '</h3><p class="sa-def">' + L.def + '</p></div>' +
             '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>' +
             '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></section>';
         });
