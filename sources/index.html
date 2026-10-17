@@ -97,6 +97,21 @@
       left: 0;
     }
 
+    /* a subsection of the bibliography */
+    .bibliography-heading {
+      margin: 56px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .bibliography-section {
+      margin-top: 22px;
+    }
+
     /* the works an entry derives from, indented under it as in the page */
     .bibliography ol {
       margin: 14px 0 0;
@@ -137,6 +152,10 @@
       .bibliography li {
         font-size: 20px;
         white-space: nowrap;
+      }
+
+      .bibliography li.long {
+        white-space: normal;
       }
     }
 
@@ -333,7 +352,12 @@
     <h1 class="page-title"><a class="heading-link title-top" href="#">Sources</a></h1>
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
     <ol class="bibliography" aria-label="Bibliography">
-      <li>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)</li>
+      <li>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
+        <ol>
+          <li>&lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
+          <li>&lsquo;<a href="https://forum.effectivealtruism.org/topics/value-erosion" target="_blank" rel="noopener">Value Erosion</a>&rsquo; <em>Future of Humanity Institute</em> (2019)</li>
+        </ol>
+      </li>
       <li>Daniel Schmachtenberger &lsquo;<a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">The Emergence Model</a>&rsquo; <em>The Emergence Project</em> (2017)
         <ol>
           <li>Ken Wilber <em><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Sex, Ecology, Spirituality: The Spirit of Evolution</a></em> (1995)</li>
@@ -347,6 +371,16 @@
       <li>Jared Diamond <em><a href="https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel" target="_blank" rel="noopener">Guns, Germs, and Steel: The Fates of Human Societies</a></em> (1997)</li>
       <li>Marshall Sahlins &lsquo;<a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">The Original Affluent Society</a>&rsquo; in <em>Stone Age Economics</em> (1972)</li>
       <li>Luke Kemp <em><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</a></em> (2025)</li>
+    </ol>
+    <h2 class="bibliography-heading">Evolutionary Process Misalignment</h2>
+    <ol class="bibliography bibliography-section" aria-label="Evolutionary Process Misalignment">
+      <li>Luke Drago &amp; Rudolf Lain &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
+      <li class="long">Jan Kulveit, Raymond Douglas, Nora Ammann, Deger Turan, David Krueger &amp; David Duvenaud &lsquo;<a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development</a>&rsquo; <em>Alignment of Complex Systems Research Group</em> (2025)</li>
+      <li>Guive Assadi &lsquo;<a href="https://hearthisidea.com/episodes/assadi/" target="_blank" rel="noopener">Will Humanity Choose Its Future?</a>&rsquo; <em>Center for the Governance of AI</em> (2023)</li>
+      <li>Andres Gomez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
+      <li>Joe Carlsmith &lsquo;<a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">Can Goodness Compete?</a>&rsquo; <em>Open Philanthropy</em> (2025)</li>
+      <li>Kristian Ronn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
+      <li>Scott Alexander &lsquo;<a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Meditations on Moloch</a>&rsquo; <em>Slate Star Codex</em> (2014)</li>
     </ol>
     </div>
 
