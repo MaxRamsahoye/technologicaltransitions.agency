@@ -1268,6 +1268,33 @@
       right: 1px;
     }
 
+    /* after the revolution still under way, a blue arrow with three heads:
+       the transition is still unfolding */
+    .sa-flow .onward {
+      color: var(--link-blue);
+    }
+
+    .sa-flow .onward::before {
+      border-color: color-mix(in srgb, currentColor 50%, var(--canvas-bg));
+      border-color: color-mix(in srgb, var(--canvas-ink) 50%, transparent);
+    }
+
+    .sa-flow .onward::after {
+      right: 0;
+    }
+
+    .sa-flow .go.onward > i {
+      right: 1px;
+    }
+
+    .sa-flow .go.onward > i:nth-child(2) {
+      right: 8px;
+    }
+
+    .sa-flow .go.onward > i:nth-child(3) {
+      right: 15px;
+    }
+
     .sa-flow .go > i {
       position: absolute;
       right: -19px;
@@ -2067,7 +2094,7 @@
               // each to the next
               var bar = row.map(function (t, i) {
                 var last = r === rows.length - 1 && i === row.length - 1;
-                return last ? '<span></span>' : '<span class="go' + (i === row.length - 1 ? ' wrap' : '') + '"><i></i></span>';
+                return last ? '<span class="go onward"><i></i><i></i><i></i></span>' : '<span class="go' + (i === row.length - 1 ? ' wrap' : '') + '"><i></i></span>';
               }).join('');
               return '<div class="sa-flow" aria-hidden="true">' + bar + '</div>' +
                 '<dl class="sa-revs">' + row.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>';
