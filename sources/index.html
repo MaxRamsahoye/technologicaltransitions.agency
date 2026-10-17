@@ -99,9 +99,9 @@
 
     /* a subsection of the bibliography */
     .bibliography-heading {
-      margin: 56px 0 0;
+      margin: 64px 0 0;
       font-family: var(--mono-caps);
-      font-size: 13px;
+      font-size: 17px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -306,11 +306,16 @@
     .source-section h2 {
       margin: 0;
       font-family: var(--mono-caps);
-      font-size: 14px;
+      font-size: 19px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
+    }
+
+    .sources > .source-section:first-child {
+      padding-top: 0;
+      border-top: none;
     }
 
     .sources > .source-section + .source {
@@ -372,7 +377,8 @@
     <div class="sources-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Sources</a></h1>
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
-    <ol class="bibliography" aria-label="Bibliography">
+    <h2 class="bibliography-heading">Civilisational Macrohistorical Development</h2>
+    <ol class="bibliography bibliography-section" aria-label="Civilisational Macrohistorical Development">
       <li>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
         <ol>
           <li>Morgan MacInnes, Ben Garfinkel &amp; Allan Dafoe &lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
@@ -406,6 +412,8 @@
     </div>
 
     <ol class="sources">
+      <li class="source-section" id="civilisational-macrohistorical-development"><h2>Civilisational Macrohistorical Development</h2></li>
+
       <li class="source" id="dafoe">
         <p class="source-author">Allan Dafoe</p>
         <p class="source-work">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</p>
