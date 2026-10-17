@@ -1343,11 +1343,13 @@
           if (pre) {
             // the tech stack builds, its top three slabs slide back out the
             // way they came, and the base splits into the three layers
-            var m = pre.n, out = m * pre.STEP + 1100;
-            ghosts.forEach(function (b, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * pre.STEP + 550); });
+            // (or, with a single slab, it is simply there, and splits)
+            var m = pre.n, out = m > 1 ? m * pre.STEP + 1100 : 0;
+            if (m > 1) ghosts.forEach(function (b, i) { later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * pre.STEP + 550); });
+            else stack.classList.remove('building');
             later(function () { stack.classList.remove('building'); }, out);
             for (var j = m - 1; j > 0; j--) (function (b, d) { later(function () { b.classList.add('st-out'); }, out + 200 + d); })(ghosts[j], (m - 1 - j) * 160);
-            var split = out + 200 + (m - 2) * 160 + 900;
+            var split = m > 1 ? out + 200 + (m - 2) * 160 + 900 : 700;
             later(function () {
               // the layers begin as thin slices of the base, then take shape
               blocks.forEach(function (b, i) {
@@ -1492,6 +1494,12 @@
           };
         }), { SIZE: 250, H: n === 8 ? 26 : 44, TRIM: n === 8 ? 16 : 30, STEP: n === 8 ? 380 : 520 });
       }
+      // The Structures open with the single base slab splitting into the
+      // three layers; the first version, which built the whole tech stack
+      // and slid its top three away first, returns with
+      // localStorage.structures = 'stack'
+      var structuresFromStack = false;
+      try { structuresFromStack = localStorage.getItem('structures') === 'stack'; } catch (e) {}
       function buildStructures(how) {
         var revs = revolutions();
         structStack[how](LAYERS.map(function (L) {
@@ -1501,7 +1509,7 @@
               '<p class="st-detail-def">' + L.def + '</p>' +
               '<dl class="st-across">' + revs.map(function (t) { return '<dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd>'; }).join('') + '</dl>'
           };
-        }), { SIZE: 250, H: 64, TRIM: 34, STEP: 700, prelude: { n: 4, SIZE: 250, H: 44, TRIM: 30, STEP: 520 } });
+        }), { SIZE: 250, H: 64, TRIM: 34, STEP: 700, prelude: { n: structuresFromStack ? 4 : 1, SIZE: 250, H: 44, TRIM: 30, STEP: 520 } });
       }
       // the alternative view of the structures: the three layers, one above
       // the other, with what each revolution brought to each
