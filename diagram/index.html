@@ -581,6 +581,25 @@
       border-top: 1.5px solid var(--link-blue);
     }
 
+    /* in The Structures, the opened section is a box in the same blue as
+       the small box selected above it */
+    .sa-layer .d-more-box {
+      margin-top: 40px;
+      padding: 34px 36px 26px;
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      box-shadow: inset 0 0 0 1.5px var(--link-blue);
+    }
+
+    .sa-layer .d-more-head {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .sa-layer .d-more-close {
+      top: -6px;
+    }
+
     .d-more-kicker {
       margin: 0 0 8px;
       font-family: var(--mono-caps);
@@ -1948,11 +1967,11 @@
           : layer === 'tech' ? sec('Key Technologies', m.stack) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
           : sec('Key Beliefs &amp; Values', BELIEFS[key]) + sec('Cultural-Psychological Adaptation', m.cult);
-        return '<div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
+        return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
           '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
           '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
           '<div class="d-more-body">' + body + '</div>' +
-          '<a class="d-more-link" href="../timeline/#' + key + '-revolution">On the Timeline</a>';
+          '<a class="d-more-link" href="../timeline/#' + key + '-revolution">On the Timeline</a></div>';
       }
       // what is open: one cell per drawer, the stack's table having one
       // drawer and each band of The Structures its own. Agricultural opens
