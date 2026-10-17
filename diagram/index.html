@@ -279,6 +279,103 @@
       margin-top: 120px;
     }
 
+    /* The Sequences: the revolutions down the side, and for each the
+       constraints it lifted and the affordances it opened */
+    .sequences-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+    }
+
+    body[data-show="sequences-main"] .sequences-view {
+      display: block;
+    }
+
+    .diagram-seq {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 28px;
+      row-gap: 30px;
+      animation: view-in 0.4s ease;
+    }
+
+    .seq-pair {
+      padding: 22px 24px 24px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+    }
+
+    .seq-pair.now {
+      border-style: dashed;
+    }
+
+    .seq-move {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+      align-items: start;
+      column-gap: 14px;
+    }
+
+    .seq-label {
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .seq-name {
+      display: block;
+      font-family: var(--serif);
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .seq-name.seq-from {
+      color: var(--muted);
+    }
+
+    .seq-arrow {
+      width: 22px;
+      height: 14px;
+      margin-top: 7px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .seq-desc {
+      margin: 18px 0 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1180px) {
+      .sequences-view {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .diagram-seq {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-seq > * {
+        grid-row: auto !important;
+        grid-column: auto !important;
+      }
+
+      .diagram-seq .v-head::before {
+        display: none;
+      }
+    }
+
     /* the stack's table: the timeline down the side (default) or along the
        top, toggled just above it */
     .d-orient,
@@ -1584,6 +1681,9 @@
       <div class="tab-group" role="tablist" aria-label="The Structures">
         <button type="button" role="tab" aria-selected="false" data-show="structures-main">The Structures</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="The Sequences">
+        <button type="button" role="tab" aria-selected="false" data-show="sequences-main">The Sequences</button>
+      </div>
       <div class="tab-group" role="group" aria-label="Transitions shown">
         <button type="button" aria-pressed="true" data-count="4">4 transitions</button>
         <button type="button" aria-pressed="false" data-count="8">8 transitions</button>
@@ -1616,6 +1716,8 @@
     </section>
 
     <div class="structures-alt" role="figure" aria-label="The Structures: infrastructure, structure and superstructure"></div>
+
+    <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div></section>
 
     <div class="d-orient" role="group" aria-label="The timeline runs">
       <span class="d-orient-label">Timeline</span>
@@ -1738,6 +1840,10 @@
         stack: {
           title: 'The Civilisational Stack',
           desc: 'Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
+        },
+        sequences: {
+          title: 'The Sequences',
+          desc: 'The limits a way of life imposes, and the new possibilities a technology stack opens up to overcome them &ndash; each major technological transition lifting a constraint that had bound every society before it.'
         },
         structures: {
           title: 'The Structures',
@@ -2285,9 +2391,29 @@
       });
       setAxis(axis);
 
+      // The Sequences: for each revolution, the constraints that bound every
+      // society before it, and the affordances that lifted them
+      var SEQ = {"cognitive": [{"from": "Kinship Bonds", "to": "Shared Myth", "desc": "Before abstract thought, cooperation reached only as far as kinship and personal acquaintance &ndash; the small band anyone could know; shared myths, gods and stories let strangers trust and cooperate with one another in far larger numbers."}, {"from": "Individual Experience", "to": "Cumulative Culture", "desc": "What each person knew died with them, and every generation had to learn for itself; language let knowledge be taught, kept and built on from one generation to the next, so that culture could accumulate."}], "agricultural": [{"from": "Natural Perishability", "to": "Storable Surplus", "desc": "Before farming, food spoiled and could not be accumulated, which kept bands small, mobile and broadly equal; grain and livestock made a surplus that could be stored, owned and taxed, and with it came private property, hierarchy and the state."}, {"from": "Common Land", "to": "Private Property", "desc": "Among foragers, land was held in common and used by all; with farming it became private property &ndash; owned, inherited and fenced &ndash; affording a surplus, power and the protection of the state to the few who held it, and closing it to the many who did not."}], "urban": [{"from": "Human Cognition", "to": "Written Record", "desc": "What a society could know, count and command was limited by what its people could hold in mind and remember; writing kept taxes, laws, debts and accounts beyond any one memory, and so made administration on the scale of a state possible."}, {"from": "Kin Loyalty", "to": "Codified Law", "desc": "Order was kept by custom and obligations of family and clan; written law, courts and kings bound strangers to a common authority, making possible societies far larger than any kin group."}], "scientific": [{"from": "Human Senses", "to": "Scientific Instruments", "desc": "Knowledge of nature was limited to what the unaided eye and hand could perceive; the telescope, microscope, clock and thermometer extended perception into the very distant, the very small and the precisely measured."}, {"from": "Scribal Copying", "to": "Printed Knowledge", "desc": "Knowledge copied by hand was scarce, slow to spread and easily corrupted; the printing press made it standardised, widely shared and cumulative &ndash; the precondition of a scientific community."}], "industrial": [{"from": "Malthusian Trap", "to": "Mass-Food Production", "desc": "For most of history, every gain in the food supply was swallowed by population growth, keeping most people near subsistence; mechanised farming, fossil fuels and synthetic fertiliser broke the trap, feeding populations many times larger."}, {"from": "Muscle Power", "to": "Fossil Energy", "desc": "Work was limited by the strength of people and animals and the reach of wind and water; coal and steam released the stored sunlight of millions of years, multiplying the energy at a society&rsquo;s command."}], "technological": [{"from": "Innate Needs", "to": "Manufactured Desires", "desc": "Human needs are finite, and an economy that only met them would soon reach its limits; but mass production requires mass consumption, so the Technological Revolution brought advertising, branding and consumer credit to manufacture desire &ndash; turning finite needs into the artificially infinite wants of consumerism."}, {"from": "Pitched Battles", "to": "Total War", "desc": "War was fought by professional armies in set engagements, with limited means and aims; industrialised war mobilised every factory, citizen and resource of a nation, and made the whole of society a target."}], "digital": [{"from": "Physical Distance", "to": "Instant Connection", "desc": "Communication was bound by the speed of travel and the post; networked computers put anyone in reach of anyone, instantly and across the world."}, {"from": "Human Calculation", "to": "Machine Computation", "desc": "What could be calculated, modelled or controlled was limited by the speed of human thought and arithmetic; the computer made calculation effectively unlimited &ndash; the ground on which artificial intelligence is built."}], "intelligence": [{"from": "Human Labour", "to": "AI Agents", "desc": "Every economy until now has depended on human labour, physical and cognitive, which has given working people a measure of bargaining power; AI agents able to do cognitive work threaten to lift that constraint, and with it that power."}, {"from": "Human Oversight", "to": "Autonomous Systems", "desc": "Decisions in war, markets and government were made, or at least checked, by people; autonomous AI systems act faster than any person can follow, removing human judgement from the loop."}]};
+      var seqTable = document.querySelector('.diagram-seq');
+      var SEQ_ARROW = '<svg class="seq-arrow" viewBox="0 0 20 12" aria-hidden="true"><path d="M1 6H19M14 1.5L19 6L14 10.5"/></svg>';
+      function buildSequences() {
+        var revs = revolutions(), html = '';
+        revs.forEach(function (t, k) {
+          var row = k + 1, now = t.key === 'intelligence' ? ' now' : '';
+          html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + (k === revs.length - 1 ? ' last' : '') + '" href="../timeline/#' + t.key + '-revolution" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
+          SEQ[t.key].forEach(function (pr, j) {
+            html += '<div class="seq-pair' + now + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '">' +
+              '<div class="seq-move"><span class="seq-label">Constraint</span><span></span><span class="seq-label">Affordance</span>' +
+              '<span class="seq-name seq-from">' + pr.from + '</span>' + SEQ_ARROW + '<span class="seq-name seq-to">' + pr.to + '</span></div>' +
+              '<p class="seq-desc">' + pr.desc + '</p></div>';
+          });
+        });
+        seqTable.innerHTML = html;
+      }
+
       function setSlug() {
         var d = show.split('-');
-        var slug = (d[0] === 'structures' ? 'structures-' : 'stack-') + (count === '8' ? 'eight' : 'four') + '-transitions';
+        var slug = d[0] + '-' + (count === '8' ? 'eight' : 'four') + '-transitions';
         history.replaceState(null, '', '#' + slug);
       }
       function render(rebuild) {
@@ -2308,6 +2434,7 @@
         if (show === 'structures-main') buildStructures(how);
         buildStructuresAlt();
         buildVertical();
+        buildSequences();
         restoreSelections();
         // the table fades in afresh, except The Structures' on a change of count
         [diagram, alt].forEach(function (el) {
@@ -2321,7 +2448,7 @@
 
       var hash = location.hash.slice(1);
       if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
-      show = (/structures/.test(hash) ? 'structures' : 'stack') + '-main';
+      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : 'stack') + '-main';
       render();
     })();
 
