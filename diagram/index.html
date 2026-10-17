@@ -284,6 +284,155 @@
       padding-bottom: 120px;
     }
 
+    /* the tables' parts open up into fuller material */
+    .d-opens {
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .d-cell.d-opens:hover,
+    .d-cell.d-opens:focus-visible,
+    .sa-cell.d-opens:hover,
+    .sa-cell.d-opens:focus-visible {
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      outline: none;
+    }
+
+    .d-cell.d-opens.open {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+    }
+
+    .d-head.open .d-dot {
+      background: var(--link-blue);
+      border-color: var(--link-blue);
+    }
+
+    .d-head.open .d-name {
+      color: var(--link-blue);
+    }
+
+    .sa-cell {
+      margin: -8px -10px;
+      padding: 8px 10px;
+    }
+
+    .sa-cell.d-opens.open {
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      box-shadow: inset 0 0 0 1.5px var(--link-blue);
+    }
+
+    .d-more {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .d-more.show {
+      grid-template-rows: 1fr;
+    }
+
+    .d-more-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .diagram-wrap + .d-more {
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
+    }
+
+    .sa-layer > .d-more {
+      grid-column: 1 / -1;
+    }
+
+    .d-more.show .d-more-inner > * {
+      animation: view-in 0.4s ease;
+    }
+
+    .d-more-head {
+      position: relative;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1.5px solid var(--link-blue);
+    }
+
+    .d-more-kicker {
+      margin: 0 0 4px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .d-more-title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .d-more-close {
+      position: absolute;
+      top: 18px;
+      right: 0;
+      padding: 4px 8px;
+      border: none;
+      background: none;
+      font: inherit;
+      font-size: 26px;
+      line-height: 1;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .d-more-close:hover {
+      color: var(--canvas-ink);
+    }
+
+    .d-more-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px 48px;
+      max-width: 1000px;
+    }
+
+    .d-more-sec h4 {
+      margin: 20px 0 4px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .d-more-sec p {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.4;
+    }
+
+    .d-more-wide {
+      grid-column: 1 / -1;
+      max-width: 760px;
+      padding-top: 16px;
+    }
+
+    .d-more-link {
+      display: inline-block;
+      margin: 22px 0 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: inherit;
+    }
+
+    .d-more-link:hover {
+      color: var(--link-blue);
+    }
+
     .stack-view,
     .structures-view,
     .structures-alt {
@@ -1138,6 +1287,7 @@
       <div class="d-up" style="grid-row: 5; --c8: 9; --c4: 5"><svg viewBox="0 0 28 28" aria-hidden="true"><polygon points="14,8.531 21.031,19.469 14,16.188 6.969,19.469"/></svg></div>
     </div>
     </div>
+    <div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div>
     <p class="diagram-note">Each new tech stack spreads by competitive pressures, and reshapes the political economy and cultural psychology of the populations that adopt it</p>
   </main>
 
@@ -1173,6 +1323,8 @@
     // an alternative view, and four or eight transitions throughout
     (function () {
       var DATA = [{"key": "cognitive", "major": false, "name": "Cognitive", "tech": "Abstract thought, language and ranged weapons", "economy": "Small, mobile and broadly egalitarian bands", "culture": "Shared myth and animism", "date8": "c. 70,000 &ndash; 10,000 BCE", "date4": "c. 70,000 &ndash; 10,000 BCE"}, {"key": "agricultural", "major": true, "name": "Agricultural", "tech": "Domestication, farming and the storable surplus", "economy": "Settled villages, private property and chiefdoms", "culture": "Ancestor cults, fertility gods and the first hierarchies", "date8": "c. 10,000 &ndash; 4000 BCE", "date4": "c. 10,000 BCE &ndash; 1760 CE"}, {"key": "urban", "major": false, "name": "Urban", "tech": "Writing, bronze, the wheel and the city", "economy": "City-states, kings, taxes, law and markets", "culture": "Organised religion and divine kingship", "date8": "c. 4000 BCE &ndash; 1540 CE", "date4": "c. 4000 BCE &ndash; 1540 CE"}, {"key": "scientific", "major": false, "name": "Scientific", "tech": "Print, instruments and experiment", "economy": "Centralising states, standing armies and oceanic trade", "culture": "Reason, mechanism and a disenchanted nature", "date8": "c. 1540 &ndash; 1760", "date4": "c. 1540 &ndash; 1760"}, {"key": "industrial", "major": true, "name": "Industrial", "tech": "Coal, steam and the factory", "economy": "Industrial capitalism, wage labour and the nation-state", "culture": "Progress, individualism and nationalism", "date8": "c. 1760 &ndash; 1870", "date4": "c. 1760 &ndash; 1950"}, {"key": "technological", "major": false, "name": "Technological", "tech": "Electricity, steel, chemistry and combustion", "economy": "Corporations, mass production and total war", "culture": "Mass culture and consumerism", "date8": "c. 1870 &ndash; 1950", "date4": "c. 1870 &ndash; 1950"}, {"key": "digital", "major": true, "name": "Digital", "tech": "The transistor, the computer and the network", "economy": "Global networks, platforms and the information economy", "culture": "Networked identity and the attention economy", "date8": "c. 1950 &ndash; 2010", "date4": "c. 1950 &ndash; 2010"}, {"key": "intelligence", "major": true, "name": "Intelligence", "tech": "Machine learning, compute and AI agents", "economy": "Automated cognitive labour and AI hyper-agents &ndash; still being enacted", "culture": "Still to be decided by the power-elite&rsquo;s response", "date8": "c. 2010 &ndash; now", "date4": "c. 2010 &ndash; now"}];
+      // fuller material for each revolution, from the Timeline
+      var MORE = {"cognitive": {"stack": "Abstraction, language, shared myth, symbolic thought, composite tools", "note": "Around seventy thousand years ago, <em>Homo sapiens</em> acquired the capacity for abstraction: to think about what is absent, imagined or possible, and to represent it in symbols. From it came foresight, strategy and design &ndash; the ability to plan ahead, to anticipate and outwit others, and to imagine a thing before making it &ndash; as well as complex language and shared myth. Stories of spirits, kin and tribe let people cooperate flexibly in groups beyond the Dunbar number and pass knowledge down the generations. For some sixty thousand years this was the basis of the nomadic hunter-gatherer way of life: small, mobile and broadly egalitarian bands living off the abundance of wild food.", "mil": "Coordinated hunting, ambush and composite tools allowed larger bands to take bigger game, and to outcompete, displace or absorb other groups and other human species.", "cult": "Shared myths, rituals and stories of kinship bound groups together beyond the Dunbar number, within an animist worldview whose egalitarian norms were enforced by gossip, ridicule and sharing.", "state": "There was no state: authority was informal and situational, held by elders and the most skilled, and always checked by the group.", "market": "There was no market: goods moved through gifts, reciprocity and sharing within and between bands, and perishable food was shared rather than stored."}, "agricultural": {"stack": "Domestication of plants and animals, irrigation, food storage, the plough", "note": "Between roughly twelve and six thousand years ago, in several regions independently, the domestication of plants and animals turned nomadic hunter-gatherer tribes into settled farming villages. Geographically-bounded food production created a storable surplus, and with it private property: land, herds and granaries that could be accumulated, defended and inherited. Populations grew, villages became towns, and the first chiefs emerged to organise labour, storage and defence &ndash; the ground on which the first cities and states would be built.", "mil": "Farming fed many more people from the same land: denser farming populations came to outnumber and displace the foragers around them, and the surplus began to feed the first specialists.", "cult": "Settled life tied people to land, ancestors and property; fertility cults and household religion grew, and the line between what was shared and what was owned hardened.", "state": "Villages and chiefdoms emerged, with big men and chiefs organising labour, storage and defence &ndash; the state in embryo, not yet the state itself.", "market": "Grain and herds became wealth that could be stored, accumulated and inherited; private property, granaries and exchange between villages grew up around them."}, "urban": {"stack": "Cities, writing, bronze metallurgy, the wheel, monumental architecture", "note": "From around six thousand years ago &ndash; first in Mesopotamia, then in Egypt, the Indus Valley and China &ndash; farming towns grew into cities, in what the archaeologist V. Gordon Childe called the Urban Revolution. The surplus now fed full-time specialists: priests, scribes, soldiers, craftsmen and rulers. Private property found its defence &ndash; city-states, law, police and armies &ndash; and its exchange &ndash; trade, currency, merchants and markets: the state and the market in proto-form. Socio-economic class, inequality, poverty and slavery followed, along with a cultural psychology of competition, domination and status-seeking. The structural formation it produced &ndash; complex hierarchy, centralised power and a division of labour &ndash; is the one we still live within.", "mil": "The surplus fed specialists, soldiers among them; fortifications, bronze and then iron weapons, chariots and standing armies made war the business of states, and conquest the road to empire.", "cult": "Organised religion, divine kingship and patriarchy took hold; writing, law and the great philosophies followed, and property, status and obedience to hierarchy were internalised.", "state": "Chiefdoms gave way to city-states, kingdoms and empires, which taxed, legislated, kept written records, and maintained police and armies to defend property.", "market": "Trade, currency, merchants and markets grew up to exchange the surplus, alongside debt, the ownership of land and slavery, co-evolving with the state."}, "scientific": {"stack": "The telescope, the microscope, the pendulum clock, the printing press, mathematics and the experimental method", "note": "Between Copernicus and Newton, observation, experiment and mathematics replaced inherited authority as the way to know nature. Knowledge itself became a technology: cumulative, testable and shared through print and the new scientific societies. It changed the superstructure first &ndash; a mechanistic, increasingly secular picture of the world &ndash; and laid the intellectual groundwork for both the machines of the industrial tech stack and the reforming ideas of the Enlightenment.", "mil": "Gunpowder, ballistics, navigation and cartography gave European states and their navies a decisive edge, in a military revolution that underwrote colonial expansion.", "cult": "A mechanistic and increasingly secular worldview emerged, as authority shifted from scripture and tradition to reason, evidence and the individual knower.", "state": "Centralising states built standing armies and fiscal-military bureaucracies, and patronised science as a source of power through bodies such as the Royal Society and the Acad&eacute;mie des Sciences.", "market": "Chartered trading companies, joint-stock finance and early banking flourished, while precise measurement and navigation opened up global trade."}, "industrial": {"stack": "The steam engine, coal, mechanised textile production, the factory", "note": "Beginning in Britain, the steam engine and coal broke the limits of human and animal muscle. Production moved from the farm and workshop to the mechanised, fossil-fuelled factory; populations moved from the countryside to the cities; and wage labour became the dominant form of work. The states that industrialised first gained an overwhelming economic and military advantage, and the pressure on every rival to follow &ndash; or be colonised &ndash; spread industrial capitalism across the world.", "mil": "Steam-powered industry, railways and gunboats gave the industrialising powers an overwhelming advantage, and every rival had to industrialise or be colonised.", "cult": "Clock-time discipline, the work ethic, individualism and faith in progress took hold, alongside the dislocation and alienation of factory life.", "state": "The nation-state took shape, with mass schooling, bureaucracy and policing to keep industrial order, and the vote was extended as workers organised.", "market": "Industrial capitalism became dominant, built on wage labour, factories and joint-stock companies, and on global commodity markets tied together by the gold standard."}, "technological": {"stack": "Electricity, steel, chemicals, the internal combustion engine, the telegraph and telephone", "note": "Often called the Second Industrial Revolution. Electricity, steel, chemistry and the internal combustion engine brought mass production, national grids and continental networks of rail, telegraph and telephone. Production concentrated in large corporations, and industrial capacity became military capacity: within a generation, the technologies that built the modern economy were turned to the industrialised total wars of the twentieth century.", "mil": "Steel navies, machine guns, chemicals and the combustion engine industrialised war, and imperial competition ended in two world wars.", "cult": "Mass society arrived, with mass media, mass consumption, nationalism and the great ideologies of liberalism, socialism and fascism.", "state": "The administrative state grew through regulation and early welfare provision and, in wartime, through the total mobilisation of economy and society.", "market": "Corporate capitalism took over, with giant firms, trusts and cartels, mass production and advertising, and financial crises that culminated in the Great Depression."}, "digital": {"stack": "The transistor, the computer, the internet, the smartphone, social media", "note": "The transistor, the computer and the network moved information to the centre of economic and social life. Much of the founding technology was paid for by the military competition of the Second World War and the Cold War, before being commercialised in the personal computer, the internet, the smartphone and social media. The result was a globally connected information society &ndash; and the data, compute and infrastructure on which the next transition would be built.", "mil": "Computing, the internet and satellites were born of the military-industrial complex and its wartime and Cold War funding, under the shadow of nuclear deterrence and, later, of information and cyber warfare.", "cult": "An information society formed around consumerism, a globalised culture and the networked self, and social media brought an attention economy and deepening polarisation.", "state": "The post-war welfare state gave way to neoliberal retreat, while the security and surveillance state expanded and global institutions such as the UN, the IMF and the World Bank took shape.", "market": "Global finance and supply chains bound the world economy together, data became an asset, and platforms concentrated attention, wealth and power in a handful of firms."}, "intelligence": {"stack": "Machine learning, large-scale compute, artificial intelligence", "note": "The fourth, and likely final, major technological transition, now under way. Machine learning at the scale of today&rsquo;s compute is producing systems that can do an ever wider range of cognitive work. It is driven by the same structural dynamic as every transition before it &ndash; military-economic adaptation, competitive pressures, multi-polar traps and arms races &ndash; but as an exponential technology its negative externalities could be magnitudes more powerful and catastrophic, potentially even existential. How it is developed, deployed and diffused remains a decision of the power-elite.", "mil": "An AI race is under way between the United States and China, and between the leading labs, with autonomous weapons, cyber operations and compute treated as strategic assets: a multi-polar trap.", "cult": "Cognitive work is being automated and persuasion and synthetic media are produced at scale, raising open questions of meaning, agency and dependence on machines.", "state": "States increasingly frame AI as a matter of national security, through Manhattan Project proposals, export controls and industrial policy, while their capacity to govern it lags behind.", "market": "Capital is concentrating in compute, data centres and a few firms, with the possible displacement of labour and a further concentration of wealth."}};
       var LAYERS = [
         { key: 'tech', name: 'Infrastructure', aka: 'Tech Stack', def: 'The technologies and material systems through which a society meets its needs &ndash; its tools, energy, transport, communications and means of production. The deepest and most durable change begins here.' },
         { key: 'economy', name: 'Structure', aka: 'Political Economy', def: 'The institutions that organise power and exchange &ndash; the state and the market, law, property and class &ndash; built on the infrastructure and remade as it changes.' },
@@ -1519,10 +1671,71 @@
         LAYERS.slice().reverse().forEach(function (L, k) {
           if (k > 0) html += '<div class="sa-arrows" aria-hidden="true"><span>&uarr; shapes</span><span>&darr; ' + (L.key === 'tech' ? 'operationalises' : 'legitimises') + '</span></div>';
           html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + '</h3><p class="sa-aka">' + L.aka + '</p><p class="sa-def">' + L.def + '</p></div>' +
-            '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl></section>';
+            '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>' +
+            '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></section>';
         });
         alt.innerHTML = html;
+        alt.querySelectorAll('.sa-cell').forEach(function (c) { opener(c, c.dataset.key, c.dataset.layer, c.closest('.sa-layer').querySelector('.d-more')); });
       }
+
+      // the tables' parts open up into fuller material below them: each
+      // revolution, and what it brought to each layer
+      var LAYER_NAMES = { tech: 'Tech Stack', economy: 'Political Economy', culture: 'Cultural Psychology' };
+      function moreHTML(key, layer) {
+        var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
+        var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
+        var body = layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
+          : layer === 'tech' ? sec('Key Technologies', m.stack) + sec('Military-Economic Adaptation', m.mil)
+          : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
+          : sec('Cultural-Psychological Adaptation', m.cult);
+        return '<div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
+          '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
+          '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
+          '<div class="d-more-body">' + body + '</div>' +
+          '<a class="d-more-link" href="../timeline/#' + key + '-revolution">On the Timeline</a>';
+      }
+      var openCell = null;
+      function closeMore() {
+        if (!openCell) return;
+        openCell.classList.remove('open');
+        openCell.setAttribute('aria-expanded', 'false');
+        openCell._drawer.classList.remove('show');
+        openCell = null;
+      }
+      function openMore(el) {
+        var same = openCell === el, drawer = el._drawer;
+        var wasOpen = drawer.classList.contains('show') && openCell && openCell._drawer === drawer;
+        closeMore();
+        if (same) return;
+        drawer.querySelector('.d-more-inner').innerHTML = moreHTML(el._key, el._layer);
+        drawer.querySelector('.d-more-close').addEventListener('click', closeMore);
+        el.classList.add('open');
+        el.setAttribute('aria-expanded', 'true');
+        drawer.classList.add('show');
+        if (wasOpen) { drawer.style.animation = 'none'; void drawer.offsetHeight; drawer.style.animation = ''; }
+        openCell = el;
+        // bring the opened material into view if it falls below the fold
+        setTimeout(function () {
+          var r = drawer.getBoundingClientRect();
+          if (r.bottom > window.innerHeight) window.scrollBy({ top: Math.min(r.bottom - window.innerHeight + 40, r.top - 120), behavior: 'smooth' });
+        }, 420);
+      }
+      function opener(el, key, layer, drawer) {
+        el._key = key; el._layer = layer; el._drawer = drawer;
+        el.classList.add('d-opens');
+        if (!el.hasAttribute('href')) { el.setAttribute('tabindex', '0'); el.setAttribute('role', 'button'); }
+        el.setAttribute('aria-expanded', 'false');
+        el.addEventListener('click', function (e) { e.preventDefault(); openMore(el); });
+        el.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && !el.hasAttribute('href')) { e.preventDefault(); openMore(el); } });
+      }
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMore(); });
+      (function () {
+        var drawer = document.querySelector('.diagram-wrap + .d-more');
+        diagram.querySelectorAll('.d-head').forEach(function (h, i) { opener(h, DATA[i].key, 'head', drawer); });
+        ['culture', 'economy', 'tech'].forEach(function (layer) {
+          diagram.querySelectorAll('.d-cell.d-' + layer).forEach(function (c, i) { opener(c, DATA[i].key, layer, drawer); });
+        });
+      })();
 
       function setSlug() {
         var d = show.split('-');
@@ -1543,6 +1756,7 @@
         // of count
         var how = rebuild === 'count' && show === 'structures-main' ? 'update' : 'build';
         if (how === 'build') { techStack.stop(); structStack.stop(); }
+        closeMore();
         if (show === 'stack-main') buildTech(how);
         if (show === 'structures-main') buildStructures(how);
         buildStructuresAlt();
