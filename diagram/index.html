@@ -468,7 +468,7 @@
     /* the drift moves a slab's faces, leaving the slab itself free to rise
        when selected or slide in when added */
     .st-stack.floating .st-block > span {
-      animation: st-bob 4.2s ease-in-out calc(var(--i) * -0.7s) infinite alternate;
+      animation: st-bob 8s linear calc(var(--i) * 0.45s) infinite;
     }
 
     .st-stack.measuring .st-block > span {
@@ -501,9 +501,12 @@
       transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
+    /* each slab starts its drift from rest, so nothing jumps as they part */
     @keyframes st-bob {
-      from { translate: 0 0 -3px; }
-      to { translate: 0 0 4px; }
+      0% { translate: 0 0 0; animation-timing-function: cubic-bezier(0.33, 0.67, 0.67, 1); }
+      25% { translate: 0 0 3.5px; animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+      75% { translate: 0 0 -3.5px; animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0.33); }
+      100% { translate: 0 0 0; }
     }
 
     @keyframes st-in {
