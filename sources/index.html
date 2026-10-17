@@ -297,6 +297,27 @@
       letter-spacing: 0.02em;
     }
 
+    /* a subsection of the sources */
+    .sources > .source-section {
+      padding: 120px 0 56px;
+      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    }
+
+    .source-section h2 {
+      margin: 0;
+      font-family: var(--mono-caps);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .sources > .source-section + .source {
+      padding-top: 0;
+      border-top: none;
+    }
+
     /* works a source is derived from, indented beneath it */
     .source-roots {
       list-style: none;
@@ -354,8 +375,8 @@
     <ol class="bibliography" aria-label="Bibliography">
       <li>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
         <ol>
-          <li>&lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
-          <li>&lsquo;<a href="https://forum.effectivealtruism.org/topics/value-erosion" target="_blank" rel="noopener">Value Erosion</a>&rsquo; <em>Future of Humanity Institute</em> (2019)</li>
+          <li>Morgan MacInnes, Ben Garfinkel &amp; Allan Dafoe &lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
+          <li>Allan Dafoe &lsquo;<a href="https://forum.effectivealtruism.org/topics/value-erosion" target="_blank" rel="noopener">Value Erosion</a>&rsquo; <em>Future of Humanity Institute</em> (2019)</li>
         </ol>
       </li>
       <li>Daniel Schmachtenberger &lsquo;<a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">The Emergence Model</a>&rsquo; <em>The Emergence Project</em> (2017)
@@ -374,12 +395,12 @@
     </ol>
     <h2 class="bibliography-heading">Evolutionary Process Misalignment</h2>
     <ol class="bibliography bibliography-section" aria-label="Evolutionary Process Misalignment">
-      <li>Luke Drago &amp; Rudolf Lain &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
+      <li>Luke Drago &amp; Rudolf Laine &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
       <li class="long">Jan Kulveit, Raymond Douglas, Nora Ammann, Deger Turan, David Krueger &amp; David Duvenaud &lsquo;<a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development</a>&rsquo; <em>Alignment of Complex Systems Research Group</em> (2025)</li>
       <li>Guive Assadi &lsquo;<a href="https://hearthisidea.com/episodes/assadi/" target="_blank" rel="noopener">Will Humanity Choose Its Future?</a>&rsquo; <em>Center for the Governance of AI</em> (2023)</li>
-      <li>Andres Gomez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
+      <li>Andr&eacute;s G&oacute;mez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
       <li>Joe Carlsmith &lsquo;<a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">Can Goodness Compete?</a>&rsquo; <em>Open Philanthropy</em> (2025)</li>
-      <li>Kristian Ronn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
+      <li>Kristian R&ouml;nn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
       <li>Scott Alexander &lsquo;<a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Meditations on Moloch</a>&rsquo; <em>Slate Star Codex</em> (2014)</li>
     </ol>
     </div>
@@ -391,6 +412,23 @@
         <p class="source-detail"><em>Science, Technology, &amp; Human Values</em>, 2015</p>
         <p class="source-note">Dafoe sorts the many versions of technological determinism into a typology and asks under what conditions technology really does drive social change. His answer is a mechanism he calls military-economic adaptationism: in a competitive international system, societies that adopt technologies conferring military and economic advantage prosper, and those that do not are outcompeted, conquered or forced to follow. The article supplies the structural half of this project&rsquo;s model &ndash; the pressure that pushes each new technology stack across civilisation.</p>
         <p class="source-link"><a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+        <ul class="source-roots">
+          <li><p class="source-label">Developed in</p></li>
+          <li class="source" id="macinnes-garfinkel-dafoe">
+            <p class="source-author">Morgan MacInnes, Ben Garfinkel &amp; Allan Dafoe</p>
+            <p class="source-work">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</p>
+            <p class="source-detail"><em>International Studies Quarterly</em>, 2024</p>
+            <p class="source-note">The authors carry Dafoe&rsquo;s mechanism from technology to the state itself. Competitive pressure between states narrows the range of domestic institutions any one of them can sustain, and technological change shifts which forms of state are competitive. A macrohistorical survey of competitively significant technologies shows the costs of anarchy to be larger than usually recognised: inventions that seem beneficial can lower human well-being by making inegalitarian states more competitive.</p>
+            <p class="source-link"><a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+          </li>
+          <li class="source" id="dafoe-value-erosion">
+            <p class="source-author">Allan Dafoe</p>
+            <p class="source-work">Value Erosion</p>
+            <p class="source-detail"><em>Future of Humanity Institute</em>, 2019</p>
+            <p class="source-note">Dafoe names the risk that competition selects against good values. Wherever there is a trade-off between a value and competitive performance &ndash; among states, companies or, in time, autonomous AI systems &ndash; those who give the value up gain an edge, and pressure mounts on everyone else to follow, until values no one chose become entrenched.</p>
+            <p class="source-link"><a href="https://forum.effectivealtruism.org/topics/value-erosion" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+          </li>
+        </ul>
       </li>
 
       <li class="source" id="schmachtenberger-emergence">
@@ -466,6 +504,64 @@
         <p class="source-detail">2025</p>
         <p class="source-note">Kemp studies the rise and collapse of more than four hundred societies across five thousand years, and finds a recurring pattern: dominance hierarchies &ndash; &ldquo;Goliaths&rdquo; &ndash; grow by extraction and status competition among elites until they become fragile and fall, while more equal and democratic societies prove more resilient. He then asks what that history means for a globally connected civilisation armed with technologies of mass destruction. It sharpens this project&rsquo;s question of whether the power-elite will steer the Intelligence Revolution towards or away from catastrophe.</p>
         <p class="source-link"><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source-section" id="evolutionary-process-misalignment"><h2>Evolutionary Process Misalignment</h2></li>
+
+      <li class="source" id="drago-laine">
+        <p class="source-author">Luke Drago &amp; Rudolf Laine</p>
+        <p class="source-work">The Intelligence Curse</p>
+        <p class="source-detail"><em>Workshop Labs</em>, 2025</p>
+        <p class="source-note">Drago and Laine draw an analogy with the resource curse, in which states that draw their wealth from oil rather than from their people have little reason to invest in them or answer to them. If powerful actors can draw their wealth and power from AI rather than from human labour, the same incentives could turn against most people &ndash; and the authors set out how the curse might be broken.</p>
+        <p class="source-link"><a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="kulveit">
+        <p class="source-author">Jan Kulveit, Raymond Douglas, Nora Ammann, Deger Turan, David Krueger &amp; David Duvenaud</p>
+        <p class="source-work">Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development</p>
+        <p class="source-detail"><em>Alignment of Complex Systems Research Group</em>, 2025</p>
+        <p class="source-note">The authors argue that existential catastrophe need not come from a sudden takeover. As AI incrementally replaces human labour and cognition across the economy, culture and the state, these systems lose the human participation that kept them implicitly aligned with human interests &ndash; and, each reinforcing the others, could leave humanity irreversibly disempowered.</p>
+        <p class="source-link"><a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="assadi">
+        <p class="source-author">Guive Assadi</p>
+        <p class="source-work">Will Humanity Choose Its Future?</p>
+        <p class="source-detail"><em>Center for the Governance of AI</em>, 2023</p>
+        <p class="source-note">Assadi defines an evolutionary future as one shaped by competition between actors towards a direction almost no one would have chosen &ndash; as, he argues, some of history&rsquo;s greatest shifts, among them the rise of agriculture, were chosen by no one. Only a world government, strong multilateral coordination or a strong defensive advantage could halt such pressures, so confidence that humanity will choose its future requires confidence that one of them will hold.</p>
+        <p class="source-link"><a href="https://hearthisidea.com/episodes/assadi/" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="gomez-emilsson">
+        <p class="source-author">Andr&eacute;s G&oacute;mez Emilsson</p>
+        <p class="source-work">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</p>
+        <p class="source-detail"><em>Qualia Research Institute</em>, 2017</p>
+        <p class="source-note">G&oacute;mez Emilsson reads the story of life as a contest between consciousness and pure replicators &ndash; patterns that spread whatever the value of the experience they produce. Selection favours whatever replicates best, not whatever feels best, and he argues that a future left to such pressures could be dominated by replicators indifferent to the quality of conscious life.</p>
+        <p class="source-link"><a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="carlsmith">
+        <p class="source-author">Joe Carlsmith</p>
+        <p class="source-work">Can Goodness Compete?</p>
+        <p class="source-detail"><em>Open Philanthropy</em>, 2025</p>
+        <p class="source-note">Carlsmith examines the worry that competition rewards power, and power does not track goodness: if every chance to trade goodness for power makes winning more likely, a competitive future is one in which goodness loses. Yet constraining competition to protect it may demand forms of control that are oppressive, stagnant or brittle &ndash; a trade-off between a hyper-competitive future and a locked-in one.</p>
+        <p class="source-link"><a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="ronn">
+        <p class="source-author">Kristian R&ouml;nn</p>
+        <p class="source-work">The Darwinian Trap</p>
+        <p class="source-detail"><em>LessWrong</em>, 2024</p>
+        <p class="source-note">R&ouml;nn names the selection pressures that drive agents to harm others for their own gain &ldquo;Darwinian demons&rdquo;, and traces how they fuel arms races for resources, power and intelligence that now threaten our future. He argues that the same pressures can be shifted &ndash; through global coordination that changes what is selected for.</p>
+        <p class="source-link"><a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
+      </li>
+
+      <li class="source" id="alexander">
+        <p class="source-author">Scott Alexander</p>
+        <p class="source-work">Meditations on Moloch</p>
+        <p class="source-detail"><em>Slate Star Codex</em>, 2014</p>
+        <p class="source-note">Alexander personifies the multipolar trap as Moloch: the logic by which competition forces every actor to sacrifice its values for competitiveness, in races to the bottom that no one wants and no one can escape alone. Left unchecked, he argues, it optimises away everything we care about, and only coordination strong enough to stand outside the competition can stop it.</p>
+        <p class="source-link"><a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
     </ol>
   </main>
