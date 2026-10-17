@@ -275,9 +275,177 @@
       display: block;
     }
 
-    body[data-show="stack-main"] .diagram-wrap,
     body[data-show="structures-main"] .structures-alt {
       margin-top: 120px;
+    }
+
+    /* the stack's table: the timeline down the side (default) or along the
+       top, toggled just above it */
+    .d-orient,
+    .diagram-v-wrap {
+      display: none;
+    }
+
+    body[data-show="stack-main"] .d-orient {
+      display: flex;
+    }
+
+    body[data-show="stack-main"].axis-v .diagram-wrap {
+      display: none;
+    }
+
+    body[data-show="stack-main"].axis-v .diagram-v-wrap {
+      display: block;
+    }
+
+    .d-orient {
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 22px;
+      width: var(--wide-col);
+      margin: 120px 0 28px calc((100% - var(--wide-col)) / 2);
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .d-orient-label {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .d-orient button {
+      padding: 0 0 5px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .d-orient button:hover,
+    .d-orient button[aria-pressed="true"] {
+      color: var(--canvas-ink);
+    }
+
+    .d-orient button[aria-pressed="true"] {
+      border-bottom-color: currentColor;
+    }
+
+    .diagram-v-wrap {
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .diagram-v {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr);
+      row-gap: 16px;
+      min-width: 760px;
+      animation: view-in 0.4s ease;
+    }
+
+    .v-label {
+      grid-row: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 0 8px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .v-label:hover .d-label-name {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* the time axis: a line down through a dot per transition */
+    .v-head {
+      position: relative;
+      grid-column: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 20px 0 28px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .v-head::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 0;
+      bottom: -16px;
+      width: 1.5px;
+      background: color-mix(in srgb, currentColor 35%, transparent);
+    }
+
+    .v-head.first::before {
+      top: 50%;
+    }
+
+    .v-head .d-dot {
+      top: calc(50% - 5px);
+    }
+
+    .v-head .d-name {
+      font-size: 22px;
+    }
+
+    .v-head:hover .d-dot,
+    .v-head.now .d-dot {
+      background: var(--canvas-ink);
+    }
+
+    .v-head:hover .d-name {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    .v-head.open .d-dot {
+      background: var(--link-blue);
+      border-color: var(--link-blue);
+    }
+
+    .v-head.open .d-name {
+      color: var(--link-blue);
+    }
+
+    .diagram-v .d-cell {
+      min-height: 84px;
+    }
+
+    .diagram-v.all .d-cell {
+      min-height: 64px;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+
+    .v-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .v-arrow svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1;
+      stroke-linejoin: round;
+      transform: rotate(90deg);
     }
 
     .diagram-note {
@@ -337,7 +505,7 @@
       min-height: 0;
     }
 
-    .diagram-wrap + .d-more {
+    .d-more-stack {
       margin-bottom: 120px;
       width: var(--wide-col);
       margin-left: calc((100% - var(--wide-col)) / 2);
@@ -1230,6 +1398,12 @@
 
     <div class="structures-alt" role="figure" aria-label="The Structures: infrastructure, structure and superstructure"></div>
 
+    <div class="d-orient" role="group" aria-label="The timeline runs">
+      <span class="d-orient-label">Timeline</span>
+      <button type="button" data-axis="v" aria-pressed="true">Vertical</button>
+      <button type="button" data-axis="h" aria-pressed="false">Horizontal</button>
+    </div>
+    <div class="diagram-v-wrap"><div class="diagram-v" role="figure" aria-label="The major technological transitions, from the earliest at the top: for each, its tech stack, political economy and cultural psychology"></div></div>
     <div class="diagram-wrap">
     <div class="diagram" role="figure" aria-label="The major technological transitions: for each, its tech stack, political economy and cultural psychology">
       <div class="axis-line" aria-hidden="true"></div>
@@ -1288,7 +1462,7 @@
       <div class="d-up" style="grid-row: 5; --c8: 9; --c4: 5"><svg viewBox="0 0 28 28" aria-hidden="true"><polygon points="14,8.531 21.031,19.469 14,16.188 6.969,19.469"/></svg></div>
     </div>
     </div>
-    <div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div>
+    <div class="d-more d-more-stack" aria-live="polite"><div class="d-more-inner"></div></div>
   </main>
 
   <footer class="site-footer">
@@ -1743,12 +1917,60 @@
       }
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMore(); });
       (function () {
-        var drawer = document.querySelector('.diagram-wrap + .d-more');
+        var drawer = document.querySelector('.d-more-stack');
         diagram.querySelectorAll('.d-head').forEach(function (h, i) { opener(h, DATA[i].key, 'head', drawer); });
         ['culture', 'economy', 'tech'].forEach(function (layer) {
           diagram.querySelectorAll('.d-cell.d-' + layer).forEach(function (c, i) { opener(c, DATA[i].key, layer, drawer); });
         });
       })();
+
+      // the stack's table with the timeline running down the side: the
+      // revolutions, earliest first, against the three layers, base first
+      var vTable = document.querySelector('.diagram-v');
+      var orientBtns = Array.prototype.slice.call(document.querySelectorAll('.d-orient [data-axis]'));
+      var axis = 'v';
+      try { if (localStorage.getItem('tableAxis') === 'h') axis = 'h'; } catch (e) {}
+      var V_LAYERS = [
+        ['tech', 'Tech Stack', 'Infrastructure', '../lexicon/#curated-tech-stack'],
+        ['economy', 'Political Economy', 'Social Structure', '../lexicon/#curated-political-economy'],
+        ['culture', 'Cultural Psychology', 'Superstructure', '../lexicon/#curated-cultural-psychology']
+      ];
+      var ARROW = '<svg viewBox="0 0 28 28" aria-hidden="true"><polygon points="14,8.531 21.031,19.469 14,16.188 6.969,19.469"/></svg>';
+      function buildVertical() {
+        var revs = revolutions(), html = '';
+        V_LAYERS.forEach(function (L, j) {
+          html += '<a class="v-label" href="' + L[3] + '" style="grid-column: ' + (2 + j * 2) + '"><span class="d-label-name">' + L[1] + '</span><span class="d-label-sub">' + L[2] + '</span></a>';
+        });
+        revs.forEach(function (t, k) {
+          var row = k + 2, now = t.key === 'intelligence' ? ' now' : '';
+          html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + '" href="../timeline/#' + t.key + '-revolution" data-key="' + t.key + '" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
+          V_LAYERS.forEach(function (L, j) {
+            html += '<div class="d-cell d-' + L[0] + now + '" data-key="' + t.key + '" data-layer="' + L[0] + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j * 2) + '">' + t[L[0]] + '</div>';
+            if (j < 2) html += '<div class="v-arrow" style="grid-row: ' + row + '; grid-column: ' + (3 + j * 2) + '">' + ARROW + '</div>';
+          });
+        });
+        vTable.innerHTML = html;
+        vTable.classList.toggle('all', count === '8');
+        var drawer = document.querySelector('.d-more-stack');
+        vTable.querySelectorAll('.v-head').forEach(function (h) { opener(h, h.dataset.key, 'head', drawer); });
+        vTable.querySelectorAll('.d-cell').forEach(function (c) { opener(c, c.dataset.key, c.dataset.layer, drawer); });
+      }
+      function setAxis(a) {
+        axis = a;
+        body.classList.toggle('axis-v', a === 'v');
+        orientBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.axis === a ? 'true' : 'false'); });
+      }
+      orientBtns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (b.dataset.axis === axis) return;
+          closeMore();
+          setAxis(b.dataset.axis);
+          try { localStorage.setItem('tableAxis', axis); } catch (e) {}
+          var t = axis === 'v' ? vTable : diagram;
+          t.style.animation = 'none'; void t.offsetHeight; t.style.animation = '';
+        });
+      });
+      setAxis(axis);
 
       function setSlug() {
         var d = show.split('-');
@@ -1773,6 +1995,7 @@
         if (show === 'stack-main') buildTech(how);
         if (show === 'structures-main') buildStructures(how);
         buildStructuresAlt();
+        buildVertical();
         // the table fades in afresh, except The Structures' on a change of count
         [diagram, alt].forEach(function (el) {
           if (el === alt && rebuild === 'count') return;
