@@ -576,8 +576,8 @@
 
     .d-more-head {
       position: relative;
-      margin-top: 32px;
-      padding-top: 36px;
+      margin-top: 56px;
+      padding-top: 52px;
       border-top: 1.5px solid var(--link-blue);
     }
 
@@ -1095,24 +1095,26 @@
 
     /* the structures' alternative view: three bands, the highest at the top,
        arrows between them, and what each revolution brought to each */
+    /* each structure: its name and description on a level of their own,
+       then what each revolution brought to it */
     .sa-layer {
-      display: grid;
-      grid-template-columns: 240px minmax(0, 1fr);
-      column-gap: 40px;
-      padding: 28px 30px;
-      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      display: block;
+    }
+
+    .sa-head {
+      max-width: 760px;
+      margin-bottom: 34px;
     }
 
     .sa-tech {
       margin-bottom: 120px;
-      border-color: var(--canvas-ink);
     }
 
     .sa-name {
       margin: 0;
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 24px;
+      font-size: 30px;
       line-height: 1.2;
     }
 
@@ -1127,7 +1129,7 @@
 
     .sa-def {
       margin: 0;
-      font-size: 16px;
+      font-size: 19px;
       line-height: 1.35;
     }
 
@@ -1158,7 +1160,7 @@
       display: flex;
       justify-content: center;
       gap: 48px;
-      padding: 12px 0;
+      padding: 48px 0;
       font-family: var(--mono-caps);
       font-size: 11px;
       letter-spacing: 0.08em;
@@ -1167,11 +1169,6 @@
     }
 
     @media (max-width: 900px) {
-      .sa-layer {
-        grid-template-columns: 1fr;
-        row-gap: 20px;
-      }
-
       .sa-revs {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
