@@ -348,7 +348,7 @@
     .diagram-v {
       display: grid;
       grid-template-columns: 210px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr);
-      row-gap: 16px;
+      row-gap: 30px;
       min-width: 760px;
       animation: view-in 0.4s ease;
     }
@@ -385,13 +385,19 @@
       position: absolute;
       left: 4px;
       top: 0;
-      bottom: -16px;
+      bottom: -30px;
       width: 1.5px;
       background: color-mix(in srgb, currentColor 35%, transparent);
     }
 
     .v-head.first::before {
       top: 50%;
+    }
+
+    /* the line stops at the foot of the last row, so nothing spills out of
+       the table to give it a scrollbar of its own */
+    .v-head.last::before {
+      bottom: 0;
     }
 
     .v-head .d-dot {
@@ -430,6 +436,54 @@
       min-height: 64px;
       padding: 12px 16px;
       font-size: 16px;
+    }
+
+    /* two kinds of arrow: the open, notched darts carry each layer's
+       influence on the next; the thin line arrows carry each layer on from
+       one transition to the next */
+    .diagram .d-cell,
+    .diagram-v .d-cell {
+      position: relative;
+    }
+
+    .diagram .d-cell:not(.now)::after,
+    .diagram-v .d-cell:not(.now)::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      background: color-mix(in srgb, currentColor 55%, transparent);
+      -webkit-mask: var(--time-arrow) center / contain no-repeat;
+      mask: var(--time-arrow) center / contain no-repeat;
+    }
+
+    .diagram .d-cell:not(.now)::after {
+      --time-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 6H19M14 1.5L19 6L14 10.5'/%3E%3C/svg%3E");
+      left: 100%;
+      top: 50%;
+      width: 28px;
+      height: 12px;
+      margin-left: 1.5px;
+      transform: translateY(-50%);
+      -webkit-mask-size: 20px 12px;
+      mask-size: 20px 12px;
+    }
+
+    .diagram.all .d-cell:not(.now)::after {
+      width: 16px;
+      -webkit-mask-size: 13px 8px;
+      mask-size: 13px 8px;
+    }
+
+    .diagram-v .d-cell:not(.now)::after {
+      --time-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 20' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 1V19M1.5 14L6 19L10.5 14'/%3E%3C/svg%3E");
+      top: 100%;
+      left: 50%;
+      width: 12px;
+      height: 30px;
+      margin-top: 1.5px;
+      transform: translateX(-50%);
+      -webkit-mask-size: 12px 20px;
+      mask-size: 12px 20px;
     }
 
     .v-arrow {
@@ -1943,7 +1997,7 @@
         });
         revs.forEach(function (t, k) {
           var row = k + 2, now = t.key === 'intelligence' ? ' now' : '';
-          html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + '" href="../timeline/#' + t.key + '-revolution" data-key="' + t.key + '" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
+          html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + (k === revs.length - 1 ? ' last' : '') + '" href="../timeline/#' + t.key + '-revolution" data-key="' + t.key + '" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
           V_LAYERS.forEach(function (L, j) {
             html += '<div class="d-cell d-' + L[0] + now + '" data-key="' + t.key + '" data-layer="' + L[0] + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j * 2) + '">' + t[L[0]] + '</div>';
             if (j < 2) html += '<div class="v-arrow" style="grid-row: ' + row + '; grid-column: ' + (3 + j * 2) + '">' + ARROW + '</div>';
