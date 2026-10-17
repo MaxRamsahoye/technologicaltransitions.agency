@@ -282,7 +282,8 @@
     /* the stack's table: the timeline down the side (default) or along the
        top, toggled just above it */
     .d-orient,
-    .diagram-v-wrap {
+    .diagram-v-wrap,
+    body:not([data-show="stack-main"]) .d-more-stack {
       display: none;
     }
 
@@ -1903,7 +1904,11 @@
             '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></section>';
         });
         alt.innerHTML = html;
-        alt.querySelectorAll('.sa-cell').forEach(function (c) { opener(c, c.dataset.key, c.dataset.layer, c.closest('.sa-layer').querySelector('.d-more')); });
+        alt.querySelectorAll('.sa-cell').forEach(function (c) {
+          var d = c.closest('.sa-layer').querySelector('.d-more');
+          d._id = c.dataset.layer;
+          opener(c, c.dataset.key, c.dataset.layer, d);
+        });
       }
 
       // the tables' parts open up into fuller material below them: each
@@ -1935,31 +1940,57 @@
           '<div class="d-more-body">' + body + '</div>' +
           '<a class="d-more-link" href="../timeline/#' + key + '-revolution">On the Timeline</a>';
       }
-      var openCell = null;
-      function closeMore() {
-        if (!openCell) return;
-        openCell.classList.remove('open');
-        openCell.setAttribute('aria-expanded', 'false');
-        openCell._drawer.classList.remove('show');
-        openCell = null;
+      // what is open: one cell per drawer, the stack's table having one
+      // drawer and each band of The Structures its own. Agricultural opens
+      // by default (its infrastructure in the stack's table, and all three
+      // layers in The Structures), and a reader's choice is kept across
+      // changes of count and orientation
+      var SEL = { stack: ['agricultural', 'tech'], tech: 'agricultural', economy: 'agricultural', culture: 'agricultural' };
+      function closeDrawer(drawer, remember) {
+        var cell = drawer._cell;
+        if (cell) { cell.classList.remove('open'); cell.setAttribute('aria-expanded', 'false'); }
+        drawer.classList.remove('show');
+        drawer._cell = null;
+        if (remember) SEL[drawer._id] = null;
       }
-      function openMore(el) {
-        var same = openCell === el, drawer = el._drawer;
-        var wasOpen = drawer.classList.contains('show') && openCell && openCell._drawer === drawer;
-        closeMore();
-        if (same) return;
+      function closeAll(remember) {
+        document.querySelectorAll('.d-more').forEach(function (d) { closeDrawer(d, remember); });
+      }
+      function closeMore() { closeAll(true); }
+      function openMore(el, quiet) {
+        var drawer = el._drawer;
+        if (drawer._cell === el) { closeDrawer(drawer, true); return; }
+        closeDrawer(drawer, false);
         drawer.querySelector('.d-more-inner').innerHTML = moreHTML(el._key, el._layer);
-        drawer.querySelector('.d-more-close').addEventListener('click', closeMore);
+        drawer.querySelector('.d-more-close').addEventListener('click', function () { closeDrawer(drawer, true); });
         el.classList.add('open');
         el.setAttribute('aria-expanded', 'true');
         drawer.classList.add('show');
-        if (wasOpen) { drawer.style.animation = 'none'; void drawer.offsetHeight; drawer.style.animation = ''; }
-        openCell = el;
+        drawer._cell = el;
+        SEL[drawer._id] = drawer._id === 'stack' ? [el._key, el._layer] : el._key;
+        if (quiet) return;
         // bring the opened material into view if it falls below the fold
         setTimeout(function () {
           var r = drawer.getBoundingClientRect();
           if (r.bottom > window.innerHeight) window.scrollBy({ top: Math.min(r.bottom - window.innerHeight + 40, r.top - 120), behavior: 'smooth' });
         }, 420);
+      }
+      function restoreSelections() {
+        closeAll(false);
+        var st = SEL.stack;
+        if (st) {
+          var table = axis === 'v' ? vTable : diagram;
+          Array.prototype.slice.call(table.querySelectorAll('.d-opens')).some(function (el) {
+            if (el._key !== st[0] || el._layer !== st[1] || (table === diagram && count === '4' && el.hasAttribute('data-minor'))) return false;
+            openMore(el, true);
+            return true;
+          });
+        }
+        alt.querySelectorAll('.sa-layer').forEach(function (sec) {
+          var d = sec.querySelector('.d-more'), k = SEL[d._id];
+          var el = k && sec.querySelector('.sa-cell[data-key="' + k + '"]');
+          if (el) openMore(el, true);
+        });
       }
       function opener(el, key, layer, drawer) {
         el._key = key; el._layer = layer; el._drawer = drawer;
@@ -1972,6 +2003,7 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMore(); });
       (function () {
         var drawer = document.querySelector('.d-more-stack');
+        drawer._id = 'stack';
         diagram.querySelectorAll('.d-head').forEach(function (h, i) { opener(h, DATA[i].key, 'head', drawer); });
         ['culture', 'economy', 'tech'].forEach(function (layer) {
           diagram.querySelectorAll('.d-cell.d-' + layer).forEach(function (c, i) { opener(c, DATA[i].key, layer, drawer); });
@@ -2017,8 +2049,8 @@
       orientBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           if (b.dataset.axis === axis) return;
-          closeMore();
           setAxis(b.dataset.axis);
+          restoreSelections();
           try { localStorage.setItem('tableAxis', axis); } catch (e) {}
           var t = axis === 'v' ? vTable : diagram;
           t.style.animation = 'none'; void t.offsetHeight; t.style.animation = '';
@@ -2045,11 +2077,11 @@
         // of count
         var how = rebuild === 'count' && show === 'structures-main' ? 'update' : 'build';
         if (how === 'build') { techStack.stop(); structStack.stop(); }
-        closeMore();
         if (show === 'stack-main') buildTech(how);
         if (show === 'structures-main') buildStructures(how);
         buildStructuresAlt();
         buildVertical();
+        restoreSelections();
         // the table fades in afresh, except The Structures' on a change of count
         [diagram, alt].forEach(function (el) {
           if (el === alt && rebuild === 'count') return;
