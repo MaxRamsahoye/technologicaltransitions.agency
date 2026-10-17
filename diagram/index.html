@@ -1680,6 +1680,19 @@
 
       // the tables' parts open up into fuller material below them: each
       // revolution, and what it brought to each layer
+      // the key beliefs and values of each revolution, to sit beside its
+      // cultural-psychological adaptation as the key technologies sit
+      // beside its military-economic one
+      var BELIEFS = {
+        cognitive: 'Animism, shared myth, kinship, reciprocity and egalitarian sharing',
+        agricultural: 'Ancestor worship, fertility gods, property, inheritance and rank',
+        urban: 'Organised religion, divine kingship, written law and hierarchy',
+        scientific: 'Reason, empirical inquiry, mechanism and a disenchanted nature',
+        industrial: 'Progress, individualism, nationalism and the work ethic',
+        technological: 'Mass culture, consumerism, faith in expertise and the mass ideologies',
+        digital: 'Networked identity, self-expression, globalism and the attention economy',
+        intelligence: 'Still being decided &ndash; contested between human agency, techno-optimism and the response of the power-elite'
+      };
       var LAYER_NAMES = { tech: 'Tech Stack', economy: 'Political Economy', culture: 'Cultural Psychology' };
       function moreHTML(key, layer) {
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
@@ -1687,7 +1700,7 @@
         var body = layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
           : layer === 'tech' ? sec('Key Technologies', m.stack) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
-          : sec('Cultural-Psychological Adaptation', m.cult);
+          : sec('Key Beliefs &amp; Values', BELIEFS[key]) + sec('Cultural-Psychological Adaptation', m.cult);
         return '<div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
           '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
           '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
