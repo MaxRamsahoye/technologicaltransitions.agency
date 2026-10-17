@@ -583,6 +583,36 @@
 
     /* in The Structures, the opened section is a box in the same blue as
        the small box selected above it */
+    .sa-rel-btn {
+      padding: 4px 6px 6px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .sa-rel-btn:hover,
+    .sa-rel-btn:focus-visible {
+      color: var(--canvas-ink);
+      border-bottom-color: currentColor;
+      outline: none;
+    }
+
+    .sa-rel-btn.open {
+      color: var(--link-blue);
+      border-bottom-color: currentColor;
+    }
+
+    .sa-rel .d-more-box {
+      margin-top: 32px;
+    }
+
+    .sa-rel .d-more-box,
     .sa-layer .d-more-box {
       margin-top: 40px;
       padding: 34px 36px 26px;
@@ -590,12 +620,14 @@
       box-shadow: inset 0 0 0 1.5px var(--link-blue);
     }
 
+    .sa-rel .d-more-head,
     .sa-layer .d-more-head {
       margin-top: 0;
       padding-top: 0;
       border-top: none;
     }
 
+    .sa-rel .d-more-close,
     .sa-layer .d-more-close {
       top: -6px;
     }
@@ -1185,11 +1217,14 @@
       line-height: 1.3;
     }
 
+    .sa-rel {
+      padding: 80px 0;
+    }
+
     .sa-arrows {
       display: flex;
       justify-content: center;
       gap: 64px;
-      padding: 80px 0;
       font-family: var(--mono-caps);
       font-size: 14px;
       letter-spacing: 0.08em;
@@ -1924,12 +1959,23 @@
         var revs = revolutions();
         var html = '';
         LAYERS.slice().reverse().forEach(function (L, k) {
-          if (k > 0) html += '<div class="sa-arrows" aria-hidden="true"><span>&uarr; shapes</span><span>&darr; ' + (L.key === 'tech' ? 'operationalises' : 'legitimises') + '</span></div>';
+          if (k > 0) {
+            var pair = L.key === 'tech' ? ['constrains', 'operationalises'] : ['conditions', 'legitimises'];
+            html += '<div class="sa-rel" data-rel="' + L.key + '"><div class="sa-arrows">' +
+              '<button type="button" class="sa-rel-btn" data-key="' + pair[0] + '">&uarr; ' + pair[0] + '</button>' +
+              '<button type="button" class="sa-rel-btn" data-key="' + pair[1] + '">&darr; ' + pair[1] + '</button></div>' +
+              '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></div>';
+          }
           html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + '<span class="name-sep">:</span> ' + L.aka + '</h3><p class="sa-def">' + L.def + '</p></div>' +
             '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>' +
             '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></section>';
         });
         alt.innerHTML = html;
+        alt.querySelectorAll('.sa-rel').forEach(function (r) {
+          var d = r.querySelector('.d-more');
+          d._id = 'rel-' + r.dataset.rel;
+          r.querySelectorAll('.sa-rel-btn').forEach(function (b) { opener(b, b.dataset.key, 'rel', d); });
+        });
         alt.querySelectorAll('.sa-cell').forEach(function (c) {
           var d = c.closest('.sa-layer').querySelector('.d-more');
           d._id = c.dataset.layer;
@@ -1953,7 +1999,21 @@
         intelligence: 'Still being decided &ndash; contested between human agency, techno-optimism and the response of the power-elite'
       };
       var LAYER_NAMES = { tech: 'Tech Stack', economy: 'Political Economy', culture: 'Cultural Psychology' };
+      // how each structure acts on its neighbour, above and below
+      var RELATIONS = {
+        constrains: ['Infrastructure &rarr; Structure', 'The tech stack constrains the political economy. The technologies through which a society meets its needs limit which institutions it can sustain, and which will prove competitive: the storable surplus of farming made property, chiefs and states possible; the factory made wage labour and the industrial nation-state. A new tech stack shifts the ground on which every institution stands.'],
+        operationalises: ['Structure &rarr; Infrastructure', 'The political economy operationalises the tech stack. Its institutions &ndash; states, markets, firms and law &ndash; decide how technologies are developed, owned, financed and deployed, and so how a new stack is put to work, at what scale and for whose benefit, and which technologies are built next.'],
+        conditions: ['Structure &rarr; Superstructure', 'The political economy conditions the cultural psychology. The institutions through which people work, trade and are governed shape what they come to value, believe and expect of one another: settled property bred inheritance and rank, markets bred individualism, and each order of power teaches the dispositions it rewards.'],
+        legitimises: ['Superstructure &rarr; Structure', 'The cultural psychology legitimises the political economy. Shared values and beliefs make an order of power and property seem natural, just or sacred &ndash; divine kingship, the work ethic, progress &ndash; and so hold it in place. When those values shift, the same culture can withdraw its consent and delegitimise the order it once upheld.']
+      };
       function moreHTML(key, layer) {
+        if (layer === 'rel') {
+          var r = RELATIONS[key];
+          return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + r[0] + '</p>' +
+            '<h3 class="d-more-title">' + key.charAt(0).toUpperCase() + key.slice(1) + '</h3>' +
+            '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
+            '<div class="d-more-body"><div class="d-more-sec d-more-wide"><p>' + r[1] + '</p></div></div></div>';
+        }
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
         var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
         var body = layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
@@ -2012,6 +2072,11 @@
             return true;
           });
         }
+        alt.querySelectorAll('.sa-rel').forEach(function (r) {
+          var d = r.querySelector('.d-more'), k = SEL[d._id];
+          var el = k && r.querySelector('.sa-rel-btn[data-key="' + k + '"]');
+          if (el) openMore(el, true);
+        });
         alt.querySelectorAll('.sa-layer').forEach(function (sec) {
           var d = sec.querySelector('.d-more'), k = SEL[d._id];
           var el = k && sec.querySelector('.sa-cell[data-key="' + k + '"]');
