@@ -1214,6 +1214,67 @@
       align-content: start;
     }
 
+    .sa-revs + .sa-flow {
+      margin-top: 44px;
+    }
+
+    /* the bar of arrows above each row: a dot where each revolution
+       begins, and a line on to the next */
+    .sa-flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      column-gap: 26px;
+      height: 12px;
+      margin: 10px 0 30px;
+      color: color-mix(in srgb, currentColor 50%, transparent);
+    }
+
+    .sa-flow span {
+      position: relative;
+    }
+
+    .sa-flow span::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 3px;
+      box-sizing: border-box;
+      width: 7px;
+      height: 7px;
+      border: 1.2px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .sa-flow .go::after {
+      content: '';
+      position: absolute;
+      left: 12px;
+      right: -20px;
+      top: 6px;
+      height: 1.2px;
+      background: currentColor;
+    }
+
+    /* at the end of a row, the line runs only to the edge, on to the next */
+    .sa-flow .wrap::after {
+      right: 0;
+    }
+
+    .sa-flow .go.wrap > i {
+      right: 1px;
+    }
+
+    .sa-flow .go > i {
+      position: absolute;
+      right: -19px;
+      top: 2.6px;
+      width: 7px;
+      height: 7px;
+      border-top: 1.2px solid currentColor;
+      border-right: 1.2px solid currentColor;
+      transform: rotate(45deg);
+    }
+
     .sa-revs dt {
       font-family: var(--mono-caps);
       font-size: 12px;
@@ -1247,6 +1308,10 @@
     @media (max-width: 900px) {
       .sa-revs {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sa-flow {
+        display: none;
       }
     }
 
@@ -1981,6 +2046,8 @@
       var alt = document.querySelector('.structures-alt');
       function buildStructuresAlt() {
         var revs = revolutions();
+        var rows = [];
+        for (var q = 0; q < revs.length; q += 4) rows.push(revs.slice(q, q + 4));
         var html = '';
         LAYERS.slice().reverse().forEach(function (L, k) {
           if (k > 0) {
@@ -1991,7 +2058,16 @@
               '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></div>';
           }
           html += '<section class="sa-layer sa-' + L.key + '"><div class="sa-head"><h3 class="sa-name">' + L.name + '<span class="name-sep">:</span> ' + L.aka + '</h3><p class="sa-def">' + L.def + '</p></div>' +
-            '<dl class="sa-revs" style="--n: ' + revs.length + '">' + revs.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>' +
+            rows.map(function (row, r) {
+              // a bar of arrows above each row of revolutions, leading from
+              // each to the next
+              var bar = row.map(function (t, i) {
+                var last = r === rows.length - 1 && i === row.length - 1;
+                return last ? '<span></span>' : '<span class="go' + (i === row.length - 1 ? ' wrap' : '') + '"><i></i></span>';
+              }).join('');
+              return '<div class="sa-flow" aria-hidden="true">' + bar + '</div>' +
+                '<dl class="sa-revs">' + row.map(function (t) { return '<div class="sa-cell" data-key="' + t.key + '" data-layer="' + L.key + '"><dt>' + t.name + '</dt><dd>' + t[L.key] + '</dd></div>'; }).join('') + '</dl>';
+            }).join('') +
             '<div class="d-more" aria-live="polite"><div class="d-more-inner"></div></div></section>';
         });
         alt.innerHTML = html;
