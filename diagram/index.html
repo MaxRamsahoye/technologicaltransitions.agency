@@ -422,6 +422,11 @@
       pointer-events: none;
     }
 
+    /* nothing to point to until the autoplay has played through */
+    .stack-layout:not(.ready) :is(.st-block, .stack-menu button) {
+      cursor: default;
+    }
+
     .st-stack .st-block.st-wait {
       visibility: hidden;
       animation: none;
@@ -482,42 +487,14 @@
       transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }
 
-    .st-stack.reshaping-late,
-    .st-stack.reshaping-late .st-block:not(.st-gone) {
-      transition-delay: 0.45s;
-    }
-
-    /* a slab added: it slides in once the others have made room */
-    .st-stack .st-block.st-enter {
-      visibility: hidden;
-      animation: st-slide 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
-    }
-
-    .st-stack.reshaping .st-block.st-enter {
-      transition: none;
-    }
-
-    @keyframes st-slide {
-      from {
-        visibility: visible;
-        translate: var(--sx) var(--sy) 0;
-      }
-      to {
-        visibility: visible;
-        translate: 0 0 0;
-      }
-    }
-
-    /* a slab taken away slides back out the way it came */
-    .st-stack .st-block.st-gone {
-      pointer-events: none;
-      transform: translate3d(calc(var(--x) + var(--sx) * 1.6), calc(var(--y) + var(--sy) * 1.6), calc(var(--z) + var(--float)));
-      transition: transform 0.9s cubic-bezier(0.55, 0, 0.78, 0.3);
-    }
-
-    .st-block.st-gone > span {
+    /* a slab added grows out of the gap the others open for it; one taken
+       away flattens and fades as they close up over it */
+    .st-block.st-faded > span {
       opacity: 0;
-      transition: opacity 0.5s ease-in 0.35s;
+    }
+
+    .st-block.st-gone {
+      pointer-events: none;
     }
 
     .st-stack.spreading .st-block {
@@ -545,7 +522,7 @@
       left: 0;
       top: 0;
       backface-visibility: visible;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, opacity 0.7s ease;
     }
 
     .st-top {
@@ -1059,7 +1036,7 @@
   <main class="page-main">
     <div class="diagram-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Stack</a></h1>
-    <p class="diagram-desc">Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
+    <p class="diagram-desc">Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
     <div class="view-tabs" aria-label="Diagrams">
       <div class="tab-group" role="tablist" aria-label="The Civilisational Stack">
         <button type="button" role="tab" aria-selected="true" data-show="stack-main">The Stack</button>
@@ -1201,7 +1178,7 @@
       var TEXT = {
         stack: {
           title: 'The Civilisational Stack',
-          desc: 'Every civilisation stands on a stack of technologies laid down by the revolutions before it. Each new layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
+          desc: 'Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
         },
         structures: {
           title: 'The Structures',
@@ -1225,7 +1202,9 @@
         var intro = panel.querySelector('.stack-intro');
         var side = root.querySelector('.stack-side');
         var blocks = [], items = [], details = [], locked = -1, sounding = -1;
-        var playing = false, touched = false, timers = [];
+        var playing = false, ready = false, timers = [];
+        var layout = root.querySelector('.stack-layout');
+        function setReady(v) { ready = v; layout.classList.toggle('ready', v); }
         function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
         function clearTimers() { timers.forEach(clearTimeout); timers = []; playing = false; }
 
@@ -1246,10 +1225,11 @@
           sounding = i;
           showAt(i);
         }
-        // the reader pointing or clicking: ignored while the autoplay runs
-        function hover(i) { touched = true; if (!playing) point(i); }
-        function press(i) { touched = true; if (playing) return; locked = locked === i ? -1 : i; point(locked); }
-        root.querySelector('.stack-layout').addEventListener('mouseleave', function () { if (!playing) { sounding = -1; showAt(locked); } });
+        // the reader pointing or clicking: ignored until the stack has built
+        // and the autoplay has played through
+        function hover(i) { if (ready) point(i); }
+        function press(i) { if (!ready) return; locked = locked === i ? -1 : i; point(locked); }
+        layout.addEventListener('mouseleave', function () { if (ready) { sounding = -1; showAt(locked); } });
 
         var shifted = false, shift = 0;
         function setShift() {
@@ -1334,7 +1314,7 @@
           stack.innerHTML = '';
           menu.innerHTML = '';
           panel.querySelectorAll('.st-detail').forEach(function (d) { d.remove(); });
-          blocks = []; items = []; details = []; locked = -1; sounding = -1; touched = false;
+          blocks = []; items = []; details = []; locked = -1; sounding = -1; setReady(false);
           setStack(n, g);
           stack.classList.remove('floating', 'spreading', 'splitting', 'reshaping');
           // first, if asked, the four slabs of the tech stack, which the
@@ -1391,11 +1371,10 @@
           later(function () { stack.classList.remove('spreading'); }, settled + 2500);
           var start = settled + 2700;
           later(function () {
-            if (touched) return;
             playing = true;
             layers.forEach(function (t, i) { later(function () { point(i); }, i * 1300); });
             // and then the base stays selected
-            later(function () { playing = false; locked = 0; point(0); }, n * 1300 + 300);
+            later(function () { playing = false; locked = 0; point(0); setReady(true); }, n * 1300 + 300);
           }, start);
         }
         // four transitions or eight: the slabs that stay move to their new
@@ -1409,7 +1388,7 @@
             showAt(at);
             return;
           }
-          if (!blocks.length || stack.querySelector('.st-ghost, .st-wait')) return build(layers, g);
+          if (!blocks.length || !ready) return build(layers, g);
           lastG = JSON.stringify(g);
           clearTimers();
           var lockedKey = locked >= 0 && blocks[locked] ? blocks[locked].dataset.key : null;
@@ -1422,14 +1401,21 @@
             else {
               b = slab(i, g);
               b.dataset.key = t.key;
-              b.classList.add('st-enter', 'st-new');
-              b.style.setProperty('--delay', '750ms');
+              b.classList.add('st-new');
               listen(b);
             }
             next.push(b);
           });
-          // in order, base first, after any slabs on their way out
-          Object.keys(keep).forEach(function (k) { keep[k].classList.remove('active'); keep[k].classList.add('st-out', 'st-gone'); });
+          // a slab taken away flattens and fades where it is, below the next
+          // slab that stays, as the rest close up over it
+          var old = blocks.slice();
+          var gone = Object.keys(keep).map(function (k) {
+            var b = keep[k], at = n;
+            for (var j = old.indexOf(b) + 1; j < old.length; j++) if (next.indexOf(old[j]) >= 0) { at = next.indexOf(old[j]); break; }
+            b.classList.remove('active');
+            b.classList.add('st-gone');
+            return [b, at];
+          });
           next.forEach(function (b) { stack.appendChild(b); });
           blocks = next;
           // where everything will end up, to line the stack up with the text
@@ -1452,24 +1438,34 @@
           var target = stack.style.getPropertyValue('--align');
           // back to where they were, then on to where they are going
           stack.classList.add('measuring');
-          blocks.forEach(function (b, i) { if (!b.classList.contains('st-new')) before[i].forEach(function (v) { b.style.setProperty(v[0], v[1]); }); });
+          blocks.forEach(function (b, i) {
+            // a slab added starts flat, in the gap the others open for it
+            if (b.classList.contains('st-new')) { b.style.setProperty('--z', (i + 0.5) * g.H + 'px'); b.style.setProperty('--h', '0px'); b.classList.add('st-faded'); }
+            else before[i].forEach(function (v) { b.style.setProperty(v[0], v[1]); });
+          });
           stack.style.setProperty('--lift', oldStack[0]); stack.style.setProperty('--n', oldStack[1]); stack.style.setProperty('--gap', oldStack[2]); stack.style.setProperty('--align', oldStack[3]);
           if (!wasFloating) stack.classList.remove('floating');
           void stack.offsetHeight;
           stack.classList.remove('measuring');
           void stack.offsetHeight;
-          // slabs taken away go first, and the rest close up after them
-          stack.classList.toggle('reshaping-late', stack.querySelector('.st-gone') !== null);
           stack.classList.add('reshaping', 'floating');
           setStack(n, g);
-          blocks.forEach(function (b, i) { place(b, i, g); b.style.setProperty('--i', i); b.classList.remove('st-new'); });
+          blocks.forEach(function (b, i) {
+            if (b.classList.contains('st-new')) later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 500);
+            place(b, i, g); b.style.setProperty('--i', i); b.classList.remove('st-new', 'st-faded');
+          });
+          gone.forEach(function (x) {
+            var b = x[0];
+            b.classList.add('st-faded');
+            b.style.setProperty('--h', '0px');
+            b.style.setProperty('--z', (x[1] - 0.5) * g.H + 'px');
+            b.style.setProperty('--i', x[1] - 0.5);
+          });
           stack.style.setProperty('--align', target);
-          blocks.forEach(function (b, i) { if (b.classList.contains('st-enter')) later(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, 1250); });
           later(function () {
-            stack.querySelectorAll('.st-gone').forEach(function (b) { b.remove(); });
-            stack.querySelectorAll('.st-enter').forEach(function (b) { b.classList.remove('st-enter'); });
-            stack.classList.remove('reshaping', 'reshaping-late');
-          }, 1900);
+            gone.forEach(function (x) { x[0].remove(); });
+            stack.classList.remove('reshaping');
+          }, 1300);
         }
         function stop() { clearTimers(); }
         return { build: build, update: update, stop: stop };
