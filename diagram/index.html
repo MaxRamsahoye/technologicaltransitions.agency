@@ -302,6 +302,25 @@
     .seq-pair {
       padding: 22px 24px 24px;
       border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .seq-pair:hover,
+    .seq-pair:focus-visible {
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      outline: none;
+    }
+
+    /* turned: the affordance, in the selected blue */
+    .seq-pair.turned {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+    }
+
+    /* the timeline begins level with the top of the first row's boxes */
+    .diagram-seq .v-head.first::before {
+      top: 0;
     }
 
     .seq-pair.now {
@@ -333,8 +352,33 @@
       line-height: 1.2;
     }
 
-    .seq-name.seq-from {
+    /* first the constraint stands out; once turned, the arrow and the
+       affordance do, and the constraint falls back */
+    .seq-name,
+    .seq-arrow,
+    .seq-move .seq-label {
+      transition: color 0.4s ease, opacity 0.4s ease;
+    }
+
+    .seq-name.seq-to,
+    .seq-pair:not(.turned) .seq-move .seq-label:nth-child(3) {
       color: var(--muted);
+    }
+
+    .seq-pair:not(.turned) .seq-arrow {
+      opacity: 0.3;
+    }
+
+    .seq-pair.turned .seq-name.seq-from {
+      color: var(--muted);
+    }
+
+    .seq-pair.turned .seq-name.seq-to {
+      color: var(--canvas-ink);
+    }
+
+    .seq-pair.turned .seq-move .seq-label:first-child {
+      opacity: 0.6;
     }
 
     .seq-arrow {
@@ -2409,6 +2453,20 @@
           });
         });
         seqTable.innerHTML = html;
+        // each box opens on its constraint, and turns to the affordance that
+        // lifted it when clicked
+        seqTable.querySelectorAll('.seq-pair').forEach(function (b) {
+          b.setAttribute('tabindex', '0');
+          b.setAttribute('role', 'button');
+          b.setAttribute('aria-pressed', 'false');
+          function turn() {
+            var on = !b.classList.contains('turned');
+            b.classList.toggle('turned', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          }
+          b.addEventListener('click', turn);
+          b.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); turn(); } });
+        });
       }
 
       function setSlug() {
