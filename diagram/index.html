@@ -2534,7 +2534,8 @@
       function selectFirst(view) {
         var first = revolutions()[0].key;
         if (view === 'stack' && !SEL.stack) SEL.stack = [first, 'tech'];
-        if (view === 'structures') ['tech', 'economy', 'culture'].forEach(function (k) { if (!SEL[k]) SEL[k] = first; });
+        // in The Structures, only the superstructure, at the top, opens
+        if (view === 'structures' && !SEL.tech && !SEL.economy && !SEL.culture) SEL.culture = first;
         if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'selrow'];
         if (view === 'sequences' && !SEL.seq) SEL.seq = [first, 'seqrow'];
         restoreSelections();
