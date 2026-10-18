@@ -279,6 +279,131 @@
       margin-top: 120px;
     }
 
+    /* The Selection Process: Dafoe on selectionism beneath the description,
+       then for each revolution its variation, selection and proliferation */
+    .diagram-quote {
+      display: none;
+      max-width: 760px;
+      margin: 36px 0 0;
+      padding: 0 0 0 26px;
+      border-left: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+    }
+
+    body[data-show="selection-main"] .diagram-quote {
+      display: block;
+    }
+
+    .diagram-quote p {
+      margin: 0;
+      font-size: 19px;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .diagram-quote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-style: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .diagram-quote cite a {
+      color: inherit;
+    }
+
+    .selection-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+    }
+
+    body[data-show="selection-main"] .selection-view {
+      display: block;
+    }
+
+    .diagram-sel {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 40px;
+      row-gap: 30px;
+      animation: view-in 0.4s ease;
+    }
+
+    .sel-col {
+      margin: 0 0 -8px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .sel-box {
+      position: relative;
+      padding: 20px 22px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+    }
+
+    .sel-box.now {
+      border-style: dashed;
+    }
+
+    .sel-box p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .sel-box.now p {
+      font-style: italic;
+    }
+
+    /* each stage leads to the next */
+    .sel-box.lead::after {
+      content: '';
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      width: 40px;
+      height: 12px;
+      margin-left: 1.5px;
+      transform: translateY(-50%);
+      background: color-mix(in srgb, currentColor 55%, transparent);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 6H19M14 1.5L19 6L14 10.5'/%3E%3C/svg%3E") center / 20px 12px no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 6H19M14 1.5L19 6L14 10.5'/%3E%3C/svg%3E") center / 20px 12px no-repeat;
+    }
+
+    .diagram-sel .v-head.first::before {
+      top: 0;
+    }
+
+    @media (max-width: 1180px) {
+      .selection-view {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .diagram-sel {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-sel > * {
+        grid-row: auto !important;
+        grid-column: auto !important;
+      }
+
+      .diagram-sel .v-head::before {
+        display: none;
+      }
+    }
+
     /* The Sequences: the revolutions down the side, and for each the
        constraints it lifted and the affordances it opened */
     .sequences-view {
@@ -1718,6 +1843,10 @@
     <div class="diagram-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Stack</a></h1>
     <p class="diagram-desc">Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
+    <blockquote class="diagram-quote">
+      <p>The claim that competition is the mechanism for technological determinism is a special case of the theory of selectionism (also called Universal Darwinism). Selectionism generalizes the mechanism at the heart of evolutionary biology: variation and differential proliferation. In a population of varied forms, if some forms proliferate (reproduce, survive, grow) because of some characteristic, then that characteristic will be more abundant in future populations. Over time, these forms, called organisms in evolutionary biology and interactors more generally, will fit better with&mdash;will appear as if designed for&mdash;the criterion that determines superior proliferation (the &ldquo;selection environment&rdquo;).</p>
+      <cite>Allan Dafoe, <a href="../sources/#dafoe">On Technological Determinism</a> (2015)</cite>
+    </blockquote>
     <div class="view-tabs" aria-label="Diagrams">
       <div class="tab-group" role="tablist" aria-label="The Civilisational Stack">
         <button type="button" role="tab" aria-selected="true" data-show="stack-main">The Stack</button>
@@ -1727,6 +1856,9 @@
       </div>
       <div class="tab-group" role="tablist" aria-label="The Sequences">
         <button type="button" role="tab" aria-selected="false" data-show="sequences-main">The Sequences</button>
+      </div>
+      <div class="tab-group" role="tablist" aria-label="The Selection Process">
+        <button type="button" role="tab" aria-selected="false" data-show="selection-main">The Selection</button>
       </div>
       <div class="tab-group" role="group" aria-label="Transitions shown">
         <button type="button" aria-pressed="true" data-count="4">4 transitions</button>
@@ -1760,6 +1892,8 @@
     </section>
 
     <div class="structures-alt" role="figure" aria-label="The Structures: infrastructure, structure and superstructure"></div>
+
+    <section class="selection-view" aria-label="The Selection Process"><div class="diagram-sel" role="figure" aria-label="For each revolution, the new forms, the selection pressures that favoured them, and how they proliferated"></div></section>
 
     <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div></section>
 
@@ -1884,6 +2018,10 @@
         stack: {
           title: 'The Civilisational Stack',
           desc: 'Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
+        },
+        selection: {
+          title: 'The Selection Process',
+          desc: 'The selection pressures and processes of each major technological transition: the new forms a revolution produced, the competitive environment that favoured them, and how they came to proliferate across civilisation.'
         },
         sequences: {
           title: 'The Sequences',
@@ -2469,6 +2607,26 @@
         });
       }
 
+      // The Selection Process: for each revolution, its variation, the
+      // selection pressure that favoured it, and its proliferation
+      var SEL = {"cognitive": ["Bands with abstract thought, language and shared myth, able to cooperate flexibly beyond the circle of kin.", "Competition with other bands and other human species for game and territory, and survival through a harsh, shifting climate.", "Larger, better-coordinated bands outhunted, displaced or absorbed their rivals, and <em>Homo sapiens</em> spread across every continent as the other human species disappeared."], "agricultural": ["Communities that domesticated plants and animals and settled to farm them, producing a storable surplus.", "Population pressure and competition for land, in which numbers decided who could hold and defend territory.", "Farming fed many more people from the same land: denser farming populations outnumbered and displaced the foragers around them, and farming spread even where health and leisure declined."], "urban": ["Cities and states that used writing, bronze and organised religion to administer and mobilise thousands of people.", "Warfare between rival polities, in which scale, organisation and the capacity to tax and field armies decided survival.", "States conquered, absorbed or were imitated by their neighbours, and the city-state, and then the empire, became the dominant form of society."], "scientific": ["States and institutions that adopted print, instruments and experimental science, and turned them to navigation, finance and war.", "Military rivalry among European states &ndash; the gunpowder revolution &ndash; and competition for oceanic trade and colonies.", "Centralised, fiscally capable states with standing armies outcompeted smaller polities, and European powers extended their reach across the globe."], "industrial": ["Economies that harnessed coal, steam and the factory to mechanise production.", "Military and economic competition between nations, in which productivity, firepower and imperial reach decided power.", "Industrialised nations came to dominate those that were not, and rivals industrialised in turn to keep up &ndash; from Germany and Japan to the Soviet Union."], "technological": ["Corporations and states that organised electricity, steel, chemistry and the combustion engine for mass production.", "Great-power rivalry and market competition, culminating in industrialised total war.", "Those that mobilised mass production won the wars and markets of the century, and the corporate, mass-producing economy spread worldwide."], "digital": ["Firms and states that adopted computers, networks and software to process information and coordinate at scale.", "Cold War competition and global markets, in which information, speed and network effects conferred advantage.", "Digitised firms and economies outcompeted those that lagged behind, and platforms with network effects grew to global dominance."], "intelligence": ["Firms and states developing machine learning, compute and AI agents to automate cognitive work.", "A race between AI developers and between great powers, in which capability and speed are rewarded over caution.", "Still being decided: competitive pressure pushes towards adoption wherever AI confers advantage &ndash; unless that pressure is constrained by coordination."]};
+      var SEL_HEADS = ['Variation', 'Selection Pressure', 'Proliferation'];
+      var selTable = document.querySelector('.diagram-sel');
+      function buildSelection() {
+        var revs = revolutions(), html = '';
+        SEL_HEADS.forEach(function (h, j) {
+          html += '<p class="sel-col" style="grid-row: 1; grid-column: ' + (2 + j) + '">' + h + '</p>';
+        });
+        revs.forEach(function (t, k) {
+          var row = k + 2, now = t.key === 'intelligence' ? ' now' : '';
+          html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + (k === revs.length - 1 ? ' last' : '') + '" href="../timeline/#' + t.key + '-revolution" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
+          SEL[t.key].forEach(function (text, j) {
+            html += '<div class="sel-box' + now + (j < 2 ? ' lead' : '') + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '"><p>' + text + '</p></div>';
+          });
+        });
+        selTable.innerHTML = html;
+      }
+
       function setSlug() {
         var d = show.split('-');
         var slug = d[0] + '-' + (count === '8' ? 'eight' : 'four') + '-transitions';
@@ -2493,6 +2651,7 @@
         buildStructuresAlt();
         buildVertical();
         buildSequences();
+        buildSelection();
         restoreSelections();
         // the table fades in afresh, except The Structures' on a change of count
         [diagram, alt].forEach(function (el) {
@@ -2506,7 +2665,7 @@
 
       var hash = location.hash.slice(1);
       if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
-      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : 'stack') + '-main';
+      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : /selection/.test(hash) ? 'selection' : 'stack') + '-main';
       render();
     })();
 
