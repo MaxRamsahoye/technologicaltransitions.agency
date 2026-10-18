@@ -2477,7 +2477,22 @@
       // by default (its infrastructure in the stack's table, and all three
       // layers in The Structures), and a reader's choice is kept across
       // changes of count and orientation
-      var SEL = { stack: ['agricultural', 'tech'], tech: 'agricultural', economy: 'agricultural', culture: 'agricultural' };
+      var SEL = { stack: null, tech: null, economy: null, culture: null, sel: null };
+      // a second after a diagram opens, its first box is selected, unless
+      // the reader has already chosen one
+      var defTimer = null;
+      function selectFirst(view) {
+        var first = revolutions()[0].key;
+        if (view === 'stack' && !SEL.stack) SEL.stack = [first, 'tech'];
+        if (view === 'structures') ['tech', 'economy', 'culture'].forEach(function (k) { if (!SEL[k]) SEL[k] = first; });
+        if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'sel0'];
+        if (view === 'sequences') {
+          var box = seqTable.querySelector('.seq-pair');
+          if (box && !seqTable.querySelector('.seq-pair.turned')) box.click();
+          return;
+        }
+        restoreSelections();
+      }
       function closeDrawer(drawer, remember) {
         var cell = drawer._cell;
         if (cell) { cell.classList.remove('open'); cell.setAttribute('aria-expanded', 'false'); }
@@ -2686,6 +2701,10 @@
         buildSequences();
         buildSelection();
         restoreSelections();
+        if (rebuild !== 'count') {
+          clearTimeout(defTimer);
+          defTimer = setTimeout(function () { if (show.split('-')[0] === d) selectFirst(d); }, 1000);
+        }
         // the table fades in afresh, except The Structures' on a change of count
         [diagram, alt].forEach(function (el) {
           if (el === alt && rebuild === 'count') return;
