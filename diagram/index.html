@@ -377,6 +377,33 @@
       grid-template-columns: 1fr;
     }
 
+    /* in The Sequences and The Selection, the material sits centred in its
+       box, with the close button in the box's corner */
+    :is(.d-more-seq, .d-more-sel) .d-more-box {
+      position: relative;
+    }
+
+    :is(.d-more-seq, .d-more-sel) .d-more-box > * {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    :is(.d-more-seq, .d-more-sel) .d-more-head {
+      position: static;
+    }
+
+    :is(.d-more-seq, .d-more-sel) .d-more-box .d-more-close {
+      top: 28px;
+      right: 30px;
+    }
+
+    :is(.d-more-seq, .d-more-sel) .d-more-link {
+      display: block;
+      width: fit-content;
+      margin-left: max(0px, calc((100% - 760px) / 2));
+    }
+
     .d-more-pair {
       margin-bottom: 8px !important;
       font-family: var(--serif);
