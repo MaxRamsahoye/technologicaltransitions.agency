@@ -389,14 +389,11 @@
     }
 
     .d-more-sel .d-more-body {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      max-width: none;
+      grid-template-columns: 1fr;
     }
 
-    @media (max-width: 900px) {
-      .d-more-sel .d-more-body {
-        grid-template-columns: 1fr;
-      }
+    .d-more-sel .d-more-sec p {
+      max-width: 760px;
     }
 
     .sel-box p {
