@@ -379,10 +379,10 @@
 
     /* in The Sequences and The Selection, the material sits centred in its
        box, with the close button in the box's corner */
-    /* the same space above and below the material as either side of it */
+    /* half as much space above and below the material as either side */
     :is(.d-more-seq, .d-more-sel) .d-more-box {
       position: relative;
-      padding: max(36px, calc((100% - 760px) / 2));
+      padding: max(36px, calc((100% - 760px) / 4)) max(36px, calc((100% - 760px) / 2));
     }
 
     :is(.d-more-seq, .d-more-sel) .d-more-head {
