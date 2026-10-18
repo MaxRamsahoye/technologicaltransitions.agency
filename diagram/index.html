@@ -358,6 +358,7 @@
     }
 
     .sel-box.d-opens:hover,
+    .sel-box.d-opens.row-hover,
     .sel-box.d-opens:focus-visible {
       background: color-mix(in srgb, currentColor 6%, transparent);
       outline: none;
@@ -370,6 +371,17 @@
 
     .d-more-sel .d-more-box {
       margin-top: 72px;
+    }
+
+    .d-more-sel .d-more-body {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: none;
+    }
+
+    @media (max-width: 900px) {
+      .d-more-sel .d-more-body {
+        grid-template-columns: 1fr;
+      }
     }
 
     .sel-box p {
@@ -2459,13 +2471,13 @@
         }
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
         var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
-        var stage = /^sel/.test(layer) ? +layer.slice(3) : -1;
-        var body = stage >= 0 ? '<div class="d-more-sec d-more-wide"><h4>' + SEL_HEADS[stage] + '</h4><p>' + SEL_LONG[key][stage] + '</p></div>'
+        var stage = layer === 'selrow' ? 0 : -1;
+        var body = stage >= 0 ? SEL_HEADS.map(function (h, j) { return sec(h, SEL_LONG[key][j]); }).join('')
           : layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
           : layer === 'tech' ? sec('Key Technologies', TECH_PROSE[key]) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
           : sec('Key Beliefs &amp; Values', BELIEF_PROSE[key]) + sec('Cultural-Psychological Adaptation', m.cult);
-        return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : (stage >= 0 ? SEL_HEADS[stage] : LAYER_NAMES[layer]) + ' &middot; ' + dateOf(t)) + '</p>' +
+        return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' || stage >= 0 ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
           '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
           (layer === 'head' ? '' : '<p class="d-more-desc">' + DESC[key] + '</p>') +
           '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
@@ -2485,7 +2497,7 @@
         var first = revolutions()[0].key;
         if (view === 'stack' && !SEL.stack) SEL.stack = [first, 'tech'];
         if (view === 'structures') ['tech', 'economy', 'culture'].forEach(function (k) { if (!SEL[k]) SEL[k] = first; });
-        if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'sel0'];
+        if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'selrow'];
         if (view === 'sequences') {
           var box = seqTable.querySelector('.seq-pair');
           if (box && !seqTable.querySelector('.seq-pair.turned')) box.click();
@@ -2496,6 +2508,7 @@
       function closeDrawer(drawer, remember) {
         var cell = drawer._cell;
         if (cell) { cell.classList.remove('open'); cell.setAttribute('aria-expanded', 'false'); }
+        if (cell && cell._layer === 'selrow') selTable.querySelectorAll('.sel-box.open').forEach(function (x) { x.classList.remove('open'); });
         drawer.classList.remove('show');
         drawer._cell = null;
         if (remember) SEL[drawer._id] = null;
@@ -2506,12 +2519,13 @@
       function closeMore() { closeAll(true); }
       function openMore(el, quiet) {
         var drawer = el._drawer;
-        if (drawer._cell === el) { closeDrawer(drawer, true); return; }
+        if (drawer._cell === el || (el._layer === 'selrow' && drawer._cell && drawer._cell._key === el._key)) { closeDrawer(drawer, true); return; }
         closeDrawer(drawer, false);
         drawer.querySelector('.d-more-inner').innerHTML = moreHTML(el._key, el._layer);
         drawer.querySelector('.d-more-close').addEventListener('click', function () { closeDrawer(drawer, true); });
         el.classList.add('open');
         el.setAttribute('aria-expanded', 'true');
+        if (el._layer === 'selrow') selTable.querySelectorAll('.sel-box[data-key="' + el._key + '"]').forEach(function (x) { x.classList.add('open'); });
         drawer.classList.add('show');
         drawer._cell = el;
         SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' ? [el._key, el._layer] : el._key;
@@ -2672,7 +2686,13 @@
         selTable.innerHTML = html;
         var drawer = document.querySelector('.d-more-sel');
         drawer._id = 'sel';
-        selTable.querySelectorAll('.sel-box').forEach(function (b) { opener(b, b.dataset.key, 'sel' + b.dataset.stage, drawer); });
+        // the three boxes of a row are selected together, and open together
+        selTable.querySelectorAll('.sel-box').forEach(function (b) {
+          opener(b, b.dataset.key, 'selrow', drawer);
+          var row = function () { return selTable.querySelectorAll('.sel-box[data-key="' + b.dataset.key + '"]'); };
+          b.addEventListener('mouseenter', function () { row().forEach(function (x) { x.classList.add('row-hover'); }); });
+          b.addEventListener('mouseleave', function () { row().forEach(function (x) { x.classList.remove('row-hover'); }); });
+        });
       }
 
       function setSlug() {
