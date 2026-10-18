@@ -369,6 +369,21 @@
       background: color-mix(in srgb, var(--link-blue) 8%, transparent);
     }
 
+    .d-more-seq .d-more-box {
+      margin-top: 72px;
+    }
+
+    .d-more-seq .d-more-body {
+      grid-template-columns: 1fr;
+    }
+
+    .d-more-pair {
+      margin-bottom: 8px !important;
+      font-family: var(--serif);
+      font-size: 25px !important;
+      line-height: 1.25 !important;
+    }
+
     .d-more-sel .d-more-box {
       margin-top: 72px;
     }
@@ -463,13 +478,14 @@
     }
 
     .seq-pair:hover,
+    .seq-pair.row-hover,
     .seq-pair:focus-visible {
       background: color-mix(in srgb, currentColor 6%, transparent);
       outline: none;
     }
 
     /* turned: the affordance, in the selected blue */
-    .seq-pair.turned {
+    .seq-pair.open {
       border-color: var(--link-blue);
       background: color-mix(in srgb, var(--link-blue) 8%, transparent);
     }
@@ -517,23 +533,23 @@
     }
 
     .seq-name.seq-to,
-    .seq-pair:not(.turned) .seq-move .seq-label:nth-child(3) {
+    .seq-pair:not(.open) .seq-move .seq-label:nth-child(3) {
       color: var(--muted);
     }
 
-    .seq-pair:not(.turned) .seq-arrow {
+    .seq-pair:not(.open) .seq-arrow {
       opacity: 0.3;
     }
 
-    .seq-pair.turned .seq-name.seq-from {
+    .seq-pair.open .seq-name.seq-from {
       color: var(--muted);
     }
 
-    .seq-pair.turned .seq-name.seq-to {
+    .seq-pair.open .seq-name.seq-to {
       color: var(--canvas-ink);
     }
 
-    .seq-pair.turned .seq-move .seq-label:first-child {
+    .seq-pair.open .seq-move .seq-label:first-child {
       opacity: 0.6;
     }
 
@@ -1927,7 +1943,8 @@
     <section class="selection-view" aria-label="The Selection Process"><div class="diagram-sel" role="figure" aria-label="For each revolution, the new forms, the selection pressures that favoured them, and how they proliferated"></div>
       <div class="d-more d-more-sel" aria-live="polite"><div class="d-more-inner"></div></div></section>
 
-    <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div></section>
+    <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div>
+      <div class="d-more d-more-seq" aria-live="polite"><div class="d-more-inner"></div></div></section>
 
     <div class="d-orient" role="group" aria-label="The timeline runs">
       <span class="d-orient-label">Timeline</span>
@@ -2471,8 +2488,11 @@
         }
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
         var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
-        var stage = layer === 'selrow' ? 0 : -1;
-        var body = stage >= 0 ? SEL_HEADS.map(function (h, j) { return sec(h, SEL_LONG[key][j]); }).join('')
+        var stage = layer === 'selrow' || layer === 'seqrow' ? 0 : -1;
+        var body = layer === 'seqrow' ? SEQ[key].map(function (pr) {
+            return '<div class="d-more-sec d-more-wide"><h4>Constraint &rarr; Affordance</h4><p class="d-more-pair">' + pr.from + ' <span aria-hidden="true">&rarr;</span> ' + pr.to + '</p><p>' + pr.desc + '</p></div>';
+          }).join('')
+          : stage >= 0 ? SEL_HEADS.map(function (h, j) { return sec(h, SEL_LONG[key][j]); }).join('')
           : layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
           : layer === 'tech' ? sec('Key Technologies', TECH_PROSE[key]) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
@@ -2489,7 +2509,7 @@
       // by default (its infrastructure in the stack's table, and all three
       // layers in The Structures), and a reader's choice is kept across
       // changes of count and orientation
-      var SEL = { stack: null, tech: null, economy: null, culture: null, sel: null };
+      var SEL = { stack: null, tech: null, economy: null, culture: null, sel: null, seq: null };
       // a second after a diagram opens, its first box is selected, unless
       // the reader has already chosen one
       var defTimer = null;
@@ -2498,17 +2518,26 @@
         if (view === 'stack' && !SEL.stack) SEL.stack = [first, 'tech'];
         if (view === 'structures') ['tech', 'economy', 'culture'].forEach(function (k) { if (!SEL[k]) SEL[k] = first; });
         if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'selrow'];
-        if (view === 'sequences') {
-          var box = seqTable.querySelector('.seq-pair');
-          if (box && !seqTable.querySelector('.seq-pair.turned')) box.click();
-          return;
-        }
+        if (view === 'sequences' && !SEL.seq) SEL.seq = [first, 'seqrow'];
         restoreSelections();
+      }
+      // rows whose boxes are selected together
+      var ROWS = { selrow: ['.diagram-sel', '.sel-box'], seqrow: ['.diagram-seq', '.seq-pair'] };
+      function rowOf(layer, key) {
+        var r = ROWS[layer];
+        return r ? document.querySelectorAll(r[0] + ' ' + r[1] + (key ? '[data-key="' + key + '"]' : '')) : [];
+      }
+      function rowBoxes(table, sel, layer, drawer) {
+        table.querySelectorAll(sel).forEach(function (b) {
+          opener(b, b.dataset.key, layer, drawer);
+          b.addEventListener('mouseenter', function () { rowOf(layer, b.dataset.key).forEach(function (x) { x.classList.add('row-hover'); }); });
+          b.addEventListener('mouseleave', function () { rowOf(layer, b.dataset.key).forEach(function (x) { x.classList.remove('row-hover'); }); });
+        });
       }
       function closeDrawer(drawer, remember) {
         var cell = drawer._cell;
         if (cell) { cell.classList.remove('open'); cell.setAttribute('aria-expanded', 'false'); }
-        if (cell && cell._layer === 'selrow') selTable.querySelectorAll('.sel-box.open').forEach(function (x) { x.classList.remove('open'); });
+        if (cell) rowOf(cell._layer).forEach(function (x) { x.classList.remove('open'); });
         drawer.classList.remove('show');
         drawer._cell = null;
         if (remember) SEL[drawer._id] = null;
@@ -2519,16 +2548,16 @@
       function closeMore() { closeAll(true); }
       function openMore(el, quiet) {
         var drawer = el._drawer;
-        if (drawer._cell === el || (el._layer === 'selrow' && drawer._cell && drawer._cell._key === el._key)) { closeDrawer(drawer, true); return; }
+        if (drawer._cell === el || (ROWS[el._layer] && drawer._cell && drawer._cell._key === el._key)) { closeDrawer(drawer, true); return; }
         closeDrawer(drawer, false);
         drawer.querySelector('.d-more-inner').innerHTML = moreHTML(el._key, el._layer);
         drawer.querySelector('.d-more-close').addEventListener('click', function () { closeDrawer(drawer, true); });
         el.classList.add('open');
         el.setAttribute('aria-expanded', 'true');
-        if (el._layer === 'selrow') selTable.querySelectorAll('.sel-box[data-key="' + el._key + '"]').forEach(function (x) { x.classList.add('open'); });
+        rowOf(el._layer, el._key).forEach(function (x) { x.classList.add('open'); });
         drawer.classList.add('show');
         drawer._cell = el;
-        SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' ? [el._key, el._layer] : el._key;
+        SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' || drawer._id === 'seq' ? [el._key, el._layer] : el._key;
         if (quiet) return;
         // bring the opened material into view if it falls below the fold
         setTimeout(function () {
@@ -2547,11 +2576,10 @@
             return true;
           });
         }
-        var ss = SEL.sel;
-        if (ss) Array.prototype.slice.call(selTable.querySelectorAll('.sel-box')).some(function (el) {
-          if (el._key !== ss[0] || el._layer !== ss[1]) return false;
-          openMore(el, true);
-          return true;
+        [['sel', selTable, '.sel-box'], ['seq', seqTable, '.seq-pair']].forEach(function (x) {
+          var ss = SEL[x[0]];
+          var el = ss && x[1].querySelector(x[2] + '[data-key="' + ss[0] + '"]');
+          if (el) openMore(el, true);
         });
         alt.querySelectorAll('.sa-rel').forEach(function (r) {
           var d = r.querySelector('.d-more'), k = SEL[d._id];
@@ -2641,27 +2669,18 @@
           var row = k + 1, now = t.key === 'intelligence' ? ' now' : '';
           html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + (k === revs.length - 1 ? ' last' : '') + '" href="../timeline/#' + t.key + '-revolution" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
           SEQ[t.key].forEach(function (pr, j) {
-            html += '<div class="seq-pair' + now + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '">' +
+            html += '<div class="seq-pair' + now + '" data-key="' + t.key + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '">' +
               '<div class="seq-move"><span class="seq-label">Constraint</span><span></span><span class="seq-label">Affordance</span>' +
-              '<span class="seq-name seq-from">' + pr.from + '</span>' + SEQ_ARROW + '<span class="seq-name seq-to">' + pr.to + '</span></div>' +
-              '<p class="seq-desc">' + pr.desc + '</p></div>';
+              '<span class="seq-name seq-from">' + pr.from + '</span>' + SEQ_ARROW + '<span class="seq-name seq-to">' + pr.to + '</span></div></div>';
           });
         });
         seqTable.innerHTML = html;
-        // each box opens on its constraint, and turns to the affordance that
-        // lifted it when clicked
-        seqTable.querySelectorAll('.seq-pair').forEach(function (b) {
-          b.setAttribute('tabindex', '0');
-          b.setAttribute('role', 'button');
-          b.setAttribute('aria-pressed', 'false');
-          function turn() {
-            var on = !b.classList.contains('turned');
-            b.classList.toggle('turned', on);
-            b.setAttribute('aria-pressed', on ? 'true' : 'false');
-          }
-          b.addEventListener('click', turn);
-          b.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); turn(); } });
-        });
+        // each box opens on its constraint; selecting a row turns both its
+        // boxes to the affordances that lifted them, and opens the two pairs
+        // one after the other below
+        var drawer = document.querySelector('.d-more-seq');
+        drawer._id = 'seq';
+        rowBoxes(seqTable, '.seq-pair', 'seqrow', drawer);
       }
 
       // The Selection Process: for each revolution, its variation, the
@@ -2687,12 +2706,7 @@
         var drawer = document.querySelector('.d-more-sel');
         drawer._id = 'sel';
         // the three boxes of a row are selected together, and open together
-        selTable.querySelectorAll('.sel-box').forEach(function (b) {
-          opener(b, b.dataset.key, 'selrow', drawer);
-          var row = function () { return selTable.querySelectorAll('.sel-box[data-key="' + b.dataset.key + '"]'); };
-          b.addEventListener('mouseenter', function () { row().forEach(function (x) { x.classList.add('row-hover'); }); });
-          b.addEventListener('mouseleave', function () { row().forEach(function (x) { x.classList.remove('row-hover'); }); });
-        });
+        rowBoxes(selTable, '.sel-box', 'selrow', drawer);
       }
 
       function setSlug() {
