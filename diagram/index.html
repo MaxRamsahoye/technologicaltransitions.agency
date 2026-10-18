@@ -353,6 +353,25 @@
       border-style: dashed;
     }
 
+    .sel-box.d-opens {
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .sel-box.d-opens:hover,
+    .sel-box.d-opens:focus-visible {
+      background: color-mix(in srgb, currentColor 6%, transparent);
+      outline: none;
+    }
+
+    .sel-box.d-opens.open {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+    }
+
+    .d-more-sel .d-more-box {
+      margin-top: 72px;
+    }
+
     .sel-box p {
       margin: 0;
       font-size: 18px;
@@ -1893,7 +1912,8 @@
 
     <div class="structures-alt" role="figure" aria-label="The Structures: infrastructure, structure and superstructure"></div>
 
-    <section class="selection-view" aria-label="The Selection Process"><div class="diagram-sel" role="figure" aria-label="For each revolution, the new forms, the selection pressures that favoured them, and how they proliferated"></div></section>
+    <section class="selection-view" aria-label="The Selection Process"><div class="diagram-sel" role="figure" aria-label="For each revolution, the new forms, the selection pressures that favoured them, and how they proliferated"></div>
+      <div class="d-more d-more-sel" aria-live="polite"><div class="d-more-inner"></div></div></section>
 
     <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div></section>
 
@@ -2439,11 +2459,13 @@
         }
         var t = DATA.filter(function (d) { return d.key === key; })[0], m = MORE[key];
         var sec = function (h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; };
-        var body = layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
+        var stage = /^sel/.test(layer) ? +layer.slice(3) : -1;
+        var body = stage >= 0 ? '<div class="d-more-sec d-more-wide"><h4>' + SEL_HEADS[stage] + '</h4><p>' + SEL_LONG[key][stage] + '</p></div>'
+          : layer === 'head' ? '<div class="d-more-sec d-more-wide"><p>' + m.note + '</p></div>'
           : layer === 'tech' ? sec('Key Technologies', TECH_PROSE[key]) + sec('Military-Economic Adaptation', m.mil)
           : layer === 'economy' ? sec('The State', m.state) + sec('The Market', m.market)
           : sec('Key Beliefs &amp; Values', BELIEF_PROSE[key]) + sec('Cultural-Psychological Adaptation', m.cult);
-        return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : LAYER_NAMES[layer] + ' &middot; ' + dateOf(t)) + '</p>' +
+        return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (layer === 'head' ? dateOf(t) : (stage >= 0 ? SEL_HEADS[stage] : LAYER_NAMES[layer]) + ' &middot; ' + dateOf(t)) + '</p>' +
           '<h3 class="d-more-title">' + t.name + ' Revolution</h3>' +
           (layer === 'head' ? '' : '<p class="d-more-desc">' + DESC[key] + '</p>') +
           '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
@@ -2477,7 +2499,7 @@
         el.setAttribute('aria-expanded', 'true');
         drawer.classList.add('show');
         drawer._cell = el;
-        SEL[drawer._id] = drawer._id === 'stack' ? [el._key, el._layer] : el._key;
+        SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' ? [el._key, el._layer] : el._key;
         if (quiet) return;
         // bring the opened material into view if it falls below the fold
         setTimeout(function () {
@@ -2496,6 +2518,12 @@
             return true;
           });
         }
+        var ss = SEL.sel;
+        if (ss) Array.prototype.slice.call(selTable.querySelectorAll('.sel-box')).some(function (el) {
+          if (el._key !== ss[0] || el._layer !== ss[1]) return false;
+          openMore(el, true);
+          return true;
+        });
         alt.querySelectorAll('.sa-rel').forEach(function (r) {
           var d = r.querySelector('.d-more'), k = SEL[d._id];
           var el = k && r.querySelector('.sa-rel-btn[data-key="' + k + '"]');
@@ -2609,8 +2637,10 @@
 
       // The Selection Process: for each revolution, its variation, the
       // selection pressure that favoured it, and its proliferation
-      var SEL = {"cognitive": ["Bands with abstract thought, language and shared myth, able to cooperate flexibly beyond the circle of kin.", "Competition with other bands and other human species for game and territory, and survival through a harsh, shifting climate.", "Larger, better-coordinated bands outhunted, displaced or absorbed their rivals, and <em>Homo sapiens</em> spread across every continent as the other human species disappeared."], "agricultural": ["Communities that domesticated plants and animals and settled to farm them, producing a storable surplus.", "Population pressure and competition for land, in which numbers decided who could hold and defend territory.", "Farming fed many more people from the same land: denser farming populations outnumbered and displaced the foragers around them, and farming spread even where health and leisure declined."], "urban": ["Cities and states that used writing, bronze and organised religion to administer and mobilise thousands of people.", "Warfare between rival polities, in which scale, organisation and the capacity to tax and field armies decided survival.", "States conquered, absorbed or were imitated by their neighbours, and the city-state, and then the empire, became the dominant form of society."], "scientific": ["States and institutions that adopted print, instruments and experimental science, and turned them to navigation, finance and war.", "Military rivalry among European states &ndash; the gunpowder revolution &ndash; and competition for oceanic trade and colonies.", "Centralised, fiscally capable states with standing armies outcompeted smaller polities, and European powers extended their reach across the globe."], "industrial": ["Economies that harnessed coal, steam and the factory to mechanise production.", "Military and economic competition between nations, in which productivity, firepower and imperial reach decided power.", "Industrialised nations came to dominate those that were not, and rivals industrialised in turn to keep up &ndash; from Germany and Japan to the Soviet Union."], "technological": ["Corporations and states that organised electricity, steel, chemistry and the combustion engine for mass production.", "Great-power rivalry and market competition, culminating in industrialised total war.", "Those that mobilised mass production won the wars and markets of the century, and the corporate, mass-producing economy spread worldwide."], "digital": ["Firms and states that adopted computers, networks and software to process information and coordinate at scale.", "Cold War competition and global markets, in which information, speed and network effects conferred advantage.", "Digitised firms and economies outcompeted those that lagged behind, and platforms with network effects grew to global dominance."], "intelligence": ["Firms and states developing machine learning, compute and AI agents to automate cognitive work.", "A race between AI developers and between great powers, in which capability and speed are rewarded over caution.", "Still being decided: competitive pressure pushes towards adoption wherever AI confers advantage &ndash; unless that pressure is constrained by coordination."]};
+      var SEL_DATA = {"cognitive": ["Bands with abstract thought, language and shared myth, able to cooperate flexibly beyond the circle of kin.", "Competition with other bands and other human species for game and territory, and survival through a harsh, shifting climate.", "Larger, better-coordinated bands outhunted, displaced or absorbed their rivals, and <em>Homo sapiens</em> spread across every continent as the other human species disappeared."], "agricultural": ["Communities that domesticated plants and animals and settled to farm them, producing a storable surplus.", "Population pressure and competition for land, in which numbers decided who could hold and defend territory.", "Farming fed many more people from the same land: denser farming populations outnumbered and displaced the foragers around them, and farming spread even where health and leisure declined."], "urban": ["Cities and states that used writing, bronze and organised religion to administer and mobilise thousands of people.", "Warfare between rival polities, in which scale, organisation and the capacity to tax and field armies decided survival.", "States conquered, absorbed or were imitated by their neighbours, and the city-state, and then the empire, became the dominant form of society."], "scientific": ["States and institutions that adopted print, instruments and experimental science, and turned them to navigation, finance and war.", "Military rivalry among European states &ndash; the gunpowder revolution &ndash; and competition for oceanic trade and colonies.", "Centralised, fiscally capable states with standing armies outcompeted smaller polities, and European powers extended their reach across the globe."], "industrial": ["Economies that harnessed coal, steam and the factory to mechanise production.", "Military and economic competition between nations, in which productivity, firepower and imperial reach decided power.", "Industrialised nations came to dominate those that were not, and rivals industrialised in turn to keep up &ndash; from Germany and Japan to the Soviet Union."], "technological": ["Corporations and states that organised electricity, steel, chemistry and the combustion engine for mass production.", "Great-power rivalry and market competition, culminating in industrialised total war.", "Those that mobilised mass production won the wars and markets of the century, and the corporate, mass-producing economy spread worldwide."], "digital": ["Firms and states that adopted computers, networks and software to process information and coordinate at scale.", "Cold War competition and global markets, in which information, speed and network effects conferred advantage.", "Digitised firms and economies outcompeted those that lagged behind, and platforms with network effects grew to global dominance."], "intelligence": ["Firms and states developing machine learning, compute and AI agents to automate cognitive work.", "A race between AI developers and between great powers, in which capability and speed are rewarded over caution.", "Still being decided: competitive pressure pushes towards adoption wherever AI confers advantage &ndash; unless that pressure is constrained by coordination."]};
       var SEL_HEADS = ['Variation', 'Selection Pressure', 'Proliferation'];
+      // the fuller account of each stage, for the opened section
+      var SEL_LONG = {"cognitive": ["Somewhere in Africa, between seventy and fifty thousand years ago, bands of <em>Homo sapiens</em> came to share a capacity for abstract thought and fully modern language. With it they could plan together, teach complex skills and bind themselves to strangers through shared myth and ritual &ndash; a form of social organisation far more flexible than anything before it.", "Bands competed with one another, and with Neanderthals, Denisovans and other human species, for game, water and territory through the swings of an ice-age climate. In that environment, the ability to coordinate larger groups, pass on knowledge and adapt quickly to new ground decided which populations survived.", "Language-using bands outhunted, displaced or absorbed their rivals and spread out of Africa to every habitable continent. Within a few tens of thousands of years the other human species were gone, and with them the great megafauna of much of the world."], "agricultural": ["In several regions independently, communities began to cultivate wild cereals and tame animals, and settled down to tend them. Farming produced a surplus that could be stored &ndash; and with it property, inheritance and the first chiefs.", "Where population pressed on resources, what mattered was how many people a stretch of land could feed and field. Health, stature and leisure counted for little against sheer numbers, and the capacity to hold and defend territory.", "Farmers could feed many times more people per acre than foragers, and their growing villages pushed out, absorbed or converted the foraging bands around them. Over a few thousand years farming spread across most of the habitable world, even where it made life harder for those who lived it."], "urban": ["In river valleys from Mesopotamia to the Indus and the Yellow River, settlements grew into cities and chiefdoms into states, organised by writing, bronze, monumental religion and kingship &ndash; forms of society that could administer, tax and command thousands of strangers.", "Rival polities fought over land, water and trade routes, and war rewarded scale: the ability to raise taxes, store grain, keep records and put organised armies in the field. Smaller and less organised societies could rarely hold out against them.", "States conquered their neighbours, or their neighbours copied them in self-defence, and the state spread as the dominant form of society. City-states gave way to kingdoms and empires, each larger and more centralised than the last."], "scientific": ["From the sixteenth century, the printing press, scientific instruments and the experimental method created new ways of knowing, and states and institutions turned them to navigation, cartography, accounting and ballistics.", "Europe&rsquo;s fragmented states were locked in near-constant war, and the gunpowder revolution made armies, fortifications and fleets ever more expensive. Survival rewarded states that could raise revenue, borrow, and apply new knowledge to warfare and oceanic trade.", "Centralised, fiscally capable states with standing armies swallowed or outlasted smaller polities, and the European powers carried their reach across the oceans, building trading and colonial empires that spanned the globe."], "industrial": ["In Britain first, coal-fired steam engines, mechanised mills and the factory system multiplied what a worker could produce, and industrial capitalism organised labour and capital around the machine.", "Nations competed for markets, resources and military power, and industrial output translated directly into iron, railways, warships and guns. A society&rsquo;s productive capacity became the measure of its power.", "Industrialised nations came to dominate the rest of the world, often by force, and their rivals industrialised to keep up &ndash; France, Germany, the United States, Japan and later the Soviet Union &ndash; until industry became the global norm."], "technological": ["Electricity, steel, industrial chemistry and the combustion engine were organised by large corporations and research laboratories into systems of mass production, from the assembly line to the chemical plant.", "Great-power rivalry, and competition between firms for mass markets, rewarded scale, standardisation and the mobilisation of whole economies &ndash; pressures that culminated in two world wars of industrialised total war.", "Those who could mass-produce won the wars and the markets of the twentieth century, and the corporate, mass-producing and mass-consuming economy spread across the developed world and beyond."], "digital": ["The transistor, the computer and the network gave firms and states new ways to process information, automate calculation and coordinate activity across distance in real time.", "The Cold War arms and space races drove computing forward, and global markets rewarded speed, information and scale &ndash; above all the network effects by which a platform grows more valuable the more people use it.", "Firms and economies that digitised outcompeted those that did not, and a handful of platforms grew to global dominance, reorganising commerce, media and communication around themselves."], "intelligence": ["Machine learning, trained on vast data with ever more compute, is producing systems that can perform a widening range of cognitive work, and AI agents that can act on their own.", "AI developers race one another for capability and market share, and great powers race for strategic advantage, in an environment that rewards speed and capability over caution and safety.", "Still being decided. Competitive pressure pushes towards adopting AI wherever it confers an advantage &ndash; in firms, militaries and states alike &ndash; unless that pressure is constrained by coordination between the actors involved."]};
       var selTable = document.querySelector('.diagram-sel');
       function buildSelection() {
         var revs = revolutions(), html = '';
@@ -2620,11 +2650,14 @@
         revs.forEach(function (t, k) {
           var row = k + 2, now = t.key === 'intelligence' ? ' now' : '';
           html += '<a class="v-head' + now + (k === 0 ? ' first' : '') + (k === revs.length - 1 ? ' last' : '') + '" href="../timeline/#' + t.key + '-revolution" style="grid-row: ' + row + '"><span class="d-dot"></span><span class="d-name">' + t.name + '</span><span class="d-date">' + dateOf(t) + '</span></a>';
-          SEL[t.key].forEach(function (text, j) {
-            html += '<div class="sel-box' + now + (j < 2 ? ' lead' : '') + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '"><p>' + text + '</p></div>';
+          SEL_DATA[t.key].forEach(function (text, j) {
+            html += '<div class="sel-box' + now + (j < 2 ? ' lead' : '') + '" data-key="' + t.key + '" data-stage="' + j + '" style="grid-row: ' + row + '; grid-column: ' + (2 + j) + '"><p>' + text + '</p></div>';
           });
         });
         selTable.innerHTML = html;
+        var drawer = document.querySelector('.d-more-sel');
+        drawer._id = 'sel';
+        selTable.querySelectorAll('.sel-box').forEach(function (b) { opener(b, b.dataset.key, 'sel' + b.dataset.stage, drawer); });
       }
 
       function setSlug() {
