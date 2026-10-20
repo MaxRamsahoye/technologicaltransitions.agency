@@ -2738,7 +2738,7 @@
         if (layer === 'stage') {
           var g = STAGE_BY[key];
           var secs = g.parent
-            ? '<div class="d-more-sec d-more-wide"><p>' + g.text + '</p></div><div class="d-more-sec d-more-wide"><h4>Developed in</h4><p>' + g.source + '</p></div>'
+            ? '<div class="d-more-sec d-more-wide"><p>' + g.text + '</p></div><div class="d-more-sec d-more-wide"><h4>' + (g.srcLabel || 'Developed in') + '</h4><p>' + g.source + '</p></div>'
             : sec2('Worldview', g.world) + sec2('Social Order', g.order);
           return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (g.parent ? STAGE_BY[g.parent].name + ' &middot; ' : '') + g.era + '</p>' +
             '<h3 class="d-more-title">' + g.name + (g.who ? ' <span class="stg-who">(' + g.who + ')</span>' : '') + (g.aka ? ' <span class="stg-who">(' + g.aka + ')</span>' : '') + '</h3>' +
@@ -2989,11 +2989,21 @@
         { key: 'classicism', name: 'Classicism', era: 'From c. 800 BCE', rev: 'urban',
           rise: 'Arising with the cities, states and writing of the Urban Revolution, and flowering in the Axial Age.',
           world: 'In Greece, India, China and Persia, thought turned back on itself: the cosmos came to be seen as ordered by reason, law or a single principle, and the good life as one of virtue, harmony and measure. Philosophy, mathematics and the great ethical traditions set ideals of form and proportion that later ages would return to as classical.',
-          order: 'City-states and empires governed through written law, citizenship and civic duty, built on agrarian surplus and slavery, with an educated elite who saw themselves as the guardians of a civilised order.' },
+          order: 'City-states and empires governed through written law, citizenship and civic duty, built on agrarian surplus and slavery, with an educated elite who saw themselves as the guardians of a civilised order.',
+          subs: [
+            { key: 'hellenism', name: 'Hellenism', era: 'c. 323&ndash;31 BCE', rev: 'urban',
+              text: 'After Alexander&rsquo;s conquests, Greek language, philosophy and art spread from the Mediterranean to the Indus, mixing with Egyptian, Persian and Indian traditions. In cosmopolitan cities such as Alexandria, with its library and museum, scholarship, science and mathematics flourished &ndash; Euclid, Archimedes, Eratosthenes &ndash; while Stoicism and Epicureanism turned philosophy from the city-state to the individual&rsquo;s search for peace of mind in a vast and unsettled world.',
+              srcLabel: 'Named in', source: 'Johann Gustav Droysen, <em>Geschichte des Hellenismus</em> (1836&ndash;1843), which gave the period its name' }
+          ] },
         { key: 'premodernism', name: 'Premodernism', aka: 'Traditionalism', era: 'From c. 500 CE', rev: 'agricultural',
           rise: 'Arising as the agrarian civilisations settled into the long order of faith and tradition, from late antiquity to the early modern era.',
           world: 'Truth is received rather than discovered: revealed in scripture, held by tradition and guarded by religious authority. The cosmos is a sacred hierarchy &ndash; a great chain of being from God to the lowest creature &ndash; and each person has a given place and purpose within it.',
-          order: 'Hierarchical agrarian societies of estates, castes and kin, ruled by monarchs by divine right, in which church and crown, custom and land bound people to fixed roles across generations.' },
+          order: 'Hierarchical agrarian societies of estates, castes and kin, ruled by monarchs by divine right, in which church and crown, custom and land bound people to fixed roles across generations.',
+          subs: [
+            { key: 'scholasticism', name: 'Scholasticism', who: 'Aquinas', era: 'c. 1100&ndash;1500', rev: 'agricultural',
+              text: 'The method of the medieval universities, which sought to reconcile faith with reason: to bring the recovered works of Aristotle, read through Islamic and Jewish commentators such as Averroes and Maimonides, into harmony with Christian revelation. Through disputation &ndash; posing a question, weighing the objections and resolving them &ndash; Thomas Aquinas built a vast synthesis in which reason reaches truths that faith completes, and so, unknowingly, prepared the ground for the rational inquiry that would later turn against tradition.',
+              source: 'Thomas Aquinas, <em>Summa Theologiae</em> (1265&ndash;1274)' }
+          ] },
         { key: 'modernism', name: 'Modernism', era: 'From c. 1600', rev: 'scientific',
           rise: 'Arising with the Scientific and Industrial Revolutions, and the Enlightenment between them.',
           world: 'Reason and evidence displace tradition and revelation as the measure of truth. Nature becomes a mechanism to be understood and mastered, history a story of progress, and the autonomous individual &ndash; with rights, a conscience and the capacity to improve &ndash; the bearer of meaning.',
@@ -3001,7 +3011,10 @@
           subs: [
             { key: 'high-modernism', name: 'High-Modernism', who: 'Scott', era: 'c. 1900&ndash;1980', rev: 'technological',
               text: 'James C. Scott&rsquo;s name for modernism at its most ambitious: a supreme confidence that scientific and technical knowledge could redesign society and nature from above. Making people and land legible to the state &ndash; through maps, censuses, grids and plans &ndash; high-modernist schemes from Soviet collectivisation and Tanzania&rsquo;s villagisation to the planned city of Bras&iacute;lia overrode local, practical knowledge, and where they were joined to authoritarian power and a weakened civil society, they ended in disaster.',
-              source: 'James C. Scott, <em>Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed</em> (1998)' }
+              source: 'James C. Scott, <em>Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed</em> (1998)' },
+            { key: 'late-modernity', name: 'Late Modernity', who: 'Giddens', era: 'From c. 1970', rev: 'digital',
+              text: 'Anthony Giddens argues that we have not left modernity behind but entered its radicalised, late phase. Time and space are lifted out of local places, social life rests on trust in abstract systems of experts and money, and tradition no longer settles how to live: the self becomes a reflexive project, continually revised in the face of choice and risk. Alongside Ulrich Beck&rsquo;s risk society, late modernity names a world increasingly preoccupied with the hazards its own modernisation has produced.',
+              source: 'Anthony Giddens, <em>The Consequences of Modernity</em> (1990) and <em>Modernity and Self-Identity</em> (1991)' }
           ] },
         { key: 'postmodernism', name: 'Postmodernism', era: 'From c. 1960', rev: 'digital',
           rise: 'Arising after the Second World War, with the information society and the Digital Revolution.',
@@ -3053,7 +3066,7 @@
           html += '<div class="stg-node ' + side + '" style="left: ' + (p[0] / W * 100).toFixed(2) + '%; top: ' + (p[1] / H * 100).toFixed(2) + '%; animation-delay: ' + delay.toFixed(2) + 's">' +
             '<span class="stg-dot"></span><div class="stg-label">' +
             '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
-            (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + ' <span class="stg-who">(' + u.who + ')</span></span>'; }).join('') +
+            (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + (u.who ? ' <span class="stg-who">(' + u.who + ')</span>' : '') + '</span>'; }).join('') +
             '</div></div>';
         });
         stgFig.innerHTML = html;
