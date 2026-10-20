@@ -91,10 +91,22 @@
       line-height: 1.4;
     }
 
-    .bibliography li::before {
-      content: '\2014';
+    /* each dash links to the work's entry further down the page */
+    .bibliography .bib-jump {
       position: absolute;
       left: 0;
+      top: 0;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .bibliography .bib-jump::before {
+      content: '\2014';
+    }
+
+    .sources-top .bibliography a.bib-jump:hover {
+      color: var(--link-blue);
+      text-decoration: none;
     }
 
     /* a subsection of the bibliography */
@@ -119,7 +131,7 @@
       list-style: none;
     }
 
-    .bibliography ol li::before {
+    .bibliography ol .bib-jump::before {
       content: '\25CB';
       font-size: 0.7em;
       line-height: 2;
@@ -211,6 +223,11 @@
 
     .source {
       padding: 26px 0;
+    }
+
+    /* links to an entry land just above it */
+    .source, .source-part {
+      scroll-margin-top: 40px;
     }
 
     .source-author {
@@ -379,35 +396,35 @@
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
     <h2 class="bibliography-heading">Civilisational Macrohistorical Development</h2>
     <ol class="bibliography bibliography-section" aria-label="Civilisational Macrohistorical Development">
-      <li>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism: A Typology, Scope Conditions, and a Mechanism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
+      <li><a class="bib-jump" href="#dafoe" aria-label="Go to the entry"></a>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
         <ol>
-          <li>MacInnes, Garfinkel &amp; Dafoe &lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect: Competitive Pressure, Technology, and the Internal Structure of States</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
-          <li>Allan Dafoe &lsquo;<a href="https://docs.google.com/document/d/1B77VWaXG-u34nSRFKV14pJNHJHHb6sa5zJ08J70CVVA/edit?usp=sharing" target="_blank" rel="noopener">Value Erosion</a>&rsquo; <em>Future of Humanity Institute</em> (2019)</li>
+          <li><a class="bib-jump" href="#macinnes-garfinkel-dafoe" aria-label="Go to the entry"></a>MacInnes, Garfinkel &amp; Dafoe &lsquo;<a href="https://doi.org/10.1093/isq/sqae111" target="_blank" rel="noopener">Anarchy as Architect</a>&rsquo; <em>International Studies Quarterly</em> (2024)</li>
+          <li><a class="bib-jump" href="#dafoe-value-erosion" aria-label="Go to the entry"></a>Allan Dafoe &lsquo;<a href="https://docs.google.com/document/d/1B77VWaXG-u34nSRFKV14pJNHJHHb6sa5zJ08J70CVVA/edit?usp=sharing" target="_blank" rel="noopener">Value Erosion</a>&rsquo; <em>Future of Humanity Institute</em> (2019)</li>
         </ol>
       </li>
-      <li>Daniel Schmachtenberger &lsquo;<a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">The Emergence Model</a>&rsquo; <em>The Emergence Project</em> (2017)
+      <li><a class="bib-jump" href="#schmachtenberger-emergence" aria-label="Go to the entry"></a>Daniel Schmachtenberger &lsquo;<a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">The Emergence Model</a>&rsquo; <em>The Emergence Project</em> (2017)
         <ol>
-          <li>Ken Wilber <em><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Sex, Ecology, Spirituality: The Spirit of Evolution</a></em> (1995)</li>
-          <li>Marvin Harris <em><a href="https://mitpressbookstore.mit.edu/book/9780759101340" target="_blank" rel="noopener">Cultural Materialism: The Struggle for a Science of Culture</a></em> (1979)</li>
+          <li><a class="bib-jump" href="#wilber" aria-label="Go to the entry"></a>Ken Wilber <em><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Sex, Ecology, Spirituality: The Spirit of Evolution</a></em> (1995)</li>
+          <li><a class="bib-jump" href="#harris" aria-label="Go to the entry"></a>Marvin Harris <em><a href="https://mitpressbookstore.mit.edu/book/9780759101340" target="_blank" rel="noopener">Cultural Materialism: The Struggle for a Science of Culture</a></em> (1979)</li>
         </ol>
       </li>
-      <li>Daniel Schmachtenberger &lsquo;<a href="https://civilizationemerging.com/new-economics-series-4/" target="_blank" rel="noopener">New Economics, Part IV</a>&rsquo; <em>Civilization Emerging</em> (2017)</li>
-      <li>Peter Joseph <em><a href="https://www.penguinrandomhouse.com/books/691520/the-new-human-rights-movement-by-peter-joseph/" target="_blank" rel="noopener">The New Human Rights Movement: Reinventing the Economy to End Oppression</a></em> (2017)</li>
-      <li>Robert M. Sapolsky <em><a href="https://penguinrandomhouse.ca/books/311787/behave-by-robert-m-sapolsky" target="_blank" rel="noopener">Behave: The Biology of Humans at Our Best and Worst</a></em> (2017)</li>
-      <li>Jared Diamond &lsquo;<a href="https://www.discovermagazine.com/magazine/issue/may-1987" target="_blank" rel="noopener">The Worst Mistake in the History of the Human Race</a>&rsquo; <em>Discover</em> (1987)</li>
-      <li>Jared Diamond <em><a href="https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel" target="_blank" rel="noopener">Guns, Germs, and Steel: The Fates of Human Societies</a></em> (1997)</li>
-      <li>Marshall Sahlins &lsquo;<a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">The Original Affluent Society</a>&rsquo; in <em>Stone Age Economics</em> (1972)</li>
-      <li>Luke Kemp <em><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</a></em> (2025)</li>
+      <li><a class="bib-jump" href="#schmachtenberger-economics" aria-label="Go to the entry"></a>Daniel Schmachtenberger &lsquo;<a href="https://civilizationemerging.com/new-economics-series-4/" target="_blank" rel="noopener">New Economics, Part IV</a>&rsquo; <em>Civilization Emerging</em> (2017)</li>
+      <li><a class="bib-jump" href="#joseph" aria-label="Go to the entry"></a>Peter Joseph <em><a href="https://www.penguinrandomhouse.com/books/691520/the-new-human-rights-movement-by-peter-joseph/" target="_blank" rel="noopener">The New Human Rights Movement: Reinventing the Economy to End Oppression</a></em> (2017)</li>
+      <li><a class="bib-jump" href="#sapolsky" aria-label="Go to the entry"></a>Robert M. Sapolsky <em><a href="https://penguinrandomhouse.ca/books/311787/behave-by-robert-m-sapolsky" target="_blank" rel="noopener">Behave: The Biology of Humans at Our Best and Worst</a></em> (2017)</li>
+      <li><a class="bib-jump" href="#diamond" aria-label="Go to the entry"></a>Jared Diamond &lsquo;<a href="https://www.discovermagazine.com/magazine/issue/may-1987" target="_blank" rel="noopener">The Worst Mistake in the History of the Human Race</a>&rsquo; <em>Discover</em> (1987)</li>
+      <li><a class="bib-jump" href="#diamond-guns" aria-label="Go to the entry"></a>Jared Diamond <em><a href="https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel" target="_blank" rel="noopener">Guns, Germs, and Steel: The Fates of Human Societies</a></em> (1997)</li>
+      <li><a class="bib-jump" href="#sahlins" aria-label="Go to the entry"></a>Marshall Sahlins &lsquo;<a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">The Original Affluent Society</a>&rsquo; in <em>Stone Age Economics</em> (1972)</li>
+      <li><a class="bib-jump" href="#kemp" aria-label="Go to the entry"></a>Luke Kemp <em><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</a></em> (2025)</li>
     </ol>
     <h2 class="bibliography-heading">Evolutionary Process Misalignment</h2>
     <ol class="bibliography bibliography-section" aria-label="Evolutionary Process Misalignment">
-      <li>Luke Drago &amp; Rudolf Laine &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
-      <li>Jan Kulveit <em>et al.</em> &lsquo;<a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development</a>&rsquo; <em>Alignment of Complex Systems Research Group</em> (2025)</li>
-      <li>Guive Assadi &lsquo;<a href="https://hearthisidea.com/episodes/assadi/" target="_blank" rel="noopener">Will Humanity Choose Its Future?</a>&rsquo; <em>Center for the Governance of AI</em> (2023)</li>
-      <li>Joe Carlsmith &lsquo;<a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">Can Goodness Compete?</a>&rsquo; (2025)</li>
-      <li>Andr&eacute;s G&oacute;mez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
-      <li>Kristian R&ouml;nn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
-      <li>Scott Alexander &lsquo;<a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Meditations on Moloch</a>&rsquo; <em>Slate Star Codex</em> (2014)</li>
+      <li><a class="bib-jump" href="#drago-laine" aria-label="Go to the entry"></a>Luke Drago &amp; Rudolf Laine &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
+      <li><a class="bib-jump" href="#kulveit" aria-label="Go to the entry"></a>Jan Kulveit <em>et al.</em> &lsquo;<a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment</a>&rsquo; <em>Alignment of Complex Systems Research Group</em> (2025)</li>
+      <li><a class="bib-jump" href="#assadi" aria-label="Go to the entry"></a>Guive Assadi &lsquo;<a href="https://hearthisidea.com/episodes/assadi/" target="_blank" rel="noopener">Will Humanity Choose Its Future?</a>&rsquo; <em>Center for the Governance of AI</em> (2023)</li>
+      <li><a class="bib-jump" href="#carlsmith" aria-label="Go to the entry"></a>Joe Carlsmith &lsquo;<a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">Can Goodness Compete?</a>&rsquo; (2025)</li>
+      <li><a class="bib-jump" href="#gomez-emilsson" aria-label="Go to the entry"></a>Andr&eacute;s G&oacute;mez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
+      <li><a class="bib-jump" href="#ronn" aria-label="Go to the entry"></a>Kristian R&ouml;nn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
+      <li><a class="bib-jump" href="#alexander" aria-label="Go to the entry"></a>Scott Alexander &lsquo;<a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Meditations on Moloch</a>&rsquo; <em>Slate Star Codex</em> (2014)</li>
     </ol>
     </div>
 
@@ -446,13 +463,13 @@
         <p class="source-link"><a href="https://archive.ph/nG3HK" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
         <ul class="source-roots">
           <li><p class="source-label">Derived from</p></li>
-          <li class="source">
+          <li class="source" id="wilber">
             <p class="source-author">Ken Wilber</p>
             <p class="source-work">Integral Theory</p>
             <p class="source-note">Wilber&rsquo;s four-quadrant map holds that any whole has interior and exterior, individual and collective dimensions &ndash; experience, behaviour, culture and systems &ndash; and that none can be reduced to the others. It underlies the Emergence Model&rsquo;s insistence that technological, institutional and cultural change be read together.</p>
             <p class="source-link"><a href="https://en.wikipedia.org/wiki/Integral_theory_(Ken_Wilber)" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
           </li>
-          <li class="source">
+          <li class="source" id="harris">
             <p class="source-author">Marvin Harris</p>
             <p class="source-work">Cultural Materialism: The Struggle for a Science of Culture</p>
             <p class="source-detail">1979</p>
@@ -490,7 +507,7 @@
         <p class="source-detail"><em>Discover</em>, 1987</p>
         <p class="source-note">Diamond argues that the adoption of agriculture, long celebrated as humanity&rsquo;s decisive step forward, was in many ways a catastrophe: it brought class, inequality, malnutrition and disease, making elites better off and most people worse off. The essay frames this project&rsquo;s account of the Agricultural Revolution.</p>
         <p class="source-link"><a href="https://www.discovermagazine.com/magazine/issue/may-1987" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
-        <div class="source-part">
+        <div class="source-part" id="diamond-guns">
           <p class="source-work">Guns, Germs, and Steel: The Fates of Human Societies</p>
           <p class="source-detail">1997</p>
           <p class="source-note">Diamond asks why some societies came to dominate others, and finds the answer in geography, domestication and the technologies and diseases they produced &ndash; an account of how technological advantage reshapes the world.</p>
