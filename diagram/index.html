@@ -380,21 +380,21 @@
     /* in The Sequences and The Selection, the material sits centred in its
        box, with the close button in the box's corner */
     /* half as much space above and below the material as either side */
-    :is(.d-more-seq, .d-more-sel) .d-more-box {
+    :is(.d-more-seq, .d-more-sel, .d-more-stg) .d-more-box {
       position: relative;
       padding: max(36px, calc((100% - 760px) / 4)) max(36px, calc((100% - 760px) / 2));
     }
 
-    :is(.d-more-seq, .d-more-sel) .d-more-head {
+    :is(.d-more-seq, .d-more-sel, .d-more-stg) .d-more-head {
       position: static;
     }
 
-    :is(.d-more-seq, .d-more-sel) .d-more-box .d-more-close {
+    :is(.d-more-seq, .d-more-sel, .d-more-stg) .d-more-box .d-more-close {
       top: 28px;
       right: 30px;
     }
 
-    :is(.d-more-seq, .d-more-sel) .d-more-link {
+    :is(.d-more-seq, .d-more-sel, .d-more-stg) .d-more-link {
       margin-bottom: 0;
     }
 
@@ -465,6 +465,233 @@
 
       .diagram-sel .v-head::before {
         display: none;
+      }
+    }
+
+    /* The Stages: the stages of cultural worldview on a spiral, from the
+       forager band at its centre outwards, each opening below */
+    .stages-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+    }
+
+    body[data-show="stages-main"] .stages-view {
+      display: block;
+    }
+
+    /* the stages have no count of transitions */
+    body[data-show="stages-main"] .view-tabs [aria-label="Transitions shown"] {
+      display: none;
+    }
+
+    .stg-fig {
+      position: relative;
+      width: min(100%, 880px);
+      aspect-ratio: 1.3;
+      margin: 0 auto;
+      container-type: inline-size;
+    }
+
+    .stg-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .stg-spiral {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-dasharray: 1;
+      animation: stg-draw 2.4s cubic-bezier(0.45, 0, 0.3, 1) both;
+    }
+
+    .stg-tip {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: stg-fade 0.4s ease 2.3s both;
+    }
+
+    @keyframes stg-draw {
+      from { stroke-dashoffset: 1; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes stg-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .stg-node {
+      position: absolute;
+      width: 0;
+      height: 0;
+      animation: stg-fade 0.5s ease both;
+    }
+
+    .stg-dot {
+      position: absolute;
+      left: -9px;
+      top: -9px;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      background: var(--canvas-bg);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stg-label {
+      position: absolute;
+      top: 0;
+      width: max-content;
+      max-width: 34cqw;
+      transform: translateY(-0.72em);
+      padding: 0 6px;
+      background: var(--canvas-bg);
+    }
+
+    .stg-node.right .stg-label { left: 18px; }
+    .stg-node.left .stg-label { right: 18px; text-align: right; }
+
+    .stg-open {
+      display: block;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .stg-name {
+      font-family: var(--serif);
+      font-size: clamp(19px, 2.9cqw, 26px);
+      line-height: 1.15;
+    }
+
+    .stg-aka {
+      display: block;
+      font-size: 0.68em;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .stg-era {
+      display: block;
+      margin: 5px 0 2px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .stg-sub {
+      margin-top: 6px;
+      font-size: clamp(15px, 2cqw, 18px);
+      line-height: 1.3;
+    }
+
+    .stg-sub::before {
+      content: '\25CB';
+      margin-right: 8px;
+      font-size: 0.7em;
+      vertical-align: 0.12em;
+    }
+
+    .stg-node.left .stg-sub::before {
+      content: none;
+    }
+
+    .stg-node.left .stg-sub::after {
+      content: '\25CB';
+      margin-left: 8px;
+      font-size: 0.7em;
+      vertical-align: 0.12em;
+    }
+
+    .stg-who {
+      color: var(--muted);
+    }
+
+    .stg-open:hover,
+    .stg-open:focus-visible,
+    .stg-open.open,
+    .stg-open.open .stg-who,
+    .stg-open.open .stg-aka {
+      color: var(--link-blue);
+      outline: none;
+    }
+
+    .stg-node:has(> .stg-label > .stg-open.open) .stg-dot,
+    .stg-node:has(.stg-open:hover) .stg-dot {
+      border-color: var(--link-blue);
+    }
+
+    .stg-node:has(> .stg-label > .stg-open.open) .stg-dot {
+      background: var(--link-blue);
+    }
+
+    .d-more-stg .d-more-box {
+      margin-top: 72px;
+    }
+
+    .d-more-stg .d-more-body {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 1180px) {
+      .stages-view {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .stg-fig {
+        aspect-ratio: auto;
+        container-type: normal;
+      }
+
+      .stg-svg {
+        display: none;
+      }
+
+      .stg-node {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        width: auto;
+        height: auto;
+        margin: 0 0 28px;
+        padding-left: 34px;
+      }
+
+      .stg-dot {
+        left: 0;
+        top: 4px;
+      }
+
+      .stg-label,
+      .stg-node.left .stg-label {
+        position: static;
+        max-width: none;
+        transform: none;
+        padding: 0;
+        text-align: left;
+      }
+
+      .stg-node.left .stg-sub::before {
+        content: '\25CB';
+      }
+
+      .stg-node.left .stg-sub::after {
+        content: none;
       }
     }
 
@@ -1925,6 +2152,9 @@
       <div class="tab-group" role="tablist" aria-label="The Selection Process">
         <button type="button" role="tab" aria-selected="false" data-show="selection-main">The Selection</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="The Stages">
+        <button type="button" role="tab" aria-selected="false" data-show="stages-main">The Stages</button>
+      </div>
       <div class="tab-group" role="group" aria-label="Transitions shown">
         <button type="button" aria-pressed="true" data-count="4">4 transitions</button>
         <button type="button" aria-pressed="false" data-count="8">8 transitions</button>
@@ -1963,6 +2193,9 @@
 
     <section class="sequences-view" aria-label="The Sequences"><div class="diagram-seq" role="figure" aria-label="For each revolution, the constraints it lifted and the affordances it opened"></div>
       <div class="d-more d-more-seq" aria-live="polite"><div class="d-more-inner"></div></div></section>
+
+    <section class="stages-view" aria-label="The Stages"><div class="stg-fig" role="figure" aria-label="The stages of cultural worldview on a spiral, from primitivism at its centre out to metamodernism"></div>
+      <div class="d-more d-more-stg" aria-live="polite"><div class="d-more-inner"></div></div></section>
 
     <div class="d-orient" role="group" aria-label="The timeline runs">
       <span class="d-orient-label">Timeline</span>
@@ -2089,6 +2322,10 @@
         selection: {
           title: 'The Selection Process',
           desc: 'The selection pressures and processes of each major technological transition: the new forms a revolution produced, the competitive environment that favoured them, and how they came to proliferate across civilisation.'
+        },
+        stages: {
+          title: 'The Stages',
+          desc: 'The developmental stages of cultural worldview: each a way of making sense of the world that arises with a new technological and social order, transcends and includes the stages before it, and spirals outward &ndash; from the animist world of the forager band to the metamodern sensibility now taking shape.'
         },
         sequences: {
           title: 'The Sequences',
@@ -2496,7 +2733,20 @@
         conditions: ['Structure &rarr; Superstructure', 'The political economy conditions the cultural psychology. The institutions through which people work, trade and are governed shape what they come to value, believe and expect of one another: settled property bred inheritance and rank, markets bred individualism, and each order of power teaches the dispositions it rewards.'],
         legitimises: ['Superstructure &rarr; Structure', 'The cultural psychology legitimises the political economy. Shared values and beliefs make an order of power and property seem natural, just or sacred &ndash; divine kingship, the work ethic, progress &ndash; and so hold it in place. When those values shift, the same culture can withdraw its consent and delegitimise the order it once upheld.']
       };
+      function sec2(h, p) { return '<div class="d-more-sec"><h4>' + h + '</h4><p>' + p + '</p></div>'; }
       function moreHTML(key, layer) {
+        if (layer === 'stage') {
+          var g = STAGE_BY[key];
+          var secs = g.parent
+            ? '<div class="d-more-sec d-more-wide"><p>' + g.text + '</p></div><div class="d-more-sec d-more-wide"><h4>Developed in</h4><p>' + g.source + '</p></div>'
+            : sec2('Worldview', g.world) + sec2('Social Order', g.order);
+          return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + (g.parent ? STAGE_BY[g.parent].name + ' &middot; ' : '') + g.era + '</p>' +
+            '<h3 class="d-more-title">' + g.name + (g.who ? ' <span class="stg-who">(' + g.who + ')</span>' : '') + (g.aka ? ' <span class="stg-who">(' + g.aka + ')</span>' : '') + '</h3>' +
+            (g.rise ? '<p class="d-more-desc">' + g.rise + '</p>' : '') +
+            '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
+            '<div class="d-more-body">' + secs + '</div>' +
+            (g.rev ? '<a class="d-more-link" href="../timeline/#' + g.rev + '-revolution">On the Timeline</a>' : '') + '</div>';
+        }
         if (layer === 'rel') {
           var r = RELATIONS[key];
           return '<div class="d-more-box"><div class="d-more-head"><p class="d-more-kicker">' + r[0] + '</p>' +
@@ -2527,7 +2777,7 @@
       // by default (its infrastructure in the stack's table, and all three
       // layers in The Structures), and a reader's choice is kept across
       // changes of count and orientation
-      var SEL = { stack: null, tech: null, economy: null, culture: null, sel: null, seq: null };
+      var SEL = { stack: null, tech: null, economy: null, culture: null, sel: null, seq: null, stg: null };
       // a second after a diagram opens, its first box is selected, unless
       // the reader has already chosen one
       var defTimer = null;
@@ -2538,6 +2788,7 @@
         if (view === 'structures' && !SEL.tech && !SEL.economy && !SEL.culture) SEL.culture = first;
         if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'selrow'];
         if (view === 'sequences' && !SEL.seq) SEL.seq = [first, 'seqrow'];
+        if (view === 'stages' && !SEL.stg) SEL.stg = [STAGES[0].key, 'stage'];
         restoreSelections();
       }
       // rows whose boxes are selected together
@@ -2576,7 +2827,7 @@
         rowOf(el._layer, el._key).forEach(function (x) { x.classList.add('open'); });
         drawer.classList.add('show');
         drawer._cell = el;
-        SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' || drawer._id === 'seq' ? [el._key, el._layer] : el._key;
+        SEL[drawer._id] = drawer._id === 'stack' || drawer._id === 'sel' || drawer._id === 'seq' || drawer._id === 'stg' ? [el._key, el._layer] : el._key;
         if (quiet) return;
         // bring the opened material into view if it falls below the fold
         setTimeout(function () {
@@ -2595,7 +2846,7 @@
             return true;
           });
         }
-        [['sel', selTable, '.sel-box'], ['seq', seqTable, '.seq-pair']].forEach(function (x) {
+        [['sel', selTable, '.sel-box'], ['seq', seqTable, '.seq-pair'], ['stg', stgFig, '.stg-open']].forEach(function (x) {
           var ss = SEL[x[0]];
           var el = ss && x[1].querySelector(x[2] + '[data-key="' + ss[0] + '"]');
           if (el) openMore(el, true);
@@ -2728,9 +2979,92 @@
         rowBoxes(selTable, '.sel-box', 'selrow', drawer);
       }
 
+      // The Stages: the stages of cultural worldview, from the forager band
+      // at the centre of a spiral outwards, with the forms some took
+      var STAGES = [
+        { key: 'primitivism', name: 'Primitivism', era: 'From c. 70,000 BCE', rev: 'cognitive',
+          rise: 'Arising with the Cognitive Revolution: the oldest and by far the longest stage of human culture.',
+          world: 'The world of the forager band is animist and mythic: animals, places and ancestors are persons, time is cyclical, and the present is bound to a time of origins. Knowledge lives in story, ritual and the memory of elders, and meaning comes from belonging to the band and to the land.',
+          order: 'Small, mobile and largely egalitarian bands of kin, held together by sharing, reciprocity and consensus, with prestige rather than power, and no state, property or written law.' },
+        { key: 'classicism', name: 'Classicism', era: 'From c. 800 BCE', rev: 'urban',
+          rise: 'Arising with the cities, states and writing of the Urban Revolution, and flowering in the Axial Age.',
+          world: 'In Greece, India, China and Persia, thought turned back on itself: the cosmos came to be seen as ordered by reason, law or a single principle, and the good life as one of virtue, harmony and measure. Philosophy, mathematics and the great ethical traditions set ideals of form and proportion that later ages would return to as classical.',
+          order: 'City-states and empires governed through written law, citizenship and civic duty, built on agrarian surplus and slavery, with an educated elite who saw themselves as the guardians of a civilised order.' },
+        { key: 'premodernism', name: 'Premodernism', aka: 'Traditionalism', era: 'From c. 500 CE', rev: 'agricultural',
+          rise: 'Arising as the agrarian civilisations settled into the long order of faith and tradition, from late antiquity to the early modern era.',
+          world: 'Truth is received rather than discovered: revealed in scripture, held by tradition and guarded by religious authority. The cosmos is a sacred hierarchy &ndash; a great chain of being from God to the lowest creature &ndash; and each person has a given place and purpose within it.',
+          order: 'Hierarchical agrarian societies of estates, castes and kin, ruled by monarchs by divine right, in which church and crown, custom and land bound people to fixed roles across generations.' },
+        { key: 'modernism', name: 'Modernism', era: 'From c. 1600', rev: 'scientific',
+          rise: 'Arising with the Scientific and Industrial Revolutions, and the Enlightenment between them.',
+          world: 'Reason and evidence displace tradition and revelation as the measure of truth. Nature becomes a mechanism to be understood and mastered, history a story of progress, and the autonomous individual &ndash; with rights, a conscience and the capacity to improve &ndash; the bearer of meaning.',
+          order: 'The nation-state, the market economy and representative government, organised through bureaucracy, science and industry, with mass education and the promise of emancipation from poverty, superstition and inherited rank.',
+          subs: [
+            { key: 'high-modernism', name: 'High-Modernism', who: 'Scott', era: 'c. 1900&ndash;1980', rev: 'technological',
+              text: 'James C. Scott&rsquo;s name for modernism at its most ambitious: a supreme confidence that scientific and technical knowledge could redesign society and nature from above. Making people and land legible to the state &ndash; through maps, censuses, grids and plans &ndash; high-modernist schemes from Soviet collectivisation and Tanzania&rsquo;s villagisation to the planned city of Bras&iacute;lia overrode local, practical knowledge, and where they were joined to authoritarian power and a weakened civil society, they ended in disaster.',
+              source: 'James C. Scott, <em>Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed</em> (1998)' }
+          ] },
+        { key: 'postmodernism', name: 'Postmodernism', era: 'From c. 1960', rev: 'digital',
+          rise: 'Arising after the Second World War, with the information society and the Digital Revolution.',
+          world: 'An incredulity toward metanarratives, in Lyotard&rsquo;s phrase: the grand stories of progress, reason and emancipation are exposed as partial and entangled with power. Truth, identity and meaning are seen as constructed &ndash; by language, culture and perspective &ndash; and are met with irony, pluralism and deconstruction.',
+          order: 'Consumer, media and network societies of plural identities and lifestyles, in which voices excluded by modernity&rsquo;s institutions gain recognition, while shared narratives, and with them trust in common institutions, fragment.' },
+        { key: 'metamodernism', name: 'Metamodernism', era: 'From c. 2000', rev: 'intelligence',
+          rise: 'Emerging in the twenty-first century, as the Intelligence Revolution begins.',
+          world: 'A sensibility that oscillates between, and integrates, modern sincerity and postmodern irony: it takes postmodernism&rsquo;s critique seriously, but seeks to reconstruct meaning, hope and grand narratives with an awareness of their limits. It thinks in terms of both/and, of complexity and of development &ndash; including the stages themselves.',
+          order: 'Still taking shape: networked, reflexive societies attempting to coordinate across worldviews, and to steer their own cultural, political and technological development in the light of the stages that came before.',
+          subs: [
+            { key: 'cultural-metamodernism', name: 'Cultural', who: 'Dempsey', era: '2023',
+              text: 'Brendan Graham Dempsey reads metamodernism as the cultural logic of cultural logics: a stage that arises once a culture becomes reflexively aware of its own development, and of modernism and postmodernism as stages within it. Drawing on complexity science and developmental psychology, it builds a meta-perspective that integrates the stages before it rather than rejecting them.',
+              source: 'Brendan Graham Dempsey, <em>Metamodernism: Or, the Cultural Logic of Cultural Logics</em> (2023)' },
+            { key: 'political-metamodernism', name: 'Political', who: 'Freinacht', era: '2017&ndash;2019',
+              text: 'Hanzi Freinacht &ndash; the pen name of Daniel G&ouml;rtz and Emil Ejner Friis &ndash; sets out a political metamodernism: a developmental politics that aims to raise the psychological, cultural and institutional development of whole populations. Its vision of a listening society extends the Nordic welfare state to people&rsquo;s inner lives, through new forms of politics &ndash; of democratisation, of gemeinschaft, existential, emancipation and empirical politics, and a politics of theory.',
+              source: 'Hanzi Freinacht, <em>The Listening Society</em> (2017) and <em>Nordic Ideology</em> (2019)' },
+            { key: 'technological-metamodernism', name: 'Technological', who: 'Reid', era: '2024&ndash;',
+              text: 'Stephen Reid applies metamodernism to technology, seeking a position beyond the opposition of techno-optimism and techno-pessimism. Taking the critiques of the techno-sceptics as seriously as the hopes of the accelerationists and longtermists, it asks how technology &ndash; from AI and decentralised governance to tools for inner development &ndash; can be steered toward human and planetary flourishing.',
+              source: 'Stephen Reid, <em>Technological Metamodernism</em> (2024&ndash;)' }
+          ] }
+      ];
+      var STAGE_BY = {};
+      STAGES.forEach(function (g) {
+        STAGE_BY[g.key] = g;
+        (g.subs || []).forEach(function (u) { u.parent = g.key; STAGE_BY[u.key] = u; });
+      });
+      var stgFig = document.querySelector('.stg-fig');
+      function buildStages() {
+        // an Archimedean spiral, r = b&theta;, in a box 1300 by 1000 units;
+        // each stage a little over half a turn further out than the last
+        var W = 1300, H = 1000, cx = W / 2, cy = H / 2 + 10, b = 25.5;
+        var t0 = 1.15 * Math.PI, step = 0.86 * Math.PI, tEnd = t0 + 5 * step + 0.55 * Math.PI;
+        var pt = function (t) { return [cx + b * t * Math.cos(t - Math.PI / 2), cy + b * t * Math.sin(t - Math.PI / 2)]; };
+        var d = '', n = 220;
+        for (var i = 0; i <= n; i++) {
+          var p = pt(0.2 * Math.PI + (tEnd - 0.2 * Math.PI) * i / n);
+          d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+        }
+        // the spiral runs on beyond the latest stage, with an arrowhead
+        var e = pt(tEnd), e0 = pt(tEnd - 0.02), ang = Math.atan2(e[1] - e0[1], e[0] - e0[0]);
+        var head = [ang + 2.6, ang - 2.6].map(function (a) { return (e[0] + 18 * Math.cos(a)).toFixed(1) + ' ' + (e[1] + 18 * Math.sin(a)).toFixed(1); });
+        var html = '<svg class="stg-svg" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true"><path class="stg-spiral" pathLength="1" d="' + d + '"/>' +
+          '<path class="stg-tip" d="M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/></svg>';
+        STAGES.forEach(function (g, k) {
+          var t = t0 + k * step, p = pt(t);
+          // each stage appears as the spiral reaches it (arc length grows as t squared)
+          var delay = 2.4 * Math.pow((t - 0.2 * Math.PI) / (tEnd - 0.2 * Math.PI), 1.6);
+          var side = p[0] < cx ? 'left' : 'right';
+          html += '<div class="stg-node ' + side + '" style="left: ' + (p[0] / W * 100).toFixed(2) + '%; top: ' + (p[1] / H * 100).toFixed(2) + '%; animation-delay: ' + delay.toFixed(2) + 's">' +
+            '<span class="stg-dot"></span><div class="stg-label">' +
+            '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
+            (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + ' <span class="stg-who">(' + u.who + ')</span></span>'; }).join('') +
+            '</div></div>';
+        });
+        stgFig.innerHTML = html;
+        var drawer = document.querySelector('.d-more-stg');
+        drawer._id = 'stg';
+        stgFig.querySelectorAll('.stg-open').forEach(function (el) { opener(el, el.dataset.key, 'stage', drawer); });
+      }
+
       function setSlug() {
         var d = show.split('-');
-        var slug = d[0] + '-' + (count === '8' ? 'eight' : 'four') + '-transitions';
+        var slug = d[0] === 'stages' ? 'stages' : d[0] + '-' + (count === '8' ? 'eight' : 'four') + '-transitions';
         history.replaceState(null, '', '#' + slug);
       }
       function render(rebuild) {
@@ -2753,6 +3087,7 @@
         buildVertical();
         buildSequences();
         buildSelection();
+        if (rebuild !== 'count' || show === 'stages-main') buildStages();
         restoreSelections();
         if (rebuild !== 'count') {
           clearTimeout(defTimer);
@@ -2770,7 +3105,7 @@
 
       var hash = location.hash.slice(1);
       if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
-      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : /selection/.test(hash) ? 'selection' : 'stack') + '-main';
+      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : /stages/.test(hash) ? 'stages' : /selection/.test(hash) ? 'selection' : 'stack') + '-main';
       render();
     })();
 
