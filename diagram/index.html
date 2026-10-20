@@ -759,6 +759,17 @@
       grid-template-columns: 1fr;
     }
 
+    /* in The Stages, the same space either side of the material as above
+       and below it */
+    .d-more-stg .d-more-box {
+      padding: max(36px, calc((100% - 760px) / 4));
+    }
+
+    .d-more-stg .d-more-sec p,
+    .d-more-stg .d-more-wide {
+      max-width: none;
+    }
+
     @media (max-width: 1180px) {
       .stages-view {
         width: auto;
