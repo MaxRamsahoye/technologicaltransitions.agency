@@ -515,8 +515,45 @@
 
     /* the helix rises from the bottom; its far side passes behind each
        stage's disc, fainter, and its near side in front */
-    .stg-svg {
-      animation: stg-rise 2.4s cubic-bezier(0.45, 0, 0.3, 1) both;
+    .stg-back,
+    .stg-front {
+      animation: stg-rise 2s cubic-bezier(0.45, 0, 0.3, 1) 1.4s both;
+    }
+
+    /* the discs slide in one by one from the bottom, as the stack's slabs
+       do, then float gently; the chosen stage's rises a little */
+    .stg-slab {
+      animation: stg-slab-in 1s cubic-bezier(0.22, 1, 0.36, 1) var(--sd) both;
+    }
+
+    .stg-bob {
+      animation: stg-bob 7s ease-in-out calc(1.8s + var(--sb)) infinite;
+    }
+
+    .stg-lift {
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .stg-slab.on .stg-lift {
+      transform: translateY(-10px);
+    }
+
+    @keyframes stg-slab-in {
+      from { transform: translate(var(--sx), -130px); opacity: 0; }
+      to { transform: none; opacity: 1; }
+    }
+
+    @keyframes stg-bob {
+      0%, 100% { transform: translateY(0); }
+      25% { transform: translateY(-3.5px); }
+      75% { transform: translateY(3.5px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .stg-slab,
+      .stg-bob {
+        animation: none;
+      }
     }
 
     .stg-back,
@@ -571,8 +608,9 @@
     }
 
     @keyframes stg-rise {
-      from { clip-path: inset(100% -10% -10% -10%); }
-      to { clip-path: inset(-10% -10% -10% -10%); }
+      from { clip-path: inset(100% -10% -10% -10%); opacity: 0; }
+      6% { opacity: 1; }
+      to { clip-path: inset(-10% -10% -10% -10%); opacity: 1; }
     }
 
     .stg-tip {
@@ -585,7 +623,7 @@
     }
 
     .stg-leads {
-      animation: stg-fade 0.6s ease 2.3s both;
+      animation: stg-fade 0.6s ease 3.3s both;
     }
 
     .stg-leads line {
@@ -2833,8 +2871,7 @@
             '<h3 class="d-more-title">' + g.name + (g.who ? ' <span class="stg-who">(' + g.who + ')</span>' : '') + (g.aka ? ' <span class="stg-who">(' + g.aka + ')</span>' : '') + '</h3>' +
             (g.rise ? '<p class="d-more-desc">' + g.rise + '</p>' : '') +
             '<button type="button" class="d-more-close" aria-label="Close">&times;</button></div>' +
-            '<div class="d-more-body">' + secs + '</div>' +
-            (g.rev ? '<a class="d-more-link" href="../timeline/#' + g.rev + '-revolution">On the Timeline</a>' : '') + '</div>';
+            '<div class="d-more-body">' + secs + '</div></div>';
         }
         if (layer === 'rel') {
           var r = RELATIONS[key];
@@ -3197,21 +3234,20 @@
         // the discs from the bottom up, each higher one over the one below
         var slabs = T.map(function (t, k) {
           var r = disc(t), ry = r * TILT, y = elev(t), id = 'stg-side-' + k;
-          return '<g class="stg-slab" data-i="' + k + '"><defs><linearGradient id="' + id + '"><stop offset="0"/><stop offset="1"/></linearGradient></defs>' +
+          return '<g class="stg-slab" data-i="' + k + '" style="--sd: ' + (k * 0.16).toFixed(2) + 's; --sx: ' + (k % 2 ? 220 : -220) + 'px; --sb: ' + (k * 0.45).toFixed(2) + 's"><g class="stg-bob"><g class="stg-lift"><defs><linearGradient id="' + id + '"><stop offset="0"/><stop offset="1"/></linearGradient></defs>' +
             '<path fill="url(#' + id + ')" d="M' + X(-r) + ' ' + Y(y) + 'V' + Y(y + TH) + 'A' + r.toFixed(1) + ' ' + ry.toFixed(1) + ' 0 0 0 ' + X(r) + ' ' + Y(y + TH) + 'V' + Y(y) + 'Z"/>' +
-            '<ellipse class="stg-top" cx="' + X(0) + '" cy="' + Y(y) + '" rx="' + r.toFixed(1) + '" ry="' + ry.toFixed(1) + '"/></g>';
+            '<ellipse class="stg-top" cx="' + X(0) + '" cy="' + Y(y) + '" rx="' + r.toFixed(1) + '" ry="' + ry.toFixed(1) + '"/></g></g></g>';
         }).join('');
         // the helix runs on above the latest stage, with an arrowhead
         var e = pts[n], e0 = pts[n - 3], ang = Math.atan2(e[1] - e0[1], e[0] - e0[0]);
         var head = [ang + 2.6, ang - 2.6].map(function (a) { return X(e[0] + 14 * Math.cos(a)) + ' ' + Y(e[1] + 14 * Math.sin(a)); });
-        var box = '<svg class="stg-svg" viewBox="0 0 ' + W.toFixed(1) + ' ' + H.toFixed(1) + '" aria-hidden="true"><path class="stg-back" d="' + far + '"/>' + slabs + '<path class="stg-front" d="' + near + '"/>' +
-          '<path class="stg-front" d="M' + head[0] + 'L' + f(e) + 'L' + head[1] + '"/></svg>';
+        var box = '<svg class="stg-svg" viewBox="0 0 ' + W.toFixed(1) + ' ' + H.toFixed(1) + '" aria-hidden="true"><path class="stg-back" d="' + far + '"/>' + slabs + '<path class="stg-front" d="' + near + 'M' + head[0] + 'L' + f(e) + 'L' + head[1] + '"/></svg>';
         var cols = { left: [], right: [] };
         STAGES.forEach(function (g, k) {
           var t = T[k], p = pt(t);
           // each stage appears as the rising helix reaches it
           var fx = (p[0] - x0) / W, fy = (p[1] - y0) / H;
-          var delay = (2.4 * Math.min(1, (1 - fy) * 1.05)).toFixed(2) + 's';
+          var delay = (1.4 + 2 * Math.min(1, (1 - fy) * 1.05)).toFixed(2) + 's';
           box += '<span class="stg-dot" data-i="' + k + '" style="left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
           cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="order: ' + k + '; animation-delay: ' + delay + '">' +
             '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
