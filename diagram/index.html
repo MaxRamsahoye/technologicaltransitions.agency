@@ -681,6 +681,11 @@
       padding-left: 36px;
     }
 
+    /* nothing to choose until the run through the stages has played */
+    .stg-fig:not(.ready) .stg-label {
+      pointer-events: none;
+    }
+
     .stg-open {
       display: block;
       cursor: pointer;
@@ -2914,7 +2919,6 @@
         if (view === 'structures' && !SEL.tech && !SEL.economy && !SEL.culture) SEL.culture = first;
         if (view === 'selection' && !SEL.sel) SEL.sel = [first, 'selrow'];
         if (view === 'sequences' && !SEL.seq) SEL.seq = [first, 'seqrow'];
-        if (view === 'stages' && !SEL.stg) SEL.stg = [STAGES[0].key, 'stage'];
         restoreSelections();
       }
       // rows whose boxes are selected together
@@ -3261,6 +3265,7 @@
         var drawer = document.querySelector('.d-more-stg');
         drawer._id = 'stg';
         stgFig.querySelectorAll('.stg-open').forEach(function (el) { opener(el, el.dataset.key, 'stage', drawer); });
+        playStages();
         // a stage's point on the spiral, and its line, light with its label
         stgFig.querySelectorAll('.stg-label').forEach(function (l) {
           var dot = stgFig.querySelector('.stg-dot[data-i="' + l.dataset.i + '"]');
@@ -3274,6 +3279,26 @@
             if (ln) ln.classList.toggle('on', on);
           }).observe(l, { subtree: true, attributes: true, attributeFilter: ['class'] });
         });
+      }
+      // as the stack does: once the discs are in and the helix has risen,
+      // each stage opens in turn from the bottom to the top, and then the
+      // first stays open; the reader can choose only once it has played
+      var stgTimers = [];
+      function stgLater(fn, ms) { stgTimers.push(setTimeout(fn, ms)); }
+      function playStages() {
+        stgTimers.forEach(clearTimeout); stgTimers = [];
+        stgFig.classList.remove('ready');
+        if (show !== 'stages-main') { stgFig.classList.add('ready'); return; }
+        var names = STAGES.map(function (g) { return stgFig.querySelector('.stg-name[data-key="' + g.key + '"]'); });
+        var drawer = document.querySelector('.d-more-stg');
+        var point = function (i) {
+          if (drawer._cell !== names[i]) openMore(names[i], true);
+          if (window.ttNodeSound) window.ttNodeSound(i);
+        };
+        STAGES.forEach(function (g, i) { stgLater(function () { if (window.ttNodeSound) window.ttNodeSound(i); }, i * 160 + 550); });
+        var start = 4000;
+        STAGES.forEach(function (g, i) { stgLater(function () { point(i); }, start + i * 1300); });
+        stgLater(function () { point(0); stgFig.classList.add('ready'); }, start + STAGES.length * 1300 + 300);
       }
       // each column's labels sit level with their points where they can,
       // pushed apart where they would overlap, and joined to them by a line
