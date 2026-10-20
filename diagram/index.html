@@ -35,7 +35,7 @@
       if (band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
-  <title>The Civilisational Stack — Technological Transitions</title>
+  <title>Diagrams — Technological Transitions</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Technological Transitions">
   <meta property="og:title" content="The Civilisational Stack — Technological Transitions">
@@ -277,6 +277,124 @@
 
     body[data-show="structures-main"] .structures-alt {
       margin-top: 120px;
+    }
+
+    /* All Diagrams: a card for each diagram, with a small drawing of it */
+    .overview-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+    }
+
+    body[data-show="overview-main"] .overview-view {
+      display: block;
+    }
+
+    body[data-show="overview-main"] .view-tabs [aria-label="Transitions shown"] {
+      display: none;
+    }
+
+    .ov-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 32px;
+      animation: view-in 0.4s ease;
+    }
+
+    .ov-card {
+      display: flex;
+      flex-direction: column;
+      padding: 26px 26px 28px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      background: none;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ov-card:hover,
+    .ov-card:focus-visible {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      outline: none;
+    }
+
+    .ov-thumb {
+      display: block;
+      width: 100%;
+      height: 170px;
+      margin-bottom: 24px;
+      --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
+      --right: var(--band-bg);
+    }
+
+    .ov-thumb .t { fill: var(--top); }
+    .ov-thumb .l { fill: var(--left); }
+    .ov-thumb .r { fill: var(--right); }
+
+    .ov-thumb .ln {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 55%, transparent);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ov-thumb .bx {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      stroke-width: 1.4;
+    }
+
+    .ov-thumb .bx.on {
+      stroke: var(--link-blue);
+      fill: color-mix(in srgb, var(--link-blue) 10%, transparent);
+    }
+
+    .ov-kicker {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .ov-title {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .ov-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1180px) {
+      .overview-view {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 1000px) {
+      .ov-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .ov-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* The Selection Process: Dafoe on selectionism beneath the description,
@@ -1497,13 +1615,13 @@
     }
 
     /* a little darker than the sepia band, a little lighter than the blue */
-    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) .st-stack {
+    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) :is(.st-stack, .ov-thumb) {
       --top: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 8%);
       --left: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 16%);
       --right: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 24%);
     }
 
-    html.band-midnight:not([data-theme="dark"]) .st-stack {
+    html.band-midnight:not([data-theme="dark"]) :is(.st-stack, .ov-thumb) {
       /* lighter shades of the band's own blue, rather than mixes with
          white, which turn grey */
       --top: #3d4b94;
@@ -1511,7 +1629,7 @@
       --right: #1a2455;
     }
 
-    html[data-theme="dark"] .st-stack {
+    html[data-theme="dark"] :is(.st-stack, .ov-thumb) {
       --top: color-mix(in srgb, var(--canvas-ink) 80%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--canvas-ink) 48%, var(--canvas-bg));
       --right: color-mix(in srgb, var(--canvas-ink) 30%, var(--canvas-bg));
@@ -2277,15 +2395,18 @@
 
   <main class="page-main">
     <div class="diagram-top wide-top">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">The Civilisational Stack</a></h1>
-    <p class="diagram-desc">Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.</p>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Diagrams</a></h1>
+    <p class="diagram-desc">Five ways of seeing the major technological transitions: the stack of technologies each laid down, the structures it remade, the constraints it lifted, the selection that spread it, and the stages of worldview that rose with it.</p>
     <blockquote class="diagram-quote">
       <p>The claim that competition is the mechanism for technological determinism is a special case of the theory of selectionism (also called Universal Darwinism). Selectionism generalizes the mechanism at the heart of evolutionary biology: variation and differential proliferation. In a population of varied forms, if some forms proliferate (reproduce, survive, grow) because of some characteristic, then that characteristic will be more abundant in future populations. Over time, these forms, called organisms in evolutionary biology and interactors more generally, will fit better with&mdash;will appear as if designed for&mdash;the criterion that determines superior proliferation (the &ldquo;selection environment&rdquo;).</p>
       <cite>Allan Dafoe, <a href="../sources/#dafoe">On Technological Determinism</a> (2015)</cite>
     </blockquote>
     <div class="view-tabs" aria-label="Diagrams">
+      <div class="tab-group" role="tablist" aria-label="All Diagrams">
+        <button type="button" role="tab" aria-selected="true" data-show="overview-main">All Diagrams</button>
+      </div>
       <div class="tab-group" role="tablist" aria-label="The Civilisational Stack">
-        <button type="button" role="tab" aria-selected="true" data-show="stack-main">The Stack</button>
+        <button type="button" role="tab" aria-selected="false" data-show="stack-main">The Stack</button>
       </div>
       <div class="tab-group" role="tablist" aria-label="The Structures">
         <button type="button" role="tab" aria-selected="false" data-show="structures-main">The Structures</button>
@@ -2305,6 +2426,8 @@
       </div>
     </div>
     </div>
+
+    <section class="overview-view" aria-label="All Diagrams"><div class="ov-grid"></div></section>
 
     <section class="stack-view" aria-label="The Civilisational Stack">
       <div class="stack-layout">
@@ -2459,6 +2582,10 @@
         { key: 'culture', name: 'Superstructure', aka: 'Cultural Psychology', def: 'The shared values, beliefs, religion and inner life of a society, which rest on its infrastructure and structure, adapt as they change, and in turn legitimise or resist them.' }
       ];
       var TEXT = {
+        overview: {
+          title: 'Diagrams',
+          desc: 'Five ways of seeing the major technological transitions: the stack of technologies each laid down, the structures it remade, the constraints it lifted, the selection that spread it, and the stages of worldview that rose with it.'
+        },
         stack: {
           title: 'The Civilisational Stack',
           desc: 'Every civilisation stands on a stack of technologies, economics and culture. Each new tech layer &ndash; from abstract thought to artificial intelligence &ndash; gave the groups that adopted it a decisive advantage, spread across civilisation through competitive pressures, and reshaped the political economy and cultural psychology built upon it. The stack is cumulative: no layer is ever removed, and the newest is being laid now.'
@@ -3385,8 +3512,67 @@
       }
       window.addEventListener('resize', function () { if (show === 'stages-main') layoutStages(); });
 
+      // All Diagrams: a card for each, with a small drawing of it, opening it
+      var OVERVIEW = [
+        ['stack', 'The Stack', 'The Civilisational Stack', 'Each revolution a new layer of the civilisational tech stack, from abstract thought to artificial intelligence, and what it brought.'],
+        ['structures', 'The Structures', 'The Structures', 'Infrastructure, social structure and superstructure: how each transition remade all three, and how each acts on the others.'],
+        ['sequences', 'The Sequences', 'The Sequences', 'The constraints each way of life imposed, and the affordances each new technology stack opened to overcome them.'],
+        ['selection', 'The Selections', 'The Selection Process', 'For each transition, the new forms it produced, the selection pressures that favoured them, and how they proliferated.'],
+        ['stages', 'The Stages', 'The Stages', 'The stages of cultural worldview, from primitivism to metamodernism, rising one above another.']
+      ];
+      // an isometric slab, centred at (x, y), w across and h thick
+      function ovSlab(x, y, w, h) {
+        var q = w / 2, d = w / 4, P = function (a) { return a.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); };
+        return '<polygon class="l" points="' + P([[x - q, y], [x, y + d], [x, y + d + h], [x - q, y + h]]) + '"/>' +
+          '<polygon class="r" points="' + P([[x, y + d], [x + q, y], [x + q, y + h], [x, y + d + h]]) + '"/>' +
+          '<polygon class="t" points="' + P([[x, y - d], [x + q, y], [x, y + d], [x - q, y]]) + '"/>';
+      }
+      function ovThumb(key) {
+        var g = '';
+        if (key === 'stack') [[130, 128, 13], [116, 94, 13], [100, 64, 13], [84, 38, 13]].forEach(function (s) { g += ovSlab(150, s[1], s[0], s[2]); });
+        if (key === 'structures') [[136, 122], [136, 84], [136, 46]].forEach(function (s) { g += ovSlab(150, s[1], s[0], 13); });
+        if (key === 'sequences') [32, 76, 120].forEach(function (y, i) {
+          g += '<rect class="bx' + (i === 0 ? ' on' : '') + '" x="40" y="' + y + '" width="86" height="30"/><rect class="bx' + (i === 0 ? ' on' : '') + '" x="174" y="' + y + '" width="86" height="30"/>' +
+            '<path class="ln" d="M134 ' + (y + 15) + 'H166M160 ' + (y + 10) + 'L166 ' + (y + 15) + 'L160 ' + (y + 20) + '"/>';
+        });
+        if (key === 'selection') [32, 76, 120].forEach(function (y, i) {
+          [24, 112, 200].forEach(function (x, j) {
+            g += '<rect class="bx' + (i === 0 ? ' on' : '') + '" x="' + x + '" y="' + y + '" width="72" height="30"/>';
+            if (j < 2) g += '<path class="ln" d="M' + (x + 76) + ' ' + (y + 15) + 'H' + (x + 84) + 'M' + (x + 80) + ' ' + (y + 11) + 'L' + (x + 84) + ' ' + (y + 15) + 'L' + (x + 80) + ' ' + (y + 19) + '"/>';
+          });
+        });
+        if (key === 'stages') {
+          // the helix coiled around the discs, its far side behind them
+          var near = '', far = '', prev = null;
+          for (var i = 0; i <= 160; i++) {
+            var t = Math.PI / 2 - 0.4 + i / 160 * (5 * Math.PI + 0.8), k = (t - Math.PI / 2) / Math.PI, r = 56 + 2 * k;
+            var pt = [150 + r * Math.sin(t), 150 - k * 22 + r * Math.cos(t) * 0.3], front = Math.cos(t) > 0;
+            var seg = (prev && prev[2] === front ? 'L' : 'M' + (prev ? prev[0].toFixed(1) + ' ' + prev[1].toFixed(1) + 'L' : '')) + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1);
+            if (front) near += seg; else far += seg;
+            prev = [pt[0], pt[1], front];
+          }
+          g += '<path class="ln" opacity="0.4" d="' + far + '"/>';
+          STAGE_COLOURS.forEach(function (c, k) {
+            var y = 150 - k * 22, rx = 42 + 2 * k, ry = rx * 0.3;
+            g += '<path fill="color-mix(in srgb, ' + c + ' 62%, #000)" d="M' + (150 - rx) + ' ' + y + 'v6a' + rx + ' ' + ry + ' 0 0 0 ' + 2 * rx + ' 0v-6z"/>' +
+              '<ellipse fill="color-mix(in srgb, ' + c + ' 82%, #fff)" cx="150" cy="' + y + '" rx="' + rx + '" ry="' + ry.toFixed(1) + '"/>';
+          });
+          g += '<path class="ln" d="' + near + '"/>';
+        }
+        return '<svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">' + g + '</svg>';
+      }
+      var ovGrid = document.querySelector('.ov-grid');
+      ovGrid.innerHTML = OVERVIEW.map(function (o, i) {
+        return '<button type="button" class="ov-card" data-go="' + o[0] + '-main">' + ovThumb(o[0]) +
+          '<p class="ov-kicker">Diagram ' + (i + 1) + '</p><h2 class="ov-title">' + o[2] + '</h2><p class="ov-desc">' + o[3] + '</p></button>';
+      }).join('');
+      ovGrid.querySelectorAll('.ov-card').forEach(function (c) {
+        c.addEventListener('click', function () { show = c.dataset.go; render(); window.scrollTo({ top: 0 }); });
+      });
+
       function setSlug() {
         var d = show.split('-');
+        if (d[0] === 'overview') { history.replaceState(null, '', location.pathname); return; }
         var slug = d[0] === 'stages' ? 'stages' : d[0] + '-' + (count === '8' ? 'eight' : 'four') + '-transitions';
         history.replaceState(null, '', '#' + slug);
       }
@@ -3396,6 +3582,7 @@
         viewBtns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.show === show ? 'true' : 'false'); });
         countBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.count === count ? 'true' : 'false'); });
         titleLink.textContent = TEXT[d].title;
+        document.title = TEXT[d].title + ' \u2014 Technological Transitions';
         desc.innerHTML = TEXT[d].desc;
         diagram.classList.toggle('all', count === '8');
         diagram.parentNode.classList.toggle('all', count === '8');
@@ -3429,7 +3616,7 @@
 
       var hash = location.hash.slice(1);
       if (/eight|(^|-)8($|-)/.test(hash)) count = '8';
-      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : /stages/.test(hash) ? 'stages' : /selection/.test(hash) ? 'selection' : 'stack') + '-main';
+      show = (/structures/.test(hash) ? 'structures' : /sequences/.test(hash) ? 'sequences' : /stages/.test(hash) ? 'stages' : /selection/.test(hash) ? 'selection' : /stack/.test(hash) ? 'stack' : 'overview') + '-main';
       render();
     })();
 
