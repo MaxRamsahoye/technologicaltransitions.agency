@@ -687,8 +687,18 @@
       padding-left: 36px;
     }
 
+    /* a stage's point and disc open it too */
+    .stg-dot,
+    .stg-slab {
+      cursor: pointer;
+    }
+
+    .stg-slab {
+      pointer-events: auto;
+    }
+
     /* nothing to choose until the run through the stages has played */
-    .stg-fig:not(.ready) .stg-label {
+    .stg-fig:not(.ready) :is(.stg-label, .stg-dot, .stg-slab) {
       pointer-events: none;
     }
 
@@ -740,6 +750,7 @@
     }
 
     .stg-open:hover,
+    .stg-name.hover,
     .stg-open:focus-visible,
     .stg-open.open,
     .stg-open.open .stg-who {
@@ -3278,11 +3289,17 @@
         drawer._id = 'stg';
         stgFig.querySelectorAll('.stg-open').forEach(function (el) { opener(el, el.dataset.key, 'stage', drawer); });
         playStages();
-        // a stage's point on the spiral, and its line, light with its label
+        // a stage's point on the spiral, and its line, light with its label;
+        // its point and its disc open it as its name does
         stgFig.querySelectorAll('.stg-label').forEach(function (l) {
           var dot = stgFig.querySelector('.stg-dot[data-i="' + l.dataset.i + '"]');
-          l.addEventListener('mouseover', function () { dot.classList.add('hover'); });
-          l.addEventListener('mouseout', function () { dot.classList.remove('hover'); });
+          var slab = stgFig.querySelector('.stg-slab[data-i="' + l.dataset.i + '"]');
+          var name = l.querySelector('.stg-name');
+          [l, dot, slab].forEach(function (el) {
+            el.addEventListener('mouseover', function () { dot.classList.add('hover'); name.classList.add('hover'); });
+            el.addEventListener('mouseout', function () { dot.classList.remove('hover'); name.classList.remove('hover'); });
+          });
+          [dot, slab].forEach(function (el) { el.addEventListener('click', function () { openMore(name); }); });
           new MutationObserver(function () {
             var on = !!l.querySelector('.stg-open.open');
             dot.classList.toggle('on', on);
