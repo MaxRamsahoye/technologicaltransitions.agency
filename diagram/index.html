@@ -535,7 +535,7 @@
     }
 
     .stg-slab.on .stg-lift {
-      transform: translateY(-10px);
+      transform: translateY(-14px);
     }
 
     @keyframes stg-slab-in {
@@ -574,22 +574,19 @@
 
     /* each stage a disc, like a slab of the stack: its top, and its side
        shaded from left to right; the chosen stage's turns the blue accent */
+    /* each stage in its colour of the Integral and Spiral Dynamics
+       stages, shaded as the stack's slabs are: a lighter top, and its side
+       from the colour itself to a darker shade; the chosen stage's top
+       brightens as it rises */
     .stg-slab {
-      --s-top: var(--top);
-      --s-left: var(--left);
-      --s-right: var(--right);
+      --s-top: color-mix(in srgb, var(--c) 82%, #ffffff);
+      --s-left: var(--c);
+      --s-right: color-mix(in srgb, var(--c) 62%, #000000);
     }
 
     .stg-slab.on {
-      --s-top: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
-      --s-left: color-mix(in srgb, var(--link-blue) 75%, var(--canvas-bg));
-      --s-right: var(--link-blue);
-    }
-
-    html[data-theme="dark"] .stg-slab.on {
-      --s-top: var(--link-blue);
-      --s-left: color-mix(in srgb, var(--link-blue) 62%, var(--canvas-bg));
-      --s-right: color-mix(in srgb, var(--link-blue) 38%, var(--canvas-bg));
+      --s-top: color-mix(in srgb, var(--c) 58%, #ffffff);
+      --s-left: color-mix(in srgb, var(--c) 85%, #ffffff);
     }
 
     .stg-slab .stg-top {
@@ -1479,21 +1476,14 @@
       --right: var(--band-bg);
     }
 
-    /* The Stages' discs take the same colours as the stack's slabs */
-    .stg-fig {
-      --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
-      --left: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
-      --right: var(--band-bg);
-    }
-
     /* a little darker than the sepia band, a little lighter than the blue */
-    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) :is(.st-stack, .stg-fig) {
+    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) .st-stack {
       --top: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 8%);
       --left: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 16%);
       --right: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 24%);
     }
 
-    html.band-midnight:not([data-theme="dark"]) :is(.st-stack, .stg-fig) {
+    html.band-midnight:not([data-theme="dark"]) .st-stack {
       /* lighter shades of the band's own blue, rather than mixes with
          white, which turn grey */
       --top: #3d4b94;
@@ -1501,7 +1491,7 @@
       --right: #1a2455;
     }
 
-    html[data-theme="dark"] :is(.st-stack, .stg-fig) {
+    html[data-theme="dark"] .st-stack {
       --top: color-mix(in srgb, var(--canvas-ink) 80%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--canvas-ink) 48%, var(--canvas-bg));
       --right: color-mix(in srgb, var(--canvas-ink) 30%, var(--canvas-bg));
@@ -3205,6 +3195,9 @@
               source: 'Stephen Reid, <em>Technological Metamodernism</em> (2024&ndash;)' }
           ] }
       ];
+      // the colours of the Integral and Spiral Dynamics stages: magenta,
+      // red, amber, orange, green and teal
+      var STAGE_COLOURS = ['#7a3e78', '#a3473a', '#b8862f', '#c96a2b', '#4e8a5a', '#2f8a8f'];
       var STAGE_BY = {};
       STAGES.forEach(function (g) {
         STAGE_BY[g.key] = g;
@@ -3247,7 +3240,7 @@
         // the discs from the bottom up, each higher one over the one below
         var slabs = T.map(function (t, k) {
           var r = disc(t), ry = r * TILT, y = elev(t), id = 'stg-side-' + k;
-          return '<g class="stg-slab" data-i="' + k + '" style="--sd: ' + (k * 0.16).toFixed(2) + 's; --sx: ' + (k % 2 ? 220 : -220) + 'px; --sb: ' + (k * 0.45).toFixed(2) + 's"><g class="stg-bob"><g class="stg-lift"><defs><linearGradient id="' + id + '"><stop offset="0"/><stop offset="1"/></linearGradient></defs>' +
+          return '<g class="stg-slab" data-i="' + k + '" style="--c: ' + STAGE_COLOURS[k] + '; --sd: ' + (k * 0.16).toFixed(2) + 's; --sx: ' + (k % 2 ? 220 : -220) + 'px; --sb: ' + (k * 0.45).toFixed(2) + 's"><g class="stg-bob"><g class="stg-lift"><defs><linearGradient id="' + id + '"><stop offset="0"/><stop offset="1"/></linearGradient></defs>' +
             '<path fill="url(#' + id + ')" d="M' + X(-r) + ' ' + Y(y) + 'V' + Y(y + TH) + 'A' + r.toFixed(1) + ' ' + ry.toFixed(1) + ' 0 0 0 ' + X(r) + ' ' + Y(y + TH) + 'V' + Y(y) + 'Z"/>' +
             '<ellipse class="stg-top" cx="' + X(0) + '" cy="' + Y(y) + '" rx="' + r.toFixed(1) + '" ry="' + ry.toFixed(1) + '"/></g></g></g>';
         }).join('');
