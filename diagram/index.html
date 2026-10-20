@@ -501,7 +501,6 @@
 
     .stg-box {
       position: relative;
-      aspect-ratio: 1;
     }
 
     .stg-svg,
@@ -514,13 +513,66 @@
       pointer-events: none;
     }
 
-    .stg-spiral {
+    /* the helix rises from the bottom; its far side passes behind each
+       stage's disc, fainter, and its near side in front */
+    .stg-svg {
+      animation: stg-rise 2.4s cubic-bezier(0.45, 0, 0.3, 1) both;
+    }
+
+    .stg-back,
+    .stg-front {
       fill: none;
-      stroke: color-mix(in srgb, currentColor 40%, transparent);
-      stroke-width: 1.5;
       stroke-linecap: round;
-      stroke-dasharray: 1;
-      animation: stg-draw 2.4s cubic-bezier(0.45, 0, 0.3, 1) both;
+    }
+
+    .stg-back {
+      stroke: color-mix(in srgb, currentColor 18%, transparent);
+      stroke-width: 1.2;
+    }
+
+    .stg-front {
+      stroke: color-mix(in srgb, currentColor 55%, transparent);
+      stroke-width: 1.6;
+    }
+
+    /* each stage a disc, like a slab of the stack: its top, and its side
+       shaded from left to right; the chosen stage's turns the blue accent */
+    .stg-slab {
+      --s-top: var(--top);
+      --s-left: var(--left);
+      --s-right: var(--right);
+    }
+
+    .stg-slab.on {
+      --s-top: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
+      --s-left: color-mix(in srgb, var(--link-blue) 75%, var(--canvas-bg));
+      --s-right: var(--link-blue);
+    }
+
+    html[data-theme="dark"] .stg-slab.on {
+      --s-top: var(--link-blue);
+      --s-left: color-mix(in srgb, var(--link-blue) 62%, var(--canvas-bg));
+      --s-right: color-mix(in srgb, var(--link-blue) 38%, var(--canvas-bg));
+    }
+
+    .stg-slab .stg-top {
+      fill: var(--s-top);
+      transition: fill 0.3s ease;
+    }
+
+    .stg-slab stop:first-child {
+      stop-color: var(--s-left);
+      transition: stop-color 0.3s ease;
+    }
+
+    .stg-slab stop:last-child {
+      stop-color: var(--s-right);
+      transition: stop-color 0.3s ease;
+    }
+
+    @keyframes stg-rise {
+      from { clip-path: inset(100% -10% -10% -10%); }
+      to { clip-path: inset(-10% -10% -10% -10%); }
     }
 
     .stg-tip {
@@ -546,11 +598,6 @@
     .stg-leads line.on {
       stroke: var(--link-blue);
       stroke-dasharray: none;
-    }
-
-    @keyframes stg-draw {
-      from { stroke-dashoffset: 1; }
-      to { stroke-dashoffset: 0; }
     }
 
     @keyframes stg-fade {
@@ -1376,14 +1423,21 @@
       --right: var(--band-bg);
     }
 
+    /* The Stages' discs take the same colours as the stack's slabs */
+    .stg-fig {
+      --top: color-mix(in srgb, var(--band-bg) 72%, var(--canvas-bg));
+      --left: color-mix(in srgb, var(--band-bg) 88%, var(--canvas-bg));
+      --right: var(--band-bg);
+    }
+
     /* a little darker than the sepia band, a little lighter than the blue */
-    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) .st-stack {
+    html:not(.band-midnight):not(.band-black):not([data-theme="dark"]) :is(.st-stack, .stg-fig) {
       --top: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 8%);
       --left: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 16%);
       --right: color-mix(in srgb, var(--band-bg), var(--canvas-ink) 24%);
     }
 
-    html.band-midnight:not([data-theme="dark"]) .st-stack {
+    html.band-midnight:not([data-theme="dark"]) :is(.st-stack, .stg-fig) {
       /* lighter shades of the band's own blue, rather than mixes with
          white, which turn grey */
       --top: #3d4b94;
@@ -1391,7 +1445,7 @@
       --right: #1a2455;
     }
 
-    html[data-theme="dark"] .st-stack {
+    html[data-theme="dark"] :is(.st-stack, .stg-fig) {
       --top: color-mix(in srgb, var(--canvas-ink) 80%, var(--canvas-bg));
       --left: color-mix(in srgb, var(--canvas-ink) 48%, var(--canvas-bg));
       --right: color-mix(in srgb, var(--canvas-ink) 30%, var(--canvas-bg));
@@ -3104,37 +3158,57 @@
       });
       var stgFig = document.querySelector('.stg-fig');
       function buildStages() {
-        // an Archimedean spiral, r = b&theta;, the stages placed on it in
-        // turn on alternate sides, each side's descending in order, so that
-        // no line from a label crosses another stage's point
-        var T = [0.4, 1.85, 2.65, 3.35, 4.8, 5.15].map(function (x) { return x * Math.PI; });
-        var b = 25.5, tEnd = 5.5 * Math.PI, tStart = 0.15 * Math.PI;
-        var pt = function (t) { return [b * t * Math.cos(t - Math.PI / 2), b * t * Math.sin(t - Math.PI / 2)]; };
-        var pts = [], n = 220;
-        for (var i = 0; i <= n; i++) pts.push(pt(tStart + (tEnd - tStart) * i / n));
+        // the stages as discs stacked like the slabs of the stack, seen
+        // from a little above, widening a little as they rise, with a helix
+        // coiled just outside them: each stage half a turn above the last,
+        // on alternate sides, its far side passing behind the discs
+        var TILT = 0.3, TH = 16, RISE = 28, tS = 0.5 * Math.PI - 0.7, tE = 5.5 * Math.PI + 0.55;
+        var T = [0, 1, 2, 3, 4, 5].map(function (k) { return 0.5 * Math.PI + k * Math.PI; });
+        var disc = function (t) { return 128 + 3.2 * (t - T[0]); };
+        var rad = function (t) { return disc(t) + 16; };
+        var elev = function (t) { return -RISE * (t - T[0]); };
+        var pt = function (t) { var r = rad(t); return [r * Math.sin(t), elev(t) + r * Math.cos(t) * TILT, Math.cos(t) > 0]; };
+        var pts = [], n = 480;
+        for (var i = 0; i <= n; i++) pts.push(pt(tS + (tE - tS) * i / n));
         var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
-        var x0 = Math.min.apply(null, xs) - 20, y0 = Math.min.apply(null, ys) - 20;
-        var S = Math.max(Math.max.apply(null, xs) + 20 - x0, Math.max.apply(null, ys) + 20 - y0);
-        var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + (p[0] - x0).toFixed(1) + ' ' + (p[1] - y0).toFixed(1); }).join('');
-        // the spiral runs on beyond the latest stage, with an arrowhead
-        var e = pt(tEnd), e0 = pt(tEnd - 0.02), ang = Math.atan2(e[1] - e0[1], e[0] - e0[0]);
-        var head = [ang + 2.6, ang - 2.6].map(function (a) { return (e[0] - x0 + 18 * Math.cos(a)).toFixed(1) + ' ' + (e[1] - y0 + 18 * Math.sin(a)).toFixed(1); });
-        var box = '<svg class="stg-svg" viewBox="0 0 ' + S.toFixed(1) + ' ' + S.toFixed(1) + '" aria-hidden="true"><path class="stg-spiral" pathLength="1" d="' + d + '"/>' +
-          '<path class="stg-tip" d="M' + head[0] + 'L' + (e[0] - x0).toFixed(1) + ' ' + (e[1] - y0).toFixed(1) + 'L' + head[1] + '"/></svg>';
+        T.forEach(function (t) { var r = disc(t), y = elev(t); xs.push(-r, r); ys.push(y - r * TILT, y + r * TILT + TH); });
+        var x0 = Math.min.apply(null, xs) - 20, y0 = Math.min.apply(null, ys) - 24;
+        var W = Math.max.apply(null, xs) + 20 - x0, H = Math.max.apply(null, ys) + 20 - y0;
+        var X = function (x) { return (x - x0).toFixed(1); }, Y = function (y) { return (y - y0).toFixed(1); };
+        var f = function (p) { return X(p[0]) + ' ' + Y(p[1]); };
+        // the near and far runs of the helix, drawn apart
+        var near = '', far = '';
+        pts.forEach(function (p, i) {
+          var cont = i && pts[i - 1][2] === p[2];
+          var seg = (cont ? 'L' : 'M' + (i ? f(pts[i - 1]) + 'L' : '')) + f(p);
+          if (p[2]) near += seg; else far += seg;
+        });
+        // the discs from the bottom up, each higher one over the one below
+        var slabs = T.map(function (t, k) {
+          var r = disc(t), ry = r * TILT, y = elev(t), id = 'stg-side-' + k;
+          return '<g class="stg-slab" data-i="' + k + '"><defs><linearGradient id="' + id + '"><stop offset="0"/><stop offset="1"/></linearGradient></defs>' +
+            '<path fill="url(#' + id + ')" d="M' + X(-r) + ' ' + Y(y) + 'V' + Y(y + TH) + 'A' + r.toFixed(1) + ' ' + ry.toFixed(1) + ' 0 0 0 ' + X(r) + ' ' + Y(y + TH) + 'V' + Y(y) + 'Z"/>' +
+            '<ellipse class="stg-top" cx="' + X(0) + '" cy="' + Y(y) + '" rx="' + r.toFixed(1) + '" ry="' + ry.toFixed(1) + '"/></g>';
+        }).join('');
+        // the helix runs on above the latest stage, with an arrowhead
+        var e = pts[n], e0 = pts[n - 3], ang = Math.atan2(e[1] - e0[1], e[0] - e0[0]);
+        var head = [ang + 2.6, ang - 2.6].map(function (a) { return X(e[0] + 14 * Math.cos(a)) + ' ' + Y(e[1] + 14 * Math.sin(a)); });
+        var box = '<svg class="stg-svg" viewBox="0 0 ' + W.toFixed(1) + ' ' + H.toFixed(1) + '" aria-hidden="true"><path class="stg-back" d="' + far + '"/>' + slabs + '<path class="stg-front" d="' + near + '"/>' +
+          '<path class="stg-front" d="M' + head[0] + 'L' + f(e) + 'L' + head[1] + '"/></svg>';
         var cols = { left: [], right: [] };
         STAGES.forEach(function (g, k) {
           var t = T[k], p = pt(t);
-          // each stage appears as the spiral reaches it (arc length grows as t squared)
-          var delay = (2.4 * Math.pow((t - tStart) / (tEnd - tStart), 1.6)).toFixed(2) + 's';
-          var fx = (p[0] - x0) / S, fy = (p[1] - y0) / S;
+          // each stage appears as the rising helix reaches it
+          var fx = (p[0] - x0) / W, fy = (p[1] - y0) / H;
+          var delay = (2.4 * Math.min(1, (1 - fy) * 1.05)).toFixed(2) + 's';
           box += '<span class="stg-dot" data-i="' + k + '" style="left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
           cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="order: ' + k + '; animation-delay: ' + delay + '">' +
             '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
             (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + (u.who ? ' <span class="stg-who">(' + u.who + ')</span>' : '') + '</span>'; }).join('') +
             '</div>' });
         });
-        var col = function (side) { return '<div class="stg-col ' + side + '">' + cols[side].sort(function (a, c) { return a.k - c.k; }).map(function (c) { return c.html; }).join('') + '</div>'; };
-        stgFig.innerHTML = col('left') + '<div class="stg-box">' + box + '</div>' + col('right') + '<svg class="stg-leads" aria-hidden="true"></svg>';
+        var col = function (side) { return '<div class="stg-col ' + side + '">' + cols[side].sort(function (a, c) { return a.fy - c.fy; }).map(function (c) { return c.html; }).join('') + '</div>'; };
+        stgFig.innerHTML = col('left') + '<div class="stg-box" style="aspect-ratio: ' + (W / H).toFixed(3) + '">' + box + '</div>' + col('right') + '<svg class="stg-leads" aria-hidden="true"></svg>';
         stgFig._cols = cols;
         layoutStages();
         var drawer = document.querySelector('.d-more-stg');
@@ -3148,6 +3222,7 @@
           new MutationObserver(function () {
             var on = !!l.querySelector('.stg-open.open');
             dot.classList.toggle('on', on);
+            stgFig.querySelector('.stg-slab[data-i="' + l.dataset.i + '"]').classList.toggle('on', on);
             var ln = stgFig.querySelector('.stg-leads line[data-i="' + l.dataset.i + '"]');
             if (ln) ln.classList.toggle('on', on);
           }).observe(l, { subtree: true, attributes: true, attributeFilter: ['class'] });
