@@ -794,10 +794,18 @@
       animation: stg-fade 0.5s ease both;
     }
 
+    /* on the left, the names sit against the line to the helix, and the
+       forms below them are listed from the left as they are on the right */
     .stg-col.left .stg-label {
       right: 0;
+      width: max-content;
+      max-width: 100%;
       padding-right: 36px;
       text-align: right;
+    }
+
+    .stg-col.left .stg-sub {
+      text-align: left;
     }
 
     .stg-col.right .stg-label {
@@ -848,19 +856,14 @@
       line-height: 1.3;
     }
 
-    .stg-col.right .stg-sub::before,
-    .stg-col.left .stg-sub::after {
+    .stg-sub::before {
       content: '\25CB';
       font-size: 0.7em;
       vertical-align: 0.12em;
     }
 
-    .stg-col.right .stg-sub::before {
+    .stg-sub::before {
       margin-right: 8px;
-    }
-
-    .stg-col.left .stg-sub::after {
-      margin-left: 8px;
     }
 
     .stg-who {
@@ -919,16 +922,6 @@
         background: var(--sc);
       }
 
-      .stg-col.left .stg-sub::after {
-        content: none;
-      }
-
-      .stg-col.left .stg-sub::before {
-        content: '\25CB';
-        margin-right: 8px;
-        font-size: 0.7em;
-        vertical-align: 0.12em;
-      }
     }
 
     .d-more-stg .d-more-box {
