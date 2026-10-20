@@ -487,6 +487,15 @@
 
     /* the spiral in the middle; the stages, with their forms, in a column
        either side, each joined to its point on the spiral by a thin line */
+    /* each stage's selection in its own colour, a little deeper for text */
+    .stg-fig {
+      --sc: var(--link-blue);
+    }
+
+    .stg-label {
+      --sc-ink: color-mix(in srgb, var(--sc) 82%, #000000);
+    }
+
     .stg-fig {
       position: relative;
       display: grid;
@@ -631,7 +640,7 @@
     }
 
     .stg-leads line.on {
-      stroke: var(--link-blue);
+      stroke: var(--sc);
       stroke-dasharray: none;
     }
 
@@ -653,12 +662,12 @@
     }
 
     .stg-dot.hover {
-      border-color: var(--link-blue);
+      border-color: var(--sc);
     }
 
     .stg-dot.on {
-      border-color: var(--link-blue);
-      background: var(--link-blue);
+      border-color: var(--sc);
+      background: var(--sc);
     }
 
     .stg-label {
@@ -734,7 +743,7 @@
     .stg-open:focus-visible,
     .stg-open.open,
     .stg-open.open .stg-who {
-      color: var(--link-blue);
+      color: var(--sc-ink);
       outline: none;
     }
 
@@ -777,8 +786,8 @@
       }
 
       .stg-label:has(> .stg-open.open)::before {
-        border-color: var(--link-blue);
-        background: var(--link-blue);
+        border-color: var(--sc);
+        background: var(--sc);
       }
 
       .stg-col.left .stg-sub::after {
@@ -3254,8 +3263,8 @@
           // each stage appears as the rising helix reaches it
           var fx = (p[0] - x0) / W, fy = (p[1] - y0) / H;
           var delay = (1.4 + 2 * Math.min(1, (1 - fy) * 1.05)).toFixed(2) + 's';
-          box += '<span class="stg-dot" data-i="' + k + '" style="left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
-          cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="order: ' + k + '; animation-delay: ' + delay + '">' +
+          box += '<span class="stg-dot" data-i="' + k + '" style="--sc: ' + STAGE_COLOURS[k] + '; left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
+          cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="--sc: ' + STAGE_COLOURS[k] + '; order: ' + k + '; animation-delay: ' + delay + '">' +
             (g.aka ? '<span class="stg-open stg-aka" data-key="' + g.key + '-alt">' + g.aka + '</span>' : '') +
             '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + '</span>' +
             (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + (u.who ? ' <span class="stg-who">(' + u.who + ')</span>' : '') + '</span>'; }).join('') +
@@ -3277,6 +3286,8 @@
           new MutationObserver(function () {
             var on = !!l.querySelector('.stg-open.open');
             dot.classList.toggle('on', on);
+            // the opened box takes the stage's colour
+            if (on) document.querySelector('.d-more-stg').style.setProperty('--link-blue', STAGE_COLOURS[l.dataset.i]);
             stgFig.querySelector('.stg-slab[data-i="' + l.dataset.i + '"]').classList.toggle('on', on);
             var ln = stgFig.querySelector('.stg-leads line[data-i="' + l.dataset.i + '"]');
             if (ln) ln.classList.toggle('on', on);
@@ -3330,7 +3341,7 @@
           var left = l.parentNode.classList.contains('left');
           var x1 = (left ? dot.left - 4 : dot.right + 4) - fr.left, y1 = dot.top + dot.height / 2 - fr.top;
           var x2 = (left ? l.getBoundingClientRect().right - 26 : l.getBoundingClientRect().left + 26) - fr.left, y2 = name.top + 16 - fr.top;
-          lines += '<line data-i="' + l.dataset.i + '" x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"' + (l.querySelector('.stg-open.open') ? ' class="on"' : '') + '/>';
+          lines += '<line data-i="' + l.dataset.i + '" style="--sc: ' + STAGE_COLOURS[l.dataset.i] + '" x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"' + (l.querySelector('.stg-open.open') ? ' class="on"' : '') + '/>';
         });
         stgFig.querySelector('.stg-leads').innerHTML = lines;
       }
