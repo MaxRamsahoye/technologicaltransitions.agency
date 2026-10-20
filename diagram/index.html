@@ -698,10 +698,13 @@
       line-height: 1.15;
     }
 
+    /* a stage's other name, above its name, opening the same account */
     .stg-aka {
-      display: block;
-      font-size: 0.68em;
+      margin-bottom: 2px;
+      font-family: var(--serif);
+      font-size: 17px;
       font-style: italic;
+      line-height: 1.2;
       color: var(--muted);
     }
 
@@ -733,8 +736,7 @@
     .stg-open:hover,
     .stg-open:focus-visible,
     .stg-open.open,
-    .stg-open.open .stg-who,
-    .stg-open.open .stg-aka {
+    .stg-open.open .stg-who {
       color: var(--link-blue);
       outline: none;
     }
@@ -3206,6 +3208,13 @@
       var STAGE_BY = {};
       STAGES.forEach(function (g) {
         STAGE_BY[g.key] = g;
+        // the other name opens the same account, under that name
+        if (g.aka) {
+          var alt = {};
+          for (var p in g) alt[p] = g[p];
+          alt.key = g.key + '-alt'; alt.name = g.aka; alt.aka = g.name;
+          STAGE_BY[alt.key] = alt;
+        }
         (g.subs || []).forEach(function (u) { u.parent = g.key; STAGE_BY[u.key] = u; });
       });
       var stgFig = document.querySelector('.stg-fig');
@@ -3254,7 +3263,8 @@
           var delay = (1.4 + 2 * Math.min(1, (1 - fy) * 1.05)).toFixed(2) + 's';
           box += '<span class="stg-dot" data-i="' + k + '" style="left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
           cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="order: ' + k + '; animation-delay: ' + delay + '">' +
-            '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
+            (g.aka ? '<span class="stg-open stg-aka" data-key="' + g.key + '-alt">' + g.aka + '</span>' : '') +
+            '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + '</span>' +
             (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + (u.who ? ' <span class="stg-who">(' + u.who + ')</span>' : '') + '</span>'; }).join('') +
             '</div>' });
         });
@@ -3310,7 +3320,7 @@
           var items = stgFig._cols[side].map(function (c) {
             var el = stgFig.querySelector('.stg-label[data-i="' + c.k + '"]');
             var name = el.querySelector('.stg-name');
-            var mid = name.firstChild.nodeType === 3 ? 16 : name.offsetHeight / 2;
+            var mid = name.offsetTop + 16;
             return { el: el, h: el.offsetHeight, mid: mid, top: c.fy * H - mid };
           });
           for (var i = 0; i < items.length; i++) {
