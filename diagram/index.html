@@ -485,20 +485,33 @@
       display: none;
     }
 
+    /* the spiral in the middle; the stages, with their forms, in a column
+       either side, each joined to its point on the spiral by a thin line */
     .stg-fig {
       position: relative;
-      width: min(100%, 880px);
-      aspect-ratio: 1.3;
-      margin: 0 auto;
-      container-type: inline-size;
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) minmax(320px, 540px) minmax(250px, 1fr);
+      align-items: start;
     }
 
-    .stg-svg {
+    .stg-col {
+      position: relative;
+      align-self: stretch;
+    }
+
+    .stg-box {
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    .stg-svg,
+    .stg-leads {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       overflow: visible;
+      pointer-events: none;
     }
 
     .stg-spiral {
@@ -519,6 +532,22 @@
       animation: stg-fade 0.4s ease 2.3s both;
     }
 
+    .stg-leads {
+      animation: stg-fade 0.6s ease 2.3s both;
+    }
+
+    .stg-leads line {
+      stroke: color-mix(in srgb, currentColor 22%, transparent);
+      stroke-width: 1;
+      stroke-dasharray: 2 4;
+      transition: stroke 0.2s ease;
+    }
+
+    .stg-leads line.on {
+      stroke: var(--link-blue);
+      stroke-dasharray: none;
+    }
+
     @keyframes stg-draw {
       from { stroke-dashoffset: 1; }
       to { stroke-dashoffset: 0; }
@@ -529,37 +558,43 @@
       to { opacity: 1; }
     }
 
-    .stg-node {
-      position: absolute;
-      width: 0;
-      height: 0;
-      animation: stg-fade 0.5s ease both;
-    }
-
     .stg-dot {
       position: absolute;
-      left: -9px;
-      top: -9px;
       width: 18px;
       height: 18px;
+      margin: -9px 0 0 -9px;
       border: 1.5px solid currentColor;
       border-radius: 50%;
       background: var(--canvas-bg);
+      animation: stg-fade 0.5s ease both;
       transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stg-dot.hover {
+      border-color: var(--link-blue);
+    }
+
+    .stg-dot.on {
+      border-color: var(--link-blue);
+      background: var(--link-blue);
     }
 
     .stg-label {
       position: absolute;
-      top: 0;
-      width: max-content;
-      max-width: 34cqw;
-      transform: translateY(-0.72em);
-      padding: 0 6px;
-      background: var(--canvas-bg);
+      width: 100%;
+      animation: stg-fade 0.5s ease both;
     }
 
-    .stg-node.right .stg-label { left: 18px; }
-    .stg-node.left .stg-label { right: 18px; text-align: right; }
+    .stg-col.left .stg-label {
+      right: 0;
+      padding-right: 36px;
+      text-align: right;
+    }
+
+    .stg-col.right .stg-label {
+      left: 0;
+      padding-left: 36px;
+    }
 
     .stg-open {
       display: block;
@@ -569,7 +604,7 @@
 
     .stg-name {
       font-family: var(--serif);
-      font-size: clamp(19px, 2.9cqw, 26px);
+      font-size: 25px;
       line-height: 1.15;
     }
 
@@ -580,39 +615,25 @@
       color: var(--muted);
     }
 
-    .stg-era {
-      display: block;
-      margin: 5px 0 2px;
-      font-family: var(--mono-caps);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
     .stg-sub {
       margin-top: 6px;
-      font-size: clamp(15px, 2cqw, 18px);
+      font-size: 17px;
       line-height: 1.3;
     }
 
-    .stg-sub::before {
+    .stg-col.right .stg-sub::before,
+    .stg-col.left .stg-sub::after {
       content: '\25CB';
+      font-size: 0.7em;
+      vertical-align: 0.12em;
+    }
+
+    .stg-col.right .stg-sub::before {
       margin-right: 8px;
-      font-size: 0.7em;
-      vertical-align: 0.12em;
     }
 
-    .stg-node.left .stg-sub::before {
-      content: none;
-    }
-
-    .stg-node.left .stg-sub::after {
-      content: '\25CB';
+    .stg-col.left .stg-sub::after {
       margin-left: 8px;
-      font-size: 0.7em;
-      vertical-align: 0.12em;
     }
 
     .stg-who {
@@ -628,13 +649,59 @@
       outline: none;
     }
 
-    .stg-node:has(> .stg-label > .stg-open.open) .stg-dot,
-    .stg-node:has(.stg-open:hover) .stg-dot {
-      border-color: var(--link-blue);
-    }
+    /* narrower screens: the stages as a list, in order, without the spiral */
+    @media (max-width: 1000px) {
+      .stg-fig {
+        display: flex;
+        flex-direction: column;
+        height: auto !important;
+      }
 
-    .stg-node:has(> .stg-label > .stg-open.open) .stg-dot {
-      background: var(--link-blue);
+      .stg-col {
+        display: contents;
+      }
+
+      .stg-box {
+        display: none;
+      }
+
+      .stg-label,
+      .stg-col.left .stg-label,
+      .stg-col.right .stg-label {
+        position: relative;
+        top: auto !important;
+        margin: 0 0 28px;
+        padding: 0 0 0 34px;
+        text-align: left;
+      }
+
+      .stg-label::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 18px;
+        height: 18px;
+        box-sizing: border-box;
+        border: 1.5px solid currentColor;
+        border-radius: 50%;
+      }
+
+      .stg-label:has(> .stg-open.open)::before {
+        border-color: var(--link-blue);
+        background: var(--link-blue);
+      }
+
+      .stg-col.left .stg-sub::after {
+        content: none;
+      }
+
+      .stg-col.left .stg-sub::before {
+        content: '\25CB';
+        margin-right: 8px;
+        font-size: 0.7em;
+        vertical-align: 0.12em;
+      }
     }
 
     .d-more-stg .d-more-box {
@@ -649,49 +716,6 @@
       .stages-view {
         width: auto;
         margin-left: 0;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .stg-fig {
-        aspect-ratio: auto;
-        container-type: normal;
-      }
-
-      .stg-svg {
-        display: none;
-      }
-
-      .stg-node {
-        position: relative;
-        left: auto !important;
-        top: auto !important;
-        width: auto;
-        height: auto;
-        margin: 0 0 28px;
-        padding-left: 34px;
-      }
-
-      .stg-dot {
-        left: 0;
-        top: 4px;
-      }
-
-      .stg-label,
-      .stg-node.left .stg-label {
-        position: static;
-        max-width: none;
-        transform: none;
-        padding: 0;
-        text-align: left;
-      }
-
-      .stg-node.left .stg-sub::before {
-        content: '\25CB';
-      }
-
-      .stg-node.left .stg-sub::after {
-        content: none;
       }
     }
 
@@ -2982,15 +3006,23 @@
       // The Stages: the stages of cultural worldview, from the forager band
       // at the centre of a spiral outwards, with the forms some took
       var STAGES = [
-        { key: 'primitivism', name: 'Primitivism', era: 'From c. 70,000 BCE', rev: 'cognitive',
+        { key: 'primitivism', name: 'Primitivism', aka: 'Tribalism', era: 'From c. 70,000 BCE', rev: 'cognitive',
           rise: 'Arising with the Cognitive Revolution: the oldest and by far the longest stage of human culture.',
           world: 'The world of the forager band is animist and mythic: animals, places and ancestors are persons, time is cyclical, and the present is bound to a time of origins. Knowledge lives in story, ritual and the memory of elders, and meaning comes from belonging to the band and to the land.',
-          order: 'Small, mobile and largely egalitarian bands of kin, held together by sharing, reciprocity and consensus, with prestige rather than power, and no state, property or written law.' },
+          order: 'Small, mobile and largely egalitarian bands of kin, held together by sharing, reciprocity and consensus, with prestige rather than power, and no state, property or written law.',
+          subs: [
+            { key: 'animism', name: 'Animism', era: 'From c. 70,000 BCE', rev: 'cognitive',
+              text: 'The sense that the world is full of persons, only some of them human: animals, plants, rivers, mountains and the dead have spirit, will and agency, and must be dealt with through respect, exchange and ritual, with shamans mediating between the human and spirit worlds. Anthropologists now read animism less as a mistaken theory of nature than as a relational way of being in the world.',
+              srcLabel: 'Key works', source: 'Edward Burnett Tylor, <em>Primitive Culture</em> (1871); Philippe Descola, <em>Beyond Nature and Culture</em> (2005)' }
+          ] },
         { key: 'classicism', name: 'Classicism', era: 'From c. 800 BCE', rev: 'urban',
           rise: 'Arising with the cities, states and writing of the Urban Revolution, and flowering in the Axial Age.',
           world: 'In Greece, India, China and Persia, thought turned back on itself: the cosmos came to be seen as ordered by reason, law or a single principle, and the good life as one of virtue, harmony and measure. Philosophy, mathematics and the great ethical traditions set ideals of form and proportion that later ages would return to as classical.',
           order: 'City-states and empires governed through written law, citizenship and civic duty, built on agrarian surplus and slavery, with an educated elite who saw themselves as the guardians of a civilised order.',
           subs: [
+            { key: 'axialism', name: 'Axialism', who: 'Jaspers', era: 'c. 800&ndash;200 BCE', rev: 'urban',
+              text: 'Karl Jaspers&rsquo; name for the age in which, independently and almost at once, the Hebrew prophets, the Greek philosophers, the Buddha and the Upanishads, Confucius and Laozi opened a gap between the world as it is and a transcendent order by which to judge it. Reflection, universal ethics and the individual conscience entered history, and the traditions founded then still frame most of the world&rsquo;s religions and philosophies.',
+              source: 'Karl Jaspers, <em>The Origin and Goal of History</em> (1949)' },
             { key: 'hellenism', name: 'Hellenism', era: 'c. 323&ndash;31 BCE', rev: 'urban',
               text: 'After Alexander&rsquo;s conquests, Greek language, philosophy and art spread from the Mediterranean to the Indus, mixing with Egyptian, Persian and Indian traditions. In cosmopolitan cities such as Alexandria, with its library and museum, scholarship, science and mathematics flourished &ndash; Euclid, Archimedes, Eratosthenes &ndash; while Stoicism and Epicureanism turned philosophy from the city-state to the individual&rsquo;s search for peace of mind in a vast and unsettled world.',
               srcLabel: 'Named in', source: 'Johann Gustav Droysen, <em>Geschichte des Hellenismus</em> (1836&ndash;1843), which gave the period its name' }
@@ -3004,11 +3036,23 @@
               text: 'The method of the medieval universities, which sought to reconcile faith with reason: to bring the recovered works of Aristotle, read through Islamic and Jewish commentators such as Averroes and Maimonides, into harmony with Christian revelation. Through disputation &ndash; posing a question, weighing the objections and resolving them &ndash; Thomas Aquinas built a vast synthesis in which reason reaches truths that faith completes, and so, unknowingly, prepared the ground for the rational inquiry that would later turn against tradition.',
               source: 'Thomas Aquinas, <em>Summa Theologiae</em> (1265&ndash;1274)' }
           ] },
-        { key: 'modernism', name: 'Modernism', era: 'From c. 1600', rev: 'scientific',
+        { key: 'modernism', name: 'Modernism', aka: 'Enlightenment', era: 'From c. 1600', rev: 'scientific',
           rise: 'Arising with the Scientific and Industrial Revolutions, and the Enlightenment between them.',
           world: 'Reason and evidence displace tradition and revelation as the measure of truth. Nature becomes a mechanism to be understood and mastered, history a story of progress, and the autonomous individual &ndash; with rights, a conscience and the capacity to improve &ndash; the bearer of meaning.',
           order: 'The nation-state, the market economy and representative government, organised through bureaucracy, science and industry, with mass education and the promise of emancipation from poverty, superstition and inherited rank.',
           subs: [
+            { key: 'humanism', name: 'Humanism', era: 'c. 1350&ndash;1600', rev: 'scientific',
+              text: 'The Renaissance return to the texts of Greece and Rome, and with it a new confidence in human dignity, reason and potential. From Petrarch to Pico della Mirandola and Erasmus, humanists made language, history and ethics the basis of education, and placed the human being, rather than God alone, at the centre of inquiry.',
+              srcLabel: 'Key works', source: 'Giovanni Pico della Mirandola, <em>Oration on the Dignity of Man</em> (1486)' },
+            { key: 'rationalism', name: 'Rationalism', who: 'Descartes', era: 'From c. 1630', rev: 'scientific',
+              text: 'The conviction that reason, rather than tradition or revelation, is the foundation of knowledge. Descartes doubted everything that could be doubted to find certainty in the thinking self, and Spinoza and Leibniz built whole systems by deduction; together with the empiricists&rsquo; insistence on experience, rationalism set the terms of modern philosophy and science.',
+              source: 'Ren&eacute; Descartes, <em>Discourse on the Method</em> (1637) and <em>Meditations on First Philosophy</em> (1641)' },
+            { key: 'progressivism', name: 'Progressivism', who: 'Condorcet', era: 'From c. 1750', rev: 'industrial',
+              text: 'Faith that history moves forward: that reason, science and freedom will steadily improve the human condition, perhaps without limit. Condorcet, writing in hiding during the Terror, traced the stages of the human mind&rsquo;s progress toward a future of equality and enlightenment, and the idea went on to animate liberalism, socialism and the industrial age alike.',
+              source: 'Nicolas de Condorcet, <em>Sketch for a Historical Picture of the Progress of the Human Mind</em> (1795)' },
+            { key: 'scientism', name: 'Scientism', who: 'Comte', era: 'From c. 1830', rev: 'industrial',
+              text: 'The belief that the methods of natural science are the only route to genuine knowledge, and can settle questions of society, morality and meaning as well. Comte&rsquo;s positivism, which placed a scientific stage at the end of human history, and later logical positivism carried it furthest; critics from the Romantics to the Frankfurt School argued that it reduced the human world to what can be measured.',
+              source: 'Auguste Comte, <em>Course of Positive Philosophy</em> (1830&ndash;1842)' },
             { key: 'high-modernism', name: 'High-Modernism', who: 'Scott', era: 'c. 1900&ndash;1980', rev: 'technological',
               text: 'James C. Scott&rsquo;s name for modernism at its most ambitious: a supreme confidence that scientific and technical knowledge could redesign society and nature from above. Making people and land legible to the state &ndash; through maps, censuses, grids and plans &ndash; high-modernist schemes from Soviet collectivisation and Tanzania&rsquo;s villagisation to the planned city of Bras&iacute;lia overrode local, practical knowledge, and where they were joined to authoritarian power and a weakened civil society, they ended in disaster.',
               source: 'James C. Scott, <em>Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed</em> (1998)' },
@@ -3019,7 +3063,24 @@
         { key: 'postmodernism', name: 'Postmodernism', era: 'From c. 1960', rev: 'digital',
           rise: 'Arising after the Second World War, with the information society and the Digital Revolution.',
           world: 'An incredulity toward metanarratives, in Lyotard&rsquo;s phrase: the grand stories of progress, reason and emancipation are exposed as partial and entangled with power. Truth, identity and meaning are seen as constructed &ndash; by language, culture and perspective &ndash; and are met with irony, pluralism and deconstruction.',
-          order: 'Consumer, media and network societies of plural identities and lifestyles, in which voices excluded by modernity&rsquo;s institutions gain recognition, while shared narratives, and with them trust in common institutions, fragment.' },
+          order: 'Consumer, media and network societies of plural identities and lifestyles, in which voices excluded by modernity&rsquo;s institutions gain recognition, while shared narratives, and with them trust in common institutions, fragment.',
+          subs: [
+            { key: 'perspectivism', name: 'Perspectivism', who: 'Nietzsche', era: '1880s', rev: 'industrial',
+              text: 'Friedrich Nietzsche&rsquo;s claim that there are no facts, only interpretations: every view is a perspective, shaped by the drives and needs of the one who holds it, and the more perspectives we bring to bear, the fuller our understanding. Writing almost a century early, he was postmodernism&rsquo;s forerunner, announcing the death of God and the collapse of the foundations modernity relied on.',
+              source: 'Friedrich Nietzsche, <em>The Gay Science</em> (1882) and <em>Beyond Good and Evil</em> (1886)' },
+            { key: 'relativism', name: 'Relativism', era: 'From c. 1960', rev: 'digital',
+              text: 'The view that truth, knowledge or morality are not absolute but relative to a culture, language, framework or perspective. Rooted in anthropology&rsquo;s cultural relativism and in the philosophy of science after Kuhn, for whom rival paradigms cannot be measured on a common scale, it is the stage&rsquo;s most contested tenet &ndash; a check on dogma to its defenders, the dissolution of all standards to its critics.',
+              srcLabel: 'Key works', source: 'Thomas Kuhn, <em>The Structure of Scientific Revolutions</em> (1962); Richard Rorty, <em>Philosophy and the Mirror of Nature</em> (1979)' },
+            { key: 'constructivism', name: 'Constructivism', era: 'From c. 1960', rev: 'digital',
+              text: 'The view that much of what we take as given &ndash; institutions, categories, identities, even knowledge &ndash; is socially constructed, made and remade through shared practice and language. Berger and Luckmann showed how a society builds its reality and then experiences it as objective; Foucault traced how categories such as madness and sexuality were produced by discourse and power.',
+              srcLabel: 'Key works', source: 'Peter L. Berger &amp; Thomas Luckmann, <em>The Social Construction of Reality</em> (1966); Michel Foucault, <em>The History of Sexuality</em> (1976)' },
+            { key: 'deconstructionism', name: 'Deconstructionism', who: 'Derrida', era: 'From 1967', rev: 'digital',
+              text: 'Jacques Derrida&rsquo;s method of reading texts against themselves: exposing the hierarchies &ndash; speech over writing, presence over absence, reason over its others &ndash; on which Western thought rests, and showing that meaning is never fully present but always deferred. It spread from philosophy to literary theory, architecture and law, and became the emblem of postmodern critique.',
+              source: 'Jacques Derrida, <em>Of Grammatology</em> (1967)' },
+            { key: 'pluralism', name: 'Pluralism', era: 'From c. 1960', rev: 'digital',
+              text: 'The acceptance that there is no single true way to live, believe or see, and that many identities, cultures and value systems can coexist with equal claim. It underwrote the rights movements, multiculturalism and the recognition of excluded voices, while raising the question of what, beyond tolerance, can hold a plural society together.',
+              srcLabel: 'Key works', source: 'Isaiah Berlin, <em>Two Concepts of Liberty</em> (1958); Jean-Fran&ccedil;ois Lyotard, <em>The Postmodern Condition</em> (1979)' }
+          ] },
         { key: 'metamodernism', name: 'Metamodernism', era: 'From c. 2000', rev: 'intelligence',
           rise: 'Emerging in the twenty-first century, as the Intelligence Revolution begins.',
           world: 'A sensibility that oscillates between, and integrates, modern sincerity and postmodern irony: it takes postmodernism&rsquo;s critique seriously, but seeks to reconstruct meaning, hope and grand narratives with an awareness of their limits. It thinks in terms of both/and, of complexity and of development &ndash; including the stages themselves.',
@@ -3043,37 +3104,87 @@
       });
       var stgFig = document.querySelector('.stg-fig');
       function buildStages() {
-        // an Archimedean spiral, r = b&theta;, in a box 1300 by 1000 units;
-        // each stage a little over half a turn further out than the last
-        var W = 1300, H = 1000, cx = W / 2, cy = H / 2 + 10, b = 25.5;
-        var t0 = 1.15 * Math.PI, step = 0.86 * Math.PI, tEnd = t0 + 5 * step + 0.55 * Math.PI;
-        var pt = function (t) { return [cx + b * t * Math.cos(t - Math.PI / 2), cy + b * t * Math.sin(t - Math.PI / 2)]; };
-        var d = '', n = 220;
-        for (var i = 0; i <= n; i++) {
-          var p = pt(0.2 * Math.PI + (tEnd - 0.2 * Math.PI) * i / n);
-          d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
-        }
+        // an Archimedean spiral, r = b&theta;, the stages placed on it in
+        // turn on alternate sides, each side's descending in order, so that
+        // no line from a label crosses another stage's point
+        var T = [0.4, 1.85, 2.65, 3.35, 4.8, 5.15].map(function (x) { return x * Math.PI; });
+        var b = 25.5, tEnd = 5.5 * Math.PI, tStart = 0.15 * Math.PI;
+        var pt = function (t) { return [b * t * Math.cos(t - Math.PI / 2), b * t * Math.sin(t - Math.PI / 2)]; };
+        var pts = [], n = 220;
+        for (var i = 0; i <= n; i++) pts.push(pt(tStart + (tEnd - tStart) * i / n));
+        var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+        var x0 = Math.min.apply(null, xs) - 20, y0 = Math.min.apply(null, ys) - 20;
+        var S = Math.max(Math.max.apply(null, xs) + 20 - x0, Math.max.apply(null, ys) + 20 - y0);
+        var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + (p[0] - x0).toFixed(1) + ' ' + (p[1] - y0).toFixed(1); }).join('');
         // the spiral runs on beyond the latest stage, with an arrowhead
         var e = pt(tEnd), e0 = pt(tEnd - 0.02), ang = Math.atan2(e[1] - e0[1], e[0] - e0[0]);
-        var head = [ang + 2.6, ang - 2.6].map(function (a) { return (e[0] + 18 * Math.cos(a)).toFixed(1) + ' ' + (e[1] + 18 * Math.sin(a)).toFixed(1); });
-        var html = '<svg class="stg-svg" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true"><path class="stg-spiral" pathLength="1" d="' + d + '"/>' +
-          '<path class="stg-tip" d="M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/></svg>';
+        var head = [ang + 2.6, ang - 2.6].map(function (a) { return (e[0] - x0 + 18 * Math.cos(a)).toFixed(1) + ' ' + (e[1] - y0 + 18 * Math.sin(a)).toFixed(1); });
+        var box = '<svg class="stg-svg" viewBox="0 0 ' + S.toFixed(1) + ' ' + S.toFixed(1) + '" aria-hidden="true"><path class="stg-spiral" pathLength="1" d="' + d + '"/>' +
+          '<path class="stg-tip" d="M' + head[0] + 'L' + (e[0] - x0).toFixed(1) + ' ' + (e[1] - y0).toFixed(1) + 'L' + head[1] + '"/></svg>';
+        var cols = { left: [], right: [] };
         STAGES.forEach(function (g, k) {
-          var t = t0 + k * step, p = pt(t);
+          var t = T[k], p = pt(t);
           // each stage appears as the spiral reaches it (arc length grows as t squared)
-          var delay = 2.4 * Math.pow((t - 0.2 * Math.PI) / (tEnd - 0.2 * Math.PI), 1.6);
-          var side = p[0] < cx ? 'left' : 'right';
-          html += '<div class="stg-node ' + side + '" style="left: ' + (p[0] / W * 100).toFixed(2) + '%; top: ' + (p[1] / H * 100).toFixed(2) + '%; animation-delay: ' + delay.toFixed(2) + 's">' +
-            '<span class="stg-dot"></span><div class="stg-label">' +
+          var delay = (2.4 * Math.pow((t - tStart) / (tEnd - tStart), 1.6)).toFixed(2) + 's';
+          var fx = (p[0] - x0) / S, fy = (p[1] - y0) / S;
+          box += '<span class="stg-dot" data-i="' + k + '" style="left: ' + (fx * 100).toFixed(2) + '%; top: ' + (fy * 100).toFixed(2) + '%; animation-delay: ' + delay + '"></span>';
+          cols[p[0] < 0 ? 'left' : 'right'].push({ k: k, fy: fy, html: '<div class="stg-label" data-i="' + k + '" style="order: ' + k + '; animation-delay: ' + delay + '">' +
             '<span class="stg-open stg-name" data-key="' + g.key + '">' + g.name + (g.aka ? '<span class="stg-aka">' + g.aka + '</span>' : '') + '</span>' +
             (g.subs || []).map(function (u) { return '<span class="stg-open stg-sub" data-key="' + u.key + '">' + u.name + (u.who ? ' <span class="stg-who">(' + u.who + ')</span>' : '') + '</span>'; }).join('') +
-            '</div></div>';
+            '</div>' });
         });
-        stgFig.innerHTML = html;
+        var col = function (side) { return '<div class="stg-col ' + side + '">' + cols[side].sort(function (a, c) { return a.k - c.k; }).map(function (c) { return c.html; }).join('') + '</div>'; };
+        stgFig.innerHTML = col('left') + '<div class="stg-box">' + box + '</div>' + col('right') + '<svg class="stg-leads" aria-hidden="true"></svg>';
+        stgFig._cols = cols;
+        layoutStages();
         var drawer = document.querySelector('.d-more-stg');
         drawer._id = 'stg';
         stgFig.querySelectorAll('.stg-open').forEach(function (el) { opener(el, el.dataset.key, 'stage', drawer); });
+        // a stage's point on the spiral, and its line, light with its label
+        stgFig.querySelectorAll('.stg-label').forEach(function (l) {
+          var dot = stgFig.querySelector('.stg-dot[data-i="' + l.dataset.i + '"]');
+          l.addEventListener('mouseover', function () { dot.classList.add('hover'); });
+          l.addEventListener('mouseout', function () { dot.classList.remove('hover'); });
+          new MutationObserver(function () {
+            var on = !!l.querySelector('.stg-open.open');
+            dot.classList.toggle('on', on);
+            var ln = stgFig.querySelector('.stg-leads line[data-i="' + l.dataset.i + '"]');
+            if (ln) ln.classList.toggle('on', on);
+          }).observe(l, { subtree: true, attributes: true, attributeFilter: ['class'] });
+        });
       }
+      // each column's labels sit level with their points where they can,
+      // pushed apart where they would overlap, and joined to them by a line
+      function layoutStages() {
+        var sbox = stgFig.querySelector('.stg-box');
+        if (!sbox || !sbox.offsetWidth) return;
+        var H = sbox.offsetHeight, bottom = H, GAP = 34;
+        ['left', 'right'].forEach(function (side) {
+          var items = stgFig._cols[side].map(function (c) {
+            var el = stgFig.querySelector('.stg-label[data-i="' + c.k + '"]');
+            var name = el.querySelector('.stg-name');
+            var mid = name.firstChild.nodeType === 3 ? 16 : name.offsetHeight / 2;
+            return { el: el, h: el.offsetHeight, mid: mid, top: c.fy * H - mid };
+          });
+          for (var i = 0; i < items.length; i++) {
+            if (i) items[i].top = Math.max(items[i].top, items[i - 1].top + items[i - 1].h + GAP);
+            if (i === 0) items[i].top = Math.max(items[i].top, 0);
+          }
+          items.forEach(function (it) { it.el.style.top = it.top + 'px'; bottom = Math.max(bottom, it.top + it.h); });
+        });
+        stgFig.style.height = bottom + 'px';
+        var fr = stgFig.getBoundingClientRect(), lines = '';
+        stgFig.querySelectorAll('.stg-label').forEach(function (l) {
+          var dot = stgFig.querySelector('.stg-dot[data-i="' + l.dataset.i + '"]').getBoundingClientRect();
+          var name = l.querySelector('.stg-name').getBoundingClientRect();
+          var left = l.parentNode.classList.contains('left');
+          var x1 = (left ? dot.left - 4 : dot.right + 4) - fr.left, y1 = dot.top + dot.height / 2 - fr.top;
+          var x2 = (left ? l.getBoundingClientRect().right - 26 : l.getBoundingClientRect().left + 26) - fr.left, y2 = name.top + 16 - fr.top;
+          lines += '<line data-i="' + l.dataset.i + '" x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"' + (l.querySelector('.stg-open.open') ? ' class="on"' : '') + '/>';
+        });
+        stgFig.querySelector('.stg-leads').innerHTML = lines;
+      }
+      window.addEventListener('resize', function () { if (show === 'stages-main') layoutStages(); });
 
       function setSlug() {
         var d = show.split('-');
@@ -3101,6 +3212,7 @@
         buildSequences();
         buildSelection();
         if (rebuild !== 'count' || show === 'stages-main') buildStages();
+        if (show === 'stages-main' && document.fonts) document.fonts.ready.then(layoutStages);
         restoreSelections();
         if (rebuild !== 'count') {
           clearTimeout(defTimer);
