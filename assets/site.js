@@ -381,7 +381,9 @@
   var footer = document.querySelector('.site-footer');
   if (footer) {
     var checkFooter = function () {
-      document.body.classList.toggle('footer-in-view', footer.getBoundingClientRect().top < window.innerHeight);
+      // a footer the page hides (as the Diagrams page does) is never in view
+      var shown = footer.getClientRects().length > 0;
+      document.body.classList.toggle('footer-in-view', shown && footer.getBoundingClientRect().top < window.innerHeight);
     };
     window.addEventListener('scroll', checkFooter, { passive: true });
     window.addEventListener('resize', checkFooter);
