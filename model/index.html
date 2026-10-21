@@ -51,14 +51,15 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="../assets/site.css?v=0ab87924" rel="stylesheet">
   <style>
-    /* light sepia band from the top of the window to just below the intro */
+    /* the top section on the page's own background */
     .md-top {
       position: relative;
       z-index: 0;
-      margin-bottom: 216px;
+      margin-bottom: 72px;
     }
 
     .md-top::before {
+      display: none;
       content: '';
       position: absolute;
       top: -180px;
@@ -66,8 +67,16 @@
       left: 50%;
       width: 100vw;
       transform: translateX(-50%);
-      background: var(--band-bg);
+      background: var(--canvas-bg);
       z-index: -1;
+    }
+
+    /* with no band, the corner controls and the top menu keep the page's
+       own colours whatever the band setting */
+    html:not([data-theme]) body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #000000;
+      --muted: #8c8c8c;
+      --link-blue: #1a3a9c;
     }
 
     .md-top .page-intro {
@@ -134,7 +143,7 @@
        beside it and the one pointed to described beneath them */
     .md-figure {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
       gap: 56px;
       align-items: center;
       width: var(--wide-col);
@@ -381,123 +390,9 @@
       }
     }
 
-    /* each group, then each structure: its name, its other name, and what
-       it comprises, with the structures or mechanisms within it beneath */
-    .md-groups {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .md-group {
-      padding: 0 0 40px;
-    }
-
-    .md-group + .md-group {
-      padding-top: 120px;
-      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-    }
-
-    .md-group > h2 {
-      margin: 0;
-      font-family: var(--mono-caps);
-      font-size: 19px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .md-group > h2 span {
-      margin-left: 14px;
-      font-family: var(--serif);
-      font-size: 21px;
-      font-style: italic;
-      font-weight: 400;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-
-    .md-structure {
-      padding: 52px 0 0;
-      scroll-margin-top: 40px;
-    }
-
-    .md-aka {
-      margin: 0 0 14px;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .md-name {
-      margin: 0;
-      font-family: var(--sans);
-      font-weight: 600;
-      font-size: 26px;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-    }
-
-    html.serif-headings .md-name {
-      font-family: var(--serif);
-      font-weight: 700;
-      font-size: 30px;
-      letter-spacing: 0;
-      -webkit-text-stroke: 0.4px currentColor;
-    }
-
-    /* a structure's other name, in brackets after its own */
-    .md-alt {
-      font-weight: 400;
-      -webkit-text-stroke: 0;
-      color: var(--muted);
-    }
-
-    .md-desc {
-      margin: 18px 0 0;
-      font-size: 23px;
-      line-height: 1.35;
-    }
-
-    /* what lies within a structure, indented beneath it */
-    .md-within {
-      margin: 30px 0 0;
-      padding: 0 0 0 28px;
-      list-style: none;
-      border-left: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-    }
-
-    .md-within li + li {
-      margin-top: 26px;
-    }
-
-    .md-within .md-name {
-      font-size: 22px;
-    }
-
-    html.serif-headings .md-within .md-name {
-      font-size: 24px;
-    }
-
-    .md-within .md-aka {
-      margin-bottom: 10px;
-    }
-
-    .md-within .md-desc {
-      margin-top: 10px;
-      font-size: 21px;
-    }
-
-    @media (max-width: 600px) {
-      .md-desc {
-        font-size: 20px;
-      }
-    }
   </style>
 </head>
-<body>
+<body class="no-band">
   <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
     <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
       <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
@@ -506,14 +401,14 @@
   </a>
 
   <main class="page-main">
-    <div class="md-top wide-top on-band">
+    <div class="md-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Complex Emergence Model</a></h1>
     <p class="page-intro md-intro">An elaboration of <a class="plain-link" href="../sources/#schmachtenberger-emergence">Schmachtenberger&rsquo;s</a> framework of civilisational structures: a modified version, called the complex emergence model for differentiation, that in effect doubles the number of structures, to eight.</p>
     <p class="md-count"><b>8</b> structures in <b>3</b> groups</p>
     </div>
 
     <section class="md-figure" aria-label="The model as a diagram">
-      <div class="md-scene"><svg class="md-svg" viewBox="0 0 800 770" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
+      <div class="md-scene"><svg class="md-svg" viewBox="0 0 800 880" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
       <div class="md-side">
         <div class="md-list">
           <p class="md-list-head">Core</p>
@@ -532,37 +427,6 @@
       </div>
     </section>
 
-    <ol class="md-groups">
-      <li class="md-group" id="core"><h2>Core</h2>
-        <div class="md-structure" id="infrastructure"><h3 class="md-name">Infrastructure <span class="md-alt">(Tech Stack)</span></h3><p class="md-desc">Technological instruments and affordances, productive (and reproductive) forces and material conditions.</p></div>
-        <div class="md-structure" id="interstructure"><h3 class="md-name">Interstructure <span class="md-alt">(Political Economy)</span></h3><p class="md-desc">The institutional complex for decision-making (governance) and resource-allocation (economy).</p></div>
-        <div class="md-structure" id="superstructure"><h3 class="md-name">Superstructure <span class="md-alt">(Cultural Psychology)</span></h3><p class="md-desc">Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.</p>
-          <ul class="md-within">
-            <li id="substructure"><h4 class="md-name">Substructure <span class="md-alt">(Evolutionary Psychology)</span></h4><p class="md-desc">Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).</p></li>
-          </ul>
-        </div>
-      </li>
-      <li class="md-group" id="interfaces"><h2>Interfaces<span>&lsquo;Second Nature&rsquo;</span></h2>
-        <div class="md-structure" id="biostructure"><h3 class="md-name">Biostructure <span class="md-alt">(Cultural-Evolutionary Biology)</span></h3><p class="md-desc">The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.</p></div>
-        <div class="md-structure" id="ecostructure"><h3 class="md-name">Ecostructure <span class="md-alt">(Cultural-Evolutionary Ecology)</span></h3><p class="md-desc">The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.</p></div>
-      </li>
-      <li class="md-group" id="transecting"><h2>Transecting</h2>
-        <div class="md-structure" id="metastructure"><h3 class="md-name">Metastructure <span class="md-alt">(System Dynamics)</span></h3><p class="md-desc">The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.</p>
-          <ul class="md-within">
-            <li id="cybernetic"><h4 class="md-name">Cybernetic</h4><p class="md-desc">Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops.</p></li>
-            <li id="game-theoretic"><h4 class="md-name">Game-Theoretic</h4><p class="md-desc">Incentive structures, rational strategising and agent-modelling.</p></li>
-            <li id="evolutionary"><h4 class="md-name">Evolutionary</h4><p class="md-desc">Selection processes, competitive pressures and niche construction.</p></li>
-          </ul>
-        </div>
-        <div class="md-structure" id="macrostructure"><h3 class="md-name">Macrostructure <span class="md-alt">(Developmental Process)</span></h3><p class="md-desc">The process by which a civilisation elaborates itself and changes across macrohistorical time.</p>
-          <ul class="md-within">
-            <li id="states-transitions"><h4 class="md-name">States &amp; Transitions</h4><p class="md-desc">The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse.</p></li>
-            <li id="constraints-affordances"><h4 class="md-name">Constraints &amp; Affordances</h4><p class="md-desc">The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development.</p></li>
-            <li id="problems-solutions-externalities"><h4 class="md-name">Problems, Solutions &amp; Externalities</h4><p class="md-desc">The historical process by which solutions to existing problems generate novel problems and unintended side-effects.</p></li>
-          </ul>
-        </div>
-      </li>
-    </ol>
   </main>
 
   <footer class="site-footer">
@@ -617,16 +481,16 @@
       // each slab: key, class, centre height, half-width, thickness, label
       // side and label
       var SLABS = [
-        ['ecostructure', 'eco', 618, 262, 14, 'left', 'Ecostructure'],
-        ['biostructure', 'bio', 552, 196, 14, 'right', 'Biostructure'],
-        ['infrastructure', 'core', 462, 120, 26, 'left', 'Infrastructure'],
-        ['interstructure', 'core', 366, 120, 26, 'right', 'Interstructure'],
-        ['substructure', 'core', 292, 70, 12, 'right', 'Substructure'],
-        ['superstructure', 'core', 222, 120, 26, 'left', 'Superstructure']
+        ['ecostructure', 'eco', 716, 262, 14, 'left', 'Ecostructure'],
+        ['biostructure', 'bio', 630, 196, 14, 'right', 'Biostructure'],
+        ['infrastructure', 'core', 522, 116, 24, 'left', 'Infrastructure'],
+        ['interstructure', 'core', 402, 116, 24, 'right', 'Interstructure'],
+        ['substructure', 'core', 308, 66, 12, 'right', 'Substructure'],
+        ['superstructure', 'core', 222, 116, 24, 'left', 'Superstructure']
       ];
       // the helix, its far side behind the core stack and its near side in
       // front, rising from the biostructure to above the superstructure
-      var near = '', far = '', prev = null, T = 4.5 * Math.PI, R = 172, Y0 = 530, RISE = 380;
+      var near = '', far = '', prev = null, T = 4.5 * Math.PI, R = 178, Y0 = 610, RISE = 470;
       for (var i = 0; i <= 200; i++) {
         var t = i / 200 * T, y = Y0 - RISE * t / T;
         var pt = [CX + R * Math.sin(t), y + R * 0.5 * Math.cos(t), Math.cos(t) > 0];
@@ -646,9 +510,9 @@
       SLABS.slice(0, 2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
       html += '<g class="md-helix" data-key="macrostructure"><path class="far" d="' + far + '"/><path class="hit" d="' + far + '"/></g>';
       SLABS.slice(2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
-      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="112" x2="' + CX + '" y2="660"/>' +
+      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="112" x2="' + CX + '" y2="760"/>' +
         '<path d="M' + (CX + 26) + ' 92a26 9 0 1 1-6-5.8M' + (CX + 14) + ' 84.5l6 1.7-2.5 5.6"/>' +
-        '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="660"/></g>';
+        '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="760"/></g>';
       html += '<g class="md-helix" data-key="macrostructure"><path d="' + near + 'M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/><path class="hit" d="' + near + '"/></g>';
       SLABS.forEach(function (s) {
         var x0 = s[5] === 'left' ? CX - s[3] - 8 : CX + s[3] + 8;
@@ -661,21 +525,12 @@
       var parts = Array.prototype.slice.call(document.querySelectorAll('.md-svg [data-key], .md-list [data-key]'));
       var detail = document.querySelector('.md-detail');
       var locked = 'infrastructure';
-      // the description, read from the structure's entry below, so that the
-      // two always agree
+      // what each structure comprises, and what lies within it
+      var MODEL = {"infrastructure": {"desc": "Technological instruments and affordances, productive (and reproductive) forces and material conditions.", "within": []}, "interstructure": {"desc": "The institutional complex for decision-making (governance) and resource-allocation (economy).", "within": []}, "superstructure": {"desc": "Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.", "within": []}, "biostructure": {"desc": "The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.", "within": []}, "ecostructure": {"desc": "The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.", "within": []}, "metastructure": {"desc": "The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.", "within": [["cybernetic", "Cybernetic", "Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops."], ["game-theoretic", "Game-Theoretic", "Incentive structures, rational strategising and agent-modelling."], ["evolutionary", "Evolutionary", "Selection processes, competitive pressures and niche construction."]]}, "macrostructure": {"desc": "The process by which a civilisation elaborates itself and changes across macrohistorical time.", "within": [["states-transitions", "States &amp; Transitions", "The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse."], ["constraints-affordances", "Constraints &amp; Affordances", "The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development."], ["problems-solutions-externalities", "Problems, Solutions &amp; Externalities", "The historical process by which solutions to existing problems generate novel problems and unintended side-effects."]]}, "substructure": {"desc": "Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).", "within": []}};
       function describe(key) {
-        var el = document.getElementById(key);
-        var d = el.querySelector('.md-desc');
-        var within = el.querySelectorAll(':scope > .md-within > li');
-        var h = '<p>' + d.innerHTML + '</p>';
-        if (within.length) {
-          h += '<ul>' + Array.prototype.map.call(within, function (li) {
-            var n = li.querySelector('.md-name').cloneNode(true);
-            var alt = n.querySelector('.md-alt'); if (alt) alt.remove();
-            return '<li><b>' + n.innerHTML.trim() + '</b> &ndash; ' + li.querySelector('.md-desc').innerHTML + '</li>';
-          }).join('') + '</ul>';
-        }
-        h += '<a href="#' + key + '">Read more</a>';
+        var m = MODEL[key];
+        var h = '<p>' + m.desc + '</p>';
+        if (m.within.length) h += '<ul>' + m.within.map(function (w) { return '<li><b>' + w[1] + '</b> &ndash; ' + w[2] + '</li>'; }).join('') + '</ul>';
         detail.innerHTML = h;
       }
       function show(key) {
@@ -695,6 +550,6 @@
   <a class="site-title" href="../">Complex<br>Emergence</a>
 
   <script src="../assets/site.js?v=689f9cb8" data-base="../"></script>
-  <script src="../assets/tools.js?v=5afe0f29" data-search-scope=".md-groups" data-hide-until=".md-top"></script>
+  <script src="../assets/tools.js?v=5afe0f29" data-search-scope=".md-figure" data-hide-until=".md-top"></script>
 </body>
 </html>
