@@ -310,6 +310,34 @@
       height: 20px;
     }
 
+    /* on hover the envelope tilts into flight, trailing speed lines */
+    .email-btn .icon-mail-send {
+      display: none;
+      overflow: visible;
+    }
+
+    .email-btn:hover .icon-mail,
+    .email-btn:focus-visible .icon-mail,
+    .email-btn.copied .icon-mail {
+      display: none;
+    }
+
+    .email-btn:hover .icon-mail-send,
+    .email-btn:focus-visible .icon-mail-send,
+    .email-btn.copied .icon-mail-send {
+      display: block;
+    }
+
+    .email-btn .speed {
+      stroke-dasharray: 8;
+      animation: mail-speed 0.35s ease-out both;
+    }
+
+    @keyframes mail-speed {
+      from { stroke-dashoffset: -8; opacity: 0; }
+      to { stroke-dashoffset: 0; opacity: 1; }
+    }
+
     /* a note beneath each of the top-right controls on hover, naming it and
        its key */
     .left-controls > * {
@@ -1835,9 +1863,16 @@
 
   <div class="left-controls">
     <button class="email-btn" type="button" data-email="maxjosephholly@outlook.com" aria-label="Copy the email address, maxjosephholly@outlook.com">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="5.5" width="18" height="13" rx="1.5"/>
         <path d="M3.5 6.5 12 13l8.5-6.5"/>
+      </svg>
+      <svg class="icon-mail-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="rotate(-22 15.5 12)">
+          <rect x="9" y="7.25" width="13" height="9.5" rx="1"/>
+          <path d="M9.4 7.75 15.5 12.6 21.6 7.75"/>
+        </g>
+        <path class="speed" d="M0.5 8.5h6.5M2 11.5h5.5M0 14.5h7.5M2.5 17.5h5"/>
       </svg>
       <span class="ctl-note" aria-live="polite">Copy email</span>
     </button>
