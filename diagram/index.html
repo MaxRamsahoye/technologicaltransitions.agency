@@ -3364,14 +3364,35 @@
       // the colours of the Integral and Spiral Dynamics stages: magenta,
       // red, amber, orange, green and teal
       var STAGE_COLOURS = ['#7a3e78', '#a3473a', '#b8862f', '#c96a2b', '#4e8a5a', '#2f8a8f'];
+      // each stage's other name, with an account of its own
+      var STAGE_ALTS = {
+        primitivism: { era: 'From c. 70,000 BCE',
+          text: 'Life organised around the tribe: a community of kin, real or imagined, bound by descent, shared ancestors and common rites, and set apart from outsiders. Loyalty runs to the group before the self, identity is given by membership, and justice is kept by reciprocity and feud rather than by law. Its moral instincts &ndash; trust within the group, suspicion of those outside it &ndash; outlast the tribe itself, and resurface in nations, parties and factions.',
+          source: 'Marshall Sahlins, <em>Tribesmen</em> (1968); Joshua Greene, <em>Moral Tribes</em> (2013)' },
+        classicism: { era: 'c. 800 BCE&ndash;500 CE',
+          text: 'The ancient world of Greece and Rome, alongside the classical civilisations of Persia, India and China: the age of the polis and the empire, of philosophy, drama, history and law. Later ages looked back to it as a lost model of civilisation &ndash; the Renaissance named the centuries in between the Middle Ages &ndash; and its texts, institutions and ideals of form became the classical inheritance of the West.',
+          source: 'Edward Gibbon, <em>The History of the Decline and Fall of the Roman Empire</em> (1776&ndash;1789)' },
+        premodernism: { era: 'From c. 1790',
+          text: 'Tradition held as an authority in its own right: the inherited wisdom of custom, faith and institutions, which no single generation&rsquo;s reason can replace. Once modernity challenged it, traditionalism became a position to defend &ndash; in Burke&rsquo;s reverence for the slow growth of the social order, and in the twentieth-century Traditionalists such as Gu&eacute;non, who saw the modern world as a falling away from a primordial wisdom.',
+          source: 'Edmund Burke, <em>Reflections on the Revolution in France</em> (1790); Ren&eacute; Gu&eacute;non, <em>The Crisis of the Modern World</em> (1927)' },
+        modernism: { era: 'c. 1680&ndash;1800',
+          text: 'The movement that made reason the judge of belief and authority &ndash; <em>sapere aude</em>, dare to know, in Kant&rsquo;s motto. Locke, Voltaire, Hume, Diderot and Kant put religion, monarchy and tradition to critical scrutiny, championed toleration, liberty and the rights of the individual, and set out the programme of progress through knowledge that the American and French revolutions sought to put into practice.',
+          source: 'Immanuel Kant, <em>An Answer to the Question: What Is Enlightenment?</em> (1784); Denis Diderot and Jean le Rond d&rsquo;Alembert (eds.), <em>Encyclop&eacute;die</em> (1751&ndash;1772)' },
+        postmodernism: { era: 'c. 1945&ndash;1975',
+          text: 'Modernism in its last and most self-conscious phase: in art and architecture, the austere abstraction of the International Style, Abstract Expressionism and Minimalism; in thought, a modernism turned on itself &ndash; still committed to form, purpose and progress, yet ever more aware of their limits. Charles Jencks and Fredric Jameson read it as the bridge to postmodernism, whose irony and pluralism it already anticipates.',
+          source: 'Charles Jencks, <em>Late-Modern Architecture</em> (1980); Fredric Jameson, <em>A Singular Modernity</em> (2002)' },
+        metamodernism: { era: 'From c. 1950',
+          text: 'The structure of consciousness that Jean Gebser called integral, and Ken Wilber made the centre of his theory: one that can hold every earlier structure &ndash; archaic, magic, mythic and rational &ndash; in view at once, taking the perspective of each without being captured by any. Integral theory maps them across four quadrants, inner and outer, individual and collective, and holds that the next stage of development is the one that can see and integrate all those before it.',
+          source: 'Jean Gebser, <em>The Ever-Present Origin</em> (1949&ndash;1953); Ken Wilber, <em>A Theory of Everything</em> (2000)' }
+      };
       var STAGE_BY = {};
       STAGES.forEach(function (g) {
         STAGE_BY[g.key] = g;
-        // the other name opens the same account, under that name
-        if (g.aka) {
-          var alt = {};
-          for (var p in g) alt[p] = g[p];
-          alt.key = g.key + '-alt'; alt.name = g.aka; alt.aka = g.name;
+        // the other name has an account of its own
+        if (g.aka && STAGE_ALTS[g.key]) {
+          var alt = STAGE_ALTS[g.key];
+          alt.key = g.key + '-alt'; alt.name = g.aka; alt.parent = g.key;
+          alt.srcLabel = alt.srcLabel || 'Key works';
           STAGE_BY[alt.key] = alt;
         }
         (g.subs || []).forEach(function (u) { u.parent = g.key; STAGE_BY[u.key] = u; });
