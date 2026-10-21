@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="hide-scrollbar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2544,7 +2544,11 @@
     </div>
   </footer>
 
-  <button class="scroll-top-btn" type="button" aria-label="Scroll to top">
+  <div class="progress-pill progress-edge" data-start=".diagram-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".diagram-top">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
       <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
     </svg>
