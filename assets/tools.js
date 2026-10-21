@@ -66,7 +66,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Overviews', 'overviews/'], ['Diagrams', 'diagram/'], ['Timelines', 'timeline/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/']];
+    var pages = [['Article', ''], ['Overviews', 'overviews/'], ['Diagrams', 'diagram/'], ['Timelines', 'timeline/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Model', 'model/']];
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
