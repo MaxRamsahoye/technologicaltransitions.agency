@@ -286,6 +286,50 @@
       height: 20px;
     }
 
+    /* envelope: left of the hamburger, copies the email address, with a
+       note beneath it that says so */
+    .email-btn {
+      position: relative;
+      display: flex;
+      padding: 0;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .email-btn:hover,
+    .email-btn:focus-visible {
+      color: var(--canvas-ink);
+      outline: none;
+    }
+
+    .email-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .email-note {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 50%;
+      transform: translate(50%, -4px);
+      font-family: var(--sans, 'Inter', sans-serif);
+      font-size: 12px;
+      white-space: nowrap;
+      color: var(--canvas-ink);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .email-btn:hover .email-note,
+    .email-btn:focus-visible .email-note,
+    .email-btn.copied .email-note {
+      opacity: 1;
+      transform: translate(50%, 0);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -1774,6 +1818,13 @@
   </div>
 
   <div class="left-controls">
+    <button class="email-btn" type="button" data-email="maxjosephholly@outlook.com" aria-label="Copy the email address, maxjosephholly@outlook.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5.5" width="18" height="13" rx="1.5"/>
+        <path d="M3.5 6.5 12 13l8.5-6.5"/>
+      </svg>
+      <span class="email-note" aria-live="polite">Copy email</span>
+    </button>
     <a class="menu-btn" href="list/" aria-label="Pages">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -2765,8 +2816,33 @@
         });
       }
 
+      // the envelope copies the email address
+      (function () {
+        var btn = document.querySelector('.email-btn');
+        var note = btn.querySelector('.email-note');
+        var timer;
+        btn.addEventListener('click', function () {
+          var email = btn.getAttribute('data-email');
+          var done = function () {
+            note.textContent = 'Email copied';
+            btn.classList.add('copied');
+            clearTimeout(timer);
+            timer = setTimeout(function () { btn.classList.remove('copied'); setTimeout(function () { note.textContent = 'Copy email'; }, 250); }, 1800);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(done, function () { note.textContent = email; btn.classList.add('copied'); });
+          } else {
+            var t = document.createElement('textarea');
+            t.value = email; t.style.position = 'fixed'; t.style.opacity = '0';
+            document.body.appendChild(t); t.select();
+            try { document.execCommand('copy'); done(); } catch (err) { note.textContent = email; btn.classList.add('copied'); }
+            t.remove();
+          }
+        });
+      })();
+
       document.addEventListener('click', function (e) {
-        var iconBtn = e.target.closest('.theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .menu-btn, .sidenote-ref, .sidenote-label');
+        var iconBtn = e.target.closest('.email-btn, .theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .menu-btn, .sidenote-ref, .sidenote-label');
         var x, y;
         if (iconBtn) {
           var rect = iconBtn.getBoundingClientRect();
