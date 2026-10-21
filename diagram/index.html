@@ -3381,7 +3381,7 @@
         // from a little above, widening a little as they rise, with a helix
         // coiled just outside them: each stage half a turn above the last,
         // on alternate sides, its far side passing behind the discs
-        var TILT = 0.3, TH = 16, RISE = 37, tS = 0.5 * Math.PI - 0.7, tE = 5.5 * Math.PI + 0.55;
+        var TILT = 0.3, TH = 16, RISE = 32.5, tS = 0.5 * Math.PI - 0.7, tE = 5.5 * Math.PI + 0.55;
         var T = [0, 1, 2, 3, 4, 5].map(function (k) { return 0.5 * Math.PI + k * Math.PI; });
         var disc = function (t) { return 128 + 3.2 * (t - T[0]); };
         var rad = function (t) { return disc(t) + 42; };
@@ -3391,8 +3391,11 @@
         for (var i = 0; i <= n; i++) pts.push(pt(tS + (tE - tS) * i / n));
         var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
         T.forEach(function (t) { var r = disc(t), y = elev(t); xs.push(-r, r); ys.push(y - r * TILT, y + r * TILT + TH); });
-        var x0 = Math.min.apply(null, xs) - 20, y0 = Math.min.apply(null, ys) - 24;
-        var W = Math.max.apply(null, xs) + 20 - x0, H = Math.max.apply(null, ys) + 20 - y0;
+        // the box is symmetrical about the column's axis, so that the discs
+        // sit centred between the two columns of labels
+        var M = Math.max(-Math.min.apply(null, xs), Math.max.apply(null, xs)) + 20;
+        var x0 = -M, y0 = Math.min.apply(null, ys) - 24;
+        var W = 2 * M, H = Math.max.apply(null, ys) + 20 - y0;
         var X = function (x) { return (x - x0).toFixed(1); }, Y = function (y) { return (y - y0).toFixed(1); };
         var f = function (p) { return X(p[0]) + ' ' + Y(p[1]); };
         // the near and far runs of the helix, drawn apart
