@@ -201,9 +201,6 @@
     }
 
     .md-map .aka {
-      display: block;
-      font-size: 16px;
-      font-style: italic;
       color: var(--muted);
     }
 
@@ -280,6 +277,13 @@
       -webkit-text-stroke: 0.4px currentColor;
     }
 
+    /* a structure's other name, in brackets after its own */
+    .md-alt {
+      font-weight: 400;
+      -webkit-text-stroke: 0;
+      color: var(--muted);
+    }
+
     .md-desc {
       margin: 18px 0 0;
       font-size: 23px;
@@ -336,35 +340,35 @@
     <p class="page-intro md-intro">An elaboration of <a class="plain-link" href="../sources/#schmachtenberger-emergence">Schmachtenberger&rsquo;s</a> framework of civilisational structures: a modified version, called the complex emergence model for differentiation, that in effect doubles the number of structures, to eight.</p>
     <p class="md-count"><b>8</b> structures in <b>3</b> groups</p>
     <nav class="md-map" aria-label="The structures">
-      <div><h2>Core</h2><ul><li><a href="#infrastructure">Infrastructure</a><span class="aka">Tech Stack</span></li><li><a href="#interstructure">Interstructure</a><span class="aka">Political Economy</span></li><li><a href="#superstructure">Superstructure</a><span class="aka">Cultural Psychology</span></li><li class="sub"><a href="#substructure">Substructure</a><span class="aka">Evolutionary Psychology</span></li></ul></div>
-      <div><h2>Interfaces<span>&lsquo;Second Nature&rsquo;</span></h2><ul><li><a href="#biostructure">Biostructure</a><span class="aka">Cultural-Evolutionary Biology</span></li><li><a href="#ecostructure">Ecostructure</a><span class="aka">Cultural-Evolutionary Ecology</span></li></ul></div>
-      <div><h2>Transecting</h2><ul><li><a href="#metastructure">Metastructure</a><span class="aka">System Dynamics</span></li><li><a href="#macrostructure">Macrostructure</a><span class="aka">Developmental Process</span></li></ul></div>
+      <div><h2>Core</h2><ul><li><a href="#infrastructure">Infrastructure</a> <span class="aka">(Tech Stack)</span></li><li><a href="#interstructure">Interstructure</a> <span class="aka">(Political Economy)</span></li><li><a href="#superstructure">Superstructure</a> <span class="aka">(Cultural Psychology)</span></li><li class="sub"><a href="#substructure">Substructure</a> <span class="aka">(Evolutionary Psychology)</span></li></ul></div>
+      <div><h2>Interfaces<span>&lsquo;Second Nature&rsquo;</span></h2><ul><li><a href="#biostructure">Biostructure</a> <span class="aka">(Cultural-Evolutionary Biology)</span></li><li><a href="#ecostructure">Ecostructure</a> <span class="aka">(Cultural-Evolutionary Ecology)</span></li></ul></div>
+      <div><h2>Transecting</h2><ul><li><a href="#metastructure">Metastructure</a> <span class="aka">(System Dynamics)</span></li><li><a href="#macrostructure">Macrostructure</a> <span class="aka">(Developmental Process)</span></li></ul></div>
     </nav>
     </div>
 
     <ol class="md-groups">
       <li class="md-group" id="core"><h2>Core</h2>
-        <div class="md-structure" id="infrastructure"><p class="md-aka">Tech Stack</p><h3 class="md-name">Infrastructure</h3><p class="md-desc">Technological instruments and affordances, productive (and reproductive) forces and material conditions.</p></div>
-        <div class="md-structure" id="interstructure"><p class="md-aka">Political Economy</p><h3 class="md-name">Interstructure</h3><p class="md-desc">The institutional complex for decision-making (governance) and resource-allocation (economy).</p></div>
-        <div class="md-structure" id="superstructure"><p class="md-aka">Cultural Psychology</p><h3 class="md-name">Superstructure</h3><p class="md-desc">Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.</p>
+        <div class="md-structure" id="infrastructure"><h3 class="md-name">Infrastructure <span class="md-alt">(Tech Stack)</span></h3><p class="md-desc">Technological instruments and affordances, productive (and reproductive) forces and material conditions.</p></div>
+        <div class="md-structure" id="interstructure"><h3 class="md-name">Interstructure <span class="md-alt">(Political Economy)</span></h3><p class="md-desc">The institutional complex for decision-making (governance) and resource-allocation (economy).</p></div>
+        <div class="md-structure" id="superstructure"><h3 class="md-name">Superstructure <span class="md-alt">(Cultural Psychology)</span></h3><p class="md-desc">Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.</p>
           <ul class="md-within">
-            <li id="substructure"><p class="md-aka">Evolutionary Psychology</p><h4 class="md-name">Substructure</h4><p class="md-desc">Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).</p></li>
+            <li id="substructure"><h4 class="md-name">Substructure <span class="md-alt">(Evolutionary Psychology)</span></h4><p class="md-desc">Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).</p></li>
           </ul>
         </div>
       </li>
       <li class="md-group" id="interfaces"><h2>Interfaces<span>&lsquo;Second Nature&rsquo;</span></h2>
-        <div class="md-structure" id="biostructure"><p class="md-aka">Cultural-Evolutionary Biology</p><h3 class="md-name">Biostructure</h3><p class="md-desc">The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.</p></div>
-        <div class="md-structure" id="ecostructure"><p class="md-aka">Cultural-Evolutionary Ecology</p><h3 class="md-name">Ecostructure</h3><p class="md-desc">The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.</p></div>
+        <div class="md-structure" id="biostructure"><h3 class="md-name">Biostructure <span class="md-alt">(Cultural-Evolutionary Biology)</span></h3><p class="md-desc">The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.</p></div>
+        <div class="md-structure" id="ecostructure"><h3 class="md-name">Ecostructure <span class="md-alt">(Cultural-Evolutionary Ecology)</span></h3><p class="md-desc">The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.</p></div>
       </li>
       <li class="md-group" id="transecting"><h2>Transecting</h2>
-        <div class="md-structure" id="metastructure"><p class="md-aka">System Dynamics</p><h3 class="md-name">Metastructure</h3><p class="md-desc">The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.</p>
+        <div class="md-structure" id="metastructure"><h3 class="md-name">Metastructure <span class="md-alt">(System Dynamics)</span></h3><p class="md-desc">The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.</p>
           <ul class="md-within">
             <li id="cybernetic"><h4 class="md-name">Cybernetic</h4><p class="md-desc">Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops.</p></li>
             <li id="game-theoretic"><h4 class="md-name">Game-Theoretic</h4><p class="md-desc">Incentive structures, rational strategising and agent-modelling.</p></li>
             <li id="evolutionary"><h4 class="md-name">Evolutionary</h4><p class="md-desc">Selection processes, competitive pressures and niche construction.</p></li>
           </ul>
         </div>
-        <div class="md-structure" id="macrostructure"><p class="md-aka">Developmental Process</p><h3 class="md-name">Macrostructure</h3><p class="md-desc">The process by which a civilisation elaborates itself and changes across macrohistorical time.</p>
+        <div class="md-structure" id="macrostructure"><h3 class="md-name">Macrostructure <span class="md-alt">(Developmental Process)</span></h3><p class="md-desc">The process by which a civilisation elaborates itself and changes across macrohistorical time.</p>
           <ul class="md-within">
             <li id="states-transitions"><h4 class="md-name">States &amp; Transitions</h4><p class="md-desc">The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse.</p></li>
             <li id="constraints-affordances"><h4 class="md-name">Constraints &amp; Affordances</h4><p class="md-desc">The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development.</p></li>
