@@ -125,7 +125,7 @@
     }
 
     .md-count {
-      margin: 0 0 8px;
+      margin: 0 0 24px;
       font-family: var(--mono-caps);
       font-size: 13px;
       font-weight: 600;
@@ -139,15 +139,30 @@
       color: var(--canvas-ink);
     }
 
+    /* wherever there is room, in the margin to the left, where the Diagrams
+       page has its buttons */
+    @media (min-width: 1280px) {
+      .md-count {
+        position: absolute;
+        top: 50%;
+        left: calc((var(--wide-col) - 100vw) / 2 + 40px);
+        max-width: calc((100vw - var(--wide-col)) / 2 - 64px);
+        margin: 0;
+        line-height: 1.6;
+        transform: translateY(-50%);
+      }
+    }
+
     /* the diagram, as wide as the top section, with the structures listed
        beside it and the one pointed to described beneath them */
     .md-figure {
       display: grid;
       grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-      gap: 56px;
+      gap: 120px;
       align-items: start;
-      width: var(--wide-col);
-      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      --fig-w: min(1360px, calc(100vw - 280px));
+      width: var(--fig-w);
+      margin: 0 0 160px calc((100% - var(--fig-w)) / 2);
       --top: #3d4b94;
       --left: #2a3674;
       --right: #1a2455;
@@ -389,6 +404,7 @@
       .md-figure {
         width: auto;
         margin-left: 0;
+        gap: 64px;
       }
     }
 
@@ -412,11 +428,12 @@
   <main class="page-main">
     <div class="md-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Complex Emergence Model</a></h1>
+    <p class="md-count"><b>8</b> structures in <b>3</b> groups</p>
     <p class="page-intro md-intro">An elaboration of <a class="plain-link" href="../sources/#schmachtenberger-emergence">Schmachtenberger&rsquo;s</a> framework of civilisational structures: a modified version, called the complex emergence model for differentiation, that in effect doubles the number of structures, to eight.</p>
     </div>
 
     <section class="md-figure" aria-label="The model as a diagram">
-      <div class="md-scene"><p class="md-count"><b>8</b> structures in <b>3</b> groups</p><svg class="md-svg" viewBox="0 30 800 850" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
+      <div class="md-scene"><svg class="md-svg" viewBox="0 40 900 970" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
       <div class="md-side">
         <div class="md-list">
           <p class="md-list-head">Core</p>
@@ -478,7 +495,7 @@
     (function () {
       var svg = document.querySelector('.md-svg');
       var NS = 'http://www.w3.org/2000/svg';
-      var CX = 400;
+      var CX = 450;
       var P = function (a) { return a.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); };
       function slab(cy, w, h) {
         var q = w / 2;
@@ -489,16 +506,16 @@
       // each slab: key, class, centre height, half-width, thickness, label
       // side and label
       var SLABS = [
-        ['ecostructure', 'eco', 716, 226, 14, 'left', 'Ecostructure'],
-        ['biostructure', 'bio', 630, 182, 14, 'right', 'Biostructure'],
-        ['infrastructure', 'core', 522, 116, 24, 'left', 'Infrastructure'],
-        ['interstructure', 'core', 402, 116, 24, 'right', 'Interstructure'],
-        ['substructure', 'core', 308, 66, 12, 'right', 'Substructure'],
-        ['superstructure', 'core', 222, 116, 24, 'left', 'Superstructure']
+        ['ecostructure', 'eco', 830, 226, 14, 'left', 'Ecostructure'],
+        ['biostructure', 'bio', 726, 182, 14, 'right', 'Biostructure'],
+        ['infrastructure', 'core', 596, 112, 24, 'left', 'Infrastructure'],
+        ['interstructure', 'core', 452, 112, 24, 'right', 'Interstructure'],
+        ['substructure', 'core', 340, 64, 12, 'right', 'Substructure'],
+        ['superstructure', 'core', 236, 112, 24, 'left', 'Superstructure']
       ];
       // the helix, its far side behind the core stack and its near side in
       // front, rising from the biostructure to above the superstructure
-      var near = '', far = '', prev = null, T = 4.5 * Math.PI, R = 178, Y0 = 610, RISE = 470;
+      var near = '', far = '', prev = null, T = 4.5 * Math.PI, R = 215, Y0 = 716, RISE = 560;
       for (var i = 0; i <= 200; i++) {
         var t = i / 200 * T, y = Y0 - RISE * t / T;
         var pt = [CX + R * Math.sin(t), y + R * 0.5 * Math.cos(t), Math.cos(t) > 0];
@@ -511,26 +528,26 @@
       var html = '';
       // labels and their lines, to the left or right of each slab
       function label(key, side, y, x0, text) {
-        var lx = side === 'left' ? 10 : 790;
+        var lx = side === 'left' ? 10 : 890;
         return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 192 : lx - 192) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
           '<text class="md-label" data-key="' + key + '" x="' + lx + '" y="' + (y + 5) + '" text-anchor="' + (side === 'left' ? 'start' : 'end') + '">' + text + '</text>';
       }
       SLABS.slice(0, 2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
       html += '<g class="md-helix" data-key="macrostructure"><path class="far" d="' + far + '"/><path class="hit" d="' + far + '"/></g>';
       SLABS.slice(2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
-      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="120" x2="' + CX + '" y2="760"/>' +
+      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="120" x2="' + CX + '" y2="880"/>' +
         // feedback: two arrows chasing each other round a circle
-        '<path d="M' + (CX - 20) + ' 92a20 20 0 0 1 34-14M' + (CX + 20) + ' 92a20 20 0 0 1-34 14"/>' +
-        '<path d="M' + (CX + 6) + ' 75l8 3-3 8M' + (CX - 6) + ' 109l-8-3 3-8"/>' +
+        '<path d="M' + (CX - 20) + ' 92A20 20 0 0 1 ' + (CX + 14.1) + ' 77.9M' + (CX + 4.9) + ' 75.8L' + (CX + 14.1) + ' 77.9L' + (CX + 12) + ' 68.7"/>' +
+        '<path d="M' + (CX + 20) + ' 92A20 20 0 0 1 ' + (CX - 14.1) + ' 106.1M' + (CX - 4.9) + ' 108.2L' + (CX - 14.1) + ' 106.1L' + (CX - 12) + ' 115.3"/>' +
         '<circle class="hub" cx="' + CX + '" cy="92" r="3.5"/>' +
-        '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="760"/></g>';
+        '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="880"/></g>';
       html += '<g class="md-helix" data-key="macrostructure"><path d="' + near + 'M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/><path class="hit" d="' + near + '"/></g>';
       SLABS.forEach(function (s) {
         var x0 = s[5] === 'left' ? CX - s[3] - 8 : CX + s[3] + 8;
         html += label(s[0], s[5], s[2] + s[4] / 2, x0, s[6]);
       });
       html += label('metastructure', 'right', 92, CX + 32, 'Metastructure');
-      html += label('macrostructure', 'left', 148, CX - R * 0.6, 'Macrostructure');
+      html += label('macrostructure', 'left', 150, CX - R * 0.62, 'Macrostructure');
       svg.innerHTML = html;
 
       var parts = Array.prototype.slice.call(document.querySelectorAll('.md-svg [data-key], .md-list [data-key]'));
