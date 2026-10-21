@@ -158,6 +158,14 @@
       text-decoration: underline;
     }
 
+    .ov-contents .ov-abstract {
+      counter-increment: none;
+    }
+
+    .ov-contents .ov-abstract::before {
+      content: '\2014';
+    }
+
     .ov-contents .ov-upcoming {
       color: var(--muted);
     }
@@ -351,7 +359,9 @@
           if (!h) return;
           n++;
           var id = 'overview-' + sec.id, title = text(h);
-          items += '<li><a href="#' + id + '"></a></li>';
+          // the first section is the abstract, unnumbered; the sections
+          // after it are numbered from one
+          items += '<li' + (n === 1 ? ' class="ov-abstract"' : '') + '><a href="#' + id + '"></a></li>';
           // the section's own opening, then each subsection's
           var kids = Array.prototype.slice.call(sec.children), parts = [], cur = { h: null, nodes: [] };
           kids.forEach(function (k) {
@@ -363,7 +373,7 @@
             var hd = pt.h ? '<h3></h3>' : '';
             return (hd || p) ? hd + (p ? opening(p) : '') : '';
           }).join('');
-          out += '<li class="ov-section" id="' + id + '"><p class="ov-num">Section ' + n + '</p><h2></h2>' + bodyHTML +
+          out += '<li class="ov-section" id="' + id + '"><p class="ov-num">' + (n === 1 ? 'Abstract' : 'Section ' + (n - 1)) + '</p><h2></h2>' + bodyHTML +
             '<p class="ov-read"><a href="' + new URL('#' + sec.id, ARTICLE).href + '">Read the section</a></p></li>';
           sec._title = title;
           sec._subs = parts.filter(function (pt) { return pt.h; }).map(function (pt) { return text(pt.h); });
