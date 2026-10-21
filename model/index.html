@@ -251,6 +251,19 @@
       stroke: color-mix(in srgb, currentColor 22%, transparent);
     }
 
+    /* only the hit areas take the pointer: the helix where it is clear of
+       the slabs, and the axis at its head */
+    .md-axis > :not(.hit),
+    .md-helix > :not(.hit) {
+      pointer-events: none;
+    }
+
+    .md-axis circle.hit {
+      fill: transparent;
+      stroke: none !important;
+      pointer-events: all;
+    }
+
     .md-axis .hit,
     .md-helix .hit {
       stroke: transparent !important;
@@ -521,12 +534,25 @@
       ];
       // the helix, its far side behind the core stack and its near side in
       // front, rising from the biostructure to above the superstructure
+      // whether a point falls on a slab as drawn, its top and both sides,
+      // with a little room around it
+      function onSlab(x, y) {
+        return SLABS.some(function (s) {
+          var dx = Math.abs(x - CX), w = s[3] + 6;
+          return dx <= w && y >= s[2] - (w - dx) / 2 - 6 && y <= s[2] + s[4] + (w - dx) / 2 + 6;
+        });
+      }
+      var nearHit = '', hitPrev = false;
       var near = '', far = '', prev = null, T = 4.5 * Math.PI, R = 215, Y0 = 663, RISE = 515;
       for (var i = 0; i <= 200; i++) {
         var t = i / 200 * T, y = Y0 - RISE * t / T;
         var pt = [CX + R * Math.sin(t), y + R * 0.5 * Math.cos(t), Math.cos(t) > 0];
         var seg = (prev && prev[2] === pt[2] ? 'L' : 'M' + (prev ? prev[0].toFixed(1) + ' ' + prev[1].toFixed(1) + 'L' : '')) + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1);
         if (pt[2]) near += seg; else far += seg;
+        // the near side can be pointed to only where it is clear of the
+        // slabs, so that pointing to a slab never picks out the helix
+        if (pt[2] && !onSlab(pt[0], pt[1])) { nearHit += (hitPrev ? 'L' : 'M') + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1); hitPrev = true; }
+        else hitPrev = false;
         prev = pt;
       }
       var e = prev, ang = Math.atan2(e[1] - (Y0 - RISE * (T - 0.05) / T + R * 0.5 * Math.cos(T - 0.05)), e[0] - (CX + R * Math.sin(T - 0.05)));
@@ -560,8 +586,8 @@
         // feedback: two arrows chasing each other round a circle
         cycleArrow(CX, 92, 20, 180, 305) + cycleArrow(CX, 92, 20, 0, 125) +
         '<circle class="hub" cx="' + CX + '" cy="92" r="3.5"/>' +
-        '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="822"/></g>';
-      html += '<g class="md-helix" data-key="macrostructure"><path d="' + near + 'M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/><path class="hit" d="' + near + '"/></g>';
+        '<circle class="hit" cx="' + CX + '" cy="92" r="30"/></g>';
+      html += '<g class="md-helix" data-key="macrostructure"><path d="' + near + 'M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/><path class="hit" d="' + nearHit + '"/></g>';
       SLABS.forEach(function (s) {
         var x0 = s[5] === 'left' ? CX - s[3] - 8 : CX + s[3] + 8;
         html += label(s[0], s[5], s[2] + s[4] / 2, x0, s[6]);
