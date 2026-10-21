@@ -112,6 +112,13 @@
 
     /* the article's contents, numbered as in its menu, each item leading
        to its section's overview below; sections still to come greyed out */
+    /* the contents sit centred in the top section, left-aligned within */
+    .ov-toc {
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
     .ov-contents-label {
       margin: 64px 0 22px;
       font-family: var(--mono-caps);
@@ -288,8 +295,10 @@
     <div class="ov-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Overviews</a></h1>
     <p class="page-intro">Each section of <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a> in brief.</p>
+    <div class="ov-toc">
     <p class="ov-contents-label">Contents</p>
     <ol class="ov-contents" aria-label="Contents"><li class="ov-loading">Loading the article&hellip;</li></ol>
+    </div>
     </div>
 
     <ol class="ov-sections"></ol>
