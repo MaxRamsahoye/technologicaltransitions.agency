@@ -120,6 +120,28 @@
       color: var(--muted);
     }
 
+    /* how many works in all, and in each category */
+    .sources-count {
+      margin: 28px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .sources-count b {
+      font-weight: 600;
+      color: var(--canvas-ink);
+    }
+
+    .cat-count {
+      margin-left: 14px;
+      font-weight: 400;
+      opacity: 0.75;
+    }
+
     .bibliography-section {
       margin-top: 22px;
     }
@@ -394,7 +416,8 @@
     <div class="sources-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Sources</a></h1>
     <p class="page-intro">Works drawn on in <a class="plain-link" href="../"><em>A Multi-Agent Model of Major Technological Transitions</em></a>.</p>
-    <h2 class="bibliography-heading">Civilisational Macrohistorical Development</h2>
+    <p class="sources-count"><b data-count="all">20</b> sources in <b data-count="cats">2</b> categories</p>
+    <h2 class="bibliography-heading">Civilisational Macrohistorical Development<span class="cat-count">13</span></h2>
     <ol class="bibliography bibliography-section" aria-label="Civilisational Macrohistorical Development">
       <li><a class="bib-jump" href="#dafoe" aria-label="Go to the entry"></a>Allan Dafoe &lsquo;<a href="https://doi.org/10.1177/0162243915579283" target="_blank" rel="noopener">On Technological Determinism</a>&rsquo; <em>Science, Technology, &amp; Human Values</em> (2015)
         <ol>
@@ -416,7 +439,7 @@
       <li><a class="bib-jump" href="#sahlins" aria-label="Go to the entry"></a>Marshall Sahlins &lsquo;<a href="https://www.routledge.com/products/9781138702608" target="_blank" rel="noopener">The Original Affluent Society</a>&rsquo; in <em>Stone Age Economics</em> (1972)</li>
       <li><a class="bib-jump" href="#kemp" aria-label="Go to the entry"></a>Luke Kemp <em><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Goliath&rsquo;s Curse: The History and Future of Societal Collapse</a></em> (2025)</li>
     </ol>
-    <h2 class="bibliography-heading">Evolutionary Process Misalignment</h2>
+    <h2 class="bibliography-heading">Evolutionary Process Misalignment<span class="cat-count">7</span></h2>
     <ol class="bibliography bibliography-section" aria-label="Evolutionary Process Misalignment">
       <li><a class="bib-jump" href="#drago-laine" aria-label="Go to the entry"></a>Luke Drago &amp; Rudolf Laine &lsquo;<a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a>&rsquo; <em>Workshop Labs</em> (2025)</li>
       <li><a class="bib-jump" href="#kulveit" aria-label="Go to the entry"></a>Jan Kulveit <em>et al.</em> &lsquo;<a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment</a>&rsquo; <em>Alignment of Complex Systems Research Group</em> (2025)</li>
@@ -429,7 +452,7 @@
     </div>
 
     <ol class="sources">
-      <li class="source-section" id="civilisational-macrohistorical-development"><h2>Civilisational Macrohistorical Development</h2></li>
+      <li class="source-section" id="civilisational-macrohistorical-development"><h2>Civilisational Macrohistorical Development<span class="cat-count">13</span></h2></li>
 
       <li class="source" id="dafoe">
         <p class="source-author">Allan Dafoe</p>
@@ -531,7 +554,7 @@
         <p class="source-link"><a href="https://www.publishersweekly.com/9780593321355" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
 
-      <li class="source-section" id="evolutionary-process-misalignment"><h2>Evolutionary Process Misalignment</h2></li>
+      <li class="source-section" id="evolutionary-process-misalignment"><h2>Evolutionary Process Misalignment<span class="cat-count">7</span></h2></li>
 
       <li class="source" id="drago-laine">
         <p class="source-author">Luke Drago &amp; Rudolf Laine</p>
@@ -619,6 +642,17 @@
   </button>
 
   <script>
+    // the counts, kept to the list: every work in it, sub-entries included,
+    // in all and in each category, at the top and down the page
+    (function () {
+      var cats = Array.prototype.slice.call(document.querySelectorAll('.bibliography-section'));
+      var counts = cats.map(function (c) { return c.querySelectorAll('li').length; });
+      document.querySelector('[data-count="all"]').textContent = counts.reduce(function (a, b) { return a + b; }, 0);
+      document.querySelector('[data-count="cats"]').textContent = cats.length;
+      document.querySelectorAll('.bibliography-heading .cat-count').forEach(function (el, i) { el.textContent = counts[i]; });
+      document.querySelectorAll('.source-section .cat-count').forEach(function (el, i) { el.textContent = counts[i]; });
+    })();
+
     // the up arrow shows once the top section has scrolled away
     (function () {
       var upBtn = document.querySelector('.scroll-top-btn');
