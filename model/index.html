@@ -55,7 +55,7 @@
     .md-top {
       position: relative;
       z-index: 0;
-      margin-bottom: 72px;
+      margin-bottom: 56px;
     }
 
     .md-top::before {
@@ -125,7 +125,7 @@
     }
 
     .md-count {
-      margin: 28px 0 0;
+      margin: 0 0 8px;
       font-family: var(--mono-caps);
       font-size: 13px;
       font-weight: 600;
@@ -145,7 +145,7 @@
       display: grid;
       grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
       gap: 56px;
-      align-items: center;
+      align-items: start;
       width: var(--wide-col);
       margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
       --top: #3d4b94;
@@ -212,6 +212,15 @@
       transition: stroke 0.3s ease;
     }
 
+    .md-axis .hub {
+      fill: currentColor;
+      stroke: none !important;
+    }
+
+    .md-axis.on .hub {
+      fill: var(--link-blue);
+    }
+
     .md-axis .shaft {
       stroke-dasharray: 2 6;
     }
@@ -241,7 +250,7 @@
     /* labels beside the diagram, each joined to its structure */
     .md-label {
       font-family: var(--serif);
-      font-size: 22px;
+      font-size: 27px;
       fill: currentColor;
       cursor: pointer;
       transition: fill 0.2s ease;
@@ -270,9 +279,9 @@
     }
 
     .md-list-head {
-      margin: 26px 0 8px;
+      margin: 30px 0 10px;
       font-family: var(--mono-caps);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -286,7 +295,7 @@
     .md-list-head em {
       margin-left: 8px;
       font-family: var(--serif);
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 400;
       letter-spacing: 0;
       text-transform: none;
@@ -298,7 +307,7 @@
       background: none;
       font: inherit;
       font-family: var(--serif);
-      font-size: 20px;
+      font-size: 23px;
       line-height: 1.3;
       text-align: left;
       color: var(--canvas-ink);
@@ -312,8 +321,8 @@
     }
 
     .md-list button.sub {
-      margin-left: 22px;
-      font-size: 18px;
+      margin-left: 24px;
+      font-size: 21px;
     }
 
     .md-list button:hover,
@@ -334,7 +343,7 @@
 
     .md-detail p {
       margin: 0;
-      font-size: 20px;
+      font-size: 23px;
       line-height: 1.4;
     }
 
@@ -348,7 +357,7 @@
       position: relative;
       margin: 0 0 8px;
       padding-left: 22px;
-      font-size: 17px;
+      font-size: 20px;
       line-height: 1.35;
     }
 
@@ -404,11 +413,10 @@
     <div class="md-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Complex Emergence Model</a></h1>
     <p class="page-intro md-intro">An elaboration of <a class="plain-link" href="../sources/#schmachtenberger-emergence">Schmachtenberger&rsquo;s</a> framework of civilisational structures: a modified version, called the complex emergence model for differentiation, that in effect doubles the number of structures, to eight.</p>
-    <p class="md-count"><b>8</b> structures in <b>3</b> groups</p>
     </div>
 
     <section class="md-figure" aria-label="The model as a diagram">
-      <div class="md-scene"><svg class="md-svg" viewBox="0 0 800 880" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
+      <div class="md-scene"><p class="md-count"><b>8</b> structures in <b>3</b> groups</p><svg class="md-svg" viewBox="0 30 800 850" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a helix rising around them"></svg></div>
       <div class="md-side">
         <div class="md-list">
           <p class="md-list-head">Core</p>
@@ -481,8 +489,8 @@
       // each slab: key, class, centre height, half-width, thickness, label
       // side and label
       var SLABS = [
-        ['ecostructure', 'eco', 716, 262, 14, 'left', 'Ecostructure'],
-        ['biostructure', 'bio', 630, 196, 14, 'right', 'Biostructure'],
+        ['ecostructure', 'eco', 716, 226, 14, 'left', 'Ecostructure'],
+        ['biostructure', 'bio', 630, 182, 14, 'right', 'Biostructure'],
         ['infrastructure', 'core', 522, 116, 24, 'left', 'Infrastructure'],
         ['interstructure', 'core', 402, 116, 24, 'right', 'Interstructure'],
         ['substructure', 'core', 308, 66, 12, 'right', 'Substructure'],
@@ -504,21 +512,24 @@
       // labels and their lines, to the left or right of each slab
       function label(key, side, y, x0, text) {
         var lx = side === 'left' ? 10 : 790;
-        return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 158 : lx - 158) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
+        return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 192 : lx - 192) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
           '<text class="md-label" data-key="' + key + '" x="' + lx + '" y="' + (y + 5) + '" text-anchor="' + (side === 'left' ? 'start' : 'end') + '">' + text + '</text>';
       }
       SLABS.slice(0, 2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
       html += '<g class="md-helix" data-key="macrostructure"><path class="far" d="' + far + '"/><path class="hit" d="' + far + '"/></g>';
       SLABS.slice(2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
-      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="112" x2="' + CX + '" y2="760"/>' +
-        '<path d="M' + (CX + 26) + ' 92a26 9 0 1 1-6-5.8M' + (CX + 14) + ' 84.5l6 1.7-2.5 5.6"/>' +
+      html += '<g class="md-axis" data-key="metastructure"><line class="shaft" x1="' + CX + '" y1="120" x2="' + CX + '" y2="760"/>' +
+        // feedback: two arrows chasing each other round a circle
+        '<path d="M' + (CX - 20) + ' 92a20 20 0 0 1 34-14M' + (CX + 20) + ' 92a20 20 0 0 1-34 14"/>' +
+        '<path d="M' + (CX + 6) + ' 75l8 3-3 8M' + (CX - 6) + ' 109l-8-3 3-8"/>' +
+        '<circle class="hub" cx="' + CX + '" cy="92" r="3.5"/>' +
         '<line class="hit" x1="' + CX + '" y1="76" x2="' + CX + '" y2="760"/></g>';
       html += '<g class="md-helix" data-key="macrostructure"><path d="' + near + 'M' + head[0] + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'L' + head[1] + '"/><path class="hit" d="' + near + '"/></g>';
       SLABS.forEach(function (s) {
         var x0 = s[5] === 'left' ? CX - s[3] - 8 : CX + s[3] + 8;
         html += label(s[0], s[5], s[2] + s[4] / 2, x0, s[6]);
       });
-      html += label('metastructure', 'right', 92, CX + 34, 'Metastructure');
+      html += label('metastructure', 'right', 92, CX + 32, 'Metastructure');
       html += label('macrostructure', 'left', 148, CX - R * 0.6, 'Macrostructure');
       svg.innerHTML = html;
 
