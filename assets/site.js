@@ -448,6 +448,12 @@
       if (!canvas) return;
       e.preventDefault();
       window.scrollTo({ top: canvas.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+    } else if (e.key === 'm' || e.key === 'M') {
+      // m: the Pages menu, as the article's hamburger opens it
+      var menu = new URL(base + 'list/', location.href);
+      if (menu.pathname === location.pathname) return;
+      playPianoClick();
+      leaveTo(menu.href);
     } else if (e.key === 'c' || e.key === 'C') {
       // c: toggle the blue link accent (shared with the article)
       var on = document.documentElement.classList.toggle('colour');
