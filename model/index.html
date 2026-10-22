@@ -343,6 +343,25 @@
       fill: var(--link-blue);
     }
 
+    .md-label .md-field {
+      font-size: 18px;
+      fill: var(--muted);
+      transition: fill 0.2s ease;
+    }
+
+    .md-label.on .md-field {
+      fill: var(--link-blue);
+    }
+
+    /* the menu set further right on this page, nearer the site's name */
+    @media (min-width: 1100px) {
+      html body .top-nav {
+        left: auto;
+        right: 220px;
+        transform: none;
+      }
+    }
+
     .md-lead {
       stroke: color-mix(in srgb, currentColor 28%, transparent);
       stroke-width: 1;
@@ -968,16 +987,16 @@
       <div class="md-side">
         <div class="md-list">
           <p class="md-list-head">Transecting</p>
-          <button type="button" data-key="metastructure">Metastructure <span>(System Dynamics)</span></button>
-          <button type="button" data-key="macrostructure">Macrostructure <span>(Developmental Process)</span></button>
+          <button type="button" data-key="metastructure">Metastructure <span>System Dynamics</span></button>
+          <button type="button" data-key="macrostructure">Macrostructure <span>Developmental Process</span></button>
           <p class="md-list-head">Core</p>
-          <button type="button" data-key="infrastructure">Infrastructure <span>(Tech Stack)</span></button>
-          <button type="button" data-key="interstructure">Interstructure <span>(Political Economy)</span></button>
-          <button type="button" data-key="superstructure">Superstructure <span>(Cultural Psychology)</span></button>
-          <button type="button" class="sub" data-key="substructure">Substructure <span>(Evolutionary Psychology)</span></button>
+          <button type="button" data-key="infrastructure">Infrastructure <span>Tech Stack</span></button>
+          <button type="button" data-key="interstructure">Interstructure <span>Political Economy</span></button>
+          <button type="button" data-key="superstructure">Superstructure <span>Cultural Psychology</span></button>
+          <button type="button" class="sub" data-key="substructure">Substructure <span>Evolutionary Psychology</span></button>
           <p class="md-list-head">Interfaces <em>&lsquo;Second Nature&rsquo;</em></p>
-          <button type="button" data-key="biostructure">Biostructure <span>(Cultural-Evolutionary Biology)</span></button>
-          <button type="button" data-key="ecostructure">Ecostructure <span>(Cultural-Evolutionary Ecology)</span></button>
+          <button type="button" data-key="biostructure">Biostructure <span>Cultural-Evolutionary Biology</span></button>
+          <button type="button" data-key="ecostructure">Ecostructure <span>Cultural-Evolutionary Ecology</span></button>
         </div>
         <div class="md-detail" aria-live="polite"></div>
       </div>
@@ -993,16 +1012,16 @@
           <div class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>Agency &middot; complex</button></div>
           <div class="md-ee-list">
             <p class="md-list-head">Transecting</p>
-            <button type="button" data-key="metastructure">Metastructure <span>(System Dynamics)</span></button>
-            <button type="button" data-key="macrostructure">Macrostructure <span>(Developmental Process)</span></button>
+            <button type="button" data-key="metastructure">Metastructure <span>System Dynamics</span></button>
+            <button type="button" data-key="macrostructure">Macrostructure <span>Developmental Process</span></button>
             <p class="md-list-head">Core</p>
-            <button type="button" data-key="infrastructure">Infrastructure <span>(Tech Stack)</span></button>
-            <button type="button" data-key="interstructure">Interstructure <span>(Political Economy)</span></button>
-            <button type="button" data-key="superstructure">Superstructure <span>(Cultural Psychology)</span></button>
-            <button type="button" class="sub" data-key="substructure">Substructure <span>(Evolutionary Psychology)</span></button>
+            <button type="button" data-key="infrastructure">Infrastructure <span>Tech Stack</span></button>
+            <button type="button" data-key="interstructure">Interstructure <span>Political Economy</span></button>
+            <button type="button" data-key="superstructure">Superstructure <span>Cultural Psychology</span></button>
+            <button type="button" class="sub" data-key="substructure">Substructure <span>Evolutionary Psychology</span></button>
             <p class="md-list-head">Interfaces <em>&lsquo;Second Nature&rsquo;</em></p>
-            <button type="button" data-key="biostructure">Biostructure <span>(Cultural-Evolutionary Biology)</span></button>
-            <button type="button" data-key="ecostructure">Ecostructure <span>(Cultural-Evolutionary Ecology)</span></button>
+            <button type="button" data-key="biostructure">Biostructure <span>Cultural-Evolutionary Biology</span></button>
+            <button type="button" data-key="ecostructure">Ecostructure <span>Cultural-Evolutionary Ecology</span></button>
           </div>
           <div class="md-ring-note" aria-live="polite"></div>
         </div>
@@ -1091,10 +1110,20 @@
         return '<path d="M' + f(s0) + 'A' + r + ' ' + r + ' 0 0 1 ' + f(e) + 'L' + f(tip) + 'M' + wing(1) + 'L' + f(tip) + 'L' + wing(-1) + '"/>';
       }
       // labels and their lines, to the left or right of each slab
+      // each with its field beneath it, as the list beside the diagram has it
+      var FIELDS = {};
+      document.querySelectorAll('.md-list [data-key] span').forEach(function (sp) { FIELDS[sp.parentNode.dataset.key] = sp.textContent; });
       function label(key, side, y, x0, text) {
         var lx = side === 'left' ? 0 : 900;
         return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 192 : lx - 192) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
-          '<text class="md-label" data-key="' + key + '" x="' + lx + '" y="' + (y + 5) + '" text-anchor="' + (side === 'left' ? 'start' : 'end') + '">' + text + '</text>';
+          '<text class="md-label" data-key="' + key + '" x="' + lx + '" y="' + (y + 5) + '" text-anchor="' + (side === 'left' ? 'start' : 'end') + '">' + text +
+          field(FIELDS[key] || '', lx) + '</text>';
+      }
+      // a long field goes on two lines, so it stays clear of the slabs
+      function field(f, x) {
+        var cut = f.length > 24 ? f.lastIndexOf(' ') : -1;
+        var lines = cut > 0 ? [f.slice(0, cut), f.slice(cut + 1)] : f ? [f] : [];
+        return lines.map(function (l, i) { return '<tspan class="md-field" x="' + x + '" dy="' + (i ? 22 : 28) + '">' + l + '</tspan>'; }).join('');
       }
       SLABS.slice(0, 2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
       SLABS.slice(2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
