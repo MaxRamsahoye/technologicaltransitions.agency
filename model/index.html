@@ -578,6 +578,78 @@
       fill: var(--canvas-bg);
     }
 
+    /* the concepts: regions of the diagram to point to, and what each
+       picks out across all the structures */
+    .md-ring .concept-hit {
+      fill: transparent;
+      cursor: pointer;
+    }
+
+    .md-ring .self-hit {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 24;
+      pointer-events: stroke;
+    }
+
+    .md-ring :is(.exo, .endo, .halo, .out, .in, .in-head, .tie, .membrane, .self) {
+      transition: opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, fill 0.3s ease, r 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .md-ring.c-exo :is(.endo, .out, .in, .in-head, .tie),
+    .md-ring.c-endo :is(.exo, .halo, .out, .in, .in-head),
+    .md-ring.c-self :is(.exo, .halo, .endo, .out, .in, .in-head, .tie) {
+      opacity: 0.2;
+    }
+
+    .md-ring.c-exo .halo {
+      r: 32px;
+      stroke: var(--c);
+    }
+
+    .md-ring.c-exo .name {
+      fill: var(--c);
+    }
+
+    .md-ring.c-endo .endo {
+      r: 14px;
+      fill: color-mix(in srgb, var(--c) 50%, var(--canvas-bg));
+      stroke-width: 2;
+    }
+
+    .md-ring.c-self .membrane {
+      stroke: var(--canvas-ink);
+      stroke-width: 3;
+    }
+
+    .md-ring.c-self .membrane.faint {
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      stroke-width: 1.5;
+    }
+
+    .md-key button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 22px;
+      padding: 4px 0;
+      border: none;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .md-key button:hover,
+    .md-key button:focus-visible,
+    .md-key button.on {
+      color: var(--canvas-ink);
+      outline: none;
+    }
+
     /* a key to the two halves of each structure, and the membrane */
     .md-key {
       display: flex;
@@ -598,12 +670,7 @@
       display: inline-block;
       width: 14px;
       height: 14px;
-      margin-left: 18px;
       border-radius: 50%;
-    }
-
-    .md-key span:first-child {
-      margin-left: 0;
     }
 
     .md-key .k-exo {
@@ -696,7 +763,7 @@
       <h2 class="md-agency-title">Human Agency <span>&amp;</span> the Exo-Endo Structure</h2>
       <p class="md-agency-intro">Every structure is at once <em>exo</em> &ndash; an extended phenotype or prosthesis, built outward from human agency &ndash; and <em>endo</em> &ndash; internalised, shaping that agency from within.</p>
       <svg class="md-ring" viewBox="-90 0 940 760" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
-      <p class="md-key"><span class="k-exo"></span>Exo &middot; extended<span class="k-endo"></span>Endo &middot; internalised<span class="k-membrane"></span>The self</p>
+      <p class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>The self</button></p>
       <p class="md-ring-note" aria-live="polite"></p>
     </section>
 
@@ -876,6 +943,15 @@
       html += '<circle class="self" cx="' + C + '" cy="' + C + '" r="' + RM + '" fill="url(#md-self)"/>';
       html += '<circle class="membrane" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
       html += '<circle class="membrane faint" cx="' + C + '" cy="' + C + '" r="' + (RM + 7) + '"/>';
+      // the three concepts, each a region to point to beneath the structures:
+      // outside the membrane (exo), inside it (endo), and the membrane (self)
+      var ring = function (r0, r1) {
+        return 'M' + (C + r1) + ' ' + C + 'a' + r1 + ' ' + r1 + ' 0 1 0 ' + (-2 * r1) + ' 0a' + r1 + ' ' + r1 + ' 0 1 0 ' + (2 * r1) + ' 0Z' +
+          'M' + (C + r0) + ' ' + C + 'a' + r0 + ' ' + r0 + ' 0 1 0 ' + (-2 * r0) + ' 0a' + r0 + ' ' + r0 + ' 0 1 0 ' + (2 * r0) + ' 0Z';
+      };
+      html += '<path class="concept-hit" data-concept="exo" fill-rule="evenodd" d="' + ring(RM + 12, ROUT + 46) + '"/>';
+      html += '<path class="concept-hit" data-concept="endo" fill-rule="evenodd" d="' + ring(RA + 14, RM - 12) + '"/>';
+      html += '<circle class="concept-hit self-hit" data-concept="self" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
       // an arrowhead at the end of a curve, along its last direction
       function head(end, ctrl) {
         var d = [end[0] - ctrl[0], end[1] - ctrl[1]], L = Math.hypot(d[0], d[1]); d = [d[0] / L, d[1] / L];
@@ -909,6 +985,25 @@
       svg.innerHTML = html;
       var DEFAULT = 'Point to a structure: each is extended outward from human agency, and internalised by it.';
       note.textContent = DEFAULT;
+      // the concepts, from the diagram or the key
+      var CONCEPTS = {
+        exo: '<b>Exo</b> &ndash; each structure as extended outward from human agency: an extended phenotype or prosthesis, built and inhabited by a population, through which its agency acts on the world.',
+        endo: '<b>Endo</b> &ndash; each structure as internalised: taken into the bodies, minds and habits of the people who live within it, shaping their agency from within.',
+        self: '<b>The self</b> &ndash; the boundary of the human agent, across which every structure passes both ways: extended outward, and drawn back in.'
+      };
+      var keys = Array.prototype.slice.call(document.querySelectorAll('.md-key [data-concept]'));
+      function concept(c) {
+        ['exo', 'endo', 'self'].forEach(function (k) { svg.classList.toggle('c-' + k, k === c); });
+        keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
+        if (c) note.innerHTML = CONCEPTS[c]; else note.textContent = DEFAULT;
+      }
+      Array.prototype.slice.call(svg.querySelectorAll('.concept-hit')).concat(keys).forEach(function (el) {
+        var c = el.getAttribute('data-concept');
+        el.addEventListener('mouseenter', function () { concept(c); });
+        el.addEventListener('mouseleave', function () { concept(null); });
+        el.addEventListener('focus', function () { concept(c); });
+        el.addEventListener('blur', function () { concept(null); });
+      });
       svg.querySelectorAll('.pair').forEach(function (g) {
         var key = g.getAttribute('data-key');
         g.addEventListener('mouseenter', function () {
