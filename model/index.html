@@ -528,6 +528,19 @@
       width: 100%;
     }
 
+    /* the panel sits level with the diagram, and rises to the top of the
+       description when a structure is pointed to, to make room for it */
+    @media (min-width: 901px) {
+      .md-agency-side {
+        transform: translateY(var(--drop, 0px));
+        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .md-agency-grid.structure .md-agency-side {
+        transform: none;
+      }
+    }
+
     @media (max-width: 1180px) {
       .md-agency-grid {
         gap: 64px;
@@ -1208,6 +1221,21 @@
       // Leaving waits a moment before clearing, so that moving from one
       // region to another that picks out the same thing never flickers
       var current = null, clearTimer = null;
+      // how far the panel drops to sit level with the diagram
+      var grid = document.querySelector('.md-agency-grid');
+      function setDrop() {
+        var intro = document.querySelector('.md-agency-intro');
+        grid.style.setProperty('--drop', (svg.getBoundingClientRect().top - intro.getBoundingClientRect().top) + 'px');
+      }
+      setDrop();
+      window.addEventListener('resize', setDrop);
+      // the panel holds still while the pointer is in it (its own list and
+      // key would otherwise slide out from under the pointer), and moves
+      // once the pointer leaves
+      var side = document.querySelector('.md-agency-side'), inPanel = false, raised = false;
+      side.addEventListener('mouseenter', function () { inPanel = true; });
+      side.addEventListener('mouseleave', function () { inPanel = false; grid.classList.toggle('structure', raised); });
+      if (document.fonts) document.fonts.ready.then(setDrop);
       var eeList = Array.prototype.slice.call(document.querySelectorAll('.md-ee-list [data-key]'));
       function show(kind, id, g) {
         clearTimeout(clearTimer);
@@ -1218,6 +1246,8 @@
         ['exo', 'endo', 'self'].forEach(function (k) { svg.classList.toggle('c-' + k, k === c); });
         keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
         svg.classList.toggle('pointing', kind === 'pair');
+        raised = kind === 'pair';
+        if (!inPanel) grid.classList.toggle('structure', raised);
         svg.querySelectorAll('.pair').forEach(function (p) { p.classList.toggle('on', p === g); });
         eeList.forEach(function (b) { b.classList.toggle('on', kind === 'pair' && b.getAttribute('data-key') === id); });
         note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
