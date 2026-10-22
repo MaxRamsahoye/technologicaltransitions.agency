@@ -502,17 +502,17 @@
 
     .md-ring .out,
     .md-ring .in,
-    .md-ring .in-head {
+    .md-ring .out-head {
       fill: none;
       stroke: color-mix(in srgb, var(--c) 65%, transparent);
-      stroke-width: 1.5;
+      stroke-width: 1.8;
       stroke-linecap: round;
       stroke-linejoin: round;
       transition: stroke 0.3s ease, stroke-width 0.3s ease;
     }
 
-    .md-ring .in {
-      stroke-dasharray: 2.5 4;
+    .md-ring .out {
+      stroke-dasharray: 3 5;
     }
 
     .md-ring .tie {
@@ -522,9 +522,9 @@
       stroke-linecap: round;
     }
 
-    .md-ring .on :is(.out, .in, .in-head) {
+    .md-ring .on :is(.out, .in, .out-head) {
       stroke: var(--c);
-      stroke-width: 2;
+      stroke-width: 2.4;
     }
 
     .md-ring .name {
@@ -592,13 +592,13 @@
       pointer-events: stroke;
     }
 
-    .md-ring :is(.exo, .endo, .halo, .out, .in, .in-head, .tie, .membrane, .self) {
+    .md-ring :is(.exo, .endo, .halo, .out, .in, .out-head, .tie, .membrane, .self) {
       transition: opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, fill 0.3s ease, r 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .md-ring.c-exo :is(.endo, .out, .in, .in-head, .tie),
-    .md-ring.c-endo :is(.exo, .halo, .out, .in, .in-head),
-    .md-ring.c-self :is(.exo, .halo, .endo, .out, .in, .in-head, .tie, .membrane) {
+    .md-ring.c-exo :is(.endo, .out, .in, .out-head, .tie),
+    .md-ring.c-endo :is(.exo, .halo, .out, .in, .out-head),
+    .md-ring.c-self :is(.exo, .halo, .endo, .out, .in, .out-head, .tie, .membrane) {
       opacity: 0.2;
     }
 
@@ -818,7 +818,7 @@
     <section class="md-agency" aria-label="Human agency and the exo-endo structure">
       <h2 class="md-agency-title">Human Agency <span>&amp;</span> the Exo-Endo Structure</h2>
       <p class="md-agency-intro">Every structure is at once <em>exo</em> &ndash; an extended phenotype or prosthesis, built outward from human agency &ndash; and <em>endo</em> &ndash; internalised, shaping that agency from within.</p>
-      <svg class="md-ring" viewBox="-90 0 940 760" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
+      <svg class="md-ring" viewBox="-110 -20 980 800" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
       <p class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>Agency &middot; complex</button></p>
       <div class="md-ring-note" aria-live="polite"></div>
     </section>
@@ -981,7 +981,7 @@
     (function () {
       var svg = document.querySelector('.md-ring');
       var note = document.querySelector('.md-ring-note');
-      var C = 380, RA = 76, RIN = 146, RM = 204, ROUT = 284, RL = 336;
+      var C = 380, RA = 76, RIN = 128, RM = 204, ROUT = 304, RL = 356;
       var SEGS = [
         ['metastructure', 'Metastructure', '#6b6b78'], ['macrostructure', 'Macrostructure', '#6b6b78'],
         ['superstructure', 'Superstructure', '#3d4b94'], ['substructure', 'Substructure', '#a35a6a'],
@@ -1011,20 +1011,24 @@
       // an arrowhead at the end of a curve, along its last direction
       function head(end, ctrl) {
         var d = [end[0] - ctrl[0], end[1] - ctrl[1]], L = Math.hypot(d[0], d[1]); d = [d[0] / L, d[1] / L];
-        var n = [-d[1], d[0]], b = [end[0] - 8 * d[0], end[1] - 8 * d[1]];
-        return 'M' + f([b[0] + 4.5 * n[0], b[1] + 4.5 * n[1]]) + 'L' + f(end) + 'L' + f([b[0] - 4.5 * n[0], b[1] - 4.5 * n[1]]);
+        var n = [-d[1], d[0]], b = [end[0] - 12 * d[0], end[1] - 12 * d[1]];
+        return 'M' + f([b[0] + 6.5 * n[0], b[1] + 6.5 * n[1]]) + 'L' + f(end) + 'L' + f([b[0] - 6.5 * n[0], b[1] - 6.5 * n[1]]);
       }
       SEGS.forEach(function (sg, i) {
         var a = -90 + 22.5 + i * 45, u = [Math.cos(a * rad), Math.sin(a * rad)], n = [-u[1], u[0]];
         var inP = P(RIN, a), outP = P(ROUT, a);
-        var s0 = P(RIN + 15, a), s1 = P(ROUT - 26, a), m = P((RIN + ROUT) / 2 - 6, a);
-        var cOut = [m[0] + 17 * n[0], m[1] + 17 * n[1]], cIn = [m[0] - 17 * n[0], m[1] - 17 * n[1]];
+        // the two arrows apart along their whole length: out on one side,
+        // back in on the other
+        var s0 = P(RIN + 14, a), s1 = P(ROUT - 26, a), m = P((RIN + ROUT) / 2, a);
+        var sh = function (p, k) { return [p[0] + k * n[0], p[1] + k * n[1]]; };
+        var cOut = sh(m, 30), cIn = sh(m, -30);
+        var o0 = sh(s0, 7), o1 = sh(s1, 7), i0 = sh(s1, -7), i1 = sh(s0, -7);
         var lab = P(RL, a), anchor = u[0] > 0.2 ? 'start' : u[0] < -0.2 ? 'end' : 'middle';
         var dy = u[1] > 0.5 ? 18 : u[1] < -0.5 ? -24 : -4;
         html += '<g class="pair" data-key="' + sg[0] + '" style="--c: ' + sg[2] + '">' +
           '<line class="tie" x1="' + f(P(RA + 18, a)).replace(' ', '" y1="') + '" x2="' + f(P(RIN - 12, a)).replace(' ', '" y2="') + '"/>' +
-          '<path class="out" d="M' + f(s0) + 'Q' + f(cOut) + ' ' + f(s1) + head(s1, cOut) + '"/>' +
-          '<path class="in" d="M' + f(s1) + 'Q' + f(cIn) + ' ' + f(s0) + '"/><path class="in-head" d="' + head(s0, cIn) + '"/>' +
+          '<path class="out" d="M' + f(o0) + 'Q' + f(cOut) + ' ' + f(o1) + '"/><path class="out-head" d="' + head(o1, cOut) + '"/>' +
+          '<path class="in" d="M' + f(i0) + 'Q' + f(cIn) + ' ' + f(i1) + head(i1, cIn) + '"/>' +
           '<circle class="endo" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="11"/>' +
           '<circle class="halo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="27"/>' +
           '<circle class="exo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="19"/>' +
