@@ -551,8 +551,8 @@
 
     .md-ring .membrane {
       fill: none;
-      stroke: color-mix(in srgb, currentColor 38%, transparent);
-      stroke-width: 1.5;
+      stroke: color-mix(in srgb, currentColor 30%, transparent);
+      stroke-width: 7;
     }
 
     .md-ring .membrane.faint {
@@ -588,7 +588,7 @@
     .md-ring .self-hit {
       fill: none;
       stroke: transparent;
-      stroke-width: 24;
+      stroke-width: 28;
       pointer-events: stroke;
     }
 
@@ -598,7 +598,7 @@
 
     .md-ring.c-exo :is(.endo, .out, .in, .in-head, .tie),
     .md-ring.c-endo :is(.exo, .halo, .out, .in, .in-head),
-    .md-ring.c-self :is(.exo, .halo, .endo, .out, .in, .in-head, .tie) {
+    .md-ring.c-self :is(.exo, .halo, .endo, .out, .in, .in-head, .tie, .membrane) {
       opacity: 0.2;
     }
 
@@ -617,14 +617,27 @@
       stroke-width: 2;
     }
 
-    .md-ring.c-self .membrane {
-      stroke: var(--canvas-ink);
-      stroke-width: 3;
+    .md-ring.c-exo .membrane {
+      stroke: color-mix(in srgb, currentColor 60%, transparent);
+      stroke-width: 9;
     }
 
-    .md-ring.c-self .membrane.faint {
-      stroke: color-mix(in srgb, currentColor 40%, transparent);
-      stroke-width: 1.5;
+    .md-ring .agency-g {
+      cursor: pointer;
+    }
+
+    .md-ring .agency-g > :is(.agency, .agency-halo) {
+      transition: r 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .md-ring.c-self .agency {
+      r: 82px;
+    }
+
+    .md-ring.c-self .agency-halo {
+      r: 98px;
+      stroke: var(--canvas-ink);
+      stroke-width: 2;
     }
 
     .md-key button {
@@ -684,9 +697,13 @@
       height: 11px;
     }
 
+    /* agency: the dark centre with its ring */
     .md-key .k-membrane {
-      border: 1.5px solid color-mix(in srgb, currentColor 60%, transparent);
-      background: radial-gradient(circle, transparent 50%, color-mix(in srgb, currentColor 12%, transparent));
+      width: 10px;
+      height: 10px;
+      margin: 0 2px;
+      background: currentColor;
+      box-shadow: 0 0 0 2px var(--canvas-bg), 0 0 0 3px currentColor;
     }
 
     /* beneath the diagram, what is pointed to: a structure as exo, as endo
@@ -990,7 +1007,7 @@
       };
       html += '<path class="concept-hit" data-concept="exo" fill-rule="evenodd" d="' + ring(RM + 12, ROUT + 46) + '"/>';
       html += '<path class="concept-hit" data-concept="endo" fill-rule="evenodd" d="' + ring(RA + 14, RM - 12) + '"/>';
-      html += '<circle class="concept-hit self-hit" data-concept="self" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
+      html += '<circle class="concept-hit self-hit" data-concept="exo" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
       // an arrowhead at the end of a curve, along its last direction
       function head(end, ctrl) {
         var d = [end[0] - ctrl[0], end[1] - ctrl[1]], L = Math.hypot(d[0], d[1]); d = [d[0] / L, d[1] / L];
@@ -1017,10 +1034,10 @@
           '<circle class="hit" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="22"/></g>';
       });
       // human agency, with a halo of its own
-      html += '<circle class="agency-halo" cx="' + C + '" cy="' + C + '" r="' + (RA + 12) + '"/>' +
+      html += '<g class="agency-g concept-hit" data-concept="self"><circle class="agency-halo" cx="' + C + '" cy="' + C + '" r="' + (RA + 12) + '"/>' +
         '<circle class="agency" cx="' + C + '" cy="' + C + '" r="' + RA + '"/>' +
         '<text class="agency-text" x="' + C + '" y="' + (C - 5) + '" text-anchor="middle">Human</text>' +
-        '<text class="agency-text" x="' + C + '" y="' + (C + 21) + '" text-anchor="middle">Agency</text>';
+        '<text class="agency-text" x="' + C + '" y="' + (C + 21) + '" text-anchor="middle">Agency</text></g>';
       svg.innerHTML = html;
       var DEFAULT = 'Point to a structure: each is extended outward from human agency, and internalised by it as a source of conditioning.';
       note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
