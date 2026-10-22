@@ -420,6 +420,129 @@
       border-bottom: 1px solid currentColor;
     }
 
+    /* a second section, a screen high: human agency at the centre of a ring
+       of the eight structures, each extended outward and internalised */
+    .md-agency {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: var(--wide-col);
+      margin: 0 0 0 calc((100% - var(--wide-col)) / 2);
+      padding: 80px 0 120px;
+      text-align: center;
+    }
+
+    .md-agency-title {
+      margin: 0 0 18px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: clamp(30px, 4vw, 40px);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .md-agency-title span {
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .md-agency-intro {
+      max-width: 640px;
+      margin: 0 0 40px;
+      font-size: 21px;
+      line-height: 1.4;
+    }
+
+    .md-ring {
+      display: block;
+      width: min(100%, 680px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .md-ring .seg {
+      cursor: pointer;
+      transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-origin: 380px 380px;
+    }
+
+    .md-ring.pointing .seg:not(.on) {
+      opacity: 0.45;
+    }
+
+    .md-ring .seg.on {
+      transform: scale(1.035);
+    }
+
+    .md-ring .seg text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15.5px;
+      fill: #ffffff;
+      pointer-events: none;
+    }
+
+    .md-ring .core-c { fill: #3d4b94; }
+    .md-ring .bio-c { fill: #a35a6a; }
+    .md-ring .eco-c { fill: #4e8a5a; }
+    .md-ring .trans-c { fill: #6b6b78; }
+
+    .md-ring .agency {
+      fill: var(--canvas-ink);
+    }
+
+    .md-ring .agency-text {
+      font-family: var(--sans);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      fill: var(--canvas-bg);
+    }
+
+    .md-ring .edge {
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      fill: var(--muted);
+    }
+
+    .md-ring .flow {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 55%, transparent);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .md-ring .guide {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 18%, transparent);
+      stroke-width: 1;
+      stroke-dasharray: 2 5;
+    }
+
+    .md-ring-note {
+      max-width: 640px;
+      min-height: 3em;
+      margin: 28px 0 0;
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    .md-ring-note b {
+      font-weight: 600;
+    }
+
+    @media (max-width: 1180px) {
+      .md-agency {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
     @media (max-width: 1180px) {
       .md-figure {
         width: auto;
@@ -469,6 +592,13 @@
         </div>
         <div class="md-detail" aria-live="polite"></div>
       </div>
+    </section>
+
+    <section class="md-agency" aria-label="Human agency and the exo-endo structure">
+      <h2 class="md-agency-title">Human Agency <span>&amp;</span> the Exo-Endo Structure</h2>
+      <p class="md-agency-intro">Every structure is at once <em>exo</em> &ndash; an extended phenotype or prosthesis, built outward from human agency &ndash; and <em>endo</em> &ndash; internalised, shaping that agency from within.</p>
+      <svg class="md-ring" viewBox="0 0 760 760" role="img" aria-label="Human agency at the centre, surrounded by a ring of the eight structures, each both extended outward as phenotype and prosthesis and internalised inward"></svg>
+      <p class="md-ring-note" aria-live="polite"></p>
     </section>
 
   </main>
@@ -600,7 +730,7 @@
       var detail = document.querySelector('.md-detail');
       var locked = 'infrastructure';
       // what each structure comprises, and what lies within it
-      var MODEL = {"infrastructure": {"desc": "Technological instruments and affordances, productive (and reproductive) forces and material conditions.", "within": []}, "interstructure": {"desc": "The institutional complex for decision-making (governance) and resource-allocation (economy).", "within": []}, "superstructure": {"desc": "Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.", "within": []}, "biostructure": {"desc": "The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.", "within": []}, "ecostructure": {"desc": "The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.", "within": []}, "metastructure": {"desc": "The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.", "within": [["cybernetic", "Cybernetic", "Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops."], ["game-theoretic", "Game-Theoretic", "Incentive structures, rational strategising and agent-modelling."], ["evolutionary", "Evolutionary", "Selection processes, competitive pressures and niche construction."]]}, "macrostructure": {"desc": "The process by which a civilisation elaborates itself and changes across macrohistorical time.", "within": [["states-transitions", "States &amp; Transitions", "The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse."], ["constraints-affordances", "Constraints &amp; Affordances", "The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development."], ["problems-solutions-externalities", "Problems, Solutions &amp; Externalities", "The historical process by which solutions to existing problems generate novel problems and unintended side-effects."]]}, "substructure": {"desc": "Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).", "within": []}};
+      var MODEL = window.MD_MODEL = {"infrastructure": {"desc": "Technological instruments and affordances, productive (and reproductive) forces and material conditions.", "within": []}, "interstructure": {"desc": "The institutional complex for decision-making (governance) and resource-allocation (economy).", "within": []}, "superstructure": {"desc": "Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.", "within": []}, "biostructure": {"desc": "The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.", "within": []}, "ecostructure": {"desc": "The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.", "within": []}, "metastructure": {"desc": "The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.", "within": [["cybernetic", "Cybernetic", "Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops."], ["game-theoretic", "Game-Theoretic", "Incentive structures, rational strategising and agent-modelling."], ["evolutionary", "Evolutionary", "Selection processes, competitive pressures and niche construction."]]}, "macrostructure": {"desc": "The process by which a civilisation elaborates itself and changes across macrohistorical time.", "within": [["states-transitions", "States &amp; Transitions", "The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse."], ["constraints-affordances", "Constraints &amp; Affordances", "The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development."], ["problems-solutions-externalities", "Problems, Solutions &amp; Externalities", "The historical process by which solutions to existing problems generate novel problems and unintended side-effects."]]}, "substructure": {"desc": "Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).", "within": []}};
       function describe(key) {
         var m = MODEL[key];
         var h = '<p>' + m.desc + '</p>';
@@ -618,6 +748,70 @@
         p.addEventListener('click', function () { locked = key; show(key); });
       });
       show(locked);
+    })();
+  </script>
+
+  <script>
+    // human agency at the centre; around it the eight structures as one
+    // ring, the exo-endo structure: its outer edge each structure extended
+    // as phenotype and prosthesis, its inner edge each internalised; the
+    // arrows between run both ways
+    (function () {
+      var svg = document.querySelector('.md-ring');
+      var note = document.querySelector('.md-ring-note');
+      var C = 380, R0 = 112, R1 = 188, R2 = 318, GAP = 1.6;
+      var SEGS = [
+        ['metastructure', 'Metastructure', 'trans-c'], ['macrostructure', 'Macrostructure', 'trans-c'],
+        ['superstructure', 'Superstructure', 'core-c'], ['substructure', 'Substructure', 'bio-c'],
+        ['interstructure', 'Interstructure', 'core-c'], ['infrastructure', 'Infrastructure', 'core-c'],
+        ['biostructure', 'Biostructure', 'bio-c'], ['ecostructure', 'Ecostructure', 'eco-c']
+      ];
+      var ALT = { infrastructure: 'Tech Stack', interstructure: 'Political Economy', superstructure: 'Cultural Psychology', substructure: 'Evolutionary Psychology', biostructure: 'Cultural-Evolutionary Biology', ecostructure: 'Cultural-Evolutionary Ecology', metastructure: 'System Dynamics', macrostructure: 'Developmental Process' };
+      var rad = Math.PI / 180;
+      var P = function (r, a) { return [C + r * Math.cos(a * rad), C + r * Math.sin(a * rad)]; };
+      var f = function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); };
+      var step = 360 / SEGS.length, html = '';
+      // guides at the ring's two edges, and their names along them
+      html += '<defs><path id="md-exo" d="M' + f(P(R2 + 26, 180)) + 'A' + (R2 + 26) + ' ' + (R2 + 26) + ' 0 0 1 ' + f(P(R2 + 26, 360)) + '"/>' +
+        '<path id="md-endo" d="M' + f(P(R1 - 14, 160)) + 'A' + (R1 - 14) + ' ' + (R1 - 14) + ' 0 0 0 ' + f(P(R1 - 14, 20)) + '"/></defs>';
+      html += '<circle class="guide" cx="' + C + '" cy="' + C + '" r="' + (R2 + 14) + '"/>';
+      html += '<text class="edge"><textPath href="#md-exo" startOffset="50%" text-anchor="middle">EXO &middot; EXTENDED PHENOTYPE &amp; PROSTHESIS</textPath></text>';
+      html += '<text class="edge"><textPath href="#md-endo" startOffset="50%" text-anchor="middle">ENDO &middot; INTERNALISED</textPath></text>';
+      // the ring of structures, from the top, clockwise
+      SEGS.forEach(function (sg, i) {
+        var a0 = -90 - step / 2 + i * step + GAP / 2, a1 = a0 + step - GAP, mid = (a0 + a1) / 2;
+        var d = 'M' + f(P(R1, a0)) + 'L' + f(P(R2, a0)) + 'A' + R2 + ' ' + R2 + ' 0 0 1 ' + f(P(R2, a1)) + 'L' + f(P(R1, a1)) + 'A' + R1 + ' ' + R1 + ' 0 0 0 ' + f(P(R1, a0)) + 'Z';
+        var t = P((R1 + R2) / 2, mid);
+        html += '<g class="seg" data-key="' + sg[0] + '"><path class="' + sg[2] + '" d="' + d + '"/>' +
+          '<text x="' + t[0].toFixed(1) + '" y="' + (t[1] + 6).toFixed(1) + '" text-anchor="middle">' + sg[1] + '</text></g>';
+      });
+      // arrows both ways between the centre and the ring, on the diagonals,
+      // clear of the edges' names
+      [-45, 45, 135, 225].forEach(function (a) {
+        var p0 = P(R0 + 10, a), p1 = P(R1 - 30, a), u = [Math.cos(a * rad), Math.sin(a * rad)], n = [-u[1], u[0]];
+        var head = function (p, dir) { return 'M' + f([p[0] - dir * 7 * u[0] + 5 * n[0], p[1] - dir * 7 * u[1] + 5 * n[1]]) + 'L' + f(p) + 'L' + f([p[0] - dir * 7 * u[0] - 5 * n[0], p[1] - dir * 7 * u[1] - 5 * n[1]]); };
+        html += '<path class="flow" d="M' + f(p0) + 'L' + f(p1) + head(p1, 1) + head(p0, -1) + '"/>';
+      });
+      // human agency
+      html += '<circle class="agency" cx="' + C + '" cy="' + C + '" r="' + R0 + '"/>' +
+        '<text class="agency-text" x="' + C + '" y="' + (C - 6) + '" text-anchor="middle">Human</text>' +
+        '<text class="agency-text" x="' + C + '" y="' + (C + 24) + '" text-anchor="middle">Agency</text>';
+      svg.innerHTML = html;
+      var DEFAULT = 'Point to a structure: each is both an extension of human agency outward and a structure internalised by it.';
+      note.textContent = DEFAULT;
+      svg.querySelectorAll('.seg').forEach(function (g) {
+        var key = g.getAttribute('data-key');
+        g.addEventListener('mouseenter', function () {
+          svg.classList.add('pointing');
+          g.classList.add('on');
+          note.innerHTML = '<b>' + g.querySelector('text').textContent + '</b> (' + ALT[key] + ') &ndash; ' + window.MD_MODEL[key].desc;
+        });
+        g.addEventListener('mouseleave', function () {
+          svg.classList.remove('pointing');
+          g.classList.remove('on');
+          note.textContent = DEFAULT;
+        });
+      });
     })();
   </script>
 
