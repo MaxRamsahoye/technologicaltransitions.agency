@@ -503,10 +503,12 @@
       position: relative;
     }
 
+    /* set by the script to sit midway between the bottom of the
+       ecostructure slab and the heading below */
     .md-agency::before {
       content: '';
       position: absolute;
-      top: 0;
+      top: calc(0px - var(--line-up, 0px));
       left: 50%;
       width: 100vw;
       height: 1px;
@@ -1286,6 +1288,26 @@
         var key = b.getAttribute('data-key');
         bind(b, 'pair', key, svg.querySelector('.pair[data-key="' + key + '"]'));
       });
+    })();
+  </script>
+
+  <script>
+    // the rule between the sections, midway between the bottom of the
+    // ecostructure slab above and the heading below
+    (function () {
+      var sec = document.querySelector('.md-agency');
+      function place() {
+        var eco = document.querySelector('.md-el[data-key="ecostructure"]');
+        var title = document.querySelector('.md-agency-title');
+        if (!eco || !title || window.innerWidth <= 900) { sec.style.removeProperty('--line-up'); return; }
+        sec.style.removeProperty('--line-up');
+        var top = sec.getBoundingClientRect().top;
+        var mid = (eco.getBoundingClientRect().bottom + title.getBoundingClientRect().top) / 2;
+        sec.style.setProperty('--line-up', Math.max(0, top - mid) + 'px');
+      }
+      place();
+      window.addEventListener('resize', place);
+      if (document.fonts) document.fonts.ready.then(place);
     })();
   </script>
 
