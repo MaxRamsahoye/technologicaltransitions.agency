@@ -552,8 +552,9 @@
     .md-ring .membrane {
       fill: none;
       stroke: color-mix(in srgb, currentColor 26%, transparent);
-      /* half as wide as an endo trace (22) */
-      stroke-width: 11;
+      /* half as wide as the endo ring inside it, from the centre's edge
+         (76) to the membrane's inner edge: 2w + w/2 = 204 - 76 */
+      stroke-width: 51;
     }
 
 
@@ -580,7 +581,7 @@
     .md-ring .self-hit {
       fill: none;
       stroke: transparent;
-      stroke-width: 32;
+      stroke-width: 55;
       pointer-events: stroke;
     }
 
@@ -610,8 +611,8 @@
     }
 
     .md-ring.c-exo .membrane {
-      stroke: color-mix(in srgb, currentColor 55%, transparent);
-      stroke-width: 11;
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      stroke-width: 51;
     }
 
     .md-ring .agency-g {
@@ -982,7 +983,7 @@
         '<stop offset="0" stop-color="currentColor" stop-opacity="0"/><stop offset="0.82" stop-color="currentColor" stop-opacity="0.025"/>' +
         '<stop offset="1" stop-color="currentColor" stop-opacity="0.07"/></radialGradient></defs>';
       // the self: a soft field darkening towards its membrane
-      html += '<circle class="self" cx="' + C + '" cy="' + C + '" r="' + RM + '" fill="url(#md-self)"/>';
+      html += '<circle class="self" cx="' + C + '" cy="' + C + '" r="' + (RM - 25.5) + '" fill="url(#md-self)"/>';
       html += '<circle class="membrane" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
       // the three concepts, each a region to point to beneath the structures:
       // outside the membrane (exo), inside it (endo), and the membrane (self)
@@ -990,8 +991,8 @@
         return 'M' + (C + r1) + ' ' + C + 'a' + r1 + ' ' + r1 + ' 0 1 0 ' + (-2 * r1) + ' 0a' + r1 + ' ' + r1 + ' 0 1 0 ' + (2 * r1) + ' 0Z' +
           'M' + (C + r0) + ' ' + C + 'a' + r0 + ' ' + r0 + ' 0 1 0 ' + (-2 * r0) + ' 0a' + r0 + ' ' + r0 + ' 0 1 0 ' + (2 * r0) + ' 0Z';
       };
-      html += '<path class="concept-hit" data-concept="exo" fill-rule="evenodd" d="' + ring(RM + 12, ROUT + 46) + '"/>';
-      html += '<path class="concept-hit" data-concept="endo" fill-rule="evenodd" d="' + ring(RA + 14, RM - 12) + '"/>';
+      html += '<path class="concept-hit" data-concept="exo" fill-rule="evenodd" d="' + ring(RM + 28, ROUT + 46) + '"/>';
+      html += '<path class="concept-hit" data-concept="endo" fill-rule="evenodd" d="' + ring(RA + 4, RM - 28) + '"/>';
       html += '<circle class="concept-hit self-hit" data-concept="exo" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
       // an arrowhead at the end of a curve, along its last direction
       function head(end, ctrl) {
