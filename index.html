@@ -1156,8 +1156,27 @@
 
     /* every other section in the band a shade darker, in its own band (as
        the Live doc alternates its shaded sections) */
+    /* the shade for each band: a darker sepia on the light sepia band, a
+       lighter black on the black ones, and darker on the others */
+    :root {
+      --inverse-bg-alt: color-mix(in srgb, var(--inverse-bg) 80%, #000);
+    }
+
+    :root:not([data-theme]):not(.band-midnight):not(.band-black) {
+      --inverse-bg-alt: #f1e6d0;
+    }
+
+    html.band-black:not([data-theme]),
+    html[data-theme="dark"] {
+      --inverse-bg-alt: color-mix(in srgb, var(--inverse-bg) 88%, #fff);
+    }
+
+    html[data-theme="midnight"] {
+      --inverse-bg-alt: color-mix(in srgb, var(--inverse-bg) 90%, var(--inverse-ink));
+    }
+
     :is(#overview, .in-band).band-alt {
-      --canvas-bg: color-mix(in srgb, var(--inverse-bg) 80%, #000);
+      --canvas-bg: var(--inverse-bg-alt);
       padding-top: 96px;
     }
 
