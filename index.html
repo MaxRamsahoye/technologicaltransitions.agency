@@ -1193,6 +1193,33 @@
       margin-bottom: 0;
     }
 
+    /* lists from the Live doc: an em dash for an item, an open circle for
+       a sub-item */
+    .live-list li {
+      margin-bottom: 10px;
+    }
+
+    .live-list > li::before {
+      content: '\2014\00a0\00a0';
+    }
+
+    .live-list .live-sub {
+      margin: 10px 0 0;
+    }
+
+    .live-sub li::before {
+      content: '\25CB\00a0\00a0';
+      font-size: 0.75em;
+      vertical-align: 0.12em;
+    }
+
+    .article-rule {
+      max-width: 760px;
+      margin: 48px 0;
+      border: 0;
+      border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    }
+
     .sidenote {
       float: right;
       clear: right;
