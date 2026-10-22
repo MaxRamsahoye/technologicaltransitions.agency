@@ -491,6 +491,12 @@
       transition: opacity 0.3s ease;
     }
 
+    /* only a structure's two nodes take the pointer, not its arrows, its
+       line to the centre or its name */
+    .md-ring .pair > :not(.hit) {
+      pointer-events: none;
+    }
+
     .md-ring.pointing .pair:not(.on) {
       opacity: 0.22;
     }
@@ -1072,30 +1078,38 @@
           }).join('') + '</div>';
       }
       var keys = Array.prototype.slice.call(document.querySelectorAll('.md-key [data-concept]'));
-      function concept(c) {
+      // one thing pointed to at a time: a structure, a concept or nothing.
+      // Leaving waits a moment before clearing, so that moving from one
+      // region to another that picks out the same thing never flickers
+      var current = null, clearTimer = null;
+      function show(kind, id, g) {
+        clearTimeout(clearTimer);
+        var keyId = kind + ':' + id;
+        if (keyId === current) return;
+        current = keyId;
+        var c = kind === 'concept' ? id : null;
         ['exo', 'endo', 'self'].forEach(function (k) { svg.classList.toggle('c-' + k, k === c); });
         keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
-        if (c) note.innerHTML = '<p class="md-note-lead">' + CONCEPTS[c] + '</p>'; else note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
+        svg.classList.toggle('pointing', kind === 'pair');
+        svg.querySelectorAll('.pair').forEach(function (p) { p.classList.toggle('on', p === g); });
+        note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
+          : '<p class="md-note-lead">' + (c ? CONCEPTS[c] : DEFAULT) + '</p>';
+      }
+      function leave() {
+        clearTimeout(clearTimer);
+        clearTimer = setTimeout(function () { show('none', '', null); }, 90);
       }
       Array.prototype.slice.call(svg.querySelectorAll('.concept-hit')).concat(keys).forEach(function (el) {
         var c = el.getAttribute('data-concept');
-        el.addEventListener('mouseenter', function () { concept(c); });
-        el.addEventListener('mouseleave', function () { concept(null); });
-        el.addEventListener('focus', function () { concept(c); });
-        el.addEventListener('blur', function () { concept(null); });
+        el.addEventListener('mouseenter', function () { show('concept', c); });
+        el.addEventListener('mouseleave', leave);
+        el.addEventListener('focus', function () { show('concept', c); });
+        el.addEventListener('blur', leave);
       });
       svg.querySelectorAll('.pair').forEach(function (g) {
         var key = g.getAttribute('data-key');
-        g.addEventListener('mouseenter', function () {
-          svg.classList.add('pointing');
-          g.classList.add('on');
-          note.innerHTML = describeStructure(key, g.querySelector('.name').firstChild.textContent);
-        });
-        g.addEventListener('mouseleave', function () {
-          svg.classList.remove('pointing');
-          g.classList.remove('on');
-          note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
-        });
+        g.addEventListener('mouseenter', function () { show('pair', key, g); });
+        g.addEventListener('mouseleave', leave);
       });
     })();
   </script>
