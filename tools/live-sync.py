@@ -25,8 +25,9 @@ The doc and the site differ in places, and this is where they are bridged:
   the Overviews page
 - list items (li, li2) become dash lists, sub-items nested
 - outside links open in a new tab, as they do elsewhere on the site
-- shading has no counterpart on the site and is ignored (the Overview has
-  its own panel there regardless)
+- the sections shaded in the doc that follow the Overview, one after
+  another, join it in its band; other shading has no counterpart on the
+  site and is ignored (the Overview has its band regardless)
 """
 import html
 import json
@@ -92,7 +93,7 @@ def main(path):
         while sid in used:
             sid, n = '%s-%d' % (base, n), n + 1
         used.add(sid)
-        sections.append({'id': sid, 'title': title, 'items': []})
+        sections.append({'id': sid, 'title': title, 'items': [], 's': False})
 
     for b in body:
         t, h = b['t'], b.get('h', '')
@@ -101,6 +102,7 @@ def main(path):
         if t == 'h1' or (t == 'h2' and not seen_h1):
             seen_h1 = seen_h1 or t == 'h1'
             new_section(h)
+            sections[-1]['s'] = bool(b.get('s'))
             continue
         if not sections:
             new_section('Introduction')
@@ -115,13 +117,20 @@ def main(path):
         else:
             sections[-1]['items'].append((t, h))
 
+    # the shaded sections straight after the Overview join its band
+    band, k = set(), 1
+    if sections and sections[0]['id'] == 'overview':
+        while k < len(sections) and sections[k]['s']:
+            band.add(sections[k]['id']); k += 1
+
     I = ' ' * 14
     out = []
     for i, s in enumerate(sections):
         nxt = sections[i + 1]['id'] if i + 1 < len(sections) else None
         # the article's own contents list stays out of the sidebar menu
         off = ' data-toc="off"' if key(s['title']) == 'contents' else ''
-        out.append('            <section id="%s"%s>' % (s['id'], off))
+        cls = ' class="in-band"' if s['id'] in band else ''
+        out.append('            <section id="%s"%s%s>' % (s['id'], cls, off))
         if s['id'] == 'overview' and nxt:
             out.append(I + '<button class="next-screen next-screen-overview" type="button" data-target="%s" aria-label="Continue to the next section">' % nxt)
             out.append('                ' + ARROW)

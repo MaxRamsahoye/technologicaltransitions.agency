@@ -222,7 +222,7 @@
       font-style: normal;
     }
 
-    html.serif-headings .article-body #overview h2 {
+    html.serif-headings .article-body :is(#overview, .in-band) h2 {
       font-size: 1.25em;
     }
 
@@ -237,7 +237,7 @@
       color: var(--link-blue);
     }
 
-    html.colour #overview a[href^="http"],
+    html.colour :is(#overview, .in-band) a[href^="http"],
     html.colour .site-footer a[href^="http"] {
       color: var(--inverse-link);
     }
@@ -1026,7 +1026,7 @@
     }
 
     /* the Overview heading in solid ink, rendered crisply */
-    #overview h2 {
+    :is(#overview, .in-band) h2 {
       color: var(--canvas-ink);
       -webkit-font-smoothing: auto;
     }
@@ -1069,7 +1069,7 @@
       margin: 0 0 15px;
     }
 
-    #overview::before {
+    :is(#overview, .in-band)::before {
       content: '';
       position: absolute;
       top: 0;
@@ -1082,7 +1082,7 @@
     }
 
     /* h: the Overview in the page's own colours instead of a shaded band */
-    html.overview-lines #overview {
+    html.overview-lines :is(#overview, .in-band) {
       --canvas-bg: var(--frame-bg);
       --canvas-ink: var(--frame-ink);
       --canvas-accent: var(--frame-ink);
@@ -1109,12 +1109,12 @@
       bottom: 0;
     }
 
-    html.colour.overview-lines #overview a[href^="http"] {
+    html.colour.overview-lines :is(#overview, .in-band) a[href^="http"] {
       color: var(--link-blue);
     }
 
     /* inverse: swap text and background colours for everything in the Overview */
-    #overview {
+    :is(#overview, .in-band) {
       --canvas-bg: var(--inverse-bg);
       --canvas-ink: var(--inverse-ink);
       --canvas-accent: var(--inverse-ink);
@@ -1127,6 +1127,49 @@
 
     .article-body #overview + section {
       margin-top: 104px;
+    }
+
+    /* the sections that follow the Overview in its band (those shaded in the
+       Live doc): the band runs on behind them, its gaps padding, not margin */
+    .article-body section.in-band {
+      position: relative;
+      z-index: 0;
+      margin: 0;
+      padding: 0 0 104px;
+    }
+
+    .article-body #overview + section.in-band {
+      margin-top: 0;
+    }
+
+    .article-body section.in-band > h2 {
+      margin-top: 0;
+    }
+
+    .article-body section.in-band:not(:has(+ section.in-band)) {
+      padding-bottom: 128px;
+    }
+
+    .article-body section.in-band + section:not(.in-band) {
+      margin-top: 104px;
+    }
+
+    /* without the band (h), one rule above the Overview and one below the
+       last section in it */
+    html.overview-lines #overview:has(+ section.in-band)::after,
+    html.overview-lines section.in-band::before,
+    html.overview-lines section.in-band:has(+ section.in-band)::after {
+      content: none;
+    }
+
+    html.overview-lines section.in-band::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
     }
 
     /* design 2 (d): the first screen stays put, and the Overview is pulled up
@@ -1994,13 +2037,13 @@
               <p class="overview-keywords">philosophy of technology · macrohistory · systemic existential risk · accelerationism · exterminism</p>
             </section>
 
-            <section id="basis">
+            <section id="basis" class="in-band">
               <h2><a class="heading-link" href="#basis">Basis</a></h2>
 
               <p>After a prolonged period of seeming inactivity after sunsetting their publication <a href="https://consilienceproject.org/" target="_blank" rel="noopener"><em>The Consilience Project</em></a>, the <a href="https://civilizationresearchinstitute.org/" target="_blank" rel="noopener"><em>Civilisation Research Institute</em></a> have recently released a series of new papers: ‘Reality Check?’, ‘General Regulatory Process for Advanced Technology’ &amp; ‘Steps for Prudent Problem-Solving’. Following suit, I thought to write my own article as an independent contribution to the civilisation research paradigm.<strong> </strong></p>
             </section>
 
-            <section id="contents" data-toc="off">
+            <section id="contents" class="in-band" data-toc="off">
               <h2><a class="heading-link" href="#contents">Contents</a></h2>
 
               <ul class="dash-list live-list">
@@ -2104,6 +2147,13 @@
         }, 210);
       });
 
+      // the last section in the Overview's band: the Overview itself, or the
+      // last of the sections that follow it there
+      function bandEnd() {
+        var e = document.getElementById('overview');
+        while (e && e.nextElementSibling && e.nextElementSibling.classList.contains('in-band')) e = e.nextElementSibling;
+        return e;
+      }
       var tocNav = document.querySelector('.toc');
       var tocList = tocNav.querySelector('ol');
       var tocItemCount = 0;
@@ -2140,7 +2190,7 @@
       // in the empty column left of the text, or on the menu itself
       (function () {
         var TOC_HOLD = 1500;
-        var overview = document.getElementById('overview');
+        var overview = bandEnd();
         var footer = document.querySelector('.site-footer');
         var mainArea = document.querySelector('.main-area');
         var active = false, hovering = false, timer = null;
@@ -2366,7 +2416,7 @@
 
       var ringFill = document.querySelector('.progress-ring-fill');
       var footerEl = document.querySelector('.site-footer');
-      var overviewSection = document.getElementById('overview');
+      var overviewSection = bandEnd();
       var RING_LENGTH = 2 * Math.PI * ringFill.r.baseVal.value;
       var btn = document.querySelector('.scroll-top-btn');
       var page = document.querySelector('.page');
