@@ -276,7 +276,7 @@
     /* the timeline's transitions, the present marked with a dot */
     .md-time .tick {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 18px;
+      font-size: 20px;
       fill: var(--muted);
       stroke: none !important;
       transition: fill 0.3s ease;
@@ -333,7 +333,7 @@
     /* labels beside the diagram, each joined to its structure */
     .md-label {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 27px;
+      font-size: 30px;
       fill: currentColor;
       cursor: pointer;
       transition: fill 0.2s ease;
@@ -344,7 +344,7 @@
     }
 
     .md-label .md-field {
-      font-size: 20px;
+      font-size: 22px;
       fill: var(--muted);
       transition: fill 0.2s ease;
     }
@@ -951,6 +951,14 @@
       }
     }
 
+    /* the panel set further out to the right of the diagram */
+    @media (min-width: 1181px) {
+      .md-figure {
+        width: calc(var(--fig-w) + 60px);
+        gap: 170px;
+      }
+    }
+
     @media (max-width: 1180px) {
       .md-figure {
         width: auto;
@@ -983,7 +991,7 @@
     </div>
 
     <section class="md-figure" aria-label="The model as a diagram">
-      <div class="md-scene"><svg class="md-svg" viewBox="-70 40 1040 1000" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a timeline beneath them"></svg></div>
+      <div class="md-scene"><svg class="md-svg" viewBox="-130 40 1160 1000" role="img" aria-label="The eight structures: the core stack of infrastructure, interstructure and superstructure, with the substructure beneath the superstructure, standing on the biostructure and the ecostructure, with the metastructure as an axis through them all and the macrostructure as a timeline beneath them"></svg></div>
       <div class="md-side">
         <div class="md-list">
           <p class="md-list-head">Transecting</p>
@@ -1114,14 +1122,14 @@
       var FIELDS = {};
       document.querySelectorAll('.md-list [data-key] span').forEach(function (sp) { FIELDS[sp.parentNode.dataset.key] = sp.textContent; });
       function label(key, side, y, x0, text) {
-        var lx = side === 'left' ? -70 : 970;
-        return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 192 : lx - 192) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
+        var lx = side === 'left' ? -130 : 1030;
+        return '<line class="md-lead" data-key="' + key + '" x1="' + (side === 'left' ? lx + 236 : lx - 236) + '" y1="' + y + '" x2="' + x0 + '" y2="' + y + '"/>' +
           '<text class="md-label" data-key="' + key + '" x="' + lx + '" y="' + (y + 5) + '" text-anchor="' + (side === 'left' ? 'start' : 'end') + '">' + text +
           field(FIELDS[key] || '', lx) + '</text>';
       }
       // (the labels stand far enough out for the longest to clear the slabs)
       function field(f, x) {
-        return f ? '<tspan class="md-field" x="' + x + '" dy="30">' + f + '</tspan>' : '';
+        return f ? '<tspan class="md-field" x="' + x + '" dy="33">' + f + '</tspan>' : '';
       }
       SLABS.slice(0, 2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
       SLABS.slice(2).forEach(function (s) { html += '<g class="md-el ' + s[1] + '" data-key="' + s[0] + '">' + slab(s[2], s[3], s[4]) + '</g>'; });
