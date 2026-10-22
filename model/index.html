@@ -458,58 +458,62 @@
 
     .md-ring {
       display: block;
-      width: min(100%, 680px);
+      width: min(100%, 840px);
       height: auto;
       overflow: visible;
     }
 
     .md-ring .pair {
       cursor: pointer;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.3s ease;
     }
 
     .md-ring.pointing .pair:not(.on) {
-      opacity: 0.25;
+      opacity: 0.22;
     }
 
     .md-ring .exo {
       fill: var(--c);
-      transition: r 0.3s ease;
     }
 
-    .md-ring .on .exo {
-      r: 24px;
+    .md-ring .halo {
+      fill: none;
+      stroke: color-mix(in srgb, var(--c) 30%, transparent);
+      stroke-width: 1.2;
+      transition: r 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s ease;
+    }
+
+    .md-ring .on .halo {
+      r: 33px;
+      stroke: var(--c);
     }
 
     .md-ring .endo {
-      fill: var(--canvas-bg);
+      fill: color-mix(in srgb, var(--c) 20%, var(--canvas-bg));
       stroke: var(--c);
-      stroke-width: 2;
-      stroke-dasharray: 3 2.5;
-    }
-
-    .md-ring .on .endo {
-      fill: color-mix(in srgb, var(--c) 18%, var(--canvas-bg));
+      stroke-width: 1.4;
     }
 
     .md-ring .out,
     .md-ring .in,
-    .md-ring .in-head,
-    .md-ring .tie {
+    .md-ring .in-head {
       fill: none;
-      stroke: color-mix(in srgb, var(--c) 70%, transparent);
-      stroke-width: 1.6;
+      stroke: color-mix(in srgb, var(--c) 65%, transparent);
+      stroke-width: 1.5;
       stroke-linecap: round;
       stroke-linejoin: round;
+      transition: stroke 0.3s ease, stroke-width 0.3s ease;
     }
 
     .md-ring .in {
-      stroke-dasharray: 3 4;
+      stroke-dasharray: 2.5 4;
     }
 
     .md-ring .tie {
-      stroke: color-mix(in srgb, currentColor 22%, transparent);
+      stroke: color-mix(in srgb, currentColor 16%, transparent);
       stroke-width: 1;
+      stroke-dasharray: 1 4;
+      stroke-linecap: round;
     }
 
     .md-ring .on :is(.out, .in, .in-head) {
@@ -524,6 +528,13 @@
       transition: fill 0.2s ease;
     }
 
+    .md-ring .name .alt {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+      fill: var(--muted);
+    }
+
     .md-ring .on .name {
       fill: var(--c);
     }
@@ -533,14 +544,13 @@
     }
 
     .md-ring .membrane {
-      fill: color-mix(in srgb, var(--link-blue) 4%, transparent);
-      stroke: color-mix(in srgb, currentColor 45%, transparent);
-      stroke-width: 1.4;
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 38%, transparent);
+      stroke-width: 1.5;
     }
 
-    .md-ring .membrane.inner {
-      fill: none;
-      stroke: color-mix(in srgb, currentColor 18%, transparent);
+    .md-ring .membrane.faint {
+      stroke: color-mix(in srgb, currentColor 12%, transparent);
       stroke-width: 1;
     }
 
@@ -548,20 +558,18 @@
       fill: var(--canvas-ink);
     }
 
+    .md-ring .agency-halo {
+      fill: none;
+      stroke: color-mix(in srgb, currentColor 20%, transparent);
+      stroke-width: 1;
+    }
+
     .md-ring .agency-text {
       font-family: var(--sans);
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 600;
       letter-spacing: -0.01em;
       fill: var(--canvas-bg);
-    }
-
-    .md-ring .edge {
-      font-family: var(--mono-caps);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      fill: var(--muted);
     }
 
     /* a key to the two halves of each structure, and the membrane */
@@ -597,12 +605,15 @@
     }
 
     .md-key .k-endo {
-      border: 1.5px dashed currentColor;
+      border: 1.5px solid currentColor;
+      background: color-mix(in srgb, currentColor 20%, var(--canvas-bg));
+      width: 11px;
+      height: 11px;
     }
 
     .md-key .k-membrane {
-      border: 1.5px solid currentColor;
-      background: color-mix(in srgb, var(--link-blue) 6%, transparent);
+      border: 1.5px solid color-mix(in srgb, currentColor 60%, transparent);
+      background: radial-gradient(circle, transparent 50%, color-mix(in srgb, currentColor 12%, transparent));
     }
 
     .md-ring-note {
@@ -678,8 +689,8 @@
     <section class="md-agency" aria-label="Human agency and the exo-endo structure">
       <h2 class="md-agency-title">Human Agency <span>&amp;</span> the Exo-Endo Structure</h2>
       <p class="md-agency-intro">Every structure is at once <em>exo</em> &ndash; an extended phenotype or prosthesis, built outward from human agency &ndash; and <em>endo</em> &ndash; internalised, shaping that agency from within.</p>
-      <svg class="md-ring" viewBox="0 0 760 760" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
-      <p class="md-key"><span class="k-exo"></span>Exo &middot; extended phenotype &amp; prosthesis<span class="k-endo"></span>Endo &middot; internalised<span class="k-membrane"></span>The self</p>
+      <svg class="md-ring" viewBox="-90 0 940 760" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
+      <p class="md-key"><span class="k-exo"></span>Exo &middot; extended<span class="k-endo"></span>Endo &middot; internalised<span class="k-membrane"></span>The self</p>
       <p class="md-ring-note" aria-live="polite"></p>
     </section>
 
@@ -835,14 +846,13 @@
 
   <script>
     // human agency at the centre, inside the membrane of the self; each
-    // structure appears twice: inside, as a hollow trace, internalised
-    // (endo), and outside, as a solid node, extended as phenotype and
-    // prosthesis (exo), with an arrow out to the one and a dashed arrow back
-    // in to the other
+    // structure appears twice: inside, a pale trace, internalised (endo),
+    // and outside, a solid node, extended (exo); a curved arrow carries it
+    // out and a dashed one brings it back in, the two together a lens
     (function () {
       var svg = document.querySelector('.md-ring');
       var note = document.querySelector('.md-ring-note');
-      var C = 380, RA = 74, RIN = 142, RM = 200, ROUT = 276, RL = 312;
+      var C = 380, RA = 76, RIN = 146, RM = 204, ROUT = 284, RL = 336;
       var SEGS = [
         ['metastructure', 'Metastructure', '#6b6b78'], ['macrostructure', 'Macrostructure', '#6b6b78'],
         ['superstructure', 'Superstructure', '#3d4b94'], ['substructure', 'Substructure', '#a35a6a'],
@@ -853,46 +863,52 @@
       var rad = Math.PI / 180;
       var P = function (r, a) { return [C + r * Math.cos(a * rad), C + r * Math.sin(a * rad)]; };
       var f = function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); };
-      var html = '';
-      // the membrane, with the name of each side along it
-      html += '<defs><path id="md-endo" d="M' + f(P(RM - 16, 150)) + 'A' + (RM - 16) + ' ' + (RM - 16) + ' 0 0 0 ' + f(P(RM - 16, 30)) + '"/>' +
-        '<path id="md-endo-top" d="M' + f(P(RM - 22, 210)) + 'A' + (RM - 22) + ' ' + (RM - 22) + ' 0 0 1 ' + f(P(RM - 22, 330)) + '"/>' +
-        '<path id="md-exo" d="M' + f(P(RM + 26, 200)) + 'A' + (RM + 26) + ' ' + (RM + 26) + ' 0 0 1 ' + f(P(RM + 26, 340)) + '"/></defs>';
+      var html = '<defs><radialGradient id="md-self" cx="50%" cy="50%" r="50%">' +
+        '<stop offset="0" stop-color="currentColor" stop-opacity="0"/><stop offset="0.82" stop-color="currentColor" stop-opacity="0.025"/>' +
+        '<stop offset="1" stop-color="currentColor" stop-opacity="0.07"/></radialGradient></defs>';
+      // the self: a soft field darkening towards its membrane
+      html += '<circle class="self" cx="' + C + '" cy="' + C + '" r="' + RM + '" fill="url(#md-self)"/>';
       html += '<circle class="membrane" cx="' + C + '" cy="' + C + '" r="' + RM + '"/>';
-      html += '<circle class="membrane inner" cx="' + C + '" cy="' + C + '" r="' + (RM - 6) + '"/>';
-      // each structure, its two halves and the arrows between them
+      html += '<circle class="membrane faint" cx="' + C + '" cy="' + C + '" r="' + (RM + 7) + '"/>';
+      // an arrowhead at the end of a curve, along its last direction
+      function head(end, ctrl) {
+        var d = [end[0] - ctrl[0], end[1] - ctrl[1]], L = Math.hypot(d[0], d[1]); d = [d[0] / L, d[1] / L];
+        var n = [-d[1], d[0]], b = [end[0] - 8 * d[0], end[1] - 8 * d[1]];
+        return 'M' + f([b[0] + 4.5 * n[0], b[1] + 4.5 * n[1]]) + 'L' + f(end) + 'L' + f([b[0] - 4.5 * n[0], b[1] - 4.5 * n[1]]);
+      }
       SEGS.forEach(function (sg, i) {
         var a = -90 + 22.5 + i * 45, u = [Math.cos(a * rad), Math.sin(a * rad)], n = [-u[1], u[0]];
-        var off = function (p, k) { return [p[0] + k * n[0], p[1] + k * n[1]]; };
-        var head = function (p, dir, k) { return 'M' + f(off([p[0] - dir * 8 * u[0], p[1] - dir * 8 * u[1]], k + 4.5)) + 'L' + f(p) + 'L' + f(off([p[0] - dir * 8 * u[0], p[1] - dir * 8 * u[1]], k - 4.5)); };
         var inP = P(RIN, a), outP = P(ROUT, a);
-        var o0 = off(P(RIN + 14, a), 5), o1 = off(P(ROUT - 26, a), 5);
-        var e0 = off(P(ROUT - 26, a), -5), e1 = off(P(RIN + 14, a), -5);
+        var s0 = P(RIN + 15, a), s1 = P(ROUT - 26, a), m = P((RIN + ROUT) / 2 - 6, a);
+        var cOut = [m[0] + 17 * n[0], m[1] + 17 * n[1]], cIn = [m[0] - 17 * n[0], m[1] - 17 * n[1]];
         var lab = P(RL, a), anchor = u[0] > 0.2 ? 'start' : u[0] < -0.2 ? 'end' : 'middle';
-        var dy = u[1] > 0.5 ? 20 : u[1] < -0.5 ? -8 : 6;
+        var dy = u[1] > 0.5 ? 18 : u[1] < -0.5 ? -24 : -4;
         html += '<g class="pair" data-key="' + sg[0] + '" style="--c: ' + sg[2] + '">' +
-          '<line class="tie" x1="' + f(P(RA + 4, a)).replace(' ', '" y1="') + '" x2="' + f(P(RIN - 11, a)).replace(' ', '" y2="') + '"/>' +
-          '<path class="out" d="M' + f(o0) + 'L' + f(o1) + head(o1, 1, 0) + '"/>' +
-          '<path class="in" d="M' + f(e0) + 'L' + f(e1) + '"/><path class="in-head" d="' + head(e1, -1, 0) + '"/>' +
-          '<circle class="endo" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="10"/>' +
-          '<circle class="exo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="20"/>' +
-          '<text class="name" x="' + lab[0].toFixed(1) + '" y="' + (lab[1] + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + sg[1] + '</text>' +
-          '<circle class="hit" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="34"/>' +
-          '<circle class="hit" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="20"/></g>';
+          '<line class="tie" x1="' + f(P(RA + 18, a)).replace(' ', '" y1="') + '" x2="' + f(P(RIN - 12, a)).replace(' ', '" y2="') + '"/>' +
+          '<path class="out" d="M' + f(s0) + 'Q' + f(cOut) + ' ' + f(s1) + head(s1, cOut) + '"/>' +
+          '<path class="in" d="M' + f(s1) + 'Q' + f(cIn) + ' ' + f(s0) + '"/><path class="in-head" d="' + head(s0, cIn) + '"/>' +
+          '<circle class="endo" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="11"/>' +
+          '<circle class="halo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="27"/>' +
+          '<circle class="exo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="19"/>' +
+          '<text class="name" x="' + lab[0].toFixed(1) + '" y="' + (lab[1] + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + sg[1] +
+          '<tspan class="alt" x="' + lab[0].toFixed(1) + '" dy="20">' + ALT[sg[0]] + '</tspan></text>' +
+          '<circle class="hit" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="36"/>' +
+          '<circle class="hit" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="22"/></g>';
       });
-      // human agency
-      html += '<circle class="agency" cx="' + C + '" cy="' + C + '" r="' + RA + '"/>' +
+      // human agency, with a halo of its own
+      html += '<circle class="agency-halo" cx="' + C + '" cy="' + C + '" r="' + (RA + 12) + '"/>' +
+        '<circle class="agency" cx="' + C + '" cy="' + C + '" r="' + RA + '"/>' +
         '<text class="agency-text" x="' + C + '" y="' + (C - 5) + '" text-anchor="middle">Human</text>' +
         '<text class="agency-text" x="' + C + '" y="' + (C + 21) + '" text-anchor="middle">Agency</text>';
       svg.innerHTML = html;
-      var DEFAULT = 'Point to a structure: each is extended outward from human agency, as phenotype and prosthesis, and internalised by it.';
+      var DEFAULT = 'Point to a structure: each is extended outward from human agency, and internalised by it.';
       note.textContent = DEFAULT;
       svg.querySelectorAll('.pair').forEach(function (g) {
         var key = g.getAttribute('data-key');
         g.addEventListener('mouseenter', function () {
           svg.classList.add('pointing');
           g.classList.add('on');
-          note.innerHTML = '<b>' + g.querySelector('.name').textContent + '</b> (' + ALT[key] + ') &ndash; ' + window.MD_MODEL[key].desc;
+          note.innerHTML = '<b>' + g.querySelector('.name').firstChild.textContent + '</b> (' + ALT[key] + ') &ndash; ' + window.MD_MODEL[key].desc;
         });
         g.addEventListener('mouseleave', function () {
           svg.classList.remove('pointing');
