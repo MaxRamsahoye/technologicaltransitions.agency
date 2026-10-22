@@ -438,9 +438,24 @@
     /* what the structure pointed to comprises */
     .md-detail {
       margin-top: 34px;
-      padding-top: 26px;
-      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
       min-height: 220px;
+    }
+
+    /* the description beneath each list: a box in the colour of what is
+       pointed to, its slab or its ring */
+    :is(.md-detail, .md-ring-note) {
+      box-sizing: border-box;
+      padding: 26px 28px 28px;
+      border: 1.5px solid color-mix(in srgb, var(--box, #8f8f96) 30%, transparent);
+      border-radius: 3px;
+      background: color-mix(in srgb, var(--box, #8f8f96) 13%, var(--canvas-bg));
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* agency: white, as its circle is */
+    .md-ring-note[data-c="self"] {
+      border-color: var(--canvas-ink);
+      background: var(--canvas-bg);
     }
 
     .md-detail p {
@@ -907,8 +922,6 @@
     .md-ring-note {
       min-height: 260px;
       margin: 24px 0 0;
-      padding-top: 22px;
-      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
     }
 
     .md-note-lead {
@@ -1158,11 +1171,18 @@
       var locked = 'infrastructure';
       // what each structure comprises, and what lies within it
       var MODEL = window.MD_MODEL = {"infrastructure": {"desc": "Technological instruments and affordances, productive (and reproductive) forces and material conditions.", "within": []}, "interstructure": {"desc": "The institutional complex for decision-making (governance) and resource-allocation (economy).", "within": []}, "superstructure": {"desc": "Ideologies, worldviews, belief and value-systems, symbols, memetics and narratives.", "within": []}, "biostructure": {"desc": "The physiological, genetic, somatic and neurobiological substrate of human populations, as altered and conditioned by cultural practices, environmental feedback and technology.", "within": []}, "ecostructure": {"desc": "The biophysical environment, resource reservoirs, ecosystem dynamics and planetary boundaries within which human civilisations are embedded and intra-acting.", "within": []}, "metastructure": {"desc": "The cybernetic, game-theoretic and evolutionary mechanisms operational within a civilisation.", "within": [["cybernetic", "Cybernetic", "Goal-optimisation (&lsquo;teleology&rsquo;), error-minimisation and feedback loops."], ["game-theoretic", "Game-Theoretic", "Incentive structures, rational strategising and agent-modelling."], ["evolutionary", "Evolutionary", "Selection processes, competitive pressures and niche construction."]]}, "macrostructure": {"desc": "The process by which a civilisation elaborates itself and changes across macrohistorical time.", "within": [["states-transitions", "States &amp; Transitions", "The critical thresholds, &lsquo;bifurcation points&rsquo; and &lsquo;phase transitions&rsquo; where systems change, complexify and collapse."], ["constraints-affordances", "Constraints &amp; Affordances", "The hard boundaries, limiting factors and &lsquo;action potentials&rsquo; generated at each stage of civilisational development."], ["problems-solutions-externalities", "Problems, Solutions &amp; Externalities", "The historical process by which solutions to existing problems generate novel problems and unintended side-effects."]]}, "substructure": {"desc": "Universal, innate cognitive-affective predispositions and capacities, which are expressed or suppressed through interaction primarily with the superstructure (and other structures).", "within": []}};
+      // each structure's colour, as its slab has it
+      var BOX = window.MD_BOX = {
+        infrastructure: '#3d4b94', interstructure: '#3d4b94', superstructure: '#3d4b94',
+        substructure: '#a35a6a', biostructure: '#a35a6a', ecostructure: '#4e8a5a',
+        metastructure: '#6b6b78', macrostructure: '#6b6b78'
+      };
       function describe(key) {
         var m = MODEL[key];
         var h = '<p>' + m.desc + '</p>';
         if (m.within.length) h += '<ul>' + m.within.map(function (w) { return '<li><b>' + w[1] + '</b> &ndash; ' + w[2] + '</li>'; }).join('') + '</ul>';
         detail.innerHTML = h;
+        detail.style.setProperty('--box', BOX[key]);
       }
       function show(key) {
         parts.forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-key') === key); });
@@ -1323,6 +1343,9 @@
         eeList.forEach(function (b) { b.classList.toggle('on', kind === 'pair' && b.getAttribute('data-key') === id); });
         note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
           : '<p class="md-note-lead">' + (c ? CONCEPTS[c] : DEFAULT) + '</p>';
+        // the box in the colour of what is shown: the structure, or the ring
+        note.style.setProperty('--box', kind === 'pair' ? window.MD_BOX[id] : c === 'exo' ? 'var(--canvas-ink)' : '#8f8f96');
+        if (c) note.dataset.c = c; else delete note.dataset.c;
       }
       // pointing shows a thing for as long as it is pointed to; clicking
       // holds it after the pointer leaves, until something else is pointed to
