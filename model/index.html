@@ -1249,11 +1249,9 @@
         ['exo', 'endo', 'self'].forEach(function (k) { svg.classList.toggle('c-' + k, k === c); });
         keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
         svg.classList.toggle('pointing', kind === 'pair');
-        // a structure raises the panel at once; it comes back down only
-        // once the pointer is out of it, so that it never bounces under the
-        // pointer as the list is browsed
+        // a structure raises the panel at once, and anything else lowers it
         raised = kind === 'pair';
-        if (raised || !inPanel) grid.classList.toggle('structure', raised);
+        grid.classList.toggle('structure', raised);
         svg.querySelectorAll('.pair').forEach(function (p) { p.classList.toggle('on', p === g); });
         eeList.forEach(function (b) { b.classList.toggle('on', kind === 'pair' && b.getAttribute('data-key') === id); });
         note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
