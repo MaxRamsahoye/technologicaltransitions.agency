@@ -658,9 +658,9 @@
 
     .md-ring .name .alt {
       font-family: var(--serif);
-      font-size: 19px;
+      font-size: 23px;
       font-style: italic;
-      fill: var(--muted);
+      fill: var(--canvas-ink);
     }
 
     .md-ring .on .name {
@@ -1174,7 +1174,7 @@
         var cOut = sh(m, 30), cIn = sh(m, -30);
         var o0 = sh(s0, 7), o1 = sh(s1, 7), i0 = sh(s1, -7), i1 = sh(s0, -7);
         var lab = P(RL, a), anchor = u[0] > 0.2 ? 'start' : u[0] < -0.2 ? 'end' : 'middle';
-        var dy = u[1] > 0.5 ? 18 : u[1] < -0.5 ? -24 : -4;
+        var dy = u[1] > 0.5 ? 18 : u[1] < -0.5 ? -36 : -10;
         html += '<g class="pair" data-key="' + sg[0] + '" style="--c: ' + sg[2] + '">' +
           '<line class="tie" x1="' + f(P(RA + 18, a)).replace(' ', '" y1="') + '" x2="' + f(P(RIN - 12, a)).replace(' ', '" y2="') + '"/>' +
           '<path class="out" d="M' + f(o0) + 'Q' + f(cOut) + ' ' + f(o1) + '"/><path class="out-head" d="' + head(o1, cOut) + '"/>' +
@@ -1183,7 +1183,7 @@
           '<circle class="halo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="27"/>' +
           '<circle class="exo" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="19"/>' +
           '<text class="name" x="' + lab[0].toFixed(1) + '" y="' + (lab[1] + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + sg[1] +
-          '<tspan class="alt" x="' + lab[0].toFixed(1) + '" dy="24">' + ALT[sg[0]] + '</tspan></text>' +
+          '<tspan class="alt" x="' + lab[0].toFixed(1) + '" dy="32">' + ALT[sg[0]] + '</tspan></text>' +
           '<circle class="hit" cx="' + outP[0].toFixed(1) + '" cy="' + outP[1].toFixed(1) + '" r="36"/>' +
           '<circle class="hit" cx="' + inP[0].toFixed(1) + '" cy="' + inP[1].toFixed(1) + '" r="22"/></g>';
       });
