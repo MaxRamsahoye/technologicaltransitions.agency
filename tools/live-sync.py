@@ -122,6 +122,7 @@ def main(path):
     if sections and sections[0]['id'] == 'overview':
         while k < len(sections) and sections[k]['s']:
             band.add(sections[k]['id']); k += 1
+    band_alt = {sid: n % 2 == 0 for n, sid in enumerate(s['id'] for s in sections[1:k])}
 
     I = ' ' * 14
     out = []
@@ -129,7 +130,8 @@ def main(path):
         nxt = sections[i + 1]['id'] if i + 1 < len(sections) else None
         # the article's own contents list stays out of the sidebar menu
         off = ' data-toc="off"' if key(s['title']) == 'contents' else ''
-        cls = ' class="in-band"' if s['id'] in band else ''
+        # every other one a shade darker, as the doc alternates them
+        cls = (' class="in-band band-alt"' if band_alt.get(s['id']) else ' class="in-band"') if s['id'] in band else ''
         out.append('            <section id="%s"%s%s>' % (s['id'], cls, off))
         if s['id'] == 'overview' and nxt:
             out.append(I + '<button class="next-screen next-screen-overview" type="button" data-target="%s" aria-label="Continue to the next section">' % nxt)

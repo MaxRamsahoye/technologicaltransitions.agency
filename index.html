@@ -1154,6 +1154,21 @@
       margin-top: 104px;
     }
 
+    /* every other section in the band a shade darker, in its own band (as
+       the Live doc alternates its shaded sections) */
+    :is(#overview, .in-band).band-alt {
+      --canvas-bg: color-mix(in srgb, var(--inverse-bg) 80%, #000);
+      padding-top: 96px;
+    }
+
+    .article-body section.band-alt + section.in-band {
+      padding-top: 96px;
+    }
+
+    html.overview-lines :is(#overview, .in-band).band-alt {
+      --canvas-bg: var(--frame-bg);
+    }
+
     /* without the band (h), one rule above the Overview and one below the
        last section in it */
     html.overview-lines #overview:has(+ section.in-band)::after,
@@ -2057,7 +2072,7 @@
               <p class="overview-keywords">philosophy of technology · macrohistory · systemic existential risk · accelerationism · exterminism</p>
             </section>
 
-            <section id="basis" class="in-band">
+            <section id="basis" class="in-band band-alt">
               <h2><a class="heading-link" href="#basis">Basis</a></h2>
 
               <p>After a prolonged period of seeming inactivity after sunsetting their publication <a href="https://consilienceproject.org/" target="_blank" rel="noopener"><em>The Consilience Project</em></a>, the <a href="https://civilizationresearchinstitute.org/" target="_blank" rel="noopener"><em>Civilisation Research Institute</em></a> have recently released a series of new papers: ‘Reality Check?’, ‘General Regulatory Process for Advanced Technology’ &amp; ‘Steps for Prudent Problem-Solving’. Following suit, I thought to write my own article as an independent contribution to the civilisation research paradigm.<strong> </strong></p>
