@@ -654,8 +654,7 @@
       fill: none;
       /* one fixed colour, darkened by opacity: a transition between two
          mixes of currentColor makes the ring blink out for a frame */
-      stroke: color-mix(in srgb, currentColor 40%, transparent);
-      opacity: 0.65;
+      stroke: var(--canvas-ink);
       /* half as wide as the endo ring inside it, from the centre's edge
          (76) to the membrane's inner edge: 2w + w/2 = 204 - 76 */
       stroke-width: 51;
@@ -663,8 +662,11 @@
     }
 
 
+    /* human agency: white, within the black ring of the exo structure */
     .md-ring .agency {
-      fill: var(--canvas-ink);
+      fill: var(--canvas-bg);
+      stroke: var(--canvas-ink);
+      stroke-width: 2;
     }
 
 
@@ -673,7 +675,7 @@
       font-size: 20px;
       font-weight: 600;
       letter-spacing: -0.01em;
-      fill: var(--canvas-bg);
+      fill: var(--canvas-ink);
     }
 
     /* the concepts: regions of the diagram to point to, and what each
@@ -715,9 +717,6 @@
       stroke-width: 2;
     }
 
-    .md-ring.c-exo .membrane {
-      opacity: 1;
-    }
 
     .md-ring .agency-g {
       cursor: pointer;
@@ -779,7 +778,7 @@
     }
 
     .md-key .k-exo {
-      background: currentColor;
+      background: var(--canvas-ink);
     }
 
     .md-key .k-endo {
@@ -789,11 +788,13 @@
       height: 11px;
     }
 
-    /* agency: the dark centre */
+    /* agency: the white centre */
     .md-key .k-membrane {
       width: 15px;
       height: 15px;
-      background: var(--canvas-ink);
+      box-sizing: border-box;
+      border: 1.5px solid var(--canvas-ink);
+      background: var(--canvas-bg);
     }
 
     /* beneath the diagram, what is pointed to: a structure as exo, as endo
