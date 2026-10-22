@@ -453,13 +453,12 @@
       text-align: left;
     }
 
-    /* the down arrow to the second section: bottom left, opposite the up
-       arrow */
+    /* the down arrow to the second section, in the up arrow's corner */
     .next-section-btn {
       position: fixed;
       bottom: 30px;
-      left: 37px;
-      z-index: 42;
+      right: 37px;
+      z-index: 43;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -488,8 +487,15 @@
     @media (max-width: 600px) {
       .next-section-btn {
         bottom: 22px;
-        left: 20px;
+        right: 20px;
       }
+    }
+
+    /* the down arrow and the up arrow share the corner: the down arrow
+       while the first section is in view, the up arrow after */
+    body.next-showing .scroll-top-btn {
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     /* a rule between the two sections of the page */
@@ -1259,14 +1265,18 @@
   </button>
 
   <script>
-    // the down arrow, bottom left, goes to the second section, and steps
-    // aside once that section has been reached
+    // the down arrow, bottom right, goes to the second section, and gives
+    // the corner back to the up arrow once that section has been reached
     (function () {
       var btn = document.querySelector('.next-section-btn');
       var target = document.querySelector('.md-agency');
       function top() { return target.getBoundingClientRect().top + window.scrollY; }
       btn.addEventListener('click', function () { window.scrollTo({ top: top(), behavior: 'smooth' }); });
-      function check() { btn.classList.toggle('visible', window.scrollY < top() - window.innerHeight * 0.4); }
+      function check() {
+        var on = window.scrollY < top() - window.innerHeight * 0.4;
+        btn.classList.toggle('visible', on);
+        document.body.classList.toggle('next-showing', on);
+      }
       window.addEventListener('scroll', check, { passive: true });
       window.addEventListener('resize', check);
       check();
