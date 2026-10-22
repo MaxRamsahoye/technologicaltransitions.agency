@@ -453,6 +453,11 @@
       text-align: left;
     }
 
+    /* a rule between the two sections of the page */
+    .md-agency {
+      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    }
+
     /* the diagram stays centred between the text above and below it */
     .md-agency .md-ring {
       align-self: center;
@@ -719,7 +724,9 @@
     /* beneath the diagram, what is pointed to: a structure as exo, as endo
        and as it bears on agency, or one of the three concepts */
     .md-ring-note {
-      width: 100%;
+      /* a panel of its own width, centred below the diagram */
+      align-self: center;
+      width: min(100%, 980px);
       min-height: 220px;
       margin: 48px 0 0;
     }
