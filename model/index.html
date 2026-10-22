@@ -1216,29 +1216,38 @@
         note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
           : '<p class="md-note-lead">' + (c ? CONCEPTS[c] : DEFAULT) + '</p>';
       }
+      // pointing shows a thing for as long as it is pointed to; clicking
+      // holds it after the pointer leaves, until something else is pointed to
+      var locked = false;
+      function hover(kind, id, g) {
+        if (locked && kind + ':' + id === current) return;
+        locked = false;
+        show(kind, id, g);
+      }
       function leave() {
+        if (locked) return;
         clearTimeout(clearTimer);
         clearTimer = setTimeout(function () { show('none', '', null); }, 90);
       }
-      Array.prototype.slice.call(svg.querySelectorAll('.concept-hit')).concat(keys).forEach(function (el) {
-        var c = el.getAttribute('data-concept');
-        el.addEventListener('mouseenter', function () { show('concept', c); });
+      function hold(kind, id, g) {
+        show(kind, id, g);
+        locked = true;
+      }
+      function bind(el, kind, id, g) {
+        el.addEventListener('mouseenter', function () { hover(kind, id, g); });
         el.addEventListener('mouseleave', leave);
-        el.addEventListener('focus', function () { show('concept', c); });
+        el.addEventListener('click', function () { hold(kind, id, g); });
+        el.addEventListener('focus', function () { hover(kind, id, g); });
         el.addEventListener('blur', leave);
+      }
+      Array.prototype.slice.call(svg.querySelectorAll('.concept-hit')).concat(keys).forEach(function (el) {
+        bind(el, 'concept', el.getAttribute('data-concept'));
       });
-      svg.querySelectorAll('.pair').forEach(function (g) {
-        var key = g.getAttribute('data-key');
-        g.addEventListener('mouseenter', function () { show('pair', key, g); });
-        g.addEventListener('mouseleave', leave);
-      });
+      svg.querySelectorAll('.pair').forEach(function (g) { bind(g, 'pair', g.getAttribute('data-key'), g); });
       // the structures listed in the panel point to their pairs
       eeList.forEach(function (b) {
-        var key = b.getAttribute('data-key'), g = svg.querySelector('.pair[data-key="' + key + '"]');
-        b.addEventListener('mouseenter', function () { show('pair', key, g); });
-        b.addEventListener('mouseleave', leave);
-        b.addEventListener('focus', function () { show('pair', key, g); });
-        b.addEventListener('blur', leave);
+        var key = b.getAttribute('data-key');
+        bind(b, 'pair', key, svg.querySelector('.pair[data-key="' + key + '"]'));
       });
     })();
   </script>
