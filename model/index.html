@@ -494,7 +494,18 @@
 
     /* a rule between the two sections of the page */
     .md-agency {
-      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      position: relative;
+    }
+
+    .md-agency::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100vw;
+      height: 1px;
+      transform: translateX(-50%);
+      background: color-mix(in srgb, currentColor 18%, transparent);
     }
 
     /* the diagram stays centred between the text above and below it */
