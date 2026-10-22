@@ -132,6 +132,13 @@
       --fig-w: min(1360px, calc(100vw - 280px));
     }
 
+    /* less room above the title than the other pages leave */
+    @media (min-width: 601px) {
+      .page-main {
+        padding-top: 116px;
+      }
+    }
+
     .md-top.wide-top,
     .md-agency {
       width: var(--fig-w);
