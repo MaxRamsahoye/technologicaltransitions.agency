@@ -363,7 +363,7 @@
       }
       fetch(ARTICLE.href).then(function (r) { return r.text(); }).then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
-        var sections = Array.prototype.slice.call(doc.querySelectorAll('.article-body > section[id]'));
+        var sections = Array.prototype.slice.call(doc.querySelectorAll('.article-body > section[id]:not([data-toc="off"])'));
         var items = '', out = '', n = 0;
         sections.forEach(function (sec) {
           var h = sec.querySelector(':scope > h2, :scope > h3');

@@ -2116,7 +2116,7 @@
       var tocNav = document.querySelector('.toc');
       var tocList = tocNav.querySelector('ol');
       var tocItemCount = 0;
-      document.querySelectorAll('.article-body > section[id]').forEach(function (section) {
+      document.querySelectorAll('.article-body > section[id]:not([data-toc="off"])').forEach(function (section) {
         var heading = section.querySelector(':scope > h2, :scope > h3');
         if (!heading) return;
         var li = document.createElement('li');

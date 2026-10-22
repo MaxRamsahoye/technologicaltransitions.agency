@@ -21,6 +21,8 @@ The doc and the site differ in places, and this is where they are bridged:
 - the title is set on two lines, broken after its first "of"
 - the author keeps the site's link to the author's page
 - keywords (kw) become the overview's keywords line
+- a section headed Contents is left out of the sidebar contents menu and
+  the Overviews page
 - list items (li, li2) become dash lists, sub-items nested
 - outside links open in a new tab, as they do elsewhere on the site
 - shading has no counterpart on the site and is ignored (the Overview has
@@ -117,7 +119,9 @@ def main(path):
     out = []
     for i, s in enumerate(sections):
         nxt = sections[i + 1]['id'] if i + 1 < len(sections) else None
-        out.append('            <section id="%s">' % s['id'])
+        # the article's own contents list stays out of the sidebar menu
+        off = ' data-toc="off"' if key(s['title']) == 'contents' else ''
+        out.append('            <section id="%s"%s>' % (s['id'], off))
         if s['id'] == 'overview' and nxt:
             out.append(I + '<button class="next-screen next-screen-overview" type="button" data-target="%s" aria-label="Continue to the next section">' % nxt)
             out.append('                ' + ARROW)
