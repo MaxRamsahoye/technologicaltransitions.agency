@@ -432,7 +432,13 @@
       width: var(--wide-col);
       margin: 0 0 0 calc((100% - var(--wide-col)) / 2);
       padding: 80px 0 120px;
-      text-align: center;
+      align-items: stretch;
+      text-align: left;
+    }
+
+    /* the diagram stays centred between the text above and below it */
+    .md-agency .md-ring {
+      align-self: center;
     }
 
     .md-agency-title {
@@ -576,7 +582,7 @@
     .md-key {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 6px 10px;
       margin: 18px 0 0;
