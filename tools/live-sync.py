@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Rebuild the site article (index.html) from the Live doc artifact.
 
-Usage: python3 tools/live-sync.py live.json
+Usage: python3 tools/live-sync.py live.html   (the Live artifact's saved page)
+       python3 tools/live-sync.py live.json   (its block list alone)
 
-live.json is the Live artifact's block list (the JSON in its
-<script id="draft">): [{"t": kind, "h": inner html, "s": 1 if shaded}, ...].
+The block list is the JSON in the page's <script id="draft">:
+[{"t": kind, "h": inner html, "s": 1 if shaded}, ...].
 
 Only the article itself is replaced: the title, subtitle and author in the
 article header, and every section of the article body. Everything else in
@@ -60,7 +61,15 @@ def inline(h):
 
 
 def main(path):
-    blocks = json.load(open(path, encoding='utf-8'))
+    raw = open(path, encoding='utf-8').read()
+    if raw.lstrip().startswith('<'):
+        m = re.search(r'<script type="application/json" id="draft">(.*?)</script>', raw, re.S)
+        if not m:
+            sys.exit('No <script id="draft"> block list in ' + path)
+        raw = m.group(1)
+    blocks = json.loads(raw)
+    if not any(b.get('t') == 'title' for b in blocks):
+        sys.exit('The block list has no title; refusing to rebuild the article from it')
     site = open(ARTICLE, encoding='utf-8').read()
 
     # the ids headings already have on the site, by heading text
