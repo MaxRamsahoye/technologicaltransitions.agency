@@ -529,6 +529,7 @@
 
     .md-agency-intro {
       max-width: 880px;
+      text-wrap: balance;
       margin: 0 0 40px;
       font-size: 21px;
       line-height: 1.4;
@@ -629,10 +630,14 @@
 
     .md-ring .membrane {
       fill: none;
-      stroke: color-mix(in srgb, currentColor 26%, transparent);
+      /* one fixed colour, darkened by opacity: a transition between two
+         mixes of currentColor makes the ring blink out for a frame */
+      stroke: color-mix(in srgb, currentColor 40%, transparent);
+      opacity: 0.65;
       /* half as wide as the endo ring inside it, from the centre's edge
          (76) to the membrane's inner edge: 2w + w/2 = 204 - 76 */
       stroke-width: 51;
+      transition: opacity 0.3s ease;
     }
 
 
@@ -663,7 +668,7 @@
       pointer-events: stroke;
     }
 
-    .md-ring :is(.exo, .endo, .halo, .out, .in, .out-head, .tie, .membrane, .self) {
+    .md-ring :is(.exo, .endo, .halo, .out, .in, .out-head, .tie, .self) {
       transition: opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, fill 0.3s ease, r 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -689,8 +694,7 @@
     }
 
     .md-ring.c-exo .membrane {
-      stroke: color-mix(in srgb, currentColor 40%, transparent);
-      stroke-width: 51;
+      opacity: 1;
     }
 
     .md-ring .agency-g {
