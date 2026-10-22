@@ -689,16 +689,55 @@
       background: radial-gradient(circle, transparent 50%, color-mix(in srgb, currentColor 12%, transparent));
     }
 
+    /* beneath the diagram, what is pointed to: a structure as exo, as endo
+       and as it bears on agency, or one of the three concepts */
     .md-ring-note {
-      max-width: 640px;
-      min-height: 3em;
+      width: 100%;
+      min-height: 220px;
       margin: 28px 0 0;
+    }
+
+    .md-note-lead {
+      max-width: 760px;
+      margin: 0;
       font-size: 20px;
       line-height: 1.4;
     }
 
-    .md-ring-note b {
+    .md-note-lead b {
       font-weight: 600;
+    }
+
+    .md-note-parts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 36px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    }
+
+    .md-note-part h4 {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .md-note-part p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 760px) {
+      .md-note-parts {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
 
     @media (max-width: 1180px) {
@@ -763,8 +802,8 @@
       <h2 class="md-agency-title">Human Agency <span>&amp;</span> the Exo-Endo Structure</h2>
       <p class="md-agency-intro">Every structure is at once <em>exo</em> &ndash; an extended phenotype or prosthesis, built outward from human agency &ndash; and <em>endo</em> &ndash; internalised, shaping that agency from within.</p>
       <svg class="md-ring" viewBox="-90 0 940 760" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg>
-      <p class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>The self</button></p>
-      <p class="md-ring-note" aria-live="polite"></p>
+      <p class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>Agency &middot; complex</button></p>
+      <div class="md-ring-note" aria-live="polite"></div>
     </section>
 
   </main>
@@ -984,18 +1023,36 @@
         '<text class="agency-text" x="' + C + '" y="' + (C + 21) + '" text-anchor="middle">Agency</text>';
       svg.innerHTML = html;
       var DEFAULT = 'Point to a structure: each is extended outward from human agency, and internalised by it.';
-      note.textContent = DEFAULT;
+      note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
       // the concepts, from the diagram or the key
       var CONCEPTS = {
         exo: '<b>Exo</b> &ndash; each structure as extended outward from human agency: an extended phenotype or prosthesis, built and inhabited by a population, through which its agency acts on the world.',
         endo: '<b>Endo</b> &ndash; each structure as internalised: taken into the bodies, minds and habits of the people who live within it, shaping their agency from within.',
-        self: '<b>The self</b> &ndash; the boundary of the human agent, across which every structure passes both ways: extended outward, and drawn back in.'
+        self: '<b>Agency &middot; complex</b> &ndash; human agency is not a will standing apart from its structures but a complex, formed at the boundary across which every structure is extended outward and drawn back in.'
       };
+      // each structure as exo, as endo, and as it bears on human agency
+      var EXOENDO = {
+        infrastructure: ['Tools, machines, energy systems and infrastructure as the extended body of a population: the prostheses through which it reaches beyond its own strength and senses.', 'Technique internalised as skill, habit and embodied know-how: the rhythms, attention and expectations a technology trains into those who use it.', 'Agency amplified and channelled by the tech stack: what can be done, and so what is thought possible, is set by the instruments to hand.'],
+        interstructure: ['Institutions, laws, markets and states as collective prostheses for decision-making and allocation, extending coordination far beyond the reach of any person.', 'Roles, norms, incentives and identities internalised &ndash; citizen, worker, consumer, official &ndash; each a way of being shaped by the institutions one lives within.', 'Agency exercised through institutions and constrained by them: the political economy distributes power and choice, and decides whose agency counts.'],
+        superstructure: ['Narratives, symbols, texts, rituals and media as externalised mind: a shared memory and imagination stored outside any single head.', 'Worldviews, values and beliefs internalised as identity and conscience: the stories a culture tells become the self-understanding of its members.', 'Agency given meaning and direction by culture: what is worth wanting, and why, is learned before it is chosen.'],
+        substructure: ['Innate dispositions projected outward into culture and institutions: kinship into nations, status-seeking into hierarchies, fear into walls.', 'The evolved, inherited ground of cognition and feeling, expressed or suppressed by the structures one grows up within.', 'Agency resting on predispositions it did not choose, which structures can amplify, redirect or restrain, but not simply remove.'],
+        biostructure: ['The body extended and remade: medicine, diet, prosthetics, pharmacology and, increasingly, genetic and neural technologies.', 'Culture written into the body itself: in physiology, epigenetics, the microbiome and the neural pathways shaped by practice and environment.', 'Agency embodied: health, energy and capacity are its material conditions, and are now themselves increasingly the object of design.'],
+        ecostructure: ['Landscapes, cities, farms and atmospheres remade by human activity: niche construction on a planetary scale, the environment as an extended phenotype.', 'The environment taken in: through food, air, seasons and place, and as the sense of nature, home and limit a people carries within it.', 'Agency embedded in and bounded by the ecosystem: it acts on the planet, and the planet&rsquo;s limits act back upon it.'],
+        metastructure: ['Feedback loops, incentive systems and selection pressures built into markets, algorithms, contests and arms races: the dynamics a civilisation runs on, externalised as mechanism.', 'Strategic thinking, competitiveness and optimisation internalised as habits of mind: people learn to model one another, play the game and chase the metric.', 'Agency caught up in dynamics larger than any agent: a multipolar trap can make each choice rational and the outcome chosen by no one.'],
+        macrostructure: ['The accumulated record of development: built environments, archives, technologies and institutions in which the past persists into the present.', 'Historical consciousness internalised as a sense of epoch, progress or decline, and as the inherited constraints and affordances of a stage of development.', 'Agency situated in time: it inherits a trajectory, meets thresholds it did not set, and can, at a transition, change the course.']
+      };
+      function describeStructure(key, name) {
+        var x = EXOENDO[key];
+        return '<p class="md-note-lead"><b>' + name + '</b> (' + ALT[key] + ') &ndash; ' + window.MD_MODEL[key].desc + '</p>' +
+          '<div class="md-note-parts">' + ['Exo', 'Endo', 'Agency'].map(function (h, i) {
+            return '<div class="md-note-part"><h4>' + h + '</h4><p>' + x[i] + '</p></div>';
+          }).join('') + '</div>';
+      }
       var keys = Array.prototype.slice.call(document.querySelectorAll('.md-key [data-concept]'));
       function concept(c) {
         ['exo', 'endo', 'self'].forEach(function (k) { svg.classList.toggle('c-' + k, k === c); });
         keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
-        if (c) note.innerHTML = CONCEPTS[c]; else note.textContent = DEFAULT;
+        if (c) note.innerHTML = '<p class="md-note-lead">' + CONCEPTS[c] + '</p>'; else note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
       }
       Array.prototype.slice.call(svg.querySelectorAll('.concept-hit')).concat(keys).forEach(function (el) {
         var c = el.getAttribute('data-concept');
@@ -1009,12 +1066,12 @@
         g.addEventListener('mouseenter', function () {
           svg.classList.add('pointing');
           g.classList.add('on');
-          note.innerHTML = '<b>' + g.querySelector('.name').firstChild.textContent + '</b> (' + ALT[key] + ') &ndash; ' + window.MD_MODEL[key].desc;
+          note.innerHTML = describeStructure(key, g.querySelector('.name').firstChild.textContent);
         });
         g.addEventListener('mouseleave', function () {
           svg.classList.remove('pointing');
           g.classList.remove('on');
-          note.textContent = DEFAULT;
+          note.innerHTML = '<p class="md-note-lead">' + DEFAULT + '</p>';
         });
       });
     })();
