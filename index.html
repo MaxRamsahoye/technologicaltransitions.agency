@@ -1291,6 +1291,31 @@
       margin-bottom: 8px;
     }
 
+    /* across two columns, each item kept whole with its sub-items */
+    #contents .live-list:not(.live-sub) {
+      columns: 2;
+      column-gap: 48px;
+    }
+
+    /* a little wider than the text column where there is room, so no item
+       breaks across two lines */
+    @media (min-width: 1200px) {
+      #contents .live-list:not(.live-sub) {
+        width: 860px;
+        max-width: none;
+      }
+    }
+
+    #contents .live-list > li {
+      break-inside: avoid;
+    }
+
+    @media (max-width: 700px) {
+      #contents .live-list:not(.live-sub) {
+        columns: 1;
+      }
+    }
+
     .article-rule {
       max-width: 760px;
       margin: 48px 0;
