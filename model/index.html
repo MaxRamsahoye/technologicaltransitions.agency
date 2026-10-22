@@ -326,7 +326,7 @@
     }
 
     /* the list beside it */
-    .md-list {
+    :is(.md-list, .md-ee-list) {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -355,7 +355,7 @@
       text-transform: none;
     }
 
-    .md-list button {
+    :is(.md-list, .md-ee-list) button {
       padding: 3px 0;
       border: none;
       background: none;
@@ -369,20 +369,20 @@
       transition: color 0.2s ease;
     }
 
-    .md-list button span {
+    :is(.md-list, .md-ee-list) button span {
       color: var(--muted);
       transition: color 0.2s ease;
     }
 
-    .md-list button.sub {
+    :is(.md-list, .md-ee-list) button.sub {
       margin-left: 24px;
       font-size: 21px;
     }
 
-    .md-list button:hover,
-    .md-list button:focus-visible,
-    .md-list button.on,
-    .md-list button.on span {
+    :is(.md-list, .md-ee-list) button:hover,
+    :is(.md-list, .md-ee-list) button:focus-visible,
+    :is(.md-list, .md-ee-list) button.on,
+    :is(.md-list, .md-ee-list) button.on span {
       color: var(--link-blue);
       outline: none;
     }
@@ -445,10 +445,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       min-height: 100dvh;
-      padding: 80px 0 120px;
+      padding: 56px 0 120px;
       align-items: stretch;
       text-align: left;
     }
@@ -512,8 +512,8 @@
        to, as in the diagram above */
     .md-agency-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-      gap: 120px;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 80px;
       align-items: start;
       width: 100%;
     }
@@ -552,7 +552,7 @@
     .md-agency-intro {
       max-width: 880px;
       text-wrap: balance;
-      margin: 0 0 40px;
+      margin: 0 0 24px;
       font-size: 21px;
       line-height: 1.4;
     }
@@ -799,10 +799,40 @@
 
     /* beneath the diagram, what is pointed to: a structure as exo, as endo
        and as it bears on agency, or one of the three concepts */
+    .md-ee-list {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    }
+
+    /* more compact here, beside the larger diagram */
+    .md-ee-list .md-list-head {
+      margin: 16px 0 4px;
+      font-size: 11px;
+    }
+
+    .md-ee-list .md-list-head:first-child {
+      margin-top: 0;
+    }
+
+    .md-ee-list button {
+      padding: 1px 0;
+      font-size: 18px;
+    }
+
+    .md-ee-list button.sub {
+      margin-left: 18px;
+      font-size: 17px;
+    }
+
+    .md-ee-list button span {
+      font-size: 0.85em;
+    }
+
     .md-ring-note {
       min-height: 260px;
-      margin: 34px 0 0;
-      padding-top: 26px;
+      margin: 24px 0 0;
+      padding-top: 22px;
       border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
     }
 
@@ -904,6 +934,19 @@
         <div class="md-agency-scene"><svg class="md-ring" viewBox="-150 -30 1060 820" role="img" aria-label="Human agency at the centre, within the membrane of the self; each of the eight structures appears inside the membrane, internalised, and outside it, extended as phenotype and prosthesis, with arrows both ways"></svg></div>
         <div class="md-agency-side">
           <div class="md-key"><button type="button" data-concept="exo"><span class="k-exo"></span>Exo &middot; extended</button><button type="button" data-concept="endo"><span class="k-endo"></span>Endo &middot; internalised</button><button type="button" data-concept="self"><span class="k-membrane"></span>Agency &middot; complex</button></div>
+          <div class="md-ee-list">
+            <p class="md-list-head">Transecting</p>
+            <button type="button" data-key="metastructure">Metastructure <span>(System Dynamics)</span></button>
+            <button type="button" data-key="macrostructure">Macrostructure <span>(Developmental Process)</span></button>
+            <p class="md-list-head">Core</p>
+            <button type="button" data-key="infrastructure">Infrastructure <span>(Tech Stack)</span></button>
+            <button type="button" data-key="interstructure">Interstructure <span>(Political Economy)</span></button>
+            <button type="button" data-key="superstructure">Superstructure <span>(Cultural Psychology)</span></button>
+            <button type="button" class="sub" data-key="substructure">Substructure <span>(Evolutionary Psychology)</span></button>
+            <p class="md-list-head">Interfaces <em>&lsquo;Second Nature&rsquo;</em></p>
+            <button type="button" data-key="biostructure">Biostructure <span>(Cultural-Evolutionary Biology)</span></button>
+            <button type="button" data-key="ecostructure">Ecostructure <span>(Cultural-Evolutionary Ecology)</span></button>
+          </div>
           <div class="md-ring-note" aria-live="polite"></div>
         </div>
       </div>
@@ -1158,6 +1201,7 @@
       // Leaving waits a moment before clearing, so that moving from one
       // region to another that picks out the same thing never flickers
       var current = null, clearTimer = null;
+      var eeList = Array.prototype.slice.call(document.querySelectorAll('.md-ee-list [data-key]'));
       function show(kind, id, g) {
         clearTimeout(clearTimer);
         var keyId = kind + ':' + id;
@@ -1168,6 +1212,7 @@
         keys.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-concept') === c); });
         svg.classList.toggle('pointing', kind === 'pair');
         svg.querySelectorAll('.pair').forEach(function (p) { p.classList.toggle('on', p === g); });
+        eeList.forEach(function (b) { b.classList.toggle('on', kind === 'pair' && b.getAttribute('data-key') === id); });
         note.innerHTML = kind === 'pair' ? describeStructure(id, g.querySelector('.name').firstChild.textContent)
           : '<p class="md-note-lead">' + (c ? CONCEPTS[c] : DEFAULT) + '</p>';
       }
@@ -1186,6 +1231,14 @@
         var key = g.getAttribute('data-key');
         g.addEventListener('mouseenter', function () { show('pair', key, g); });
         g.addEventListener('mouseleave', leave);
+      });
+      // the structures listed in the panel point to their pairs
+      eeList.forEach(function (b) {
+        var key = b.getAttribute('data-key'), g = svg.querySelector('.pair[data-key="' + key + '"]');
+        b.addEventListener('mouseenter', function () { show('pair', key, g); });
+        b.addEventListener('mouseleave', leave);
+        b.addEventListener('focus', function () { show('pair', key, g); });
+        b.addEventListener('blur', leave);
       });
     })();
   </script>
