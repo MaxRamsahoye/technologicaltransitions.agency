@@ -271,6 +271,34 @@
       transition: background-color 0.25s ease;
     }
 
+    /* a page with a downward arrow: first of the controls, downloads the
+       article as a PDF */
+    .pdf-btn {
+      display: flex;
+      color: var(--muted);
+    }
+
+    .pdf-btn:hover,
+    .pdf-btn:focus-visible {
+      color: var(--canvas-ink);
+      outline: none;
+    }
+
+    .pdf-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* the arrow drops a little on hover */
+    .pdf-btn .arrow {
+      transition: transform 0.25s ease;
+    }
+
+    .pdf-btn:hover .arrow,
+    .pdf-btn:focus-visible .arrow {
+      transform: translateY(1.5px);
+    }
+
     /* hamburger: left of the theme toggle, opens the Pages menu */
     .menu-btn {
       display: flex;
@@ -2011,6 +2039,14 @@
   </div>
 
   <div class="left-controls">
+    <a class="pdf-btn" href="article.pdf" download="A Multi-Agent Model of Major Technological Transitions.pdf" aria-label="Download the article as a PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/>
+        <path d="M14 3v5h5"/>
+        <g class="arrow"><path d="M12 10.5v6.5"/><path d="M9 14l3 3 3-3"/></g>
+      </svg>
+      <span class="ctl-note" aria-hidden="true">Download PDF</span>
+    </a>
     <button class="email-btn" type="button" data-email="maxjosephholly@outlook.com" aria-label="Copy the email address, maxjosephholly@outlook.com">
       <svg class="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="5.5" width="18" height="13" rx="1.5"/>
@@ -2214,7 +2250,7 @@
         if (e.defaultPrevented || e.button !== 0) return;
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         var link = e.target.closest('a');
-        if (!link || (link.target && link.target !== '_self')) return;
+        if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
         var url;
         try { url = new URL(link.href, location.href); } catch (err) { return; }
         if (url.origin !== location.origin) return;
@@ -3054,7 +3090,7 @@
       })();
 
       document.addEventListener('click', function (e) {
-        var iconBtn = e.target.closest('.email-btn, .theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .menu-btn, .sidenote-ref, .sidenote-label');
+        var iconBtn = e.target.closest('.pdf-btn, .email-btn, .theme-toggle, .back-arrow, .scroll-top-btn, .next-screen, .menu-btn, .sidenote-ref, .sidenote-label');
         var x, y;
         if (iconBtn) {
           var rect = iconBtn.getBoundingClientRect();
