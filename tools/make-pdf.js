@@ -68,6 +68,10 @@ const CSS = `
   /* the darker band of the site (Basis): edge to edge across its page, in
      the darker shade of the midnight blue */
   .band-page section.band-alt { margin: 0 -24mm; padding: 16mm 24mm; background: #0a0f26; }
+  /* first on its page, it runs up to the top edge: the top of the page, not
+     a band across it, and what follows sits below it rather than centred */
+  .band-page:has(> section.band-alt:first-child) { justify-content: flex-start; }
+  .band-page > section.band-alt:first-child { margin-top: -24mm; padding-top: 30mm; padding-bottom: 20mm; }
   .band-page section.band-alt + section { margin-top: 38pt; }
   /* the article proper starts on a page of its own */
   .article-start { break-before: page; }
