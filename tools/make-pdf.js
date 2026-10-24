@@ -36,8 +36,8 @@ const CSS = `
   body { margin: 0; font-family: 'ET Bembo', Georgia, serif; font-size: 13.5pt; line-height: 1.42; color: #000; }
   a { color: #1a3a9c; text-decoration: none; }
   .amp { font-style: normal; }
-  /* the title on a page of its own, a third of the way down */
-  .title-page { padding-top: 62mm; break-after: page; }
+  /* the title on a page of its own, a little below the middle */
+  .title-page { padding-top: 92mm; break-after: page; }
   /* set as on the site, in proportion: the author in grey IBM Plex, the
      title in Inter Bold (its second line the width of the text), the
      subtitle in semibold ET Bembo */
@@ -65,6 +65,10 @@ const CSS = `
   .band-page section + section { margin-top: 26pt; }
   .band-page h2 { margin-top: 0; }
   .band-page section > :last-child { margin-bottom: 0; }
+  /* the darker band of the site (Basis): edge to edge across its page, in
+     the darker shade of the midnight blue */
+  .band-page section.band-alt { margin: 0 -24mm; padding: 16mm 24mm; background: #0a0f26; }
+  .band-page section.band-alt + section { margin-top: 38pt; }
   /* the article proper starts on a page of its own */
   .article-start { break-before: page; }
   .article-start > h2:first-child { margin-top: 0; }
