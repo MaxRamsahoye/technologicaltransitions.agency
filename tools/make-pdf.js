@@ -33,7 +33,7 @@ const CSS = `
     @top-right { content: 'Technological\\A Transitions'; white-space: pre; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 10pt; line-height: 1.15; letter-spacing: 0.06em; text-transform: uppercase; text-align: right; vertical-align: bottom; padding-bottom: 2mm; color: #000; }
   }
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  body { margin: 0; font-family: 'ET Bembo', Georgia, serif; font-size: 12pt; line-height: 1.42; color: #000; }
+  body { margin: 0; font-family: 'ET Bembo', Georgia, serif; font-size: 13.5pt; line-height: 1.42; color: #000; }
   a { color: #1a3a9c; text-decoration: none; }
   .amp { font-style: normal; }
   .author { margin: 0 0 14pt; font-size: 12pt; }
@@ -42,10 +42,10 @@ const CSS = `
   h1 .title-line { display: block; }
   .subtitle { margin: 0 0 28pt; font-size: 15pt; line-height: 1.3; }
   section { margin: 0 0 8pt; }
-  h2 { margin: 26pt 0 8pt; font-size: 17pt; font-weight: 600; line-height: 1.2; break-after: avoid; }
-  h3 { margin: 18pt 0 6pt; font-size: 13.5pt; font-weight: 600; font-style: italic; break-after: avoid; }
-  h4, h5 { margin: 14pt 0 4pt; font-size: 12pt; font-weight: 600; break-after: avoid; }
-  p { margin: 0 0 8pt; orphans: 3; widows: 3; }
+  h2 { margin: 28pt 0 9pt; font-size: 20pt; font-weight: 600; line-height: 1.2; break-after: avoid; }
+  h3 { margin: 20pt 0 7pt; font-size: 15.5pt; font-weight: 600; font-style: italic; break-after: avoid; }
+  h4, h5 { margin: 16pt 0 5pt; font-size: 13.5pt; font-weight: 600; break-after: avoid; }
+  p { margin: 0 0 9pt; orphans: 3; widows: 3; }
   /* the Overview, Basis and Contents, as on the site set apart before the
      article proper: here between two rules */
   .lead-in { padding: 4pt 0 14pt; border-top: 0.75pt solid #000; border-bottom: 0.75pt solid #000; margin-bottom: 10pt; }
