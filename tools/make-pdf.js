@@ -8,7 +8,7 @@
 //
 // The article's header and sections are lifted out of index.html into a
 // plain document set for print: one column, the site's typefaces, no bands,
-// buttons or menus, page numbers at the foot. Run it again whenever the
+// buttons or menus, the site's name and page numbers in the margins. Run it again whenever the
 // article changes (after each sync from the Live doc).
 const path = require('path');
 const { chromium } = require('playwright');
@@ -21,7 +21,17 @@ const CSS = `
   @font-face { font-family: 'ET Bembo'; src: url('fonts/ETBembo-SemiBoldOSF.woff2') format('woff2'); font-weight: 600; font-style: normal; }
   @font-face { font-family: 'ET Bembo'; src: url('fonts/et-book-bold-line-figures.woff') format('woff'); font-weight: 700; font-style: normal; }
   @font-face { font-family: 'ET Bembo'; src: url('fonts/ETBembo-DisplayItalic.woff2') format('woff2'); font-weight: 400; font-style: italic; }
-  @page { size: A4; margin: 24mm 24mm 22mm; }
+  /* the site's name and page numbers in the page margins, in IBM Plex as
+     on the site; on the first page its name in the top right corner too */
+  @page {
+    size: A4;
+    margin: 24mm 24mm 22mm;
+    @bottom-left { content: 'technologicaltransitions.agency'; font-family: 'IBM Plex Sans', sans-serif; font-size: 8pt; color: #777; vertical-align: middle; }
+    @bottom-right { content: counter(page); font-family: 'IBM Plex Sans', sans-serif; font-size: 8pt; color: #777; vertical-align: middle; }
+  }
+  @page :first {
+    @top-right { content: 'Technological\\A Transitions'; white-space: pre; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 10pt; line-height: 1.15; letter-spacing: 0.06em; text-transform: uppercase; text-align: right; vertical-align: bottom; padding-bottom: 2mm; color: #000; }
+  }
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { margin: 0; font-family: 'ET Bembo', Georgia, serif; font-size: 12pt; line-height: 1.42; color: #000; }
   a { color: #1a3a9c; text-decoration: none; }
@@ -40,14 +50,16 @@ const CSS = `
      article proper: here between two rules */
   .lead-in { padding: 4pt 0 14pt; border-top: 0.75pt solid #000; border-bottom: 0.75pt solid #000; margin-bottom: 10pt; }
   .lead-in section:first-child h2 { margin-top: 14pt; }
+  /* the article proper starts on a page of its own */
+  .lead-in + section { break-before: page; }
+  .lead-in + section > h2:first-child { margin-top: 0; }
   .overview-keywords { margin-top: 12pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 9pt; letter-spacing: 0.02em; }
   ul { margin: 6pt 0 10pt; padding: 0; list-style: none; }
   li { margin: 0 0 4pt; padding-left: 1.3em; text-indent: -1.3em; }
   .live-list > li::before { content: '\\2014\\00a0\\00a0'; }
   .live-sub { margin: 4pt 0 0; }
   .live-sub li::before { content: '\\25CB\\00a0\\00a0'; font-size: 0.75em; vertical-align: 0.1em; }
-  #contents .live-list:not(.live-sub) { columns: 2; column-gap: 24pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 10.5pt; }
-  #contents .live-list > li { break-inside: avoid; }
+  #contents .live-list:not(.live-sub) { font-family: 'IBM Plex Sans', sans-serif; font-size: 10.5pt; }
   #contents .live-sub { font-size: 9pt; }
   hr { border: 0; border-top: 0.75pt solid #999; margin: 16pt 0; }
 `;
@@ -82,21 +94,18 @@ const CSS = `
   });
   const doc = '<!doctype html><html><head><meta charset="utf-8"><base href="file://' + ROOT + '/">' +
     '<title>' + parts.titleText + '</title>' +
-    '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">' +
+    '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">' +
     '<style>' + CSS + '</style></head><body>' +
     '<p class="author">' + parts.author + '</p><h1>' + parts.title + '</h1><p class="subtitle">' + parts.subtitle + '</p>' +
     '<div class="lead-in">' + parts.leadIn + '</div>' + parts.rest + '</body></html>';
   await page.setContent(doc, { waitUntil: 'load', timeout: 20000 }).catch(() => page.setContent(doc, { waitUntil: 'domcontentloaded' }));
-  await page.evaluate(() => document.fonts.ready);
+  // the margins' type is not in the page itself, so load it by name
+  await page.evaluate(() => Promise.all(['400 8pt "IBM Plex Sans"', '500 10pt "IBM Plex Sans"'].map((f) => document.fonts.load(f))).then(() => document.fonts.ready));
   await page.pdf({
     path: OUT,
     format: 'A4',
     preferCSSPageSize: true,
     printBackground: true,
-    displayHeaderFooter: true,
-    headerTemplate: '<span></span>',
-    footerTemplate: '<div style="width:100%;font-family:Georgia,serif;font-size:8pt;color:#777;padding:0 24mm;display:flex;justify-content:space-between">' +
-      '<span>technologicaltransitions.agency</span><span class="pageNumber"></span></div>',
   });
   await browser.close();
   console.log('Wrote ' + path.relative(ROOT, OUT));
