@@ -38,11 +38,14 @@ const CSS = `
   .amp { font-style: normal; }
   /* the title on a page of its own, a third of the way down */
   .title-page { padding-top: 62mm; break-after: page; }
-  .author { margin: 0 0 14pt; font-size: 12pt; }
-  .author a { color: #000; }
-  h1 { margin: 0 0 12pt; font-size: 28pt; line-height: 1.08; font-weight: 600; }
-  h1 .title-line { display: block; }
-  .subtitle { margin: 0 0 28pt; font-size: 15pt; line-height: 1.3; }
+  /* set as on the site, in proportion: the author in grey IBM Plex, the
+     title in Inter Bold (its second line the width of the text), the
+     subtitle in semibold ET Bembo */
+  .author { margin: 0 0 18pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 10pt; color: #8c8c8c; }
+  .author a { color: inherit; }
+  h1 { margin: 0 0 14pt; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.02em; font-size: 29pt; line-height: 1.08; }
+  h1 .title-line { display: block; white-space: nowrap; }
+  .subtitle { margin: 0; font-weight: 600; font-size: 14.5pt; line-height: 1.3; }
   section { margin: 0 0 8pt; }
   h2 { margin: 28pt 0 9pt; font-size: 20pt; font-weight: 600; line-height: 1.2; break-after: avoid; }
   h3 { margin: 20pt 0 7pt; font-size: 15.5pt; font-weight: 600; font-style: italic; break-after: avoid; }
@@ -107,14 +110,14 @@ const CSS = `
   });
   const doc = '<!doctype html><html><head><meta charset="utf-8"><base href="file://' + ROOT + '/">' +
     '<title>' + parts.titleText + '</title>' +
-    '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">' +
+    '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Inter:wght@700&display=swap" rel="stylesheet">' +
     '<style>' + CSS + '</style></head><body>' +
     '<div class="title-page"><p class="author">' + parts.author + '</p><h1>' + parts.title + '</h1><p class="subtitle">' + parts.subtitle + '</p></div>' +
     parts.bandPages.map((h) => '<div class="band-page">' + h + '</div>').join('') +
     parts.rest.replace('<section', '<section class="article-start"') + '</body></html>';
   await page.setContent(doc, { waitUntil: 'load', timeout: 20000 }).catch(() => page.setContent(doc, { waitUntil: 'domcontentloaded' }));
   // the margins' type is not in the page itself, so load it by name
-  await page.evaluate(() => Promise.all(['400 8pt "IBM Plex Sans"', '500 10pt "IBM Plex Sans"'].map((f) => document.fonts.load(f))).then(() => document.fonts.ready));
+  await page.evaluate(() => Promise.all(['400 8pt "IBM Plex Sans"', '500 10pt "IBM Plex Sans"', '700 29pt "Inter"'].map((f) => document.fonts.load(f))).then(() => document.fonts.ready));
   await page.pdf({
     path: OUT,
     format: 'A4',
