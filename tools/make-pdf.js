@@ -53,7 +53,7 @@ const CSS = `
   /* the article proper starts on a page of its own */
   .lead-in + section { break-before: page; }
   .lead-in + section > h2:first-child { margin-top: 0; }
-  .overview-keywords { margin-top: 12pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 9pt; letter-spacing: 0.02em; }
+  .overview-keywords { margin-top: 26pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 9pt; letter-spacing: 0.02em; }
   ul { margin: 6pt 0 10pt; padding: 0; list-style: none; }
   li { margin: 0 0 4pt; padding-left: 1.3em; text-indent: -1.3em; }
   .live-list > li::before { content: '\\2014\\00a0\\00a0'; }
