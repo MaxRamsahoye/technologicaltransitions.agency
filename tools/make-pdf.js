@@ -36,6 +36,8 @@ const CSS = `
   body { margin: 0; font-family: 'ET Bembo', Georgia, serif; font-size: 13.5pt; line-height: 1.42; color: #000; }
   a { color: #1a3a9c; text-decoration: none; }
   .amp { font-style: normal; }
+  /* the title on a page of its own, a third of the way down */
+  .title-page { padding-top: 62mm; break-after: page; }
   .author { margin: 0 0 14pt; font-size: 12pt; }
   .author a { color: #000; }
   h1 { margin: 0 0 12pt; font-size: 28pt; line-height: 1.08; font-weight: 600; }
@@ -46,13 +48,23 @@ const CSS = `
   h3 { margin: 20pt 0 7pt; font-size: 15.5pt; font-weight: 600; font-style: italic; break-after: avoid; }
   h4, h5 { margin: 16pt 0 5pt; font-size: 13.5pt; font-weight: 600; break-after: avoid; }
   p { margin: 0 0 9pt; orphans: 3; widows: 3; }
-  /* the Overview, Basis and Contents, as on the site set apart before the
-     article proper: here between two rules */
-  .lead-in { padding: 4pt 0 14pt; border-top: 0.75pt solid #000; border-bottom: 0.75pt solid #000; margin-bottom: 10pt; }
-  .lead-in section:first-child h2 { margin-top: 14pt; }
+  /* the sections in the site's band (the Overview, then Basis and Contents
+     together) on pages of their own in its midnight blue, edge to edge,
+     their text centred on the page */
+  @page band { margin: 0; background: #0d1330; @bottom-left { content: none; } @bottom-right { content: none; } }
+  .band-page {
+    page: band; break-before: page; break-inside: avoid;
+    box-sizing: border-box; min-height: 296.5mm; padding: 24mm;
+    display: flex; flex-direction: column; justify-content: center;
+    background: #0d1330; color: #fbf6ec;
+  }
+  .band-page a { color: #8ab4f8; }
+  .band-page section + section { margin-top: 26pt; }
+  .band-page h2 { margin-top: 0; }
+  .band-page section > :last-child { margin-bottom: 0; }
   /* the article proper starts on a page of its own */
-  .lead-in + section { break-before: page; }
-  .lead-in + section > h2:first-child { margin-top: 0; }
+  .article-start { break-before: page; }
+  .article-start > h2:first-child { margin-top: 0; }
   .overview-keywords { margin-top: 26pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 9pt; letter-spacing: 0.02em; }
   ul { margin: 6pt 0 10pt; padding: 0; list-style: none; }
   li { margin: 0 0 4pt; padding-left: 1.3em; text-indent: -1.3em; }
@@ -88,7 +100,8 @@ const CSS = `
       title: title.innerHTML,
       titleText: q('.article-title').textContent.replace(/\s+/g, ' ').trim(),
       subtitle: q('.article-subtitle').innerHTML,
-      leadIn: html(sections.slice(0, n)),
+      // the Overview on one page, the sections after it in the band on another
+      bandPages: n ? [html(sections.slice(0, 1))].concat(n > 1 ? [html(sections.slice(1, n))] : []) : [],
       rest: html(sections.slice(n)),
     };
   });
@@ -96,8 +109,9 @@ const CSS = `
     '<title>' + parts.titleText + '</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">' +
     '<style>' + CSS + '</style></head><body>' +
-    '<p class="author">' + parts.author + '</p><h1>' + parts.title + '</h1><p class="subtitle">' + parts.subtitle + '</p>' +
-    '<div class="lead-in">' + parts.leadIn + '</div>' + parts.rest + '</body></html>';
+    '<div class="title-page"><p class="author">' + parts.author + '</p><h1>' + parts.title + '</h1><p class="subtitle">' + parts.subtitle + '</p></div>' +
+    parts.bandPages.map((h) => '<div class="band-page">' + h + '</div>').join('') +
+    parts.rest.replace('<section', '<section class="article-start"') + '</body></html>';
   await page.setContent(doc, { waitUntil: 'load', timeout: 20000 }).catch(() => page.setContent(doc, { waitUntil: 'domcontentloaded' }));
   // the margins' type is not in the page itself, so load it by name
   await page.evaluate(() => Promise.all(['400 8pt "IBM Plex Sans"', '500 10pt "IBM Plex Sans"'].map((f) => document.fonts.load(f))).then(() => document.fonts.ready));
