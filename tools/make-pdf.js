@@ -26,7 +26,7 @@ const CSS = `
   @page {
     size: A4;
     margin: 24mm 24mm 22mm;
-    @bottom-left { content: 'technologicaltransitions.agency'; font-family: 'IBM Plex Sans', sans-serif; font-size: 8pt; color: #777; vertical-align: middle; }
+    @bottom-left { content: 'technologicaltransitions.agency'; font-family: 'IBM Plex Sans', sans-serif; font-size: 8pt; color: #1a3a9c; vertical-align: middle; }
     @bottom-right { content: counter(page); font-family: 'IBM Plex Sans', sans-serif; font-size: 8pt; color: #777; vertical-align: middle; }
   }
   @page :first {
