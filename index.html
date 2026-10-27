@@ -1035,11 +1035,13 @@
     }
 
     /* ET Bembo has no bold italic, and browsers fake one (iOS Safari
-       crudely): italics in a link or in bold keep the true italic, and
-       take on weight from a hairline stroke, as the italic subheadings do */
+       crudely): italics in a link, in bold or in the semibold subtitle keep
+       the true italic, and take on weight from a hairline stroke, as the
+       italic subheadings do */
     .article-body :is(a, strong, b) :is(em, i),
     .article-body :is(em, i) :is(a, strong, b),
-    .article-body :is(em, i):is(a, strong, b) {
+    .article-body :is(em, i):is(a, strong, b),
+    .article-subtitle :is(em, i) {
       font-weight: 400;
       font-synthesis: none;
       -webkit-text-stroke: 0.35px currentColor;

@@ -743,3 +743,12 @@ html.hide-scrollbar {
 html.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ET Bembo has no bold italic, and browsers fake one (iOS Safari crudely):
+   italics in bold, in a link or in a bold title keep the true italic, and
+   take on weight from a hairline stroke */
+:is(strong, b, a, h1, h2, h3, h4, .article-subtitle) :is(em, i),
+:is(em, i) :is(strong, b) {
+  font-synthesis: none;
+  -webkit-text-stroke: 0.35px currentColor;
+}
