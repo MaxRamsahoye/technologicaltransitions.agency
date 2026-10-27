@@ -330,6 +330,11 @@
       stroke: color-mix(in srgb, var(--link-blue) 40%, transparent);
     }
 
+    /* nothing to point to until the run up the stack has played */
+    .md-figure:not(.ready) :is(.md-svg [data-key], .md-list button) {
+      cursor: default;
+    }
+
     /* labels beside the diagram, each joined to its structure */
     .md-label {
       font-family: 'IBM Plex Sans', sans-serif;
@@ -1179,6 +1184,8 @@
       };
       function describe(key) {
         var m = MODEL[key];
+        // nothing pointed to: the box empty, in its plain grey
+        if (!m) { detail.innerHTML = ''; detail.style.removeProperty('--box'); return; }
         var h = '<p>' + m.desc + '</p>';
         if (m.within.length) h += '<ul>' + m.within.map(function (w) { return '<li><b>' + w[1] + '</b> &ndash; ' + w[2] + '</li>'; }).join('') + '</ul>';
         detail.innerHTML = h;
@@ -1188,13 +1195,28 @@
         parts.forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-key') === key); });
         describe(key);
       }
+      // pointing and clicking wait until the run up the stack has played
+      var figure = document.querySelector('.md-figure'), ready = false;
       parts.forEach(function (p) {
         var key = p.getAttribute('data-key');
-        p.addEventListener('mouseenter', function () { show(key); });
-        p.addEventListener('mouseleave', function () { show(locked); });
-        p.addEventListener('click', function () { locked = key; show(key); });
+        p.addEventListener('mouseenter', function () { if (ready) show(key); });
+        p.addEventListener('mouseleave', function () { if (ready) show(locked); });
+        p.addEventListener('click', function () { if (ready) { locked = key; show(key); } });
       });
-      show(locked);
+      // as the Stack diagram does: a moment after the page opens, each
+      // structure lights in turn from the base of the stack to the axis at
+      // its top, each with a note a step higher, and then the first
+      // selection returns
+      var RUN = ['ecostructure', 'biostructure', 'infrastructure', 'interstructure', 'substructure', 'superstructure', 'metastructure'];
+      function settle() { ready = true; figure.classList.add('ready'); show(locked); }
+      show('');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) settle();
+      else setTimeout(function () {
+        RUN.forEach(function (key, i) {
+          setTimeout(function () { show(key); if (window.ttNodeSound) window.ttNodeSound(i); }, i * 1300);
+        });
+        setTimeout(settle, RUN.length * 1300 + 300);
+      }, 900);
     })();
   </script>
 
