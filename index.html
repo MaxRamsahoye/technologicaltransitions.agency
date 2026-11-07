@@ -19,7 +19,7 @@
         var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         // arriving from another page of the site (or a refresh, or back/forward): fade in
         var fromSite = false;
-        try { fromSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+        try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('./', location.href)); } catch (e) {}
         // browsers with cross-document view transitions crossfade between pages
         // themselves; the others fade out and in (and so does a refresh)
         var vt = 'CSSViewTransitionRule' in window;
@@ -1890,10 +1890,11 @@
       var loader = document.querySelector('.loader');
 
       // On arriving at the site, and on every refresh: skip it only when
-      // coming from another page of the site, or going back/forward.
+      // coming from another page of the site (within its own folder: other
+      // sites share the host), or going back/forward.
       var internal = false;
       try {
-        internal = !!document.referrer && new URL(document.referrer).origin === location.origin;
+        internal = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('./', location.href));
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         if (nav && nav.type === 'back_forward') internal = true;
         if (nav && nav.type === 'reload') internal = false;   // a refresh plays it again

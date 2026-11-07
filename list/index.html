@@ -13,7 +13,7 @@
       var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
       // arriving from another page of the site (or a refresh, or back/forward): fade in
       var fromSite = false;
-      try { fromSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../', location.href)); } catch (e) {}
       // browsers with cross-document view transitions crossfade between pages
       // themselves; the others fade out and in (and so does a refresh)
       var vt = 'CSSViewTransitionRule' in window;
@@ -181,7 +181,7 @@
     </div>
   </main>
 
-  <script src="../assets/site.js?v=689f9cb8" data-base="../"></script>
+  <script src="../assets/site.js?v=6b93d14b" data-base="../"></script>
   <script src="../assets/tools.js?v=91aacf4b"></script>
 </body>
 </html>

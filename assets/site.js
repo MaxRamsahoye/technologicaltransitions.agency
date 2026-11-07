@@ -264,7 +264,7 @@
       playPianoClick();
       document.body.classList.add('page-leaving');
       setTimeout(function () {
-        var fromSite = document.referrer && new URL(document.referrer).origin === location.origin;
+        var fromSite = document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL(base, location.href));
         // data-direct: always go to the arrow's own page, not back in history
         if (fromSite && history.length > 1 && !backArrow.hasAttribute('data-direct')) history.back();
         else location.href = backArrow.getAttribute('href');
