@@ -183,8 +183,9 @@
       --rule: #232c4c;
       --muted: #8c8c8c;
       --link-blue: #8ab4f8;
-      --inverse-bg: #0b0c0d;
-      --inverse-ink: #ffffff;
+      /* the bands midnight blue, as on the white theme by default */
+      --inverse-bg: #0d1330;
+      --inverse-ink: #fbf6ec;
       --inverse-link: #8ab4f8;
     }
 
@@ -1207,8 +1208,7 @@
       --inverse-bg-alt: #f1e6d0;
     }
 
-    html.band-black:not([data-theme]),
-    html[data-theme="dark"] {
+    html.band-black:not([data-theme]) {
       --inverse-bg-alt: color-mix(in srgb, var(--inverse-bg) 88%, #fff);
     }
 

@@ -79,9 +79,10 @@ html[data-theme="dark"] {
   --canvas-ink: #ffffff;
   --muted: #8c8c8c;
   --track-tint: rgba(255, 255, 255, 0.15);
-  --band-bg: #0b0c0d;
-  --inverse-bg: #0b0c0d;
-  --inverse-ink: #ffffff;
+  /* the bands midnight blue, as on the white theme by default */
+  --band-bg: #0d1330;
+  --inverse-bg: #0d1330;
+  --inverse-ink: #fbf6ec;
   --selection-bg: rgba(180, 205, 235, 0.35);
 }
 
