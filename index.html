@@ -1276,6 +1276,10 @@
       transition: opacity 0.4s ease;
     }
 
+    html.design-2 body.overview-kept :is(#overview, .article-header .next-screen) {
+      transition: none !important;
+    }
+
     html.design-2 body.overview-shown #overview {
       opacity: 1;
       pointer-events: auto;
@@ -2652,22 +2656,35 @@
         return document.documentElement.classList.contains('design-2');
       }
 
+      // once shown, the Overview stays: scrolling back to the top keeps it,
+      // and so does coming back to the article from another of the site's
+      // pages (or back/forward); only a refresh, or arriving from outside the
+      // site, starts again from the down arrow
       function showOverview() {
         document.body.classList.add('overview-shown');
+        try { sessionStorage.setItem('overviewShown', '1'); } catch (e) {}
       }
       window.showOverview = showOverview;
 
-      function hideOverview() {
-        var body = document.body;
-        body.classList.remove('overview-shown');
-      }
+      (function () {
+        var keep = false;
+        try {
+          var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+          var within = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('./', location.href));
+          keep = sessionStorage.getItem('overviewShown') === '1' && (!nav || nav.type !== 'reload') && (within || (nav && nav.type === 'back_forward'));
+          if (!keep) sessionStorage.removeItem('overviewShown');
+        } catch (e) {}
+        // shown at once, without fading in again
+        if (keep && isDesign2()) {
+          document.body.classList.add('overview-shown', 'overview-kept');
+          setTimeout(function () { document.body.classList.remove('overview-kept'); }, 100);
+        }
+      })();
 
-      // scrolling down shows it; scrolling back up to the very top hides it
-      // again and brings back the down arrow
+      // scrolling down shows it
       function checkOverview() {
         if (!isDesign2()) return;
         if (window.scrollY > 10) showOverview();
-        else if (window.scrollY <= 0) hideOverview();
       }
 
       window.addEventListener('scroll', checkOverview, { passive: true });
