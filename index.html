@@ -1551,13 +1551,14 @@
       }
     }
 
+    /* the title block and the menu, centred together with room between them */
     .footer-inner {
       display: grid;
       grid-template-columns: max-content max-content;
-      justify-content: space-between;
-      column-gap: 48px;
+      justify-content: center;
+      column-gap: 150px;
       align-items: center;
-      width: var(--text-column);
+      width: auto;
       max-width: 100%;
       margin: 0 auto;
     }
@@ -1591,7 +1592,7 @@
     /* the menu sits in from the column's right edge */
     .footer-sitemap {
       align-self: center;
-      margin-right: 96px;
+      margin-right: 0;
     }
 
     @media (max-width: 1000px) {
@@ -1626,6 +1627,26 @@
 
     .footer-sitemap li + li {
       margin-top: 10px;
+    }
+
+    /* the pages in two columns of four, read down the first and then the
+       second */
+    .footer-sitemap ol {
+      display: grid;
+      grid-template-rows: repeat(4, auto);
+      grid-auto-flow: column;
+      justify-content: start;
+      column-gap: 72px;
+      row-gap: 14px;
+    }
+
+    .footer-sitemap li + li {
+      margin-top: 0;
+    }
+
+    /* Contact: copies the email address, as the envelope at the top does */
+    .footer-contact {
+      cursor: pointer;
     }
 
 
@@ -2240,6 +2261,7 @@
           <li><a href="timeline/">Timelines</a></li>
           <li><a href="lexicon/">Concepts</a></li>
           <li><a href="sources/">Sources</a></li>
+          <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
         </ol>
       </nav>
       </div>
@@ -3135,6 +3157,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=91aacf4b" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=ae98fa67" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>

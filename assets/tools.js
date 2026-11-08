@@ -62,6 +62,32 @@
   style.textContent = css;
   document.head.appendChild(style);
 
+  /* ---------- footer: Contact ---------- */
+
+  // Contact copies the email address, as the envelope at the top of the
+  // article does, and says so for a moment
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('.footer-contact');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    var email = a.getAttribute('data-email');
+    function say(text) {
+      clearTimeout(a.copyTimer);
+      a.textContent = text;
+      a.copyTimer = setTimeout(function () { a.textContent = 'Contact'; }, 1800);
+    }
+    function fallback() {
+      var t = document.createElement('textarea');
+      t.value = email; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (err) {}
+      t.remove();
+      say(ok ? 'Email copied' : email);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(function () { say('Email copied'); }, fallback);
+    else fallback();
+  });
+
   /* ---------- top menu ---------- */
 
   (function () {

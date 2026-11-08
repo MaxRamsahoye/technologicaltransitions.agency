@@ -527,13 +527,14 @@ html.band-black:not([data-theme]) .on-band {
   color: inherit;
 }
 
+/* the title block and the menu, centred together with room between them */
 .footer-inner {
   display: grid;
   grid-template-columns: max-content max-content;
-  justify-content: space-between;
-  column-gap: 48px;
+  justify-content: center;
+  column-gap: 150px;
   align-items: center;
-  width: var(--text-column);
+  width: auto;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -584,10 +585,10 @@ html.band-black:not([data-theme]) .on-band {
   text-underline-offset: 3px;
 }
 
-/* the menu sits in from the column's right edge */
+/* the menu, two columns wide, ends at the column's right edge */
 .footer-sitemap {
   align-self: center;
-  margin-right: 96px;
+  margin-right: 0;
 }
 
 @media (max-width: 1000px) {
@@ -619,6 +620,26 @@ html.band-black:not([data-theme]) .on-band {
 
 .footer-sitemap li + li {
   margin-top: 10px;
+}
+
+/* the pages in two columns of four, read down the first and then the
+   second */
+.footer-sitemap ol {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  justify-content: start;
+  column-gap: 72px;
+  row-gap: 14px;
+}
+
+.footer-sitemap li + li {
+  margin-top: 0;
+}
+
+/* Contact: copies the email address, as the envelope at the top does */
+.footer-contact {
+  cursor: pointer;
 }
 
 .footer-sitemap a {
