@@ -70,7 +70,12 @@
     }
 
     .pages-box {
-      max-width: 760px;
+      max-width: 1080px;
+    }
+
+    /* this page is the menu: no menu along the top */
+    .top-nav {
+      display: none !important;
     }
 
     /* the title is centred; the back arrow sits just to its left */
@@ -114,10 +119,23 @@
       }
     }
 
+    /* the pages across two columns, read down the first then the second */
     .menu {
       list-style: none;
       margin: 0;
       padding: 0;
+      columns: 2;
+      column-gap: 96px;
+    }
+
+    .menu li {
+      break-inside: avoid;
+    }
+
+    @media (max-width: 860px) {
+      .menu {
+        columns: 1;
+      }
     }
 
     .menu a {
