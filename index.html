@@ -722,9 +722,9 @@
 
     .progress-ring {
       position: fixed;
-      /* vertically centred on the theme toggle */
+      /* the top left corner while reading, the site's name in the right */
       top: 31px;
-      right: calc(var(--frame-margin) + 40px);
+      left: calc(var(--frame-margin) + 40px);
       width: 28px;
       height: 28px;
       transform: rotate(-90deg);
@@ -759,7 +759,47 @@
     @media (max-width: 600px) {
       .progress-ring {
         top: 22px;
+        left: 24px;
+      }
+    }
+
+    /* the site's name in the top right corner while reading, shown and
+       hidden with the progress ring; it takes you back to the top */
+    .corner-title {
+      position: fixed;
+      top: 24px;
+      right: calc(var(--frame-margin) + 40px);
+      z-index: 40;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: right;
+      white-space: nowrap;
+      color: var(--canvas-ink);
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    body.past-overview .corner-title {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.past-overview.footer-in-view .corner-title {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .corner-title {
+        top: 18px;
         right: 24px;
+        font-size: 15px;
       }
     }
 
@@ -2140,6 +2180,7 @@
     </button>
   </div>
 
+  <a class="corner-title title-top" href="./">Technological<br>Transitions</a>
   <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
     <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
     <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
