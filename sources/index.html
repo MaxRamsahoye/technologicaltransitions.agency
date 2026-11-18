@@ -292,6 +292,20 @@
       color: var(--muted);
     }
 
+    /* where the work appeared, linked where it appeared in more than one place */
+    .source-detail a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+    }
+
+    .source-detail a:hover {
+      color: var(--canvas-ink);
+      text-decoration-color: currentColor;
+    }
+
     .source-note {
       margin: 22px 0 0;
       font-size: 23px;
@@ -329,12 +343,6 @@
 
     .source-link a:hover {
       border-bottom-color: currentColor;
-    }
-
-    /* where a work appears in two places, a link to each */
-    .source-link-gap {
-      display: inline-block;
-      width: 28px;
     }
 
     .source-link em {
@@ -454,7 +462,7 @@
       <li><a class="bib-jump" href="#gomez-emilsson" aria-label="Go to the entry"></a>Andr&eacute;s G&oacute;mez Emilsson &lsquo;<a href="https://qri.org/blog/universal-plot" target="_blank" rel="noopener">The Universal Plot: Part I &ndash; Consciousness vs. Pure Replicators</a>&rsquo; <em>Qualia Research Institute</em> (2017)</li>
       <li><a class="bib-jump" href="#ronn" aria-label="Go to the entry"></a>Kristian R&ouml;nn &lsquo;<a href="https://www.lesswrong.com/s/jZfcWzg8cxviFqwrT" target="_blank" rel="noopener">The Darwinian Trap</a>&rsquo; <em>LessWrong</em> (2024)</li>
       <li><a class="bib-jump" href="#alexander" aria-label="Go to the entry"></a>Scott Alexander &lsquo;<a href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener">Meditations on Moloch</a>&rsquo; <em>Slate Star Codex</em> (2014)</li>
-      <li><a class="bib-jump" href="#wilberg" aria-label="Go to the entry"></a>Jonah Wilberg &lsquo;<a href="https://thewiderangle.substack.com/p/who-is-moloch-really" target="_blank" rel="noopener">Why Moloch is Actually the God of Evolutionary Prisoner&rsquo;s Dilemmas</a>&rsquo; <em>The Wider Angle</em> &amp; <em>LessWrong</em> (2025)</li>
+      <li><a class="bib-jump" href="#wilberg" aria-label="Go to the entry"></a>Jonah Wilberg &lsquo;<a href="https://www.lesswrong.com/posts/rJuq9iwYgobsRGzJJ/why-moloch-is-actually-the-god-of-evolutionary-prisoner-s" target="_blank" rel="noopener">Why Moloch is Actually the God of Evolutionary Prisoner&rsquo;s Dilemmas</a>&rsquo; <em><a href="https://thewiderangle.substack.com/p/who-is-moloch-really" target="_blank" rel="noopener">The Wider Angle</a></em> &amp; <em><a href="https://www.lesswrong.com/posts/rJuq9iwYgobsRGzJJ/why-moloch-is-actually-the-god-of-evolutionary-prisoner-s" target="_blank" rel="noopener">LessWrong</a></em> (2025)</li>
     </ol>
     </div>
 
@@ -622,9 +630,9 @@
       <li class="source" id="wilberg">
         <p class="source-author">Jonah Wilberg</p>
         <p class="source-work">Why Moloch is Actually the God of Evolutionary Prisoner&rsquo;s Dilemmas</p>
-        <p class="source-detail"><em>The Wider Angle</em> &amp; <em>LessWrong</em>, 2025</p>
+        <p class="source-detail"><em><a href="https://thewiderangle.substack.com/p/who-is-moloch-really" target="_blank" rel="noopener">The Wider Angle</a></em> &amp; <em><a href="https://www.lesswrong.com/posts/rJuq9iwYgobsRGzJJ/why-moloch-is-actually-the-god-of-evolutionary-prisoner-s" target="_blank" rel="noopener">LessWrong</a></em>, 2025</p>
         <p class="source-note">Wilberg proposes a new way of modelling Moloch: not as a standard collective action problem &ndash; a prisoner&rsquo;s dilemma, Nash equilibrium or coordination failure &ndash; but as an evolutionary prisoner&rsquo;s dilemma, in which selection acts on an indefinitely large population of cooperators and defectors. The series it opens goes on to ask how, if at all, such a god can be defeated.</p>
-        <p class="source-link"><a href="https://thewiderangle.substack.com/p/who-is-moloch-really" target="_blank" rel="noopener">The Wider Angle <span aria-hidden="true">&nearr;</span></a><span class="source-link-gap"></span><a href="https://www.lesswrong.com/posts/rJuq9iwYgobsRGzJJ/why-moloch-is-actually-the-god-of-evolutionary-prisoner-s" target="_blank" rel="noopener">LessWrong <span aria-hidden="true">&nearr;</span></a></p>
+        <p class="source-link"><a href="https://www.lesswrong.com/posts/rJuq9iwYgobsRGzJJ/why-moloch-is-actually-the-god-of-evolutionary-prisoner-s" target="_blank" rel="noopener">Source <span aria-hidden="true">&nearr;</span></a></p>
       </li>
     </ol>
   </main>
